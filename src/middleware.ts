@@ -2,8 +2,10 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  // For now, we'll just check if the path is a shift route
-  if (request.nextUrl.pathname.startsWith('/shift/')) {
+  const { pathname } = request.nextUrl;
+
+  // Protected routes that require active charting session
+  if (pathname === '/charting' || pathname === '/review') {
     // Here you would typically check for authentication
     // For now, we'll just let it through
     
