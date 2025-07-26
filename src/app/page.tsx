@@ -1,54 +1,113 @@
-"use client";
-import { ResidentList } from '@/components/organisms/ResidentList';
-import { ADLQuickEntry } from '@/components/organisms/ADLQuickEntry';
+'use client';
 
-export default function Home() {
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { DUMMY_RESIDENTS } from '@/constants/residents';
+import { useShiftStore } from '@/stores/shiftStore';
+import { Badge } from '@/components/atoms/Badge';
+
+export default function HomePage() {
+  const router = useRouter();
+  const { startShift } = useShiftStore();
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  const handleStartShift = () => {
+    const selectedResidents = DUMMY_RESIDENTS.filter((r) => selectedIds.has(r.id));
+    startShift(selectedResidents);
+    router.push('/shift/chart');
+  };
+
+  const getStatusVariant = (status: string) => {
+    switch (status) {
+      case 'independent':
+        return 'success';
+      case 'partial':
+        return 'warning';
+      case 'full':
+        return 'error';
+      default:
+        return 'info';
+    }
+  };
+
   return (
-    <main className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
         {/* Header */}
-        <header className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">SmartChart Pro</h1>
-            <p className="text-sm text-gray-500">Assisted Living Care Management</p>
-          </div>
-          
-          {/* Offline indicator */}
-          <div className="flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1">
-            <div className="h-2 w-2 rounded-full bg-yellow-500" />
-            <span className="text-sm font-medium text-yellow-800">Offline Mode</span>
-          </div>
+        <header>
+          <h1 className="text-3xl font-bold text-gray-900">SmartChart Pro</h1>
+          <p className="mt-2 text-sm text-gray-600">
+            Select the residents you'll be caring for during your shift
+          </p>
         </header>
 
-        {/* Quick Entry Section */}
-        <ADLQuickEntry />
+        {/* Resident Selection */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Available Residents
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {DUMMY_RESIDENTS.map((resident) => (
+                <label
+                  key={resident.id}
+                  className={`relative flex items-center space-x-4 p-4 border rounded-lg cursor-pointer transition-colors ${
+                    selectedIds.has(resident.id)
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:bg-gray-50'
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    className="sr-only"
+                    checked={selectedIds.has(resident.id)}
+                    onChange={(e) => {
+                      const newSelected = new Set(selectedIds);
+                      if (e.target.checked) {
+                        newSelected.add(resident.id);
+                      } else {
+                        newSelected.delete(resident.id);
+                      }
+                      setSelectedIds(newSelected);
+                    }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {resident.name}
+                      </p>
+                      <Badge variant={getStatusVariant(resident.status)}>
+                        {resident.status.charAt(0).toUpperCase() + resident.status.slice(1)}
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-gray-500">Room {resident.room}</p>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
 
-        {/* Residents Section */}
-        <ResidentList />
-
-        {/* Export Button */}
-        <div className="flex justify-end">
-          <button
-            type="button"
-            className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-          >
-            <svg
-              className="h-5 w-5 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
-              />
-            </svg>
-            Export Today's Report (PDF)
-          </button>
+          {/* Footer */}
+          <div className="border-t border-gray-200 px-6 py-4 bg-gray-50 rounded-b-lg">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-gray-600">
+                {selectedIds.size} resident{selectedIds.size !== 1 ? 's' : ''} selected
+              </p>
+              <button
+                onClick={handleStartShift}
+                disabled={selectedIds.size === 0}
+                className={`px-4 py-2 rounded-lg font-medium ${
+                  selectedIds.size === 0
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+              >
+                Start Shift
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
