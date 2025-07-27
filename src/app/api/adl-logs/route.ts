@@ -19,10 +19,7 @@ export async function GET(request: Request) {
     return NextResponse.json(logs);
   } catch (error) {
     console.error('Error fetching ADL logs:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch ADL logs' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch ADL logs' }, { status: 500 });
   }
 }
 
@@ -46,9 +43,6 @@ export async function POST(request: Request) {
     return NextResponse.json(log, { status: 201 });
   } catch (error) {
     console.error('Error creating ADL log:', error);
-    return NextResponse.json(
-      { error: 'Failed to create ADL log' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to create ADL log' }, { status: 500 });
   }
-} 
+}

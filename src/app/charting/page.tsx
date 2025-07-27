@@ -47,10 +47,11 @@ export default function ChartingPage() {
 
     // Show a brief success message
     const successMessage = document.createElement('div');
-    successMessage.className = 'fixed top-4 right-4 bg-green-100 text-green-800 px-4 py-2 rounded-lg shadow-sm';
+    successMessage.className =
+      'fixed top-4 right-4 bg-green-100 text-green-800 px-4 py-2 rounded-lg shadow-sm';
     successMessage.textContent = 'Entry saved successfully';
     document.body.appendChild(successMessage);
-    
+
     // Remove the message after 2 seconds
     setTimeout(() => {
       successMessage.remove();
@@ -71,7 +72,7 @@ export default function ChartingPage() {
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-lg font-medium text-gray-900 mb-4">Select Resident</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {selectedResidents.map((resident) => (
+            {selectedResidents.map(resident => (
               <button
                 key={resident.id}
                 onClick={() => setSelectedResident(resident.id)}
@@ -107,10 +108,7 @@ export default function ChartingPage() {
             <h2 className="font-medium text-gray-900">{currentResident?.name}</h2>
             <p className="text-sm text-gray-500">Room {currentResident?.room}</p>
           </div>
-          <button
-            onClick={resetForm}
-            className="text-sm text-gray-500 hover:text-gray-700"
-          >
+          <button onClick={resetForm} className="text-sm text-gray-500 hover:text-gray-700">
             Change Resident
           </button>
         </div>
@@ -120,7 +118,7 @@ export default function ChartingPage() {
       <div className="bg-white rounded-lg shadow p-6">
         <h2 className="text-lg font-medium text-gray-900 mb-4">Select Activity</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {ADL_TYPES.map((adl) => (
+          {ADL_TYPES.map(adl => (
             <button
               key={adl.id}
               onClick={() => setSelectedADL(adl.id)}
@@ -141,7 +139,7 @@ export default function ChartingPage() {
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-lg font-medium text-gray-900 mb-4">Select Assistance Level</h2>
           <div className="grid gap-3 sm:grid-cols-3">
-            {ASSISTANCE_LEVELS.map((level) => (
+            {ASSISTANCE_LEVELS.map(level => (
               <button
                 key={level.id}
                 onClick={() => setSelectedAssistance(level.id)}
@@ -164,7 +162,7 @@ export default function ChartingPage() {
           <h2 className="text-lg font-medium text-gray-900 mb-4">Notes (Optional)</h2>
           <textarea
             value={notes}
-            onChange={(e) => setNotes(e.target.value)}
+            onChange={e => setNotes(e.target.value)}
             className="w-full h-32 rounded-lg border-gray-200 resize-none"
             placeholder="Add any additional notes..."
           />
@@ -194,4 +192,4 @@ export default function ChartingPage() {
       </div>
     </div>
   );
-} 
+}

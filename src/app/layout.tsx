@@ -8,11 +8,7 @@ import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { isChartingActive, selectedResidents } = useChartingStore();
@@ -44,8 +40,8 @@ export default function RootLayout({
                   {pathname === '/charting'
                     ? 'Chart ADLs'
                     : pathname === '/review'
-                    ? 'Review Charting'
-                    : 'SmartChart Pro'}
+                      ? 'Review Charting'
+                      : 'SmartChart Pro'}
                 </h1>
                 {isChartingActive && (
                   <div className="text-sm text-gray-500">

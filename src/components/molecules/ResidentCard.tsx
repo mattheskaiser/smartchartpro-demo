@@ -16,13 +16,7 @@ const statusConfig = {
   full: { label: 'Full Assist', variant: 'error' as const },
 };
 
-export const ResidentCard = ({
-  name,
-  imageUrl,
-  status,
-  room,
-  className,
-}: ResidentCardProps) => {
+export const ResidentCard = ({ name, imageUrl, status, room }: ResidentCardProps) => {
   const { label, variant } = statusConfig[status];
 
   return (
@@ -37,4 +31,4 @@ export const ResidentCard = ({
       </div>
     </div>
   );
-}; 
+};

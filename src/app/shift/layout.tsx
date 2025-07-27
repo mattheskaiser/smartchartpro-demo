@@ -4,11 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useShiftStore } from '@/stores/shiftStore';
 
-export default function ShiftLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ShiftLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { isShiftActive, selectedResidents } = useShiftStore();
@@ -29,8 +25,8 @@ export default function ShiftLayout({
             {pathname === '/shift/start'
               ? 'Start Shift'
               : pathname === '/shift/chart'
-              ? 'Chart ADLs'
-              : 'Review Shift'}
+                ? 'Chart ADLs'
+                : 'Review Shift'}
           </h1>
           {isShiftActive && (
             <div className="text-sm text-gray-500">
@@ -44,4 +40,4 @@ export default function ShiftLayout({
       <main className="max-w-7xl mx-auto px-4 py-6">{children}</main>
     </div>
   );
-} 
+}

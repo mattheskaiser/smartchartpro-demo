@@ -16,19 +16,10 @@ const options = [
   { value: 'full', label: 'Full Assist' },
 ] as const;
 
-export const AssistanceSelector = ({
-  value,
-  onChange,
-  className,
-}: AssistanceSelectorProps) => {
+export const AssistanceSelector = ({ value, onChange, className }: AssistanceSelectorProps) => {
   return (
-    <div
-      className={clsx(
-        'inline-flex rounded-lg border border-gray-200 bg-white p-1',
-        className
-      )}
-    >
-      {options.map((option) => (
+    <div className={clsx('inline-flex rounded-lg border border-gray-200 bg-white p-1', className)}>
+      {options.map(option => (
         <Button
           key={option.value}
           variant={value === option.value ? 'primary' : 'secondary'}
@@ -43,4 +34,4 @@ export const AssistanceSelector = ({
       ))}
     </div>
   );
-}; 
+};
