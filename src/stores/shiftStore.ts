@@ -18,24 +18,27 @@ interface ShiftStore {
   addEntry: (entry: ADLEntry) => void;
 }
 
-export const useShiftStore = create<ShiftStore>((set) => ({
+export const useShiftStore = create<ShiftStore>(set => ({
   isShiftActive: false,
   selectedResidents: [],
   entries: [],
-  
-  startShift: (residents) => set({
-    isShiftActive: true,
-    selectedResidents: residents,
-    entries: [],
-  }),
-  
-  endShift: () => set({
-    isShiftActive: false,
-    selectedResidents: [],
-    entries: [],
-  }),
-  
-  addEntry: (entry) => set((state) => ({
-    entries: [...state.entries, entry],
-  })),
-})); 
+
+  startShift: residents =>
+    set({
+      isShiftActive: true,
+      selectedResidents: residents,
+      entries: [],
+    }),
+
+  endShift: () =>
+    set({
+      isShiftActive: false,
+      selectedResidents: [],
+      entries: [],
+    }),
+
+  addEntry: entry =>
+    set(state => ({
+      entries: [...state.entries, entry],
+    })),
+}));

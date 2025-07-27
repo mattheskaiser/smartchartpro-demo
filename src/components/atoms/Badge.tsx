@@ -7,11 +7,7 @@ interface BadgeProps {
   className?: string;
 }
 
-export const Badge = ({
-  variant = 'info',
-  children,
-  className,
-}: BadgeProps) => {
+export const Badge = ({ variant = 'info', children, className }: BadgeProps) => {
   return (
     <span
       className={clsx(
@@ -28,4 +24,4 @@ export const Badge = ({
       {children}
     </span>
   );
-}; 
+};

@@ -39,4 +39,4 @@ export const Icon = ({ type, size = 'md', className }: IconProps) => {
       aria-hidden="true"
     />
   );
-}; 
+};

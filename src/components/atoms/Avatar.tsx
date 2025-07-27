@@ -9,12 +9,7 @@ interface AvatarProps {
   className?: string;
 }
 
-export const Avatar = ({
-  src,
-  alt,
-  size = 'md',
-  className,
-}: AvatarProps) => {
+export const Avatar = ({ src, alt, size = 'md', className }: AvatarProps) => {
   const dimensions = {
     sm: 32,
     md: 48,
@@ -25,21 +20,13 @@ export const Avatar = ({
 
   return (
     <div
-      className={clsx(
-        'relative rounded-full overflow-hidden bg-gray-200',
-        className
-      )}
+      className={clsx('relative rounded-full overflow-hidden bg-gray-200', className)}
       style={{
         width: pixelSize,
         height: pixelSize,
       }}
     >
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        className="object-cover"
-      />
+      <Image src={src} alt={alt} fill className="object-cover" />
     </div>
   );
-}; 
+};

@@ -12,7 +12,7 @@ export default function StartPage() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const handleStartCharting = () => {
-    const selectedResidents = DUMMY_RESIDENTS.filter((r) => selectedIds.has(r.id));
+    const selectedResidents = DUMMY_RESIDENTS.filter(r => selectedIds.has(r.id));
     startCharting(selectedResidents);
     router.push('/charting');
   };
@@ -44,11 +44,9 @@ export default function StartPage() {
         {/* Resident Selection */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Available Residents
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Available Residents</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {DUMMY_RESIDENTS.map((resident) => (
+              {DUMMY_RESIDENTS.map(resident => (
                 <label
                   key={resident.id}
                   className={`relative flex items-center space-x-4 p-4 border rounded-lg cursor-pointer transition-colors ${
@@ -61,7 +59,7 @@ export default function StartPage() {
                     type="checkbox"
                     className="sr-only"
                     checked={selectedIds.has(resident.id)}
-                    onChange={(e) => {
+                    onChange={e => {
                       const newSelected = new Set(selectedIds);
                       if (e.target.checked) {
                         newSelected.add(resident.id);
@@ -73,9 +71,7 @@ export default function StartPage() {
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <p className="text-sm font-medium text-gray-900 truncate">
-                        {resident.name}
-                      </p>
+                      <p className="text-sm font-medium text-gray-900 truncate">{resident.name}</p>
                       <Badge variant={getStatusVariant(resident.status)}>
                         {resident.status.charAt(0).toUpperCase() + resident.status.slice(1)}
                       </Badge>
@@ -110,4 +106,4 @@ export default function StartPage() {
       </div>
     </div>
   );
-} 
+}

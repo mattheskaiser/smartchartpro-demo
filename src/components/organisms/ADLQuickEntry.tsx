@@ -4,14 +4,7 @@ import React from 'react';
 import { ADLButton } from '../molecules/ADLButton';
 import { AssistanceSelector } from '../molecules/AssistanceSelector';
 
-const ADL_TYPES = [
-  'bathing',
-  'dressing',
-  'eating',
-  'toileting',
-  'mobility',
-  'health',
-] as const;
+const ADL_TYPES = ['bathing', 'dressing', 'eating', 'toileting', 'mobility', 'health'] as const;
 
 export const ADLQuickEntry = () => {
   return (
@@ -22,12 +15,8 @@ export const ADLQuickEntry = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        {ADL_TYPES.map((type) => (
-          <ADLButton
-            key={type}
-            type={type}
-            className="w-full"
-          />
+        {ADL_TYPES.map(type => (
+          <ADLButton key={type} type={type} className="w-full" />
         ))}
       </div>
 
@@ -52,4 +41,4 @@ export const ADLQuickEntry = () => {
       </div>
     </div>
   );
-}; 
+};

@@ -71,5 +71,5 @@ export const DUMMY_RESIDENTS = [
   },
 ] as const;
 
-export type Resident = typeof DUMMY_RESIDENTS[number];
-export type ResidentStatus = Resident['status']; 
+export type Resident = (typeof DUMMY_RESIDENTS)[number];
+export type ResidentStatus = Resident['status'];

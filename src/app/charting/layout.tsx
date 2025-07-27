@@ -4,11 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useChartingStore } from '@/stores/chartingStore';
 
-export default function ChartingLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ChartingLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { isChartingActive, selectedResidents } = useChartingStore();
@@ -29,8 +25,8 @@ export default function ChartingLayout({
             {pathname === '/charting/start'
               ? 'Start Charting'
               : pathname === '/charting/chart'
-              ? 'Chart ADLs'
-              : 'Review Charting'}
+                ? 'Chart ADLs'
+                : 'Review Charting'}
           </h1>
           {isChartingActive && (
             <div className="text-sm text-gray-500">
@@ -44,4 +40,4 @@ export default function ChartingLayout({
       <main className="max-w-7xl mx-auto px-4 py-6">{children}</main>
     </div>
   );
-} 
+}

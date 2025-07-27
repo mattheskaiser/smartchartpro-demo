@@ -23,29 +23,32 @@ interface ChartingStore {
 
 export const useChartingStore = create<ChartingStore>()(
   persist(
-    (set) => ({
+    set => ({
       isChartingActive: false,
       selectedResidents: [],
       entries: [],
-      
-      startCharting: (residents) => set({
-        isChartingActive: true,
-        selectedResidents: residents,
-        entries: [],
-      }),
-      
-      endCharting: () => set({
-        isChartingActive: false,
-        selectedResidents: [],
-        entries: [],
-      }),
-      
-      addEntry: (entry) => set((state) => ({
-        entries: [...state.entries, entry],
-      })),
+
+      startCharting: residents =>
+        set({
+          isChartingActive: true,
+          selectedResidents: residents,
+          entries: [],
+        }),
+
+      endCharting: () =>
+        set({
+          isChartingActive: false,
+          selectedResidents: [],
+          entries: [],
+        }),
+
+      addEntry: entry =>
+        set(state => ({
+          entries: [...state.entries, entry],
+        })),
     }),
     {
       name: 'charting-store',
     }
   )
-); 
+);

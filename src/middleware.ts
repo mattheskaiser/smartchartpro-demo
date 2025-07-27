@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
   if (pathname === '/charting' || pathname === '/review') {
     // Here you would typically check for authentication
     // For now, we'll just let it through
-    
+
     // In a real app, you would check the session/token
     // const session = await getSession(request);
     // if (!session) {
@@ -17,4 +17,4 @@ export function middleware(request: NextRequest) {
 
     return NextResponse.next();
   }
-} 
+}
