@@ -16,11 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   // Basic route protection
   useEffect(() => {
     // Allow access to /start, /, and all /admin routes without active charting
-    if (
-      pathname === '/start' ||
-      pathname === '/' ||
-      pathname.startsWith('/admin')
-    ) {
+    if (pathname === '/start' || pathname === '/' || pathname.startsWith('/admin')) {
       return;
     }
 

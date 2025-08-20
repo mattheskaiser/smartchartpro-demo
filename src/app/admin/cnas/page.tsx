@@ -97,7 +97,7 @@ export default function CNAManagement() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {cnas.map((cna) => (
+                  {cnas.map(cna => (
                     <tr key={cna.id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
                         <div className="flex items-center">
@@ -148,4 +148,4 @@ export default function CNAManagement() {
       </div>
     </div>
   );
-} 
+}

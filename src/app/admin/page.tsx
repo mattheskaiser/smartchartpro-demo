@@ -43,7 +43,7 @@ export default function AdminDashboard() {
 
       {/* Stats */}
       <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {stats.map((stat) => (
+        {stats.map(stat => (
           <div
             key={stat.name}
             className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
@@ -87,8 +87,8 @@ export default function AdminDashboard() {
                           activity.status === 'completed'
                             ? 'bg-green-100'
                             : activity.status === 'active'
-                            ? 'bg-blue-100'
-                            : 'bg-gray-100'
+                              ? 'bg-blue-100'
+                              : 'bg-gray-100'
                         )}
                       >
                         <UserIcon
@@ -97,8 +97,8 @@ export default function AdminDashboard() {
                             activity.status === 'completed'
                               ? 'text-green-600'
                               : activity.status === 'active'
-                              ? 'text-blue-600'
-                              : 'text-gray-600'
+                                ? 'text-blue-600'
+                                : 'text-gray-600'
                           )}
                         />
                       </div>
@@ -121,4 +121,4 @@ export default function AdminDashboard() {
       </div>
     </div>
   );
-} 
+}

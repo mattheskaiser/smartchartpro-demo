@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { PlusIcon } from '@heroicons/react/20/solid';
 import { Badge } from '@/components/atoms/Badge';
 import { Avatar } from '@/components/atoms/Avatar';
@@ -34,14 +34,7 @@ const residents = [
   },
 ];
 
-const adlOptions = [
-  'bathing',
-  'dressing',
-  'eating',
-  'toileting',
-  'mobility',
-  'health',
-];
+const adlOptions = ['bathing', 'dressing', 'eating', 'toileting', 'mobility', 'health'];
 
 export default function ResidentManagement() {
   const [showModal, setShowModal] = useState(false);
@@ -57,11 +50,9 @@ export default function ResidentManagement() {
   };
 
   const handleAdlChange = (adl: string) => {
-    setForm((prev) => ({
+    setForm(prev => ({
       ...prev,
-      adls: prev.adls.includes(adl)
-        ? prev.adls.filter((a) => a !== adl)
-        : [...prev.adls, adl],
+      adls: prev.adls.includes(adl) ? prev.adls.filter(a => a !== adl) : [...prev.adls, adl],
     }));
   };
 
@@ -144,7 +135,7 @@ export default function ResidentManagement() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">ADLs</label>
                 <div className="flex flex-wrap gap-2">
-                  {adlOptions.map((adl) => (
+                  {adlOptions.map(adl => (
                     <label key={adl} className="flex items-center gap-1 text-sm">
                       <input
                         type="checkbox"
@@ -221,7 +212,7 @@ export default function ResidentManagement() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {residents.map((resident) => (
+                  {residents.map(resident => (
                     <tr key={resident.id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
                         <div className="flex items-center">
@@ -262,4 +253,4 @@ export default function ResidentManagement() {
       </div>
     </div>
   );
-} 
+}
