@@ -10,7 +10,7 @@ import React from 'react';
 
 type IconType = 'bathing' | 'dressing' | 'eating' | 'toileting' | 'mobility' | 'health';
 
-interface IconProps {
+interface IconAtomProps {
   type: IconType;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
@@ -18,7 +18,7 @@ interface IconProps {
 
 const iconComponents = {
   bathing: SparklesIcon,
-  dressing: UserIcon, // Using UserIcon as a fallback for clothing
+  dressing: UserIcon,
   eating: UserIcon,
   toileting: HomeIcon,
   mobility: ArrowPathIcon,
@@ -31,7 +31,7 @@ const iconSizes = {
   lg: 'w-8 h-8',
 };
 
-export const Icon = ({ type, size = 'md', className }: IconProps) => {
+export const IconAtom = ({ type, size = 'md', className }: IconAtomProps) => {
   const IconComponent = iconComponents[type];
   return (
     <IconComponent

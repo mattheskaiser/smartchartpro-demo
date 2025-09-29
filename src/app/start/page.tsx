@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { DUMMY_RESIDENTS } from '@/constants/residents';
 import { useChartingStore } from '@/stores/chartingStore';
-import { Badge } from '@/components/atoms/Badge';
+import { BadgeAtom } from '@/components/atoms/Badge.atom';
 
 export default function StartPage() {
   const router = useRouter();
@@ -72,9 +72,9 @@ export default function StartPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
                       <p className="text-sm font-medium text-gray-900 truncate">{resident.name}</p>
-                      <Badge variant={getStatusVariant(resident.status)}>
+                      <BadgeAtom variant={getStatusVariant(resident.status)}>
                         {resident.status.charAt(0).toUpperCase() + resident.status.slice(1)}
-                      </Badge>
+                      </BadgeAtom>
                     </div>
                     <p className="text-sm text-gray-500">Room {resident.room}</p>
                   </div>

@@ -1,13 +1,13 @@
 import { clsx } from 'clsx';
 import React from 'react';
 
-interface BadgeProps {
+interface BadgeAtomProps {
   variant?: 'success' | 'warning' | 'error' | 'info';
   children: React.ReactNode;
   className?: string;
 }
 
-export const Badge = ({ variant = 'info', children, className }: BadgeProps) => {
+export const BadgeAtom = ({ variant = 'info', children, className }: BadgeAtomProps) => {
   return (
     <span
       className={clsx(

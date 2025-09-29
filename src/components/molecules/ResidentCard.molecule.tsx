@@ -1,8 +1,8 @@
 import React from 'react';
-import { Avatar } from '../atoms/Avatar';
-import { Badge } from '../atoms/Badge';
+import { AvatarAtom } from '../atoms/Avatar.atom';
+import { BadgeAtom } from '../atoms/Badge.atom';
 
-interface ResidentCardProps {
+interface ResidentCardMoleculeProps {
   name: string;
   imageUrl: string;
   status: 'independent' | 'partial' | 'full';
@@ -16,17 +16,17 @@ const statusConfig = {
   full: { label: 'Full Assist', variant: 'error' as const },
 };
 
-export const ResidentCard = ({ name, imageUrl, status, room }: ResidentCardProps) => {
+export const ResidentCardMolecule = ({ name, imageUrl, status, room }: ResidentCardMoleculeProps) => {
   const { label, variant } = statusConfig[status];
 
   return (
     <div className="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-      <Avatar src={imageUrl} alt={name} size="lg" />
+      <AvatarAtom src={imageUrl} alt={name} size="lg" />
       <div className="flex flex-col">
         <h3 className="text-lg font-semibold text-gray-900">{name}</h3>
         <p className="text-sm text-gray-500">Room {room}</p>
         <div className="mt-2">
-          <Badge variant={variant}>{label}</Badge>
+          <BadgeAtom variant={variant}>{label}</BadgeAtom>
         </div>
       </div>
     </div>

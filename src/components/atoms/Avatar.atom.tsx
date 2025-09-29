@@ -2,14 +2,14 @@ import { clsx } from 'clsx';
 import Image from 'next/image';
 import React from 'react';
 
-interface AvatarProps {
+interface AvatarAtomProps {
   src: string;
   alt: string;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
-export const Avatar = ({ src, alt, size = 'md', className }: AvatarProps) => {
+export const AvatarAtom = ({ src, alt, size = 'md', className }: AvatarAtomProps) => {
   const dimensions = {
     sm: 32,
     md: 48,

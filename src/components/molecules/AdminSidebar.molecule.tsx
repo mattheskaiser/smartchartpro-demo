@@ -15,11 +15,9 @@ export const AdminSidebarMolecule = () => {
   const pathname = usePathname();
 
   const isActiveItem = (href: string) => {
-    // Exact match for dashboard (just /admin)
     if (href === '/admin') {
       return pathname === '/admin';
     }
-    // For other routes, check if pathname starts with the href
     return pathname.startsWith(href);
   };
 

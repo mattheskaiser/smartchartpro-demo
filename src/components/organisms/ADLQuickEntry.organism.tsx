@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
-import { ADLButton } from '../molecules/ADLButton';
-import { AssistanceSelector } from '../molecules/AssistanceSelector';
+import { ADLButtonMolecule } from '../molecules/ADLButton.molecule';
+import { AssistanceSelectorMolecule } from '../molecules/AssistanceSelector.molecule';
 
 const ADL_TYPES = ['bathing', 'dressing', 'eating', 'toileting', 'mobility', 'health'] as const;
 
-export const ADLQuickEntry = () => {
+export const ADLQuickEntryOrganism = () => {
   return (
     <div className="space-y-6 rounded-lg border border-gray-200 bg-white p-6">
       <div>
@@ -16,13 +16,13 @@ export const ADLQuickEntry = () => {
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
         {ADL_TYPES.map(type => (
-          <ADLButton key={type} type={type} className="w-full" />
+          <ADLButtonMolecule key={type} type={type} className="w-full" />
         ))}
       </div>
 
       <div>
         <h3 className="mb-3 text-sm font-medium text-gray-700">Assistance Level</h3>
-        <AssistanceSelector className="w-full" />
+        <AssistanceSelectorMolecule className="w-full" />
       </div>
 
       <div className="flex justify-end space-x-4">

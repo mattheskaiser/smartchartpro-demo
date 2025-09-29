@@ -1,7 +1,7 @@
 'use client';
 import { PlusIcon } from '@heroicons/react/20/solid';
-import { Badge } from '@/components/atoms/Badge';
-import { Avatar } from '@/components/atoms/Avatar';
+import { BadgeAtom } from '@/components/atoms/Badge.atom';
+import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { useState } from 'react';
 
 const residents = [
@@ -217,7 +217,7 @@ export default function ResidentManagement() {
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
                         <div className="flex items-center">
                           <div className="h-10 w-10 flex-shrink-0">
-                            <Avatar src={resident.imageUrl} alt={resident.name} />
+                            <AvatarAtom src={resident.imageUrl} alt={resident.name} />
                           </div>
                           <div className="ml-4">
                             <div className="font-medium text-gray-900">{resident.name}</div>
@@ -228,9 +228,9 @@ export default function ResidentManagement() {
                         {resident.room}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4">
-                        <Badge variant={resident.status as 'info' | 'warning' | 'success'}>
+                        <BadgeAtom variant={resident.status as 'info' | 'warning' | 'success'}>
                           {resident.status}
-                        </Badge>
+                        </BadgeAtom>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {resident.lastADL}
