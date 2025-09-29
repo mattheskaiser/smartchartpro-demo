@@ -16,7 +16,11 @@ const options = [
   { value: 'full', label: 'Full Assist' },
 ] as const;
 
-export const AssistanceSelectorMolecule = ({ value, onChange, className }: AssistanceSelectorMoleculeProps) => {
+export const AssistanceSelectorMolecule = ({
+  value,
+  onChange,
+  className,
+}: AssistanceSelectorMoleculeProps) => {
   return (
     <div className={clsx('inline-flex rounded-lg border border-gray-200 bg-white p-1', className)}>
       {options.map(option => (

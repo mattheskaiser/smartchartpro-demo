@@ -16,7 +16,12 @@ const statusConfig = {
   full: { label: 'Full Assist', variant: 'error' as const },
 };
 
-export const ResidentCardMolecule = ({ name, imageUrl, status, room }: ResidentCardMoleculeProps) => {
+export const ResidentCardMolecule = ({
+  name,
+  imageUrl,
+  status,
+  room,
+}: ResidentCardMoleculeProps) => {
   const { label, variant } = statusConfig[status];
 
   return (

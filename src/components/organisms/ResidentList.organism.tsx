@@ -2,7 +2,6 @@ import React from 'react';
 import { ResidentCardMolecule } from '../molecules/ResidentCard.molecule';
 import { DUMMY_RESIDENTS } from '@/constants/residents';
 
-
 export const ResidentListOrganism = () => {
   return (
     <div className="space-y-4">

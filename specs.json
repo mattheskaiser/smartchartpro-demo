@@ -1,0 +1,49 @@
+{
+  "projectStructure": {
+    "pattern": "Atomic Design",
+    "description": "Project follows the Atomic Design methodology for component organization",
+    "levels": ["atoms", "molecules", "organisms", "templates", "pages"]
+  },
+  "namingConventions": {
+    "fileNaming": {
+      "pattern": "{ComponentName}.{level}.tsx",
+      "examples": [
+        "Button.atom.tsx",
+        "List.molecule.tsx",
+        "Header.organism.tsx",
+        "Dashboard.template.tsx",
+        "Home.page.tsx"
+      ],
+      "description": "File names use PascalCase component name followed by atomic level and .tsx extension"
+    },
+    "componentNaming": {
+      "pattern": "{ComponentName}{Level}",
+      "examples": ["ButtonAtom", "ListMolecule", "HeaderOrganism", "DashboardTemplate", "HomePage"],
+      "description": "Component names use PascalCase with the atomic level as a suffix"
+    }
+  },
+  "folderStructure": {
+    "recommended": "src/components/{level}/{ComponentName}.{level}.tsx",
+    "example": {
+      "atoms": "src/components/atoms/Button.atom.tsx",
+      "molecules": "src/components/molecules/List.molecule.tsx",
+      "organisms": "src/components/organisms/Header.organism.tsx",
+      "templates": "src/components/templates/Dashboard.template.tsx",
+      "pages": "src/components/pages/Home.page.tsx"
+    }
+  },
+  "importExample": {
+    "description": "How components should be imported",
+    "examples": [
+      "import { ButtonAtom } from '@/components/atoms/Button.atom'",
+      "import { ListMolecule } from '@/components/molecules/List.molecule'"
+    ]
+  },
+  "atomicDesignLevels": {
+    "atoms": "Basic building blocks (buttons, inputs, labels)",
+    "molecules": "Simple groups of atoms (search bar, form field)",
+    "organisms": "Complex components made of molecules/atoms (header, footer, form)",
+    "templates": "Page-level layouts without real content",
+    "pages": "Specific instances of templates with real content"
+  }
+}
