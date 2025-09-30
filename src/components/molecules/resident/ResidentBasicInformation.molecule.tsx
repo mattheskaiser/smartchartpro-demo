@@ -20,14 +20,16 @@ interface ResidentBasicInformationProps {
   onInputChange: (field: string, value: string) => void;
 }
 
-export const ResidentBasicInformationMolecule = ({ 
-  resident, 
-  isEditing, 
-  onInputChange 
+export const ResidentBasicInformationMolecule = ({
+  resident,
+  isEditing,
+  onInputChange,
 }: ResidentBasicInformationProps) => {
   return (
     <CardAtom>
-      <TextAtom variant="h3" weight="medium" className="mb-4">Basic Information</TextAtom>
+      <TextAtom variant="h3" weight="medium" className="mb-4">
+        Basic Information
+      </TextAtom>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <LabelAtom>Full Name</LabelAtom>
@@ -35,7 +37,7 @@ export const ResidentBasicInformationMolecule = ({
             <InputAtom
               type="text"
               value={resident.name}
-              onChange={(e) => onInputChange('name', e.target.value)}
+              onChange={e => onInputChange('name', e.target.value)}
             />
           ) : (
             <TextAtom>{resident.name}</TextAtom>
@@ -47,7 +49,7 @@ export const ResidentBasicInformationMolecule = ({
             <InputAtom
               type="text"
               value={resident.room}
-              onChange={(e) => onInputChange('room', e.target.value)}
+              onChange={e => onInputChange('room', e.target.value)}
             />
           ) : (
             <TextAtom>{resident.room}</TextAtom>
@@ -59,7 +61,7 @@ export const ResidentBasicInformationMolecule = ({
             <InputAtom
               type="date"
               value={resident.dateOfBirth}
-              onChange={(e) => onInputChange('dateOfBirth', e.target.value)}
+              onChange={e => onInputChange('dateOfBirth', e.target.value)}
             />
           ) : (
             <TextAtom>{new Date(resident.dateOfBirth).toLocaleDateString()}</TextAtom>
@@ -71,7 +73,7 @@ export const ResidentBasicInformationMolecule = ({
             <InputAtom
               type="date"
               value={resident.admissionDate}
-              onChange={(e) => onInputChange('admissionDate', e.target.value)}
+              onChange={e => onInputChange('admissionDate', e.target.value)}
             />
           ) : (
             <TextAtom>{new Date(resident.admissionDate).toLocaleDateString()}</TextAtom>
@@ -82,7 +84,7 @@ export const ResidentBasicInformationMolecule = ({
           {isEditing ? (
             <SelectAtom
               value={resident.status}
-              onChange={(e) => onInputChange('status', e.target.value)}
+              onChange={e => onInputChange('status', e.target.value)}
             >
               <option value="independent">Independent</option>
               <option value="partial">Partial</option>
@@ -100,7 +102,7 @@ export const ResidentBasicInformationMolecule = ({
             <InputAtom
               type="text"
               value={resident.assignedCNA}
-              onChange={(e) => onInputChange('assignedCNA', e.target.value)}
+              onChange={e => onInputChange('assignedCNA', e.target.value)}
             />
           ) : (
             <TextAtom>{resident.assignedCNA}</TextAtom>

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { PlusIcon } from '@heroicons/react/20/solid';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { InputAtom } from '@/components/atoms/Input.atom';
 import { SelectAtom } from '@/components/atoms/Select.atom';
@@ -55,14 +54,16 @@ export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit }: AddResid
         >
           ×
         </ButtonAtom>
-        <TextAtom variant="h3" weight="semibold" className="mb-4">Add Resident</TextAtom>
+        <TextAtom variant="h3" weight="semibold" className="mb-4">
+          Add Resident
+        </TextAtom>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <LabelAtom required>Name</LabelAtom>
             <InputAtom
               type="text"
               value={form.name}
-              onChange={(e) => handleChange('name', e.target.value)}
+              onChange={e => handleChange('name', e.target.value)}
               required
             />
           </div>
@@ -71,16 +72,13 @@ export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit }: AddResid
             <InputAtom
               type="text"
               value={form.room}
-              onChange={(e) => handleChange('room', e.target.value)}
+              onChange={e => handleChange('room', e.target.value)}
               required
             />
           </div>
           <div>
             <LabelAtom>Status</LabelAtom>
-            <SelectAtom
-              value={form.status}
-              onChange={(e) => handleChange('status', e.target.value)}
-            >
+            <SelectAtom value={form.status} onChange={e => handleChange('status', e.target.value)}>
               <option value="independent">Independent</option>
               <option value="partial">Partial</option>
               <option value="full">Full</option>
@@ -95,7 +93,9 @@ export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit }: AddResid
                     checked={form.adls.includes(adl)}
                     onCheckedChange={() => handleAdlChange(adl)}
                   />
-                  <TextAtom variant="small" className="capitalize">{adl}</TextAtom>
+                  <TextAtom variant="small" className="capitalize">
+                    {adl}
+                  </TextAtom>
                 </label>
               ))}
             </div>

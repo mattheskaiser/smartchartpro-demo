@@ -10,18 +10,16 @@ interface ResidentNotesProps {
   onNotesChange: (notes: string) => void;
 }
 
-export const ResidentNotesMolecule = ({ 
-  notes, 
-  isEditing, 
-  onNotesChange 
-}: ResidentNotesProps) => {
+export const ResidentNotesMolecule = ({ notes, isEditing, onNotesChange }: ResidentNotesProps) => {
   return (
     <CardAtom>
-      <TextAtom variant="h3" weight="medium" className="mb-4">Notes</TextAtom>
+      <TextAtom variant="h3" weight="medium" className="mb-4">
+        Notes
+      </TextAtom>
       {isEditing ? (
         <TextareaAtom
           value={notes}
-          onChange={(e) => onNotesChange(e.target.value)}
+          onChange={e => onNotesChange(e.target.value)}
           rows={4}
           placeholder="Add notes about the resident..."
         />

@@ -3,12 +3,7 @@
 import Link from 'next/link';
 import clsx from 'clsx';
 import { usePathname } from 'next/navigation';
-import { 
-  Cog6ToothIcon, 
-  HomeIcon, 
-  UserGroupIcon, 
-  UsersIcon 
-} from '@heroicons/react/24/outline';
+import { Cog6ToothIcon, HomeIcon, UserGroupIcon, UsersIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: HomeIcon },
@@ -32,9 +27,9 @@ export const AdminSidebarMolecule = () => {
       <div className="flex items-center justify-center h-16 border-b border-gray-200">
         <h1 className="text-xl font-semibold text-gray-900">Admin Portal</h1>
       </div>
-      
+
       <nav className="flex-1 px-4 py-6 space-y-2">
-        {navigation.map((item) => (
+        {navigation.map(item => (
           <Link
             key={item.name}
             href={item.href}

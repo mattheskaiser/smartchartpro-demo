@@ -12,14 +12,16 @@ interface ResidentADLRequirementsProps {
   onToggleADL: (adl: string) => void;
 }
 
-export const ResidentADLRequirementsMolecule = ({ 
-  adlNeeds, 
-  isEditing, 
-  onToggleADL 
+export const ResidentADLRequirementsMolecule = ({
+  adlNeeds,
+  isEditing,
+  onToggleADL,
 }: ResidentADLRequirementsProps) => {
   return (
     <CardAtom>
-      <TextAtom variant="h3" weight="medium" className="mb-4">ADL Requirements</TextAtom>
+      <TextAtom variant="h3" weight="medium" className="mb-4">
+        ADL Requirements
+      </TextAtom>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {adlOptions.map(adl => (
           <label key={adl} className="flex items-center space-x-2">
@@ -28,7 +30,9 @@ export const ResidentADLRequirementsMolecule = ({
               onCheckedChange={() => isEditing && onToggleADL(adl)}
               disabled={!isEditing}
             />
-            <TextAtom variant="small" className="capitalize">{adl}</TextAtom>
+            <TextAtom variant="small" className="capitalize">
+              {adl}
+            </TextAtom>
           </label>
         ))}
       </div>

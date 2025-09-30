@@ -30,15 +30,9 @@ export const ResidentListTableMolecule = ({ residents }: ResidentListTableProps)
             <th className="py-3.5 pl-6 pr-3 text-left text-sm font-semibold text-gray-900">
               Resident
             </th>
-            <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-              Room
-            </th>
-            <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-              Status
-            </th>
-            <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-              Last ADL
-            </th>
+            <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Room</th>
+            <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+            <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Last ADL</th>
             <th className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
               Assigned CNA
             </th>
@@ -46,7 +40,7 @@ export const ResidentListTableMolecule = ({ residents }: ResidentListTableProps)
         </thead>
         <tbody className="divide-y divide-gray-200 bg-white">
           {residents.map(resident => (
-            <tr 
+            <tr
               key={resident.id}
               onClick={() => router.push(`/admin/residents/${resident.id}`)}
               className="hover:bg-gray-50 cursor-pointer transition-colors"
@@ -62,7 +56,9 @@ export const ResidentListTableMolecule = ({ residents }: ResidentListTableProps)
                 </div>
               </td>
               <td className="px-3 py-4">
-                <TextAtom variant="small" color="muted">{resident.room}</TextAtom>
+                <TextAtom variant="small" color="muted">
+                  {resident.room}
+                </TextAtom>
               </td>
               <td className="px-3 py-4">
                 <BadgeAtom variant={resident.status as 'info' | 'warning' | 'success'}>
@@ -70,10 +66,14 @@ export const ResidentListTableMolecule = ({ residents }: ResidentListTableProps)
                 </BadgeAtom>
               </td>
               <td className="px-3 py-4">
-                <TextAtom variant="small" color="muted">{resident.lastADL}</TextAtom>
+                <TextAtom variant="small" color="muted">
+                  {resident.lastADL}
+                </TextAtom>
               </td>
               <td className="px-3 py-4">
-                <TextAtom variant="small" color="muted">{resident.assignedCNA}</TextAtom>
+                <TextAtom variant="small" color="muted">
+                  {resident.assignedCNA}
+                </TextAtom>
               </td>
             </tr>
           ))}

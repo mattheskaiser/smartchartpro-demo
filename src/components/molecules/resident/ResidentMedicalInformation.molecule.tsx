@@ -11,28 +11,44 @@ interface ResidentMedicalInformationProps {
   };
 }
 
-export const ResidentMedicalInformationMolecule = ({ medicalInfo }: ResidentMedicalInformationProps) => {
+export const ResidentMedicalInformationMolecule = ({
+  medicalInfo,
+}: ResidentMedicalInformationProps) => {
   return (
     <CardAtom>
-      <TextAtom variant="h3" weight="medium" className="mb-3">Medical Information</TextAtom>
+      <TextAtom variant="h3" weight="medium" className="mb-3">
+        Medical Information
+      </TextAtom>
       <div className="space-y-3">
         <div>
-          <TextAtom variant="small" weight="medium" color="secondary">Allergies:</TextAtom>
-          <TextAtom variant="small" color="secondary">{medicalInfo.allergies.join(', ')}</TextAtom>
+          <TextAtom variant="small" weight="medium" color="secondary">
+            Allergies:
+          </TextAtom>
+          <TextAtom variant="small" color="secondary">
+            {medicalInfo.allergies.join(', ')}
+          </TextAtom>
         </div>
         <div>
-          <TextAtom variant="small" weight="medium" color="secondary">Medications:</TextAtom>
+          <TextAtom variant="small" weight="medium" color="secondary">
+            Medications:
+          </TextAtom>
           <ul className="mt-1">
             {medicalInfo.medications.map((med, index) => (
               <li key={index}>
-                <TextAtom variant="small" color="secondary" as="span">• {med}</TextAtom>
+                <TextAtom variant="small" color="secondary" as="span">
+                  • {med}
+                </TextAtom>
               </li>
             ))}
           </ul>
         </div>
         <div>
-          <TextAtom variant="small" weight="medium" color="secondary">Conditions:</TextAtom>
-          <TextAtom variant="small" color="secondary">{medicalInfo.conditions.join(', ')}</TextAtom>
+          <TextAtom variant="small" weight="medium" color="secondary">
+            Conditions:
+          </TextAtom>
+          <TextAtom variant="small" color="secondary">
+            {medicalInfo.conditions.join(', ')}
+          </TextAtom>
         </div>
       </div>
     </CardAtom>

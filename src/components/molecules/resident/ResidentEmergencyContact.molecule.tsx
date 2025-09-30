@@ -15,14 +15,16 @@ interface ResidentEmergencyContactProps {
   onInputChange: (field: string, value: string) => void;
 }
 
-export const ResidentEmergencyContactMolecule = ({ 
-  emergencyContact, 
-  isEditing, 
-  onInputChange 
+export const ResidentEmergencyContactMolecule = ({
+  emergencyContact,
+  isEditing,
+  onInputChange,
 }: ResidentEmergencyContactProps) => {
   return (
     <CardAtom>
-      <TextAtom variant="h3" weight="medium" className="mb-4">Emergency Contact</TextAtom>
+      <TextAtom variant="h3" weight="medium" className="mb-4">
+        Emergency Contact
+      </TextAtom>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <LabelAtom>Contact Name</LabelAtom>
@@ -30,7 +32,7 @@ export const ResidentEmergencyContactMolecule = ({
             <InputAtom
               type="text"
               value={emergencyContact.name}
-              onChange={(e) => onInputChange('name', e.target.value)}
+              onChange={e => onInputChange('name', e.target.value)}
             />
           ) : (
             <TextAtom>{emergencyContact.name}</TextAtom>
@@ -42,7 +44,7 @@ export const ResidentEmergencyContactMolecule = ({
             <InputAtom
               type="text"
               value={emergencyContact.relationship}
-              onChange={(e) => onInputChange('relationship', e.target.value)}
+              onChange={e => onInputChange('relationship', e.target.value)}
             />
           ) : (
             <TextAtom>{emergencyContact.relationship}</TextAtom>
@@ -54,7 +56,7 @@ export const ResidentEmergencyContactMolecule = ({
             <InputAtom
               type="tel"
               value={emergencyContact.phone}
-              onChange={(e) => onInputChange('phone', e.target.value)}
+              onChange={e => onInputChange('phone', e.target.value)}
             />
           ) : (
             <TextAtom>{emergencyContact.phone}</TextAtom>

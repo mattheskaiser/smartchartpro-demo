@@ -9,12 +9,7 @@ interface CardAtomProps {
   padding?: 'none' | 'sm' | 'md' | 'lg';
 }
 
-export const CardAtom = ({ 
-  children, 
-  className, 
-  padding = 'md',
-  ...props 
-}: CardAtomProps) => {
+export const CardAtom = ({ children, className, padding = 'md', ...props }: CardAtomProps) => {
   return (
     <div
       className={clsx(

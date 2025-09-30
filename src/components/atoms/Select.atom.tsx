@@ -8,17 +8,12 @@ interface SelectAtomProps extends React.SelectHTMLAttributes<HTMLSelectElement> 
   error?: boolean;
 }
 
-export const SelectAtom = ({ 
-  children, 
-  className, 
-  error,
-  ...props 
-}: SelectAtomProps) => {
+export const SelectAtom = ({ children, className, error, ...props }: SelectAtomProps) => {
   return (
     <select
       className={clsx(
         'w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-offset-2 focus:outline-none transition-colors',
-        error 
+        error
           ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
           : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500',
         className

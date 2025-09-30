@@ -33,7 +33,8 @@ const mockResident = {
     conditions: ['Diabetes Type 2', 'Hypertension'],
   },
   adlNeeds: ['bathing', 'dressing', 'mobility'],
-  notes: 'Patient prefers morning care routine. Needs assistance with mobility due to recent hip surgery.',
+  notes:
+    'Patient prefers morning care routine. Needs assistance with mobility due to recent hip surgery.',
 };
 
 export default function ResidentDetail() {
@@ -52,7 +53,7 @@ export default function ResidentDetail() {
   const handleEmergencyContactChange = (field: string, value: string) => {
     setResident(prev => ({
       ...prev,
-      emergencyContact: { ...prev.emergencyContact, [field]: value }
+      emergencyContact: { ...prev.emergencyContact, [field]: value },
     }));
   };
 
@@ -65,7 +66,7 @@ export default function ResidentDetail() {
       ...prev,
       adlNeeds: prev.adlNeeds.includes(adl)
         ? prev.adlNeeds.filter(a => a !== adl)
-        : [...prev.adlNeeds, adl]
+        : [...prev.adlNeeds, adl],
     }));
   };
 
@@ -82,13 +83,17 @@ export default function ResidentDetail() {
             <ArrowLeftIcon className="h-5 w-5" />
           </ButtonAtom>
           <div>
-            <TextAtom variant="h1" weight="semibold">{resident.name}</TextAtom>
-            <TextAtom variant="small" color="muted">Room {resident.room}</TextAtom>
+            <TextAtom variant="h1" weight="semibold">
+              {resident.name}
+            </TextAtom>
+            <TextAtom variant="small" color="muted">
+              Room {resident.room}
+            </TextAtom>
           </div>
         </div>
         <ButtonAtom
           variant="primary"
-          onClick={() => isEditing ? handleSave() : setIsEditing(true)}
+          onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
         >
           <PencilIcon className="h-4 w-4 mr-2" />
           {isEditing ? 'Save Changes' : 'Edit'}
