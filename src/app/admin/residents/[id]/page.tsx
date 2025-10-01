@@ -32,43 +32,55 @@ const mockResident = {
   medicalInfo: {
     allergies: [
       { id: '1', name: 'Penicillin', severity: 'severe', reaction: 'Anaphylaxis' },
-      { id: '2', name: 'Shellfish', severity: 'moderate', reaction: 'Hives and swelling' }
+      { id: '2', name: 'Shellfish', severity: 'moderate', reaction: 'Hives and swelling' },
     ],
     conditions: [
-      { id: '1', name: 'Diabetes Type 2', diagnosedDate: '2018-03-15', status: 'managed', notes: 'Well controlled with medication' },
-      { id: '2', name: 'Hypertension', diagnosedDate: '2020-07-22', status: 'active', notes: 'Monitoring blood pressure daily' }
+      {
+        id: '1',
+        name: 'Diabetes Type 2',
+        diagnosedDate: '2018-03-15',
+        status: 'managed',
+        notes: 'Well controlled with medication',
+      },
+      {
+        id: '2',
+        name: 'Hypertension',
+        diagnosedDate: '2020-07-22',
+        status: 'active',
+        notes: 'Monitoring blood pressure daily',
+      },
     ],
     medications: [
-      { 
-        id: '1', 
-        name: 'Lisinopril', 
-        dosage: '10mg', 
-        frequency: 'Once daily', 
+      {
+        id: '1',
+        name: 'Lisinopril',
+        dosage: '10mg',
+        frequency: 'Once daily',
         instructions: 'Take in the morning with water',
         startDate: '2020-07-22',
-        status: 'current'
+        status: 'current',
       },
-      { 
-        id: '2', 
-        name: 'Metformin', 
-        dosage: '500mg', 
-        frequency: 'Twice daily', 
+      {
+        id: '2',
+        name: 'Metformin',
+        dosage: '500mg',
+        frequency: 'Twice daily',
         instructions: 'Take with meals to reduce stomach upset',
         startDate: '2018-03-15',
-        status: 'current'
+        status: 'current',
       },
-      { 
-        id: '3', 
-        name: 'Aspirin', 
-        dosage: '81mg', 
-        frequency: 'Once daily', 
+      {
+        id: '3',
+        name: 'Aspirin',
+        dosage: '81mg',
+        frequency: 'Once daily',
         instructions: 'Take with food',
         startDate: '2019-01-10',
         endDate: '2023-06-15',
         status: 'past',
-        discontinuedReason: 'Stomach irritation'
-      }
-    ]
+        discontinuedReason: 'Stomach irritation',
+      },
+    ],
   },
   adlNeeds: ['bathing', 'dressing', 'mobility'],
   notes:
@@ -111,21 +123,21 @@ export default function ResidentDetail() {
   const handleAllergiesChange = (allergies: any[]) => {
     setResident(prev => ({
       ...prev,
-      medicalInfo: { ...prev.medicalInfo, allergies }
+      medicalInfo: { ...prev.medicalInfo, allergies },
     }));
   };
 
   const handleConditionsChange = (conditions: any[]) => {
     setResident(prev => ({
       ...prev,
-      medicalInfo: { ...prev.medicalInfo, conditions }
+      medicalInfo: { ...prev.medicalInfo, conditions },
     }));
   };
 
   const handleMedicationsChange = (medications: any[]) => {
     setResident(prev => ({
       ...prev,
-      medicalInfo: { ...prev.medicalInfo, medications }
+      medicalInfo: { ...prev.medicalInfo, medications },
     }));
   };
 

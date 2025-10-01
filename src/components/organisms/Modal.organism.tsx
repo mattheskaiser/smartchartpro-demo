@@ -49,16 +49,10 @@ export const ModalOrganism = ({
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        
-        <div className="py-4">
-          {children}
-        </div>
 
-        {footer && (
-          <DialogFooter>
-            {footer}
-          </DialogFooter>
-        )}
+        <div className="py-4">{children}</div>
+
+        {footer && <DialogFooter>{footer}</DialogFooter>}
       </DialogContent>
     </Dialog>
   );
@@ -88,12 +82,7 @@ export const FormModalOrganism = ({
       <ButtonAtom variant="secondary" onClick={onClose} disabled={isSubmitting}>
         {cancelLabel}
       </ButtonAtom>
-      <ButtonAtom 
-        variant={submitVariant} 
-        type="submit" 
-        form="modal-form"
-        disabled={isSubmitting}
-      >
+      <ButtonAtom variant={submitVariant} type="submit" form="modal-form" disabled={isSubmitting}>
         {isSubmitting ? 'Submitting...' : submitLabel}
       </ButtonAtom>
     </>

@@ -11,16 +11,32 @@ import { FormModalOrganism } from '@/components/organisms/Modal.organism';
 interface ConditionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (condition: { name: string; diagnosedDate: string; status: string; notes: string }) => void;
-  editingCondition?: { id: string; name: string; diagnosedDate: string; status: string; notes: string } | null;
+  onSubmit: (condition: {
+    name: string;
+    diagnosedDate: string;
+    status: string;
+    notes: string;
+  }) => void;
+  editingCondition?: {
+    id: string;
+    name: string;
+    diagnosedDate: string;
+    status: string;
+    notes: string;
+  } | null;
 }
 
-export const ConditionModalMolecule = ({ isOpen, onClose, onSubmit, editingCondition }: AddConditionModalProps) => {
+export const ConditionModalMolecule = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  editingCondition,
+}: ConditionModalProps) => {
   const [form, setForm] = useState({
     name: '',
     diagnosedDate: '',
     status: 'active',
-    notes: ''
+    notes: '',
   });
 
   // Update form when editing condition changes
@@ -30,7 +46,7 @@ export const ConditionModalMolecule = ({ isOpen, onClose, onSubmit, editingCondi
         name: editingCondition.name,
         diagnosedDate: editingCondition.diagnosedDate,
         status: editingCondition.status,
-        notes: editingCondition.notes
+        notes: editingCondition.notes,
       });
     } else {
       setForm({ name: '', diagnosedDate: '', status: 'active', notes: '' });
@@ -60,7 +76,7 @@ export const ConditionModalMolecule = ({ isOpen, onClose, onSubmit, editingCondi
         <InputAtom
           type="text"
           value={form.name}
-          onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
+          onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
           placeholder="e.g., Diabetes Type 2"
           required
         />
@@ -70,11 +86,11 @@ export const ConditionModalMolecule = ({ isOpen, onClose, onSubmit, editingCondi
           <LabelAtom>Status</LabelAtom>
           <DropdownAtom
             value={form.status}
-            onValueChange={(value) => setForm(prev => ({ ...prev, status: value }))}
+            onValueChange={value => setForm(prev => ({ ...prev, status: value }))}
             options={[
               { value: 'active', label: 'Active' },
               { value: 'managed', label: 'Managed' },
-              { value: 'resolved', label: 'Resolved' }
+              { value: 'resolved', label: 'Resolved' },
             ]}
           />
         </div>
@@ -82,7 +98,7 @@ export const ConditionModalMolecule = ({ isOpen, onClose, onSubmit, editingCondi
           <LabelAtom>Diagnosed Date</LabelAtom>
           <DatePickerMolecule
             value={form.diagnosedDate}
-            onChange={(date) => setForm(prev => ({ ...prev, diagnosedDate: date }))}
+            onChange={date => setForm(prev => ({ ...prev, diagnosedDate: date }))}
             placeholder="Select date"
           />
         </div>
@@ -91,7 +107,7 @@ export const ConditionModalMolecule = ({ isOpen, onClose, onSubmit, editingCondi
         <LabelAtom>Notes</LabelAtom>
         <TextareaAtom
           value={form.notes}
-          onChange={(e) => setForm(prev => ({ ...prev, notes: e.target.value }))}
+          onChange={e => setForm(prev => ({ ...prev, notes: e.target.value }))}
           placeholder="Additional notes about this condition..."
           rows={3}
         />

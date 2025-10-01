@@ -13,11 +13,16 @@ interface AllergyModalProps {
   editingAllergy?: { id: string; name: string; severity: string; reaction: string } | null;
 }
 
-export const AllergyModalMolecule = ({ isOpen, onClose, onSubmit, editingAllergy }: AddAllergyModalProps) => {
+export const AllergyModalMolecule = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  editingAllergy,
+}: AllergyModalProps) => {
   const [form, setForm] = useState({
     name: '',
     severity: 'mild',
-    reaction: ''
+    reaction: '',
   });
 
   // Update form when editing allergy changes
@@ -26,7 +31,7 @@ export const AllergyModalMolecule = ({ isOpen, onClose, onSubmit, editingAllergy
       setForm({
         name: editingAllergy.name,
         severity: editingAllergy.severity,
-        reaction: editingAllergy.reaction
+        reaction: editingAllergy.reaction,
       });
     } else {
       setForm({ name: '', severity: 'mild', reaction: '' });
@@ -56,7 +61,7 @@ export const AllergyModalMolecule = ({ isOpen, onClose, onSubmit, editingAllergy
         <InputAtom
           type="text"
           value={form.name}
-          onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
+          onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
           placeholder="e.g., Penicillin"
           required
         />
@@ -65,11 +70,11 @@ export const AllergyModalMolecule = ({ isOpen, onClose, onSubmit, editingAllergy
         <LabelAtom>Severity</LabelAtom>
         <DropdownAtom
           value={form.severity}
-          onValueChange={(value) => setForm(prev => ({ ...prev, severity: value }))}
+          onValueChange={value => setForm(prev => ({ ...prev, severity: value }))}
           options={[
             { value: 'mild', label: 'Mild' },
             { value: 'moderate', label: 'Moderate' },
-            { value: 'severe', label: 'Severe' }
+            { value: 'severe', label: 'Severe' },
           ]}
         />
       </div>
@@ -78,7 +83,7 @@ export const AllergyModalMolecule = ({ isOpen, onClose, onSubmit, editingAllergy
         <InputAtom
           type="text"
           value={form.reaction}
-          onChange={(e) => setForm(prev => ({ ...prev, reaction: e.target.value }))}
+          onChange={e => setForm(prev => ({ ...prev, reaction: e.target.value }))}
           placeholder="e.g., Rash, swelling"
         />
       </div>

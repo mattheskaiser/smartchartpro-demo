@@ -27,23 +27,27 @@ interface ResidentMedicationsProps {
   onMedicationsChange: (medications: Medication[]) => void;
 }
 
-export const ResidentMedicationsMolecule = ({ 
-  medications, 
-  isEditing, 
-  onMedicationsChange 
+export const ResidentMedicationsMolecule = ({
+  medications,
+  isEditing,
+  onMedicationsChange,
 }: ResidentMedicationsProps) => {
   const [activeTab, setActiveTab] = useState<'current' | 'past'>('current');
   const [showModal, setShowModal] = useState(false);
   const [editingMedication, setEditingMedication] = useState<Medication | null>(null);
 
-  const addMedication = (medicationData: { name: string; dosage: string; frequency: string; instructions: string; startDate: string }) => {
+  const addMedication = (medicationData: {
+    name: string;
+    dosage: string;
+    frequency: string;
+    instructions: string;
+    startDate: string;
+  }) => {
     if (editingMedication) {
       // Update existing medication
-      onMedicationsChange(medications.map(m => 
-        m.id === editingMedication.id 
-          ? { ...m, ...medicationData }
-          : m
-      ));
+      onMedicationsChange(
+        medications.map(m => (m.id === editingMedication.id ? { ...m, ...medicationData } : m))
+      );
       setEditingMedication(null);
     } else {
       // Add new medication
@@ -52,7 +56,7 @@ export const ResidentMedicationsMolecule = ({
         ...medicationData,
         status: 'current',
         endDate: undefined,
-        discontinuedReason: undefined
+        discontinuedReason: undefined,
       };
       onMedicationsChange([...medications, medication]);
     }
@@ -73,11 +77,18 @@ export const ResidentMedicationsMolecule = ({
   };
 
   const discontinueMedication = (id: string, reason: string) => {
-    onMedicationsChange(medications.map(m => 
-      m.id === id 
-        ? { ...m, status: 'past', endDate: new Date().toISOString().split('T')[0], discontinuedReason: reason }
-        : m
-    ));
+    onMedicationsChange(
+      medications.map(m =>
+        m.id === id
+          ? {
+              ...m,
+              status: 'past',
+              endDate: new Date().toISOString().split('T')[0],
+              discontinuedReason: reason,
+            }
+          : m
+      )
+    );
   };
 
   const currentMedications = medications.filter(m => m.status === 'current');
@@ -85,8 +96,10 @@ export const ResidentMedicationsMolecule = ({
 
   return (
     <CardAtom>
-      <TextAtom variant="h3" weight="medium" className="mb-4">Medications</TextAtom>
-      
+      <TextAtom variant="h3" weight="medium" className="mb-4">
+        Medications
+      </TextAtom>
+
       {/* Tabs */}
       <div className="flex space-x-1 mb-4 bg-gray-100 p-1 rounded-lg">
         <button
@@ -119,13 +132,15 @@ export const ResidentMedicationsMolecule = ({
 
       {/* Medications List */}
       <div className="space-y-3 mb-4">
-        {(activeTab === 'current' ? currentMedications : pastMedications).map((medication) => (
+        {(activeTab === 'current' ? currentMedications : pastMedications).map(medication => (
           <div key={medication.id} className="p-4 bg-gray-50 rounded-md">
             <div className="flex items-start justify-between mb-2">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <TextAtom weight="medium">{medication.name}</TextAtom>
-                  <TextAtom variant="small" color="muted">({medication.dosage})</TextAtom>
+                  <TextAtom variant="small" color="muted">
+                    ({medication.dosage})
+                  </TextAtom>
                 </div>
                 <TextAtom variant="small" color="secondary" className="mb-1">
                   {medication.frequency}
@@ -137,17 +152,26 @@ export const ResidentMedicationsMolecule = ({
                 )}
                 <div className="flex items-center gap-4">
                   <TextAtom variant="caption" color="muted">
-                    <TextAtom variant="caption" weight="medium" color="muted" as="span">Started:</TextAtom> {new Date(medication.startDate).toLocaleDateString()}
+                    <TextAtom variant="caption" weight="medium" color="muted" as="span">
+                      Started:
+                    </TextAtom>{' '}
+                    {new Date(medication.startDate).toLocaleDateString()}
                   </TextAtom>
                   {medication.endDate && (
                     <TextAtom variant="caption" color="muted">
-                      <TextAtom variant="caption" weight="medium" color="muted" as="span">Ended:</TextAtom> {new Date(medication.endDate).toLocaleDateString()}
+                      <TextAtom variant="caption" weight="medium" color="muted" as="span">
+                        Ended:
+                      </TextAtom>{' '}
+                      {new Date(medication.endDate).toLocaleDateString()}
                     </TextAtom>
                   )}
                 </div>
                 {medication.discontinuedReason && (
                   <TextAtom variant="small" color="muted" className="mt-1 italic">
-                    <TextAtom variant="small" weight="medium" color="muted" as="span">Reason for discontinuation:</TextAtom> {medication.discontinuedReason}
+                    <TextAtom variant="small" weight="medium" color="muted" as="span">
+                      Reason for discontinuation:
+                    </TextAtom>{' '}
+                    {medication.discontinuedReason}
                   </TextAtom>
                 )}
               </div>
@@ -155,16 +179,22 @@ export const ResidentMedicationsMolecule = ({
                 <ActionMenuMolecule
                   onEdit={() => handleEdit(medication)}
                   onDelete={() => removeMedication(medication.id)}
-                  items={medication.status === 'current' ? [{
-                    id: 'discontinue',
-                    label: 'Discontinue',
-                    icon: Clock,
-                    onClick: () => {
-                      const reason = prompt('Reason for discontinuing this medication:');
-                      if (reason) discontinueMedication(medication.id, reason);
-                    },
-                    variant: 'warning'
-                  }] : []}
+                  items={
+                    medication.status === 'current'
+                      ? [
+                          {
+                            id: 'discontinue',
+                            label: 'Discontinue',
+                            icon: Clock,
+                            onClick: () => {
+                              const reason = prompt('Reason for discontinuing this medication:');
+                              if (reason) discontinueMedication(medication.id, reason);
+                            },
+                            variant: 'warning',
+                          },
+                        ]
+                      : []
+                  }
                 />
               )}
             </div>

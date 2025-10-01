@@ -10,17 +10,35 @@ import { FormModalOrganism } from '@/components/organisms/Modal.organism';
 interface AddMedicationModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (medication: { name: string; dosage: string; frequency: string; instructions: string; startDate: string }) => void;
-  editingMedication?: { id: string; name: string; dosage: string; frequency: string; instructions: string; startDate: string } | null;
+  onSubmit: (medication: {
+    name: string;
+    dosage: string;
+    frequency: string;
+    instructions: string;
+    startDate: string;
+  }) => void;
+  editingMedication?: {
+    id: string;
+    name: string;
+    dosage: string;
+    frequency: string;
+    instructions: string;
+    startDate: string;
+  } | null;
 }
 
-export const AddMedicationModalMolecule = ({ isOpen, onClose, onSubmit, editingMedication }: AddMedicationModalProps) => {
+export const AddMedicationModalMolecule = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  editingMedication,
+}: AddMedicationModalProps) => {
   const [form, setForm] = useState({
     name: '',
     dosage: '',
     frequency: '',
     instructions: '',
-    startDate: ''
+    startDate: '',
   });
 
   // Update form when editing medication changes
@@ -31,7 +49,7 @@ export const AddMedicationModalMolecule = ({ isOpen, onClose, onSubmit, editingM
         dosage: editingMedication.dosage,
         frequency: editingMedication.frequency,
         instructions: editingMedication.instructions,
-        startDate: editingMedication.startDate
+        startDate: editingMedication.startDate,
       });
     } else {
       setForm({ name: '', dosage: '', frequency: '', instructions: '', startDate: '' });
@@ -62,7 +80,7 @@ export const AddMedicationModalMolecule = ({ isOpen, onClose, onSubmit, editingM
           <InputAtom
             type="text"
             value={form.name}
-            onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
+            onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
             placeholder="e.g., Lisinopril"
             required
           />
@@ -72,7 +90,7 @@ export const AddMedicationModalMolecule = ({ isOpen, onClose, onSubmit, editingM
           <InputAtom
             type="text"
             value={form.dosage}
-            onChange={(e) => setForm(prev => ({ ...prev, dosage: e.target.value }))}
+            onChange={e => setForm(prev => ({ ...prev, dosage: e.target.value }))}
             placeholder="e.g., 10mg"
           />
         </div>
@@ -83,7 +101,7 @@ export const AddMedicationModalMolecule = ({ isOpen, onClose, onSubmit, editingM
           <InputAtom
             type="text"
             value={form.frequency}
-            onChange={(e) => setForm(prev => ({ ...prev, frequency: e.target.value }))}
+            onChange={e => setForm(prev => ({ ...prev, frequency: e.target.value }))}
             placeholder="e.g., Once daily"
           />
         </div>
@@ -91,7 +109,7 @@ export const AddMedicationModalMolecule = ({ isOpen, onClose, onSubmit, editingM
           <LabelAtom>Start Date</LabelAtom>
           <DatePickerMolecule
             value={form.startDate}
-            onChange={(date) => setForm(prev => ({ ...prev, startDate: date }))}
+            onChange={date => setForm(prev => ({ ...prev, startDate: date }))}
             placeholder="Select start date"
           />
         </div>
@@ -100,7 +118,7 @@ export const AddMedicationModalMolecule = ({ isOpen, onClose, onSubmit, editingM
         <LabelAtom>Instructions</LabelAtom>
         <TextareaAtom
           value={form.instructions}
-          onChange={(e) => setForm(prev => ({ ...prev, instructions: e.target.value }))}
+          onChange={e => setForm(prev => ({ ...prev, instructions: e.target.value }))}
           placeholder="e.g., Take with food, avoid alcohol..."
           rows={3}
         />

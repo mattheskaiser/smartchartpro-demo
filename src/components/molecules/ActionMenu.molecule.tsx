@@ -4,17 +4,8 @@ import React from 'react';
 import { EllipsisVertical, Pencil, Trash2 } from 'lucide-react';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Command,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 
 export interface ActionMenuItem {
   id: string;
@@ -40,13 +31,13 @@ export const ActionMenuMolecule = ({
   onDelete,
   showStandardActions = true,
   disabled = false,
-  className
+  className,
 }: ActionMenuProps) => {
   const [open, setOpen] = React.useState(false);
 
   // Standard actions
   const standardActions: ActionMenuItem[] = [];
-  
+
   if (onEdit) {
     standardActions.push({
       id: 'edit',
@@ -56,7 +47,7 @@ export const ActionMenuMolecule = ({
         onEdit();
         setOpen(false);
       },
-      variant: 'default'
+      variant: 'default',
     });
   }
 
@@ -69,14 +60,12 @@ export const ActionMenuMolecule = ({
         onDelete();
         setOpen(false);
       },
-      variant: 'destructive'
+      variant: 'destructive',
     });
   }
 
   // Combine standard actions with custom items
-  const allItems = showStandardActions 
-    ? [...standardActions, ...items]
-    : items;
+  const allItems = showStandardActions ? [...standardActions, ...items] : items;
 
   const getItemClassName = (variant?: string) => {
     switch (variant) {
@@ -94,7 +83,7 @@ export const ActionMenuMolecule = ({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button 
+        <button
           className={`inline-flex items-center justify-center h-8 w-8 p-0 rounded-md text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
           disabled={disabled}
         >
@@ -105,7 +94,7 @@ export const ActionMenuMolecule = ({
         <Command>
           <CommandList>
             <CommandGroup>
-              {allItems.map((item) => {
+              {allItems.map(item => {
                 const IconComponent = item.icon;
                 return (
                   <CommandItem
@@ -120,7 +109,9 @@ export const ActionMenuMolecule = ({
                     className={`cursor-pointer ${getItemClassName(item.variant)}`}
                   >
                     {IconComponent && <IconComponent className="mr-2 h-4 w-4" />}
-                    <TextAtom variant="small" as="span">{item.label}</TextAtom>
+                    <TextAtom variant="small" as="span">
+                      {item.label}
+                    </TextAtom>
                   </CommandItem>
                 );
               })}

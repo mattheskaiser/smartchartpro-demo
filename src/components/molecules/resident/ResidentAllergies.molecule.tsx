@@ -21,10 +21,10 @@ interface ResidentAllergiesProps {
   onAllergiesChange: (allergies: Allergy[]) => void;
 }
 
-export const ResidentAllergiesMolecule = ({ 
-  allergies, 
-  isEditing, 
-  onAllergiesChange 
+export const ResidentAllergiesMolecule = ({
+  allergies,
+  isEditing,
+  onAllergiesChange,
 }: ResidentAllergiesProps) => {
   const [showModal, setShowModal] = useState(false);
   const [editingAllergy, setEditingAllergy] = useState<Allergy | null>(null);
@@ -32,18 +32,24 @@ export const ResidentAllergiesMolecule = ({
   const addAllergy = (allergyData: { name: string; severity: string; reaction: string }) => {
     if (editingAllergy) {
       // Update existing allergy
-      onAllergiesChange(allergies.map(a => 
-        a.id === editingAllergy.id 
-          ? { ...a, ...allergyData, severity: allergyData.severity as 'mild' | 'moderate' | 'severe' }
-          : a
-      ));
+      onAllergiesChange(
+        allergies.map(a =>
+          a.id === editingAllergy.id
+            ? {
+                ...a,
+                ...allergyData,
+                severity: allergyData.severity as 'mild' | 'moderate' | 'severe',
+              }
+            : a
+        )
+      );
       setEditingAllergy(null);
     } else {
       // Add new allergy
       const allergy: Allergy = {
         id: Date.now().toString(),
         ...allergyData,
-        severity: allergyData.severity as 'mild' | 'moderate' | 'severe'
+        severity: allergyData.severity as 'mild' | 'moderate' | 'severe',
       };
       onAllergiesChange([...allergies, allergy]);
     }
@@ -65,30 +71,43 @@ export const ResidentAllergiesMolecule = ({
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'severe': return 'bg-red-100 text-red-800';
-      case 'moderate': return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-green-100 text-green-800';
+      case 'severe':
+        return 'bg-red-100 text-red-800';
+      case 'moderate':
+        return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-green-100 text-green-800';
     }
   };
 
   return (
     <CardAtom>
-      <TextAtom variant="h3" weight="medium" className="mb-4">Allergies</TextAtom>
-      
+      <TextAtom variant="h3" weight="medium" className="mb-4">
+        Allergies
+      </TextAtom>
+
       {/* Existing Allergies */}
       <div className="space-y-3 mb-4">
-        {allergies.map((allergy) => (
-          <div key={allergy.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
+        {allergies.map(allergy => (
+          <div
+            key={allergy.id}
+            className="flex items-center justify-between p-3 bg-gray-50 rounded-md"
+          >
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
                 <TextAtom weight="medium">{allergy.name}</TextAtom>
                 <span className={`px-2 py-1 rounded-full ${getSeverityColor(allergy.severity)}`}>
-                  <TextAtom variant="caption" as="span">{allergy.severity}</TextAtom>
+                  <TextAtom variant="caption" as="span">
+                    {allergy.severity}
+                  </TextAtom>
                 </span>
               </div>
               {allergy.reaction && (
                 <TextAtom variant="small" color="muted">
-                  <TextAtom variant="small" weight="medium" color="muted" as="span">Reaction:</TextAtom> {allergy.reaction}
+                  <TextAtom variant="small" weight="medium" color="muted" as="span">
+                    Reaction:
+                  </TextAtom>{' '}
+                  {allergy.reaction}
                 </TextAtom>
               )}
             </div>
