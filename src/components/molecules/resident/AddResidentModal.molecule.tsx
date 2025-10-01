@@ -80,12 +80,12 @@ export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit }: AddResid
             <LabelAtom>Status</LabelAtom>
             <DropdownAtom
               value={form.status}
-              onValueChange={(value) => handleChange('status', value)}
+              onValueChange={value => handleChange('status', value)}
               placeholder="Select care status"
               options={[
                 { value: 'independent', label: 'Independent' },
                 { value: 'partial', label: 'Partial' },
-                { value: 'full', label: 'Full' }
+                { value: 'full', label: 'Full' },
               ]}
             />
           </div>

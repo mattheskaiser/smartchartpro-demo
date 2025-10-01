@@ -61,7 +61,7 @@ export const ResidentBasicInformationMolecule = ({
           {isEditing ? (
             <DatePickerMolecule
               value={resident.dateOfBirth}
-              onChange={(date) => onInputChange('dateOfBirth', date)}
+              onChange={date => onInputChange('dateOfBirth', date)}
               placeholder="Select date of birth"
             />
           ) : (
@@ -73,7 +73,7 @@ export const ResidentBasicInformationMolecule = ({
           {isEditing ? (
             <DatePickerMolecule
               value={resident.admissionDate}
-              onChange={(date) => onInputChange('admissionDate', date)}
+              onChange={date => onInputChange('admissionDate', date)}
               placeholder="Select admission date"
             />
           ) : (
@@ -85,12 +85,12 @@ export const ResidentBasicInformationMolecule = ({
           {isEditing ? (
             <DropdownAtom
               value={resident.status}
-              onValueChange={(value) => onInputChange('status', value)}
+              onValueChange={value => onInputChange('status', value)}
               placeholder="Select care status"
               options={[
                 { value: 'independent', label: 'Independent' },
                 { value: 'partial', label: 'Partial' },
-                { value: 'full', label: 'Full' }
+                { value: 'full', label: 'Full' },
               ]}
             />
           ) : (
