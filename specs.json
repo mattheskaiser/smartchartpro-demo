@@ -106,6 +106,22 @@
         "file": "src/components/atoms/Badge.atom.tsx",
         "purpose": "Status indicators",
         "usage": "<BadgeAtom variant=\"success\">Active</BadgeAtom>"
+      },
+      "DropdownAtom": {
+        "file": "src/components/atoms/Dropdown.atom.tsx",
+        "replaces": ["<select>", "native select elements"],
+        "props": ["value", "onValueChange", "placeholder", "options", "disabled"],
+        "usage": "<DropdownAtom value={value} onValueChange={handler} options={[{value: 'opt1', label: 'Option 1'}]} />",
+        "description": "Uses Shadcn Select component for consistent dropdown styling"
+      }
+    },
+    "availableMolecules": {
+      "DatePickerMolecule": {
+        "file": "src/components/molecules/DatePicker.molecule.tsx",
+        "replaces": ["<input type=\"date\">", "native date inputs"],
+        "props": ["value", "onChange", "placeholder", "disabled"],
+        "usage": "<DatePickerMolecule value={dateString} onChange={handler} placeholder=\"Pick a date\" />",
+        "description": "Uses Shadcn Calendar and Popover components for enhanced date selection"
       }
     },
     "rules": {
