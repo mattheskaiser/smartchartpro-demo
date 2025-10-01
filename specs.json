@@ -57,9 +57,12 @@
       },
       "ButtonAtom": {
         "file": "src/components/atoms/Button.atom.tsx",
-        "replaces": ["<button>"],
-        "props": ["variant", "size", "isFullWidth"],
-        "usage": "<ButtonAtom variant=\"primary\" size=\"md\">Click me</ButtonAtom>"
+        "replaces": ["<button>", "raw HTML buttons"],
+        "props": ["variant", "size", "isFullWidth", "asChild"],
+        "usage": "<ButtonAtom variant=\"primary\" size=\"md\">Click me</ButtonAtom>",
+        "description": "Uses Shadcn Button component for consistent styling and behavior. Always use ButtonAtom instead of raw HTML buttons.",
+        "variants": ["primary", "secondary", "outline", "ghost", "destructive"],
+        "sizes": ["sm", "md", "lg", "icon"]
       },
       "InputAtom": {
         "file": "src/components/atoms/Input.atom.tsx",

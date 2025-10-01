@@ -3,6 +3,7 @@
 import React from 'react';
 import { ADLButtonMolecule } from '../molecules/ADLButton.molecule';
 import { AssistanceSelectorMolecule } from '../molecules/AssistanceSelector.molecule';
+import { ButtonAtom } from '../atoms/Button.atom';
 
 const ADL_TYPES = ['bathing', 'dressing', 'eating', 'toileting', 'mobility', 'health'] as const;
 
@@ -26,18 +27,12 @@ export const ADLQuickEntryOrganism = () => {
       </div>
 
       <div className="flex justify-end space-x-4">
-        <button
-          type="button"
-          className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
-        >
+        <ButtonAtom variant="secondary" type="button">
           Clear
-        </button>
-        <button
-          type="button"
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-        >
+        </ButtonAtom>
+        <ButtonAtom variant="primary" type="button">
           Save Entry
-        </button>
+        </ButtonAtom>
       </div>
     </div>
   );
