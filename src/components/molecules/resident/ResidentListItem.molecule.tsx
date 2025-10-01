@@ -1,6 +1,6 @@
 import React from 'react';
-import { AvatarAtom } from '../atoms/Avatar.atom';
-import { BadgeAtom } from '../atoms/Badge.atom';
+import { AvatarAtom } from '../../atoms/Avatar.atom';
+import { BadgeAtom } from '../../atoms/Badge.atom';
 
 interface ResidentCardMoleculeProps {
   name: string;
@@ -16,7 +16,7 @@ const statusConfig = {
   full: { label: 'Full Assist', variant: 'error' as const },
 };
 
-export const ResidentCardMolecule = ({
+export const ResidentListItemMolecule = ({
   name,
   imageUrl,
   status,
