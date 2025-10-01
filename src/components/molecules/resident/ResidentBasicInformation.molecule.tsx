@@ -4,8 +4,9 @@ import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { LabelAtom } from '@/components/atoms/Label.atom';
 import { InputAtom } from '@/components/atoms/Input.atom';
-import { SelectAtom } from '@/components/atoms/Select.atom';
+import { DropdownAtom } from '@/components/atoms/Dropdown.atom';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
+import { DatePickerMolecule } from '@/components/molecules/DatePicker.molecule';
 
 interface ResidentBasicInformationProps {
   resident: {
@@ -58,10 +59,10 @@ export const ResidentBasicInformationMolecule = ({
         <div>
           <LabelAtom>Date of Birth</LabelAtom>
           {isEditing ? (
-            <InputAtom
-              type="date"
+            <DatePickerMolecule
               value={resident.dateOfBirth}
-              onChange={e => onInputChange('dateOfBirth', e.target.value)}
+              onChange={(date) => onInputChange('dateOfBirth', date)}
+              placeholder="Select date of birth"
             />
           ) : (
             <TextAtom>{new Date(resident.dateOfBirth).toLocaleDateString()}</TextAtom>
@@ -70,10 +71,10 @@ export const ResidentBasicInformationMolecule = ({
         <div>
           <LabelAtom>Admission Date</LabelAtom>
           {isEditing ? (
-            <InputAtom
-              type="date"
+            <DatePickerMolecule
               value={resident.admissionDate}
-              onChange={e => onInputChange('admissionDate', e.target.value)}
+              onChange={(date) => onInputChange('admissionDate', date)}
+              placeholder="Select admission date"
             />
           ) : (
             <TextAtom>{new Date(resident.admissionDate).toLocaleDateString()}</TextAtom>
@@ -82,14 +83,16 @@ export const ResidentBasicInformationMolecule = ({
         <div>
           <LabelAtom>Care Status</LabelAtom>
           {isEditing ? (
-            <SelectAtom
+            <DropdownAtom
               value={resident.status}
-              onChange={e => onInputChange('status', e.target.value)}
-            >
-              <option value="independent">Independent</option>
-              <option value="partial">Partial</option>
-              <option value="full">Full</option>
-            </SelectAtom>
+              onValueChange={(value) => onInputChange('status', value)}
+              placeholder="Select care status"
+              options={[
+                { value: 'independent', label: 'Independent' },
+                { value: 'partial', label: 'Partial' },
+                { value: 'full', label: 'Full' }
+              ]}
+            />
           ) : (
             <BadgeAtom variant={resident.status as 'info' | 'warning' | 'success'}>
               {resident.status}

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { InputAtom } from '@/components/atoms/Input.atom';
-import { SelectAtom } from '@/components/atoms/Select.atom';
+import { DropdownAtom } from '@/components/atoms/Dropdown.atom';
 import { LabelAtom } from '@/components/atoms/Label.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
@@ -78,11 +78,16 @@ export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit }: AddResid
           </div>
           <div>
             <LabelAtom>Status</LabelAtom>
-            <SelectAtom value={form.status} onChange={e => handleChange('status', e.target.value)}>
-              <option value="independent">Independent</option>
-              <option value="partial">Partial</option>
-              <option value="full">Full</option>
-            </SelectAtom>
+            <DropdownAtom
+              value={form.status}
+              onValueChange={(value) => handleChange('status', value)}
+              placeholder="Select care status"
+              options={[
+                { value: 'independent', label: 'Independent' },
+                { value: 'partial', label: 'Partial' },
+                { value: 'full', label: 'Full' }
+              ]}
+            />
           </div>
           <div>
             <LabelAtom>ADLs</LabelAtom>
