@@ -9,8 +9,10 @@ import { ResidentBasicInformationMolecule } from '@/components/molecules/residen
 import { ResidentEmergencyContactMolecule } from '@/components/molecules/resident/ResidentEmergencyContact.molecule';
 import { ResidentADLRequirementsMolecule } from '@/components/molecules/resident/ResidentADLRequirements.molecule';
 import { ResidentNotesMolecule } from '@/components/molecules/resident/ResidentNotes.molecule';
-import { ResidentSummaryCardMolecule } from '@/components/molecules/resident/ResidentSummaryCard.molecule';
-import { ResidentMedicalInformationMolecule } from '@/components/molecules/resident/ResidentMedicalInformation.molecule';
+
+import { ResidentAllergiesMolecule } from '@/components/molecules/resident/ResidentAllergies.molecule';
+import { ResidentConditionsMolecule } from '@/components/molecules/resident/ResidentConditions.molecule';
+import { ResidentMedicationsMolecule } from '@/components/molecules/resident/ResidentMedications.molecule';
 
 const mockResident = {
   id: 1,
@@ -28,9 +30,45 @@ const mockResident = {
     phone: '(555) 123-4567',
   },
   medicalInfo: {
-    allergies: ['Penicillin', 'Shellfish'],
-    medications: ['Lisinopril 10mg', 'Metformin 500mg'],
-    conditions: ['Diabetes Type 2', 'Hypertension'],
+    allergies: [
+      { id: '1', name: 'Penicillin', severity: 'severe', reaction: 'Anaphylaxis' },
+      { id: '2', name: 'Shellfish', severity: 'moderate', reaction: 'Hives and swelling' }
+    ],
+    conditions: [
+      { id: '1', name: 'Diabetes Type 2', diagnosedDate: '2018-03-15', status: 'managed', notes: 'Well controlled with medication' },
+      { id: '2', name: 'Hypertension', diagnosedDate: '2020-07-22', status: 'active', notes: 'Monitoring blood pressure daily' }
+    ],
+    medications: [
+      { 
+        id: '1', 
+        name: 'Lisinopril', 
+        dosage: '10mg', 
+        frequency: 'Once daily', 
+        instructions: 'Take in the morning with water',
+        startDate: '2020-07-22',
+        status: 'current'
+      },
+      { 
+        id: '2', 
+        name: 'Metformin', 
+        dosage: '500mg', 
+        frequency: 'Twice daily', 
+        instructions: 'Take with meals to reduce stomach upset',
+        startDate: '2018-03-15',
+        status: 'current'
+      },
+      { 
+        id: '3', 
+        name: 'Aspirin', 
+        dosage: '81mg', 
+        frequency: 'Once daily', 
+        instructions: 'Take with food',
+        startDate: '2019-01-10',
+        endDate: '2023-06-15',
+        status: 'past',
+        discontinuedReason: 'Stomach irritation'
+      }
+    ]
   },
   adlNeeds: ['bathing', 'dressing', 'mobility'],
   notes:
@@ -70,6 +108,27 @@ export default function ResidentDetail() {
     }));
   };
 
+  const handleAllergiesChange = (allergies: any[]) => {
+    setResident(prev => ({
+      ...prev,
+      medicalInfo: { ...prev.medicalInfo, allergies }
+    }));
+  };
+
+  const handleConditionsChange = (conditions: any[]) => {
+    setResident(prev => ({
+      ...prev,
+      medicalInfo: { ...prev.medicalInfo, conditions }
+    }));
+  };
+
+  const handleMedicationsChange = (medications: any[]) => {
+    setResident(prev => ({
+      ...prev,
+      medicalInfo: { ...prev.medicalInfo, medications }
+    }));
+  };
+
   return (
     <div className="mx-auto max-w-7xl">
       <div className="mb-6 flex items-center justify-between">
@@ -100,36 +159,69 @@ export default function ResidentDetail() {
         </ButtonAtom>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-          <ResidentBasicInformationMolecule
-            resident={resident}
-            isEditing={isEditing}
-            onInputChange={handleInputChange}
-          />
-
-          <ResidentEmergencyContactMolecule
-            emergencyContact={resident.emergencyContact}
-            isEditing={isEditing}
-            onInputChange={handleEmergencyContactChange}
-          />
-
-          <ResidentADLRequirementsMolecule
-            adlNeeds={resident.adlNeeds}
-            isEditing={isEditing}
-            onToggleADL={toggleADL}
-          />
-
-          <ResidentNotesMolecule
-            notes={resident.notes}
-            isEditing={isEditing}
-            onNotesChange={handleNotesChange}
-          />
+      <div className="space-y-8">
+        {/* Basic Information Section */}
+        <div>
+          <TextAtom variant="h2" weight="semibold" className="mb-4 text-gray-900">
+            Basic Information
+          </TextAtom>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ResidentBasicInformationMolecule
+              resident={resident}
+              isEditing={isEditing}
+              onInputChange={handleInputChange}
+            />
+            <ResidentEmergencyContactMolecule
+              emergencyContact={resident.emergencyContact}
+              isEditing={isEditing}
+              onInputChange={handleEmergencyContactChange}
+            />
+          </div>
+          <div className="mt-6">
+            <ResidentNotesMolecule
+              notes={resident.notes}
+              isEditing={isEditing}
+              onNotesChange={handleNotesChange}
+            />
+          </div>
         </div>
 
-        <div className="space-y-6">
-          <ResidentSummaryCardMolecule resident={resident} />
-          <ResidentMedicalInformationMolecule medicalInfo={resident.medicalInfo} />
+        {/* Care & Activities Section */}
+        <div>
+          <TextAtom variant="h2" weight="semibold" className="mb-4 text-gray-900">
+            Care & Activities
+          </TextAtom>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ResidentADLRequirementsMolecule
+              adlNeeds={resident.adlNeeds}
+              isEditing={isEditing}
+              onToggleADL={toggleADL}
+            />
+            <ResidentAllergiesMolecule
+              allergies={resident.medicalInfo.allergies}
+              isEditing={isEditing}
+              onAllergiesChange={handleAllergiesChange}
+            />
+          </div>
+        </div>
+
+        {/* Medical Information Section */}
+        <div>
+          <TextAtom variant="h2" weight="semibold" className="mb-4 text-gray-900">
+            Medical Information
+          </TextAtom>
+          <div className="space-y-6">
+            <ResidentConditionsMolecule
+              conditions={resident.medicalInfo.conditions}
+              isEditing={isEditing}
+              onConditionsChange={handleConditionsChange}
+            />
+            <ResidentMedicationsMolecule
+              medications={resident.medicalInfo.medications}
+              isEditing={isEditing}
+              onMedicationsChange={handleMedicationsChange}
+            />
+          </div>
         </div>
       </div>
     </div>
