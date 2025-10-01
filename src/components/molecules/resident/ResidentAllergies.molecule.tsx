@@ -34,7 +34,7 @@ export const ResidentAllergiesMolecule = ({
       // Update existing allergy
       onAllergiesChange(allergies.map(a => 
         a.id === editingAllergy.id 
-          ? { ...a, ...allergyData }
+          ? { ...a, ...allergyData, severity: allergyData.severity as 'mild' | 'moderate' | 'severe' }
           : a
       ));
       setEditingAllergy(null);
@@ -42,7 +42,8 @@ export const ResidentAllergiesMolecule = ({
       // Add new allergy
       const allergy: Allergy = {
         id: Date.now().toString(),
-        ...allergyData
+        ...allergyData,
+        severity: allergyData.severity as 'mild' | 'moderate' | 'severe'
       };
       onAllergiesChange([...allergies, allergy]);
     }

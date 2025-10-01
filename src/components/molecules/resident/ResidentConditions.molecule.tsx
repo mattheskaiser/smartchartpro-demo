@@ -35,7 +35,7 @@ export const ResidentConditionsMolecule = ({
       // Update existing condition
       onConditionsChange(conditions.map(c => 
         c.id === editingCondition.id 
-          ? { ...c, ...conditionData }
+          ? { ...c, ...conditionData, status: conditionData.status as 'active' | 'managed' | 'resolved' }
           : c
       ));
       setEditingCondition(null);
@@ -43,7 +43,8 @@ export const ResidentConditionsMolecule = ({
       // Add new condition
       const condition: Condition = {
         id: Date.now().toString(),
-        ...conditionData
+        ...conditionData,
+        status: conditionData.status as 'active' | 'managed' | 'resolved'
       };
       onConditionsChange([...conditions, condition]);
     }

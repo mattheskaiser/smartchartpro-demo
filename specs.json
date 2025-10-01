@@ -168,6 +168,12 @@
       "hydrationSafety": {
         "description": "Avoid nesting block elements inside TextAtom",
         "solution": "Use as=\"span\" for inline text within list items or other inline contexts"
+      },
+      "uiFolderRestriction": {
+        "description": "NEVER create or modify components in src/components/ui/ folder",
+        "reason": "The ui folder is reserved exclusively for Shadcn components installed via CLI",
+        "rule": "Only use existing components from ui folder, never create new ones there",
+        "violation": "Creating custom components in ui folder will break Shadcn component management"
       }
     },
     "benefits": [

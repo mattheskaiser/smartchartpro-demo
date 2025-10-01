@@ -5,8 +5,9 @@ import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { AddMedicationModalMolecule } from './AddMedicationModal.molecule';
-import { PlusIcon, ClockIcon, CheckCircleIcon, Clock } from '@heroicons/react/24/outline';
-import { ActionMenuMolecule, ActionMenuItem } from '@/components/molecules/ActionMenu.molecule';
+import { PlusIcon, ClockIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
+import { Clock } from 'lucide-react';
 
 interface Medication {
   id: string;
