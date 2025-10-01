@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
-import { AddAllergyModalMolecule } from './AddAllergyModal.molecule';
+import { AllergyModalMolecule } from './modals/AllergyModal.molecule';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
 
@@ -117,7 +117,7 @@ export const ResidentAllergiesMolecule = ({
         </div>
       )}
 
-      <AddAllergyModalMolecule
+      <AllergyModalMolecule
         isOpen={showModal}
         onClose={() => {
           setShowModal(false);

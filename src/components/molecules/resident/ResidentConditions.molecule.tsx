@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
-import { AddConditionModalMolecule } from './AddConditionModal.molecule';
+import { ConditionModalMolecule } from './modals/ConditionModal.molecule';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
 
@@ -121,7 +121,7 @@ export const ResidentConditionsMolecule = ({
         </div>
       )}
 
-      <AddConditionModalMolecule
+      <ConditionModalMolecule
         isOpen={showModal}
         onClose={() => {
           setShowModal(false);

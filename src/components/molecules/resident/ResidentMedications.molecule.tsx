@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
-import { AddMedicationModalMolecule } from './AddMedicationModal.molecule';
+import { MedicationModalMolecule } from './modals/MedicationModal.molecule';
 import { PlusIcon, ClockIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
 import { Clock } from 'lucide-react';
@@ -187,7 +187,7 @@ export const ResidentMedicationsMolecule = ({
         </div>
       )}
 
-      <AddMedicationModalMolecule
+      <MedicationModalMolecule
         isOpen={showModal}
         onClose={() => {
           setShowModal(false);
