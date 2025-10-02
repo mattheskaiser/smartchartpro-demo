@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
-import { MedicationModalMolecule } from './modals/MedicationModal.molecule';
 import { PlusIcon, ClockIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
 import { Clock } from 'lucide-react';
+import { MedicationModalMolecule } from '@/components/molecules/resident/modals/MedicationModal.molecule';
 
 interface Medication {
   id: string;

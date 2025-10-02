@@ -4,7 +4,6 @@ import { PlusIcon } from '@heroicons/react/20/solid';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ResidentListTableMolecule } from '@/components/molecules/resident/ResidentListTable.molecule';
-import { AddResidentModalMolecule } from '@/components/molecules/resident/AddResidentModal.molecule';
 
 const residents = [
   {
@@ -40,7 +39,6 @@ export default function ResidentManagement() {
   const [showModal, setShowModal] = useState(false);
 
   const handleAddResident = (formData: any) => {
-    // Here you would add the resident to your backend or state
     console.log('Adding resident:', formData);
     setShowModal(false);
   };
@@ -67,12 +65,6 @@ export default function ResidentManagement() {
       <div className="mt-8">
         <ResidentListTableMolecule residents={residents} />
       </div>
-
-      <AddResidentModalMolecule
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        onSubmit={handleAddResident}
-      />
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { TextareaAtom } from '@/components/atoms/Textarea.atom';
 import { DatePickerMolecule } from '@/components/molecules/DatePicker.molecule';
 import { FormModalOrganism } from '@/components/organisms/Modal.organism';
 
-interface AddMedicationModalProps {
+interface MedicationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (medication: {
@@ -27,12 +27,12 @@ interface AddMedicationModalProps {
   } | null;
 }
 
-export const AddMedicationModalMolecule = ({
+export const MedicationModalMolecule = ({
   isOpen,
   onClose,
   onSubmit,
   editingMedication,
-}: AddMedicationModalProps) => {
+}: MedicationModalProps) => {
   const [form, setForm] = useState({
     name: '',
     dosage: '',
@@ -94,7 +94,7 @@ export const AddMedicationModalMolecule = ({
             placeholder="e.g., 10mg"
           />
         </div>
-      </div>
+      </div>{' '}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <LabelAtom>Frequency</LabelAtom>
