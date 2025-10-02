@@ -1,3 +1,5 @@
+import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
+
 export default function Settings() {
   return (
     <div className="mx-auto max-w-7xl">
@@ -87,12 +89,12 @@ export default function Settings() {
                   <div className="mt-6 space-y-6">
                     <div className="relative flex gap-x-3">
                       <div className="flex h-6 items-center">
-                        <input
+                        <CheckboxAtom
                           id="shifts"
-                          name="shifts"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                          defaultChecked
+                          checked={true}
+                          onCheckedChange={(checked) => {
+                            // Handle change
+                          }}
                         />
                       </div>
                       <div className="text-sm leading-6">
@@ -106,12 +108,12 @@ export default function Settings() {
                     </div>
                     <div className="relative flex gap-x-3">
                       <div className="flex h-6 items-center">
-                        <input
+                        <CheckboxAtom
                           id="adl-alerts"
-                          name="adl-alerts"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                          defaultChecked
+                          checked={true}
+                          onCheckedChange={(checked) => {
+                            // Handle change
+                          }}
                         />
                       </div>
                       <div className="text-sm leading-6">
