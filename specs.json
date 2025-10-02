@@ -45,5 +45,212 @@
     "organisms": "Complex components made of molecules/atoms (header, footer, form)",
     "templates": "Page-level layouts without real content",
     "pages": "Specific instances of templates with real content"
+  },
+  "atomicDesignImplementation": {
+    "overview": "This project follows atomic design principles to ensure consistent, reusable, and maintainable UI components.",
+    "availableAtoms": {
+      "TextAtom": {
+        "file": "src/components/atoms/Text.atom.tsx",
+        "replaces": ["<p>", "<h1>", "<h2>", "<h3>", "<span>"],
+        "props": ["variant", "color", "weight", "as"],
+        "usage": "<TextAtom variant=\"h1\" weight=\"semibold\">Title</TextAtom>"
+      },
+      "ButtonAtom": {
+        "file": "src/components/atoms/Button.atom.tsx",
+        "replaces": ["<button>", "raw HTML buttons"],
+        "props": ["variant", "size", "isFullWidth", "asChild"],
+        "usage": "<ButtonAtom variant=\"primary\" size=\"md\">Click me</ButtonAtom>",
+        "description": "Uses Shadcn Button component for consistent styling and behavior. Always use ButtonAtom instead of raw HTML buttons.",
+        "variants": ["primary", "secondary", "outline", "ghost", "destructive"],
+        "sizes": ["sm", "md", "lg", "icon"]
+      },
+      "InputAtom": {
+        "file": "src/components/atoms/Input.atom.tsx",
+        "replaces": ["<input>"],
+        "props": "Standard input props",
+        "usage": "<InputAtom type=\"text\" value={value} onChange={handler} />"
+      },
+      "SelectAtom": {
+        "file": "src/components/atoms/Select.atom.tsx",
+        "replaces": ["<select>"],
+        "props": ["error", "standard select props"],
+        "usage": "<SelectAtom value={value} onChange={handler}><option>...</option></SelectAtom>"
+      },
+      "TextareaAtom": {
+        "file": "src/components/atoms/Textarea.atom.tsx",
+        "replaces": ["<textarea>"],
+        "props": ["error", "standard textarea props"],
+        "usage": "<TextareaAtom rows={4} value={value} onChange={handler} />"
+      },
+      "CheckboxAtom": {
+        "file": "src/components/atoms/Checkbox.atom.tsx",
+        "replaces": ["<input type=\"checkbox\">"],
+        "props": "Shadcn checkbox props",
+        "usage": "<CheckboxAtom checked={checked} onCheckedChange={handler} />"
+      },
+      "LabelAtom": {
+        "file": "src/components/atoms/Label.atom.tsx",
+        "replaces": ["<label>"],
+        "props": ["required", "standard label props"],
+        "usage": "<LabelAtom required>Field Name</LabelAtom>"
+      },
+      "CardAtom": {
+        "file": "src/components/atoms/Card.atom.tsx",
+        "replaces": ["<div className=\"bg-white rounded-lg shadow p-6\">"],
+        "props": ["padding"],
+        "usage": "<CardAtom padding=\"md\">Content</CardAtom>"
+      },
+      "AvatarAtom": {
+        "file": "src/components/atoms/Avatar.atom.tsx",
+        "purpose": "User profile images",
+        "usage": "<AvatarAtom src={url} alt={name} />"
+      },
+      "BadgeAtom": {
+        "file": "src/components/atoms/Badge.atom.tsx",
+        "purpose": "Status indicators",
+        "usage": "<BadgeAtom variant=\"success\">Active</BadgeAtom>"
+      },
+      "DropdownAtom": {
+        "file": "src/components/atoms/Dropdown.atom.tsx",
+        "replaces": ["<select>", "native select elements"],
+        "props": ["value", "onValueChange", "placeholder", "options", "disabled"],
+        "usage": "<DropdownAtom value={value} onValueChange={handler} options={[{value: 'opt1', label: 'Option 1'}]} />",
+        "description": "Uses Shadcn Select component for consistent dropdown styling"
+      }
+    },
+    "availableMolecules": {
+      "DatePickerMolecule": {
+        "file": "src/components/molecules/DatePicker.molecule.tsx",
+        "replaces": ["<input type=\"date\">", "native date inputs"],
+        "props": ["value", "onChange", "placeholder", "disabled"],
+        "usage": "<DatePickerMolecule value={dateString} onChange={handler} placeholder=\"Pick a date\" />",
+        "description": "Uses Shadcn Calendar and Popover components for enhanced date selection"
+      }
+    },
+    "rules": {
+      "noRawHTML": {
+        "description": "Never use raw HTML elements when atoms exist",
+        "forbidden": [
+          "<button className=\"...\">Click me</button>",
+          "<p className=\"text-gray-900\">Text</p>",
+          "<input type=\"text\" className=\"...\" />",
+          "<div className=\"bg-white rounded-lg shadow p-6\">...</div>"
+        ],
+        "correct": [
+          "<ButtonAtom variant=\"primary\">Click me</ButtonAtom>",
+          "<TextAtom color=\"primary\">Text</TextAtom>",
+          "<InputAtom type=\"text\" />",
+          "<CardAtom>...</CardAtom>"
+        ]
+      },
+      "createMissingAtoms": {
+        "description": "If you need a UI element that doesn't have an atom, create it",
+        "steps": [
+          "Create the atom in src/components/atoms/",
+          "Follow naming convention: ComponentName.atom.tsx",
+          "Export as ComponentNameAtom",
+          "Include proper TypeScript interfaces",
+          "Use consistent styling patterns"
+        ]
+      },
+      "consistentSpacing": {
+        "description": "All admin pages should use px-6 for horizontal padding",
+        "pattern": "<div className=\"mx-auto max-w-7xl\">{/* Page content */}</div>"
+      },
+      "formPatterns": {
+        "description": "Always pair inputs with labels",
+        "pattern": "<div><LabelAtom required>Field Name</LabelAtom><InputAtom type=\"text\" value={value} onChange={handler} /></div>"
+      },
+      "cardUsage": {
+        "description": "Group related content in cards",
+        "pattern": "<CardAtom><TextAtom variant=\"h3\" weight=\"medium\" className=\"mb-4\">Section Title</TextAtom>{/* Section content */}</CardAtom>"
+      },
+      "hydrationSafety": {
+        "description": "Avoid nesting block elements inside TextAtom",
+        "solution": "Use as=\"span\" for inline text within list items or other inline contexts"
+      },
+      "uiFolderRestriction": {
+        "description": "NEVER create or modify components in src/components/ui/ folder",
+        "reason": "The ui folder is reserved exclusively for Shadcn components installed via CLI",
+        "rule": "Only use existing components from ui folder, never create new ones there",
+        "violation": "Creating custom components in ui folder will break Shadcn component management"
+      }
+    },
+    "benefits": [
+      "Consistency: All components follow the same design patterns",
+      "Maintainability: Changes to styling can be made in one place",
+      "Reusability: Components can be used across different pages",
+      "Type Safety: TypeScript interfaces ensure proper usage",
+      "Accessibility: Atoms can include built-in accessibility features"
+    ],
+    "implementationChecklist": [
+      "Replace all raw HTML elements with atoms",
+      "Use consistent spacing (mx-auto max-w-7xl for admin pages)",
+      "Group content in CardAtom components",
+      "Use TextAtom for all text content",
+      "Use ButtonAtom for all buttons",
+      "Use form atoms (InputAtom, SelectAtom, etc.) for forms",
+      "Create missing atoms if needed",
+      "Follow TypeScript best practices",
+      "Use as=\"span\" for inline text to avoid hydration issues"
+    ],
+    "properAtomicDesignApplication": {
+      "description": "Don't put everything in pages - break down complex components into molecules and organisms",
+      "guidelines": {
+        "pages": {
+          "responsibility": "Should only orchestrate molecules and organisms, handle routing, and manage high-level state",
+          "maxLines": "Ideally under 100 lines",
+          "example": "A page should import and compose molecules/organisms, not contain 300+ lines of JSX"
+        },
+        "molecules": {
+          "responsibility": "Groups of atoms that form a cohesive unit",
+          "namingConventions": {
+            "descriptiveNames": "Use descriptive names that clearly indicate the component's purpose",
+            "domainSpecific": "Start with domain name if component is specific to that domain (e.g., Resident, CNA, etc.)",
+            "examples": [
+              "AddResidentModal.molecule.tsx - specifically for adding residents",
+              "ResidentBasicInformation.molecule.tsx - basic info specific to residents",
+              "ResidentEmergencyContact.molecule.tsx - emergency contact for residents",
+              "ResidentADLRequirements.molecule.tsx - ADL requirements for residents"
+            ]
+          },
+          "organization": {
+            "domainFolders": "Create domain-specific folders inside molecules for better organization",
+            "structure": "src/components/molecules/{domain}/{ComponentName}.molecule.tsx",
+            "examples": [
+              "src/components/molecules/resident/AddResidentModal.molecule.tsx",
+              "src/components/molecules/resident/ResidentBasicInformation.molecule.tsx",
+              "src/components/molecules/cna/CnaSchedule.molecule.tsx"
+            ]
+          },
+          "characteristics": [
+            "Self-contained functionality",
+            "Reusable across different contexts (if generic) or domain-specific (if specialized)",
+            "Manages its own internal state if needed",
+            "Composed of atoms",
+            "Named descriptively to indicate exact purpose"
+          ]
+        },
+        "organisms": {
+          "responsibility": "Complex components made of molecules and atoms",
+          "examples": [
+            "ResidentDetailForm.organism.tsx - entire resident detail form",
+            "ResidentManagementTable.organism.tsx - complete table with actions"
+          ],
+          "characteristics": [
+            "Handles complex business logic",
+            "Coordinates multiple molecules",
+            "May connect to external data sources"
+          ]
+        }
+      },
+      "refactoringRules": [
+        "If a page has 200+ lines, break it into molecules/organisms",
+        "If you see repeated patterns, extract them into molecules",
+        "If a component handles multiple concerns, split it",
+        "Each molecule should have a single responsibility",
+        "Molecules should be reusable and testable in isolation"
+      ]
+    }
   }
 }

@@ -26,35 +26,39 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     }
   }, [isChartingActive, pathname, router]);
 
-  // Don't show header on start page
-  const showHeader = pathname !== '/start' && pathname !== '/';
+  // Don't show header on start page or admin pages (admin has its own layout)
+  const showHeader = pathname !== '/start' && pathname !== '/' && !pathname.startsWith('/admin');
+  const isAdminRoute = pathname.startsWith('/admin');
 
   return (
     <html lang="en" className="h-full">
       <body className={`${inter.className} h-full antialiased`}>
-        <div className="min-h-screen bg-gray-50">
-          {showHeader && (
-            <header className="bg-white border-b border-gray-200 px-4 py-4">
-              <div className="max-w-7xl mx-auto flex items-center justify-between">
-                <h1 className="text-xl font-semibold text-gray-900">
-                  {pathname === '/charting'
-                    ? 'Chart ADLs'
-                    : pathname === '/review'
-                      ? 'Review Charting'
-                      : 'SmartChart Pro'}
-                </h1>
-                {isChartingActive && (
-                  <div className="text-sm text-gray-500">
-                    {selectedResidents.length} residents selected
-                  </div>
-                )}
-              </div>
-            </header>
-          )}
-
-          {/* Main Content */}
-          <main className="max-w-7xl mx-auto px-4 py-6">{children}</main>
-        </div>
+        {isAdminRoute ? (
+          // Admin routes use their own fullscreen layout
+          children
+        ) : (
+          <div className="min-h-screen bg-gray-50">
+            {showHeader && (
+              <header className="bg-white border-b border-gray-200 px-4 py-4">
+                <div className="max-w-7xl mx-auto flex items-center justify-between">
+                  <h1 className="text-xl font-semibold text-gray-900">
+                    {pathname === '/charting'
+                      ? 'Chart ADLs'
+                      : pathname === '/review'
+                        ? 'Review Charting'
+                        : 'SmartChart Pro'}
+                  </h1>
+                  {isChartingActive && (
+                    <div className="text-sm text-gray-500">
+                      {selectedResidents.length} residents selected
+                    </div>
+                  )}
+                </div>
+              </header>
+            )}
+            <main className="max-w-7xl mx-auto px-4 py-6">{children}</main>
+          </div>
+        )}
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
-import { ResidentCardMolecule } from '../molecules/ResidentCard.molecule';
 import { DUMMY_RESIDENTS } from '@/constants/residents';
+import { ResidentListItemMolecule } from '../molecules/resident/ResidentListItem.molecule';
 
 export const ResidentListOrganism = () => {
   return (
@@ -8,7 +8,7 @@ export const ResidentListOrganism = () => {
       <h2 className="text-2xl font-bold text-gray-900">Residents</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {DUMMY_RESIDENTS.map(resident => (
-          <ResidentCardMolecule
+          <ResidentListItemMolecule
             key={resident.id}
             name={resident.name}
             imageUrl={resident.imageUrl}
