@@ -13,6 +13,8 @@ import { ResidentNotesMolecule } from '@/components/molecules/resident/ResidentN
 import { ResidentAllergiesMolecule } from '@/components/molecules/resident/ResidentAllergies.molecule';
 import { ResidentConditionsMolecule } from '@/components/molecules/resident/ResidentConditions.molecule';
 import { ResidentMedicationsMolecule } from '@/components/molecules/resident/ResidentMedications.molecule';
+import { ResidentDNRStatusMolecule } from '@/components/molecules/resident/ResidentDNRStatus.molecule';
+import { ResidentSpecialistsMolecule } from '@/components/molecules/resident/ResidentSpecialists.molecule';
 
 const mockResident = {
   id: 1,
@@ -29,6 +31,32 @@ const mockResident = {
     relationship: 'Son',
     phone: '(555) 123-4567',
   },
+  dnrStatus: {
+    hasDNR: true,
+    hasDNI: false,
+    dnrDate: '2023-02-15',
+    dniDate: undefined,
+    physicianName: 'Dr. Sarah Mitchell',
+    notes: 'DNR order signed by patient and family',
+  },
+  specialists: [
+    {
+      id: '1',
+      name: 'Dr. Sarah Mitchell',
+      specialty: 'primary-care',
+      phone: '(555) 234-5678',
+      email: 'sarah.mitchell@healthcenter.com',
+      notes: 'Primary care physician, sees patient monthly',
+    },
+    {
+      id: '2',
+      name: 'Dr. Robert Chen',
+      specialty: 'cardiologist',
+      phone: '(555) 345-6789',
+      email: 'robert.chen@cardiology.com',
+      notes: 'Manages hypertension and heart health',
+    },
+  ],
   medicalInfo: {
     allergies: [
       { id: '1', name: 'Penicillin', severity: 'severe' as const, reaction: 'Anaphylaxis' },
@@ -141,6 +169,20 @@ export default function ResidentDetail() {
     }));
   };
 
+  const handleDNRStatusChange = (field: string, value: any) => {
+    setResident(prev => ({
+      ...prev,
+      dnrStatus: { ...prev.dnrStatus, [field]: value },
+    }));
+  };
+
+  const handleSpecialistsChange = (specialists: any[]) => {
+    setResident(prev => ({
+      ...prev,
+      specialists,
+    }));
+  };
+
   return (
     <div className="mx-auto max-w-7xl">
       <div className="mb-6 flex items-center justify-between">
@@ -223,6 +265,18 @@ export default function ResidentDetail() {
             Medical Information
           </TextAtom>
           <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <ResidentDNRStatusMolecule
+                dnrStatus={resident.dnrStatus}
+                isEditing={isEditing}
+                onDNRStatusChange={handleDNRStatusChange}
+              />
+              <ResidentSpecialistsMolecule
+                specialists={resident.specialists}
+                isEditing={isEditing}
+                onSpecialistsChange={handleSpecialistsChange}
+              />
+            </div>
             <ResidentConditionsMolecule
               conditions={resident.medicalInfo.conditions}
               isEditing={isEditing}
