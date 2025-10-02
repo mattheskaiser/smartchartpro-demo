@@ -6,6 +6,7 @@ import { LabelAtom } from '@/components/atoms/Label.atom';
 import { TextareaAtom } from '@/components/atoms/Textarea.atom';
 import { DropdownAtom } from '@/components/atoms/Dropdown.atom';
 import { FormModalOrganism } from '@/components/organisms/Modal.organism';
+import { SPECIALTY_OPTIONS } from '@/constants/medical';
 
 interface SpecialistModalProps {
   isOpen: boolean;
@@ -26,19 +27,6 @@ interface SpecialistModalProps {
     notes?: string;
   } | null;
 }
-
-const specialtyOptions = [
-  { value: 'primary-care', label: 'Primary Care Physician' },
-  { value: 'cardiologist', label: 'Cardiologist' },
-  { value: 'neurologist', label: 'Neurologist' },
-  { value: 'psychiatrist', label: 'Psychiatrist' },
-  { value: 'endocrinologist', label: 'Endocrinologist' },
-  { value: 'orthopedist', label: 'Orthopedist' },
-  { value: 'dermatologist', label: 'Dermatologist' },
-  { value: 'ophthalmologist', label: 'Ophthalmologist' },
-  { value: 'podiatrist', label: 'Podiatrist' },
-  { value: 'other', label: 'Other' },
-];
 
 export const SpecialistModalMolecule = ({
   isOpen,
@@ -104,7 +92,7 @@ export const SpecialistModalMolecule = ({
             value={form.specialty}
             onValueChange={value => setForm(prev => ({ ...prev, specialty: value }))}
             placeholder="Select specialty"
-            options={specialtyOptions}
+            options={SPECIALTY_OPTIONS}
           />
         </div>
       </div>

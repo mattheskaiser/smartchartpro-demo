@@ -7,6 +7,7 @@ import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
 import { SpecialistModalMolecule } from './modals/SpecialistModal.molecule';
+import { SPECIALTY_OPTIONS } from '@/constants/medical';
 
 interface Specialist {
   id: string;
@@ -23,19 +24,6 @@ interface ResidentSpecialistsProps {
   onSpecialistsChange: (specialists: Specialist[]) => void;
 }
 
-const specialtyOptions = [
-  { value: 'primary-care', label: 'Primary Care Physician' },
-  { value: 'cardiologist', label: 'Cardiologist' },
-  { value: 'neurologist', label: 'Neurologist' },
-  { value: 'psychiatrist', label: 'Psychiatrist' },
-  { value: 'endocrinologist', label: 'Endocrinologist' },
-  { value: 'orthopedist', label: 'Orthopedist' },
-  { value: 'dermatologist', label: 'Dermatologist' },
-  { value: 'ophthalmologist', label: 'Ophthalmologist' },
-  { value: 'podiatrist', label: 'Podiatrist' },
-  { value: 'other', label: 'Other' },
-];
-
 export const ResidentSpecialistsMolecule = ({
   specialists,
   isEditing,
@@ -45,7 +33,7 @@ export const ResidentSpecialistsMolecule = ({
   const [editingSpecialist, setEditingSpecialist] = useState<Specialist | null>(null);
 
   const getSpecialtyLabel = (value: string) => {
-    return specialtyOptions.find(option => option.value === value)?.label || value;
+    return SPECIALTY_OPTIONS.find(option => option.value === value)?.label || value;
   };
 
   const addSpecialist = (specialistData: {

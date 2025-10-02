@@ -3,8 +3,7 @@
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
-
-const adlOptions = ['bathing', 'dressing', 'eating', 'toileting', 'mobility', 'health'];
+import { ADL_OPTIONS } from '@/constants/adl';
 
 interface ResidentADLRequirementsProps {
   adlNeeds: string[];
@@ -23,7 +22,7 @@ export const ResidentADLRequirementsMolecule = ({
         ADL Requirements
       </TextAtom>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        {adlOptions.map(adl => (
+        {ADL_OPTIONS.map(adl => (
           <label key={adl} className="flex items-center space-x-2">
             <CheckboxAtom
               checked={adlNeeds.includes(adl)}

@@ -1,34 +1,10 @@
-import { ClockIcon, UserGroupIcon, UserIcon } from '@heroicons/react/24/outline';
+import { UserGroupIcon, UserIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
+import { DASHBOARD_STATS, RECENT_ACTIVITY } from '@/constants/admin';
 
 const stats = [
-  { name: 'Total CNAs', value: '12', icon: UserIcon },
-  { name: 'Active CNAs', value: '8', icon: ClockIcon },
+  ...DASHBOARD_STATS,
   { name: 'Total Residents', value: '45', icon: UserGroupIcon },
-];
-
-const recentActivity = [
-  {
-    id: 1,
-    cna: 'Sarah Johnson',
-    action: 'Completed ADL round',
-    timestamp: '2 hours ago',
-    status: 'completed',
-  },
-  {
-    id: 2,
-    cna: 'Michael Chen',
-    action: 'Started shift',
-    timestamp: '3 hours ago',
-    status: 'active',
-  },
-  {
-    id: 3,
-    cna: 'Emily Davis',
-    action: 'Updated resident status',
-    timestamp: '4 hours ago',
-    status: 'completed',
-  },
 ];
 
 export default function AdminDashboard() {
@@ -71,10 +47,10 @@ export default function AdminDashboard() {
           <h2 className="text-base font-semibold text-gray-900">Recent Activity</h2>
           <div className="mt-6 flow-root">
             <ul role="list" className="-mb-8">
-              {recentActivity.map((activity, activityIdx) => (
+              {RECENT_ACTIVITY.map((activity, activityIdx) => (
                 <li key={activity.id}>
                   <div className="relative pb-8">
-                    {activityIdx !== recentActivity.length - 1 ? (
+                    {activityIdx !== RECENT_ACTIVITY.length - 1 ? (
                       <span
                         className="absolute left-5 top-5 -ml-px h-full w-0.5 bg-gray-200"
                         aria-hidden="true"
@@ -104,11 +80,11 @@ export default function AdminDashboard() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{activity.cna}</div>
+                          <div className="text-sm font-medium text-gray-900">{activity.user}</div>
                           <p className="mt-0.5 text-sm text-gray-500">{activity.timestamp}</p>
                         </div>
                         <div className="mt-2 text-sm text-gray-700">
-                          <p>{activity.action}</p>
+                          <p>{activity.description}</p>
                         </div>
                       </div>
                     </div>
