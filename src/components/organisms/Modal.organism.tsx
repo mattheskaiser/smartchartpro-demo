@@ -20,7 +20,7 @@ interface ModalProps {
   children: React.ReactNode;
   footer?: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  showCloseButton?: boolean;
+
   className?: string;
 }
 
@@ -39,7 +39,6 @@ export const ModalOrganism = ({
   children,
   footer,
   size = 'md',
-  showCloseButton = true,
   className,
 }: ModalProps) => {
   return (

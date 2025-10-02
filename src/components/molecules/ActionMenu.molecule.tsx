@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { EllipsisVertical, Pencil, Trash2 } from 'lucide-react';
-import { ButtonAtom } from '@/components/atoms/Button.atom';
+
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';

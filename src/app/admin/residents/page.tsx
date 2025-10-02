@@ -7,11 +7,9 @@ import { ResidentListTableMolecule } from '@/components/molecules/resident/Resid
 import { ADMIN_RESIDENTS } from '@/constants/residents';
 
 export default function ResidentManagement() {
-  const [showModal, setShowModal] = useState(false);
-
-  const handleAddResident = (formData: any) => {
-    console.log('Adding resident:', formData);
-    setShowModal(false);
+  const handleAddResident = () => {
+    // TODO: Implement add resident functionality
+    console.log('Add resident clicked');
   };
 
   return (
@@ -26,7 +24,7 @@ export default function ResidentManagement() {
           </TextAtom>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <ButtonAtom variant="primary" onClick={() => setShowModal(true)}>
+          <ButtonAtom variant="primary" onClick={handleAddResident}>
             <PlusIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
             Add Resident
           </ButtonAtom>

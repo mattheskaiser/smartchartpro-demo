@@ -46,11 +46,7 @@ export const ResidentSpecialistsMolecule = ({
     if (editingSpecialist) {
       // Update existing specialist
       onSpecialistsChange(
-        specialists.map(s =>
-          s.id === editingSpecialist.id
-            ? { ...s, ...specialistData }
-            : s
-        )
+        specialists.map(s => (s.id === editingSpecialist.id ? { ...s, ...specialistData } : s))
       );
       setEditingSpecialist(null);
     } else {
@@ -85,7 +81,7 @@ export const ResidentSpecialistsMolecule = ({
 
       {/* Existing Specialists */}
       <div className="space-y-3 mb-4">
-        {specialists.map((specialist) => (
+        {specialists.map(specialist => (
           <div key={specialist.id} className="p-4 bg-gray-50 rounded-md">
             <div className="flex items-start justify-between mb-2">
               <div className="flex-1">

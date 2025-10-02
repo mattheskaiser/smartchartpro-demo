@@ -39,7 +39,7 @@ export const ResidentDNRStatusMolecule = ({
             {isEditing ? (
               <CheckboxAtom
                 checked={dnrStatus.hasDNR}
-                onCheckedChange={(checked) => onDNRStatusChange('hasDNR', checked)}
+                onCheckedChange={checked => onDNRStatusChange('hasDNR', checked)}
                 label="Has DNR order"
               />
             ) : (
@@ -53,7 +53,7 @@ export const ResidentDNRStatusMolecule = ({
             {isEditing ? (
               <CheckboxAtom
                 checked={dnrStatus.hasDNI}
-                onCheckedChange={(checked) => onDNRStatusChange('hasDNI', checked)}
+                onCheckedChange={checked => onDNRStatusChange('hasDNI', checked)}
                 label="Has DNI order"
               />
             ) : (
@@ -72,12 +72,14 @@ export const ResidentDNRStatusMolecule = ({
                 {isEditing ? (
                   <DatePickerMolecule
                     value={dnrStatus.dnrDate || ''}
-                    onChange={(date) => onDNRStatusChange('dnrDate', date)}
+                    onChange={date => onDNRStatusChange('dnrDate', date)}
                     placeholder="Select DNR date"
                   />
                 ) : (
                   <TextAtom>
-                    {dnrStatus.dnrDate ? new Date(dnrStatus.dnrDate).toLocaleDateString() : 'Not specified'}
+                    {dnrStatus.dnrDate
+                      ? new Date(dnrStatus.dnrDate).toLocaleDateString()
+                      : 'Not specified'}
                   </TextAtom>
                 )}
               </div>
@@ -88,12 +90,14 @@ export const ResidentDNRStatusMolecule = ({
                 {isEditing ? (
                   <DatePickerMolecule
                     value={dnrStatus.dniDate || ''}
-                    onChange={(date) => onDNRStatusChange('dniDate', date)}
+                    onChange={date => onDNRStatusChange('dniDate', date)}
                     placeholder="Select DNI date"
                   />
                 ) : (
                   <TextAtom>
-                    {dnrStatus.dniDate ? new Date(dnrStatus.dniDate).toLocaleDateString() : 'Not specified'}
+                    {dnrStatus.dniDate
+                      ? new Date(dnrStatus.dniDate).toLocaleDateString()
+                      : 'Not specified'}
                   </TextAtom>
                 )}
               </div>

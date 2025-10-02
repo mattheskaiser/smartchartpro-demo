@@ -199,7 +199,8 @@ export const MOCK_RESIDENT_DETAIL = {
     ],
   },
   adlNeeds: ['bathing', 'dressing', 'mobility'],
-  notes: 'Patient prefers morning care routine. Needs assistance with mobility due to recent hip surgery.',
+  notes:
+    'Patient prefers morning care routine. Needs assistance with mobility due to recent hip surgery.',
 };
 
 export type Resident = (typeof DUMMY_RESIDENTS)[number];

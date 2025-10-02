@@ -1,6 +1,11 @@
+'use client';
+
+import { useState } from 'react';
 import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
 
 export default function Settings() {
+  const [shiftNotifications, setShiftNotifications] = useState(true);
+  const [adlAlerts, setAdlAlerts] = useState(true);
   return (
     <div className="mx-auto max-w-7xl">
       <div className="space-y-10 divide-y divide-gray-900/10">
@@ -91,10 +96,8 @@ export default function Settings() {
                       <div className="flex h-6 items-center">
                         <CheckboxAtom
                           id="shifts"
-                          checked={true}
-                          onCheckedChange={(checked) => {
-                            // Handle change
-                          }}
+                          checked={shiftNotifications}
+                          onCheckedChange={setShiftNotifications}
                         />
                       </div>
                       <div className="text-sm leading-6">
@@ -110,10 +113,8 @@ export default function Settings() {
                       <div className="flex h-6 items-center">
                         <CheckboxAtom
                           id="adl-alerts"
-                          checked={true}
-                          onCheckedChange={(checked) => {
-                            // Handle change
-                          }}
+                          checked={adlAlerts}
+                          onCheckedChange={setAdlAlerts}
                         />
                       </div>
                       <div className="text-sm leading-6">

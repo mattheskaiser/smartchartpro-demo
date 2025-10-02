@@ -2,10 +2,7 @@ import { UserGroupIcon, UserIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { DASHBOARD_STATS, RECENT_ACTIVITY } from '@/constants/admin';
 
-const stats = [
-  ...DASHBOARD_STATS,
-  { name: 'Total Residents', value: '45', icon: UserGroupIcon },
-];
+const stats = [...DASHBOARD_STATS, { name: 'Total Residents', value: '45', icon: UserGroupIcon }];
 
 export default function AdminDashboard() {
   return (

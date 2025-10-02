@@ -58,7 +58,7 @@ export default function StartShiftPage() {
                 >
                   <CheckboxAtom
                     checked={selectedIds.has(resident.id)}
-                    onCheckedChange={(checked) => {
+                    onCheckedChange={checked => {
                       const newSelected = new Set(selectedIds);
                       if (checked) {
                         newSelected.add(resident.id);

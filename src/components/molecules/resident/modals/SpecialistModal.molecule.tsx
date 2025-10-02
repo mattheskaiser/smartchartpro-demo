@@ -96,7 +96,7 @@ export const SpecialistModalMolecule = ({
           />
         </div>
       </div>
-      
+
       <div className="grid grid-cols-2 gap-4">
         <div>
           <LabelAtom required>Phone</LabelAtom>
@@ -118,7 +118,7 @@ export const SpecialistModalMolecule = ({
           />
         </div>
       </div>
-      
+
       <div>
         <LabelAtom>Notes</LabelAtom>
         <TextareaAtom

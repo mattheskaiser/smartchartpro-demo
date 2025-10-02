@@ -1,5 +1,12 @@
 // ADL (Activities of Daily Living) options
-export const ADL_OPTIONS = ['bathing', 'dressing', 'eating', 'toileting', 'mobility', 'health'] as const;
+export const ADL_OPTIONS = [
+  'bathing',
+  'dressing',
+  'eating',
+  'toileting',
+  'mobility',
+  'health',
+] as const;
 
 // ADL types with labels for forms and displays
 export const ADL_TYPES = [

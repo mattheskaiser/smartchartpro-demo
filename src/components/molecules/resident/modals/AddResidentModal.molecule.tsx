@@ -7,12 +7,19 @@ import { LabelAtom } from '@/components/atoms/Label.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
 import { FormModalOrganism } from '@/components/organisms/Modal.organism';
-import { ADL_OPTIONS, CARE_STATUS_OPTIONS } from '@/constants/adl'; 
+import { ADL_OPTIONS, CARE_STATUS_OPTIONS } from '@/constants/adl';
+
+interface ResidentFormData {
+  name: string;
+  room: string;
+  status: string;
+  adls: string[];
+}
 
 interface AddResidentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (formData: any) => void;
+  onSubmit: (formData: ResidentFormData) => void;
 }
 
 export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit }: AddResidentModalProps) => {

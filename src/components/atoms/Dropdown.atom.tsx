@@ -18,7 +18,7 @@ interface DropdownAtomProps {
   value?: string;
   onValueChange?: (value: string) => void;
   placeholder?: string;
-  options: DropdownOption[];
+  options: readonly DropdownOption[];
   disabled?: boolean;
   className?: string;
 }
