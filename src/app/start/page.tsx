@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { DUMMY_RESIDENTS } from '@/constants/residents';
 import { useChartingStore } from '@/stores/chartingStore';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
+import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
 
 export default function StartPage() {
   const router = useRouter();
@@ -47,21 +48,19 @@ export default function StartPage() {
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Available Residents</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {DUMMY_RESIDENTS.map(resident => (
-                <label
+                <div
                   key={resident.id}
-                  className={`relative flex items-center space-x-4 p-4 border rounded-lg cursor-pointer transition-colors ${
+                  className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-colors ${
                     selectedIds.has(resident.id)
                       ? 'border-blue-500 bg-blue-50'
                       : 'border-gray-200 hover:bg-gray-50'
                   }`}
                 >
-                  <input
-                    type="checkbox"
-                    className="sr-only"
+                  <CheckboxAtom
                     checked={selectedIds.has(resident.id)}
-                    onChange={e => {
+                    onCheckedChange={checked => {
                       const newSelected = new Set(selectedIds);
-                      if (e.target.checked) {
+                      if (checked) {
                         newSelected.add(resident.id);
                       } else {
                         newSelected.delete(resident.id);
@@ -78,7 +77,7 @@ export default function StartPage() {
                     </div>
                     <p className="text-sm text-gray-500">Room {resident.room}</p>
                   </div>
-                </label>
+                </div>
               ))}
             </div>
           </div>

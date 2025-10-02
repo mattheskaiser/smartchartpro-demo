@@ -7,13 +7,19 @@ import { LabelAtom } from '@/components/atoms/Label.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
 import { FormModalOrganism } from '@/components/organisms/Modal.organism';
+import { ADL_OPTIONS, CARE_STATUS_OPTIONS } from '@/constants/adl';
 
-const adlOptions = ['bathing', 'dressing', 'eating', 'toileting', 'mobility', 'health'];
+interface ResidentFormData {
+  name: string;
+  room: string;
+  status: string;
+  adls: string[];
+}
 
 interface AddResidentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (formData: any) => void;
+  onSubmit: (formData: ResidentFormData) => void;
 }
 
 export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit }: AddResidentModalProps) => {
@@ -74,17 +80,13 @@ export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit }: AddResid
           value={form.status}
           onValueChange={value => handleChange('status', value)}
           placeholder="Select care status"
-          options={[
-            { value: 'independent', label: 'Independent' },
-            { value: 'partial', label: 'Partial' },
-            { value: 'full', label: 'Full' },
-          ]}
+          options={CARE_STATUS_OPTIONS}
         />
       </div>
       <div>
         <LabelAtom>ADLs</LabelAtom>
         <div className="flex flex-wrap gap-2">
-          {adlOptions.map(adl => (
+          {ADL_OPTIONS.map(adl => (
             <label key={adl} className="flex items-center gap-1 text-sm">
               <CheckboxAtom
                 checked={form.adls.includes(adl)}

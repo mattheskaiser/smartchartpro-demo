@@ -3,14 +3,7 @@
 import Link from 'next/link';
 import clsx from 'clsx';
 import { usePathname } from 'next/navigation';
-import { Cog6ToothIcon, HomeIcon, UserGroupIcon, UsersIcon } from '@heroicons/react/24/outline';
-
-const navigation = [
-  { name: 'Dashboard', href: '/admin', icon: HomeIcon },
-  { name: 'Residents', href: '/admin/residents', icon: UserGroupIcon },
-  { name: 'CNA Management', href: '/admin/cnas', icon: UsersIcon },
-  { name: 'Settings', href: '/admin/settings', icon: Cog6ToothIcon },
-];
+import { ADMIN_NAVIGATION } from '@/constants/navigation';
 
 export const AdminSidebarMolecule = () => {
   const pathname = usePathname();
@@ -29,7 +22,7 @@ export const AdminSidebarMolecule = () => {
       </div>
 
       <nav className="flex-1 px-4 py-6 space-y-2">
-        {navigation.map(item => (
+        {ADMIN_NAVIGATION.map(item => (
           <Link
             key={item.name}
             href={item.href}

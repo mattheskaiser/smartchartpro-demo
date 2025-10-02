@@ -1,36 +1,7 @@
 import { PlusIcon } from '@heroicons/react/20/solid';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-
-const cnas = [
-  {
-    id: 1,
-    name: 'Sarah Johnson',
-    email: 'sarah.j@example.com',
-    status: 'active',
-    shift: 'Morning',
-    assignedResidents: 8,
-    lastActive: '2 hours ago',
-  },
-  {
-    id: 2,
-    name: 'Michael Chen',
-    email: 'michael.c@example.com',
-    status: 'active',
-    shift: 'Evening',
-    assignedResidents: 6,
-    lastActive: '1 hour ago',
-  },
-  {
-    id: 3,
-    name: 'Emily Davis',
-    email: 'emily.d@example.com',
-    status: 'inactive',
-    shift: 'Night',
-    assignedResidents: 0,
-    lastActive: '2 days ago',
-  },
-];
+import { CNAS_DATA } from '@/constants/admin';
 
 export default function CNAManagement() {
   return (
@@ -97,7 +68,7 @@ export default function CNAManagement() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {cnas.map(cna => (
+                  {CNAS_DATA.map(cna => (
                     <tr key={cna.id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
                         <div className="flex items-center">
@@ -128,7 +99,7 @@ export default function CNAManagement() {
                         {cna.shift}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {cna.assignedResidents}
+                        {cna.residents}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {cna.lastActive}

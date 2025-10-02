@@ -1,4 +1,11 @@
+'use client';
+
+import { useState } from 'react';
+import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
+
 export default function Settings() {
+  const [shiftNotifications, setShiftNotifications] = useState(true);
+  const [adlAlerts, setAdlAlerts] = useState(true);
   return (
     <div className="mx-auto max-w-7xl">
       <div className="space-y-10 divide-y divide-gray-900/10">
@@ -87,12 +94,10 @@ export default function Settings() {
                   <div className="mt-6 space-y-6">
                     <div className="relative flex gap-x-3">
                       <div className="flex h-6 items-center">
-                        <input
+                        <CheckboxAtom
                           id="shifts"
-                          name="shifts"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                          defaultChecked
+                          checked={shiftNotifications}
+                          onCheckedChange={setShiftNotifications}
                         />
                       </div>
                       <div className="text-sm leading-6">
@@ -106,12 +111,10 @@ export default function Settings() {
                     </div>
                     <div className="relative flex gap-x-3">
                       <div className="flex h-6 items-center">
-                        <input
+                        <CheckboxAtom
                           id="adl-alerts"
-                          name="adl-alerts"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                          defaultChecked
+                          checked={adlAlerts}
+                          onCheckedChange={setAdlAlerts}
                         />
                       </div>
                       <div className="text-sm leading-6">

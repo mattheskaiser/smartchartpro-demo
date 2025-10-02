@@ -4,43 +4,12 @@ import { PlusIcon } from '@heroicons/react/20/solid';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ResidentListTableMolecule } from '@/components/molecules/resident/ResidentListTable.molecule';
-
-const residents = [
-  {
-    id: 1,
-    name: 'Alice Thompson',
-    imageUrl: '/placeholder.jpg',
-    room: '101',
-    status: 'independent',
-    lastADL: '1 hour ago',
-    assignedCNA: 'Sarah Johnson',
-  },
-  {
-    id: 2,
-    name: 'Robert Wilson',
-    imageUrl: '/placeholder.jpg',
-    room: '102',
-    status: 'partial',
-    lastADL: '2 hours ago',
-    assignedCNA: 'Michael Chen',
-  },
-  {
-    id: 3,
-    name: 'Mary Davis',
-    imageUrl: '/placeholder.jpg',
-    room: '103',
-    status: 'full',
-    lastADL: '30 minutes ago',
-    assignedCNA: 'Emily Davis',
-  },
-];
+import { ADMIN_RESIDENTS } from '@/constants/residents';
 
 export default function ResidentManagement() {
-  const [showModal, setShowModal] = useState(false);
-
-  const handleAddResident = (formData: any) => {
-    console.log('Adding resident:', formData);
-    setShowModal(false);
+  const handleAddResident = () => {
+    // TODO: Implement add resident functionality
+    console.log('Add resident clicked');
   };
 
   return (
@@ -55,7 +24,7 @@ export default function ResidentManagement() {
           </TextAtom>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <ButtonAtom variant="primary" onClick={() => setShowModal(true)}>
+          <ButtonAtom variant="primary" onClick={handleAddResident}>
             <PlusIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
             Add Resident
           </ButtonAtom>
@@ -63,7 +32,7 @@ export default function ResidentManagement() {
       </div>
 
       <div className="mt-8">
-        <ResidentListTableMolecule residents={residents} />
+        <ResidentListTableMolecule residents={ADMIN_RESIDENTS} />
       </div>
     </div>
   );
