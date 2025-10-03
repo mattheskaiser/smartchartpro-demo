@@ -17,7 +17,6 @@ export const AdminSidebarMolecule = () => {
 
   return (
     <div className="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 flex flex-col">
-
       <nav className="flex-1 px-4 py-6 space-y-2">
         {ADMIN_NAVIGATION.map(item => (
           <Link

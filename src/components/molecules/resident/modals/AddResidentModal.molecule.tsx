@@ -49,7 +49,6 @@ export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit }: AddResid
       onSubmit={handleSubmit}
       title="Add Resident"
       submitLabel="Add Resident"
-
     >
       <div className="grid grid-cols-2 gap-4">
         <div>
