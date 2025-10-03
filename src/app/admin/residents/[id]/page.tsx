@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeftIcon, PencilIcon } from '@heroicons/react/24/outline';
-import { ButtonAtom } from '@/components/atoms/Button.atom';
+import { StickyPageHeaderMolecule } from '@/components/molecules/StickyPageHeader.molecule';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ResidentBasicInformationMolecule } from '@/components/molecules/resident/ResidentBasicInformation.molecule';
 import { ResidentEmergencyContactMolecule } from '@/components/molecules/resident/ResidentEmergencyContact.molecule';
@@ -86,34 +85,14 @@ export default function ResidentDetail() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl">
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center">
-          <ButtonAtom
-            variant="secondary"
-            size="sm"
-            onClick={() => router.back()}
-            className="mr-4 p-2"
-          >
-            <ArrowLeftIcon className="h-5 w-5" />
-          </ButtonAtom>
-          <div>
-            <TextAtom variant="h1" weight="semibold">
-              {resident.name}
-            </TextAtom>
-            <TextAtom variant="small" color="muted">
-              Room {resident.room}
-            </TextAtom>
-          </div>
-        </div>
-        <ButtonAtom
-          variant="primary"
-          onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-        >
-          <PencilIcon className="h-4 w-4 mr-2" />
-          {isEditing ? 'Save Changes' : 'Edit'}
-        </ButtonAtom>
-      </div>
+    <div className="mx-auto max-w-7xl px-8">
+      <StickyPageHeaderMolecule
+        title={resident.name}
+        subtitle={`Room ${resident.room}`}
+        isEditing={isEditing}
+        onBack={() => router.back()}
+        onToggleEdit={() => (isEditing ? handleSave() : setIsEditing(true))}
+      />
 
       <div className="space-y-8">
         {/* Basic Information Section */}
