@@ -20,8 +20,8 @@ export function StickyPageHeaderMolecule({
     onToggleEdit,
 }: StickyPageHeaderProps) {
     return (
-        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-200 -mx-8 px-8 py-4 mb-6">
-            <div className="mx-auto max-w-7xl flex items-center justify-between">
+        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-200 py-4 mb-6 -mx-6 px-6 -mt-8 pt-8">
+            <div className="flex items-center justify-between">
                 <div className="flex items-center">
                     <ButtonAtom
                         variant="secondary"
