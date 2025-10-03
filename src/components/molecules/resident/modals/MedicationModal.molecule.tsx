@@ -72,7 +72,7 @@ export const MedicationModalMolecule = ({
       onSubmit={handleSubmit}
       title={editingMedication ? 'Edit Medication' : 'Add Medication'}
       submitLabel={editingMedication ? 'Update Medication' : 'Add Medication'}
-      size="md"
+
     >
       <div className="grid grid-cols-2 gap-4">
         <div>

@@ -73,7 +73,7 @@ export const SpecialistModalMolecule = ({
       onSubmit={handleSubmit}
       title={editingSpecialist ? 'Edit Specialist/Doctor' : 'Add Specialist/Doctor'}
       submitLabel={editingSpecialist ? 'Update Specialist' : 'Add Specialist'}
-      size="md"
+
     >
       <div className="grid grid-cols-2 gap-4">
         <div>
