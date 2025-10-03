@@ -4,12 +4,27 @@ import { PlusIcon } from '@heroicons/react/20/solid';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ResidentListTableMolecule } from '@/components/molecules/resident/ResidentListTable.molecule';
+import { AddResidentModalMolecule } from '@/components/molecules/resident/modals/AddResidentModal.molecule';
 import { ADMIN_RESIDENTS } from '@/constants/residents';
 
 export default function ResidentManagement() {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
   const handleAddResident = () => {
-    // TODO: Implement add resident functionality
-    console.log('Add resident clicked');
+    setIsAddModalOpen(true);
+  };
+
+  const handleSubmitResident = (formData: any) => {
+    // TODO: Implement actual resident creation logic
+    console.log('Creating new resident:', formData);
+
+    // Here you would typically:
+    // 1. Validate the form data
+    // 2. Send to API/database
+    // 3. Update the residents list
+    // 4. Show success message
+
+    setIsAddModalOpen(false);
   };
 
   return (
@@ -34,6 +49,12 @@ export default function ResidentManagement() {
       <div className="mt-8">
         <ResidentListTableMolecule residents={ADMIN_RESIDENTS} />
       </div>
+
+      <AddResidentModalMolecule
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSubmit={handleSubmitResident}
+      />
     </div>
   );
 }
