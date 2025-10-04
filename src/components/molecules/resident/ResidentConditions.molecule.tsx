@@ -33,6 +33,7 @@ export const ResidentConditionsMolecule = ({
   const safeConditions = Array.isArray(conditions) ? conditions : [];
   const [showModal, setShowModal] = useState(false);
   const [editingCondition, setEditingCondition] = useState<Condition | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const addCondition = async (conditionData: {
     name: string;
@@ -42,6 +43,7 @@ export const ResidentConditionsMolecule = ({
   }) => {
     if (!residentId) return;
 
+    setIsLoading(true);
     try {
       if (editingCondition) {
         // Update existing condition
@@ -76,6 +78,8 @@ export const ResidentConditionsMolecule = ({
       }
     } catch (error) {
       console.error('Error saving condition:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -182,6 +186,7 @@ export const ResidentConditionsMolecule = ({
         }}
         onSubmit={addCondition}
         editingCondition={editingCondition}
+        isLoading={isLoading}
       />
     </CardAtom>
   );

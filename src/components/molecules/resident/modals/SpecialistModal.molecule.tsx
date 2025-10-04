@@ -26,6 +26,7 @@ interface SpecialistModalProps {
     email?: string;
     notes?: string;
   } | null;
+  isLoading?: boolean;
 }
 
 export const SpecialistModalMolecule = ({
@@ -33,6 +34,7 @@ export const SpecialistModalMolecule = ({
   onClose,
   onSubmit,
   editingSpecialist,
+  isLoading = false,
 }: SpecialistModalProps) => {
   const [form, setForm] = useState({
     name: '',
@@ -59,7 +61,7 @@ export const SpecialistModalMolecule = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.name.trim() && form.specialty.trim() && form.phone.trim()) {
+    if (form.name.trim() && form.specialty.trim() && form.phone.trim() && !isLoading) {
       onSubmit(form);
       setForm({ name: '', specialty: '', phone: '', email: '', notes: '' });
       onClose();
@@ -73,6 +75,7 @@ export const SpecialistModalMolecule = ({
       onSubmit={handleSubmit}
       title={editingSpecialist ? 'Edit Specialist/Doctor' : 'Add Specialist/Doctor'}
       submitLabel={editingSpecialist ? 'Update Specialist' : 'Add Specialist'}
+      isSubmitting={isLoading}
     >
       <div className="grid grid-cols-2 gap-4">
         <div>

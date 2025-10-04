@@ -39,6 +39,7 @@ export const ResidentMedicationsMolecule = ({
   const [activeTab, setActiveTab] = useState<'current' | 'past'>('current');
   const [showModal, setShowModal] = useState(false);
   const [editingMedication, setEditingMedication] = useState<Medication | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const addMedication = async (medicationData: {
     name: string;
@@ -49,6 +50,7 @@ export const ResidentMedicationsMolecule = ({
   }) => {
     if (!residentId) return;
 
+    setIsLoading(true);
     try {
       if (editingMedication) {
         // Update existing medication
@@ -83,6 +85,8 @@ export const ResidentMedicationsMolecule = ({
       }
     } catch (error) {
       console.error('Error saving medication:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -271,6 +275,7 @@ export const ResidentMedicationsMolecule = ({
         }}
         onSubmit={addMedication}
         editingMedication={editingMedication}
+        isLoading={isLoading}
       />
     </CardAtom>
   );

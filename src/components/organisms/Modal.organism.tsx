@@ -71,8 +71,14 @@ export const FormModalOrganism = ({
       <ButtonAtom variant="secondary" onClick={onClose} disabled={isSubmitting}>
         {cancelLabel}
       </ButtonAtom>
-      <ButtonAtom variant={submitVariant} type="submit" form="modal-form" disabled={isSubmitting}>
-        {isSubmitting ? 'Submitting...' : submitLabel}
+      <ButtonAtom
+        variant={submitVariant}
+        type="submit"
+        form="modal-form"
+        isLoading={isSubmitting}
+        loadingText="Submitting..."
+      >
+        {submitLabel}
       </ButtonAtom>
     </>
   );

@@ -25,6 +25,7 @@ interface MedicationModalProps {
     instructions: string;
     startDate: string;
   } | null;
+  isLoading?: boolean;
 }
 
 export const MedicationModalMolecule = ({
@@ -32,6 +33,7 @@ export const MedicationModalMolecule = ({
   onClose,
   onSubmit,
   editingMedication,
+  isLoading = false,
 }: MedicationModalProps) => {
   const [form, setForm] = useState({
     name: '',
@@ -58,7 +60,7 @@ export const MedicationModalMolecule = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.name.trim()) {
+    if (form.name.trim() && form.dosage.trim() && form.frequency.trim() && !isLoading) {
       onSubmit(form);
       setForm({ name: '', dosage: '', frequency: '', instructions: '', startDate: '' });
       onClose();
@@ -72,6 +74,7 @@ export const MedicationModalMolecule = ({
       onSubmit={handleSubmit}
       title={editingMedication ? 'Edit Medication' : 'Add Medication'}
       submitLabel={editingMedication ? 'Update Medication' : 'Add Medication'}
+      isSubmitting={isLoading}
     >
       <div className="grid grid-cols-2 gap-4">
         <div>
@@ -85,23 +88,25 @@ export const MedicationModalMolecule = ({
           />
         </div>
         <div>
-          <LabelAtom>Dosage</LabelAtom>
+          <LabelAtom required>Dosage</LabelAtom>
           <InputAtom
             type="text"
             value={form.dosage}
             onChange={e => setForm(prev => ({ ...prev, dosage: e.target.value }))}
             placeholder="e.g., 10mg"
+            required
           />
         </div>
       </div>{' '}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <LabelAtom>Frequency</LabelAtom>
+          <LabelAtom required>Frequency</LabelAtom>
           <InputAtom
             type="text"
             value={form.frequency}
             onChange={e => setForm(prev => ({ ...prev, frequency: e.target.value }))}
             placeholder="e.g., Once daily"
+            required
           />
         </div>
         <div>

@@ -8,6 +8,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   try {
     const resident = await prisma.resident.findUnique({
       where: { id: params.id },
+      include: {
+        allergies: true,
+        conditions: true,
+        medications: true,
+        specialists: true,
+        dnrStatus: true,
+      },
     });
 
     if (!resident) {
@@ -25,16 +32,33 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const body = await request.json();
+    console.log('Updating resident:', params.id, 'with data:', body);
+
+    // Handle date fields properly
+    const updateData = { ...body };
+    if (updateData.dateOfBirth) {
+      updateData.dateOfBirth = new Date(updateData.dateOfBirth);
+    }
+    if (updateData.admissionDate) {
+      updateData.admissionDate = new Date(updateData.admissionDate);
+    }
 
     const resident = await prisma.resident.update({
       where: { id: params.id },
-      data: body,
+      data: updateData,
     });
 
     return NextResponse.json(resident);
   } catch (error) {
     console.error('Error updating resident:', error);
-    return NextResponse.json({ error: 'Failed to update resident' }, { status: 500 });
+    console.error('Error details:', error instanceof Error ? error.message : error);
+    return NextResponse.json(
+      {
+        error: 'Failed to update resident',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 }
+    );
   }
 }
 

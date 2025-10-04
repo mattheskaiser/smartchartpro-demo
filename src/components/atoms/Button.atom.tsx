@@ -3,6 +3,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { SpinnerAtom } from '@/components/atoms/Spinner.atom';
 
 interface ButtonAtomProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
@@ -10,6 +11,8 @@ interface ButtonAtomProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
   isFullWidth?: boolean;
   children: React.ReactNode;
   asChild?: boolean;
+  isLoading?: boolean;
+  loadingText?: string;
 }
 
 export const ButtonAtom = ({
@@ -19,6 +22,9 @@ export const ButtonAtom = ({
   children,
   className,
   asChild,
+  isLoading = false,
+  loadingText,
+  disabled,
   ...props
 }: ButtonAtomProps) => {
   // Map our sizes to Shadcn sizes
@@ -34,6 +40,9 @@ export const ButtonAtom = ({
     destructive: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
   };
 
+  // Determine spinner size based on button size
+  const spinnerSize = size === 'sm' ? 'sm' : size === 'lg' ? 'md' : 'sm';
+
   return (
     <Button
       variant="ghost" // Use ghost as base to avoid Shadcn colors
@@ -43,12 +52,21 @@ export const ButtonAtom = ({
         variantClasses[variant],
         'font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2',
         isFullWidth && 'w-full',
+        isLoading && 'cursor-not-allowed opacity-90',
         className
       )}
       asChild={asChild}
+      disabled={disabled || isLoading}
       {...props}
     >
-      {children}
+      {isLoading ? (
+        <div className="flex items-center space-x-2">
+          <SpinnerAtom size={spinnerSize} className="text-white" />
+          <span>{loadingText || 'Loading...'}</span>
+        </div>
+      ) : (
+        children
+      )}
     </Button>
   );
 };

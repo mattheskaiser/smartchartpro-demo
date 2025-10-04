@@ -40,11 +40,13 @@ import { ResidentDNRStatusMolecule } from '@/components/molecules/resident/Resid
 import { ResidentSpecialistsMolecule } from '@/components/molecules/resident/ResidentSpecialists.molecule';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
 import { useResident, useUpdateResident } from '@/hooks/useResidents';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ResidentDetail() {
   const router = useRouter();
   const params = useParams();
   const [isEditing, setIsEditing] = useState(false);
+  const queryClient = useQueryClient();
 
   // Use TanStack Query hooks
   const { data: fetchedResident, isLoading, error } = useResident(params.id as string);
@@ -52,22 +54,76 @@ export default function ResidentDetail() {
 
   // Local state for editing (synced with fetched data)
   const [resident, setResident] = useState<ResidentData | null>(null);
+  // Track original basic resident data to detect changes
+  const [originalBasicData, setOriginalBasicData] = useState<Partial<ResidentData> | null>(null);
 
   // Sync local state with fetched data
   useEffect(() => {
     if (fetchedResident && !isEditing) {
       setResident(fetchedResident);
+      // Store original basic data (excluding related models)
+      const { allergies, conditions, medications, specialists, dnrStatus, ...basicData } =
+        fetchedResident;
+      setOriginalBasicData(basicData);
     }
   }, [fetchedResident, isEditing]);
+
+  // Helper function to check if basic data has changed
+  const hasBasicDataChanged = () => {
+    if (!resident || !originalBasicData) return false;
+
+    const { allergies, conditions, medications, specialists, dnrStatus, ...currentBasicData } =
+      resident;
+
+    // Compare each field
+    const fieldsToCompare = [
+      'name',
+      'room',
+      'status',
+      'imageUrl',
+      'dateOfBirth',
+      'admissionDate',
+      'emergencyContactName',
+      'emergencyContactPhone',
+      'emergencyContactRelationship',
+      'assignedCNA',
+      'notes',
+    ];
+
+    for (const field of fieldsToCompare) {
+      if (
+        currentBasicData[field as keyof typeof currentBasicData] !==
+        originalBasicData[field as keyof typeof originalBasicData]
+      ) {
+        return true;
+      }
+    }
+
+    // Check adlNeeds array
+    const currentAdl = currentBasicData.adlNeeds || [];
+    const originalAdl = originalBasicData.adlNeeds || [];
+    if (JSON.stringify(currentAdl.sort()) !== JSON.stringify(originalAdl.sort())) {
+      return true;
+    }
+
+    return false;
+  };
 
   const handleSave = async () => {
     if (!resident) return;
 
     try {
-      await updateResidentMutation.mutateAsync({
-        id: params.id as string,
-        data: resident,
-      });
+      // Only make a request if basic resident data has changed
+      if (hasBasicDataChanged()) {
+        const { allergies, conditions, medications, specialists, dnrStatus, ...basicResidentData } =
+          resident;
+
+        await updateResidentMutation.mutateAsync({
+          id: params.id as string,
+          data: basicResidentData,
+        });
+      }
+
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating resident:', error);
@@ -79,9 +135,18 @@ export default function ResidentDetail() {
   };
 
   const handleEmergencyContactChange = (field: string, value: string) => {
+    // Map the field names to the actual database field names
+    const fieldMap: { [key: string]: string } = {
+      name: 'emergencyContactName',
+      phone: 'emergencyContactPhone',
+      relationship: 'emergencyContactRelationship',
+    };
+
+    const actualField = fieldMap[field] || field;
+
     setResident((prev: ResidentData | null) => ({
       ...prev,
-      [field]: value,
+      [actualField]: value,
     }));
   };
 
@@ -107,6 +172,8 @@ export default function ResidentDetail() {
       ...prev,
       allergies,
     }));
+    // Invalidate query to ensure fresh data on next fetch
+    queryClient.invalidateQueries({ queryKey: ['residents', params.id] });
   };
 
   const handleConditionsChange = (conditions: any[]) => {
@@ -114,6 +181,8 @@ export default function ResidentDetail() {
       ...prev,
       conditions,
     }));
+    // Invalidate query to ensure fresh data on next fetch
+    queryClient.invalidateQueries({ queryKey: ['residents', params.id] });
   };
 
   const handleMedicationsChange = (medications: any[]) => {
@@ -121,6 +190,8 @@ export default function ResidentDetail() {
       ...prev,
       medications,
     }));
+    // Invalidate query to ensure fresh data on next fetch
+    queryClient.invalidateQueries({ queryKey: ['residents', params.id] });
   };
 
   const handleDNRStatusChange = async (field: string, value: any) => {
@@ -154,6 +225,8 @@ export default function ResidentDetail() {
       ...prev,
       specialists,
     }));
+    // Invalidate query to ensure fresh data on next fetch
+    queryClient.invalidateQueries({ queryKey: ['residents', params.id] });
   };
 
   if (isLoading) {
@@ -210,6 +283,7 @@ export default function ResidentDetail() {
         isEditing={isEditing}
         onBack={() => router.back()}
         onToggleEdit={() => (isEditing ? handleSave() : setIsEditing(true))}
+        isSaving={updateResidentMutation.isPending}
       />
 
       <div className="space-y-8">

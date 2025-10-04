@@ -35,6 +35,7 @@ export const ResidentSpecialistsMolecule = ({
   const safeSpecialists = Array.isArray(specialists) ? specialists : [];
   const [showModal, setShowModal] = useState(false);
   const [editingSpecialist, setEditingSpecialist] = useState<Specialist | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getSpecialtyLabel = (value: string) => {
     return SPECIALTY_OPTIONS.find(option => option.value === value)?.label || value;
@@ -48,6 +49,8 @@ export const ResidentSpecialistsMolecule = ({
     notes: string;
   }) => {
     if (!residentId) return;
+
+    setIsLoading(true);
 
     try {
       if (editingSpecialist) {
@@ -83,6 +86,8 @@ export const ResidentSpecialistsMolecule = ({
       }
     } catch (error) {
       console.error('Error saving specialist:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -184,6 +189,7 @@ export const ResidentSpecialistsMolecule = ({
         }}
         onSubmit={addSpecialist}
         editingSpecialist={editingSpecialist}
+        isLoading={isLoading}
       />
     </CardAtom>
   );
