@@ -32,10 +32,12 @@ export const ResidentAllergiesMolecule = ({
   const safeAllergies = Array.isArray(allergies) ? allergies : [];
   const [showModal, setShowModal] = useState(false);
   const [editingAllergy, setEditingAllergy] = useState<Allergy | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const addAllergy = async (allergyData: { name: string; severity: string; reaction: string }) => {
     if (!residentId) return;
 
+    setIsLoading(true);
     try {
       if (editingAllergy) {
         // Update existing allergy
@@ -70,6 +72,8 @@ export const ResidentAllergiesMolecule = ({
       }
     } catch (error) {
       console.error('Error saving allergy:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -174,6 +178,7 @@ export const ResidentAllergiesMolecule = ({
         }}
         onSubmit={addAllergy}
         editingAllergy={editingAllergy}
+        isLoading={isLoading}
       />
     </CardAtom>
   );

@@ -11,6 +11,7 @@ interface AllergyModalProps {
   onClose: () => void;
   onSubmit: (allergy: { name: string; severity: string; reaction: string }) => void;
   editingAllergy?: { id: string; name: string; severity: string; reaction: string } | null;
+  isLoading?: boolean;
 }
 
 export const AllergyModalMolecule = ({
@@ -18,6 +19,7 @@ export const AllergyModalMolecule = ({
   onClose,
   onSubmit,
   editingAllergy,
+  isLoading = false,
 }: AllergyModalProps) => {
   const [form, setForm] = useState({
     name: '',
@@ -40,7 +42,7 @@ export const AllergyModalMolecule = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.name.trim()) {
+    if (form.name.trim() && !isLoading) {
       onSubmit(form);
       setForm({ name: '', severity: 'mild', reaction: '' });
       onClose();
@@ -54,6 +56,7 @@ export const AllergyModalMolecule = ({
       onSubmit={handleSubmit}
       title={editingAllergy ? 'Edit Allergy' : 'Add Allergy'}
       submitLabel={editingAllergy ? 'Update Allergy' : 'Add Allergy'}
+      isSubmitting={isLoading}
     >
       <div>
         <LabelAtom required>Allergy Name</LabelAtom>

@@ -79,9 +79,18 @@ export default function ResidentDetail() {
   };
 
   const handleEmergencyContactChange = (field: string, value: string) => {
+    // Map the field names to the actual database field names
+    const fieldMap: { [key: string]: string } = {
+      name: 'emergencyContactName',
+      phone: 'emergencyContactPhone',
+      relationship: 'emergencyContactRelationship',
+    };
+
+    const actualField = fieldMap[field] || field;
+
     setResident((prev: ResidentData | null) => ({
       ...prev,
-      [field]: value,
+      [actualField]: value,
     }));
   };
 
@@ -210,6 +219,7 @@ export default function ResidentDetail() {
         isEditing={isEditing}
         onBack={() => router.back()}
         onToggleEdit={() => (isEditing ? handleSave() : setIsEditing(true))}
+        isSaving={updateResidentMutation.isPending}
       />
 
       <div className="space-y-8">

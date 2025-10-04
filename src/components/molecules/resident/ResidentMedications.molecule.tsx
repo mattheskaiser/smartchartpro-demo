@@ -39,6 +39,7 @@ export const ResidentMedicationsMolecule = ({
   const [activeTab, setActiveTab] = useState<'current' | 'past'>('current');
   const [showModal, setShowModal] = useState(false);
   const [editingMedication, setEditingMedication] = useState<Medication | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const addMedication = async (medicationData: {
     name: string;
@@ -49,6 +50,7 @@ export const ResidentMedicationsMolecule = ({
   }) => {
     if (!residentId) return;
 
+    setIsLoading(true);
     try {
       if (editingMedication) {
         // Update existing medication
@@ -83,6 +85,8 @@ export const ResidentMedicationsMolecule = ({
       }
     } catch (error) {
       console.error('Error saving medication:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -150,11 +154,10 @@ export const ResidentMedicationsMolecule = ({
       <div className="flex space-x-1 mb-4 bg-gray-100 p-1 rounded-lg">
         <button
           onClick={() => setActiveTab('current')}
-          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${
-            activeTab === 'current'
-              ? 'bg-white text-blue-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${activeTab === 'current'
+            ? 'bg-white text-blue-600 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
+            }`}
         >
           <ClockIcon className="h-4 w-4 mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
@@ -163,11 +166,10 @@ export const ResidentMedicationsMolecule = ({
         </button>
         <button
           onClick={() => setActiveTab('past')}
-          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${
-            activeTab === 'past'
-              ? 'bg-white text-blue-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${activeTab === 'past'
+            ? 'bg-white text-blue-600 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
+            }`}
         >
           <CheckCircleIcon className="h-4 w-4 mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
@@ -228,17 +230,17 @@ export const ResidentMedicationsMolecule = ({
                   items={
                     medication.status === 'current'
                       ? [
-                          {
-                            id: 'discontinue',
-                            label: 'Discontinue',
-                            icon: Clock,
-                            onClick: () => {
-                              const reason = prompt('Reason for discontinuing this medication:');
-                              if (reason) discontinueMedication(medication.id, reason);
-                            },
-                            variant: 'warning',
+                        {
+                          id: 'discontinue',
+                          label: 'Discontinue',
+                          icon: Clock,
+                          onClick: () => {
+                            const reason = prompt('Reason for discontinuing this medication:');
+                            if (reason) discontinueMedication(medication.id, reason);
                           },
-                        ]
+                          variant: 'warning',
+                        },
+                      ]
                       : []
                   }
                 />
@@ -271,6 +273,7 @@ export const ResidentMedicationsMolecule = ({
         }}
         onSubmit={addMedication}
         editingMedication={editingMedication}
+        isLoading={isLoading}
       />
     </CardAtom>
   );

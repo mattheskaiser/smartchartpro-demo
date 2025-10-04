@@ -24,6 +24,7 @@ interface ConditionModalProps {
     status: string;
     notes: string;
   } | null;
+  isLoading?: boolean;
 }
 
 export const ConditionModalMolecule = ({
@@ -31,6 +32,7 @@ export const ConditionModalMolecule = ({
   onClose,
   onSubmit,
   editingCondition,
+  isLoading = false,
 }: ConditionModalProps) => {
   const [form, setForm] = useState({
     name: '',
@@ -55,7 +57,7 @@ export const ConditionModalMolecule = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.name.trim()) {
+    if (form.name.trim() && !isLoading) {
       onSubmit(form);
       setForm({ name: '', diagnosedDate: '', status: 'active', notes: '' });
       onClose();
@@ -69,6 +71,7 @@ export const ConditionModalMolecule = ({
       onSubmit={handleSubmit}
       title={editingCondition ? 'Edit Medical Condition' : 'Add Medical Condition'}
       submitLabel={editingCondition ? 'Update Condition' : 'Add Condition'}
+      isSubmitting={isLoading}
     >
       <div>
         <LabelAtom required>Condition Name</LabelAtom>
