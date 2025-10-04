@@ -62,7 +62,8 @@ export default function ResidentDetail() {
     if (fetchedResident && !isEditing) {
       setResident(fetchedResident);
       // Store original basic data (excluding related models)
-      const { allergies, conditions, medications, specialists, dnrStatus, ...basicData } = fetchedResident;
+      const { allergies, conditions, medications, specialists, dnrStatus, ...basicData } =
+        fetchedResident;
       setOriginalBasicData(basicData);
     }
   }, [fetchedResident, isEditing]);
@@ -71,17 +72,29 @@ export default function ResidentDetail() {
   const hasBasicDataChanged = () => {
     if (!resident || !originalBasicData) return false;
 
-    const { allergies, conditions, medications, specialists, dnrStatus, ...currentBasicData } = resident;
+    const { allergies, conditions, medications, specialists, dnrStatus, ...currentBasicData } =
+      resident;
 
     // Compare each field
     const fieldsToCompare = [
-      'name', 'room', 'status', 'imageUrl', 'dateOfBirth', 'admissionDate',
-      'emergencyContactName', 'emergencyContactPhone', 'emergencyContactRelationship',
-      'assignedCNA', 'notes'
+      'name',
+      'room',
+      'status',
+      'imageUrl',
+      'dateOfBirth',
+      'admissionDate',
+      'emergencyContactName',
+      'emergencyContactPhone',
+      'emergencyContactRelationship',
+      'assignedCNA',
+      'notes',
     ];
 
     for (const field of fieldsToCompare) {
-      if (currentBasicData[field as keyof typeof currentBasicData] !== originalBasicData[field as keyof typeof originalBasicData]) {
+      if (
+        currentBasicData[field as keyof typeof currentBasicData] !==
+        originalBasicData[field as keyof typeof originalBasicData]
+      ) {
         return true;
       }
     }
@@ -102,7 +115,8 @@ export default function ResidentDetail() {
     try {
       // Only make a request if basic resident data has changed
       if (hasBasicDataChanged()) {
-        const { allergies, conditions, medications, specialists, dnrStatus, ...basicResidentData } = resident;
+        const { allergies, conditions, medications, specialists, dnrStatus, ...basicResidentData } =
+          resident;
 
         await updateResidentMutation.mutateAsync({
           id: params.id as string,

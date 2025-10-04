@@ -55,7 +55,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     return NextResponse.json(
       {
         error: 'Failed to update resident',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
