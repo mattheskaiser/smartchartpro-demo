@@ -16,9 +16,10 @@ interface AddResidentModalProps {
     emergencyContactName: string;
     emergencyContactPhone: string;
   }) => void;
+  isLoading?: boolean;
 }
 
-export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit }: AddResidentModalProps) => {
+export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit, isLoading = false }: AddResidentModalProps) => {
   const [form, setForm] = useState({
     name: '',
     room: '',
@@ -29,8 +30,22 @@ export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit }: AddResid
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.name.trim() && form.room.trim() && form.emergencyContactName.trim()) {
+    if (
+      !isLoading &&
+      form.name.trim() &&
+      form.room.trim() &&
+      form.dateOfBirth.trim() &&
+      form.emergencyContactName.trim() &&
+      form.emergencyContactPhone.trim()
+    ) {
       onSubmit(form);
+      // Don't reset form or close modal here - let the parent handle success
+    }
+  };
+
+  // Reset form when modal closes
+  const handleClose = () => {
+    if (!isLoading) {
       setForm({
         name: '',
         room: '',
@@ -45,10 +60,11 @@ export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit }: AddResid
   return (
     <FormModalOrganism
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       onSubmit={handleSubmit}
       title="Add Resident"
       submitLabel="Add Resident"
+      isSubmitting={isLoading}
     >
       <div className="grid grid-cols-2 gap-4">
         <div>

@@ -6,13 +6,15 @@ import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 
 interface Resident {
-  id: number;
+  id: string;
   name: string;
   imageUrl: string;
   room: string;
   status: string;
-  lastADL: string;
-  assignedCNA: string;
+  lastADL?: string;
+  assignedCNA?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface ResidentListTableProps {
@@ -67,12 +69,12 @@ export const ResidentListTableMolecule = ({ residents }: ResidentListTableProps)
               </td>
               <td className="px-3 py-4">
                 <TextAtom variant="small" color="muted">
-                  {resident.lastADL}
+                  {resident.lastADL || 'No recent activity'}
                 </TextAtom>
               </td>
               <td className="px-3 py-4">
                 <TextAtom variant="small" color="muted">
-                  {resident.assignedCNA}
+                  {resident.assignedCNA || 'Not assigned'}
                 </TextAtom>
               </td>
             </tr>

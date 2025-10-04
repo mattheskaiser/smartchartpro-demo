@@ -19,16 +19,20 @@ interface Specialist {
 }
 
 interface ResidentSpecialistsProps {
-  specialists: Specialist[];
+  specialists?: Specialist[] | null;
   isEditing: boolean;
   onSpecialistsChange: (specialists: Specialist[]) => void;
+  residentId?: string;
 }
 
 export const ResidentSpecialistsMolecule = ({
-  specialists,
+  specialists = [],
   isEditing,
   onSpecialistsChange,
+  residentId,
 }: ResidentSpecialistsProps) => {
+  // Ensure specialists is always an array
+  const safeSpecialists = Array.isArray(specialists) ? specialists : [];
   const [showModal, setShowModal] = useState(false);
   const [editingSpecialist, setEditingSpecialist] = useState<Specialist | null>(null);
 
@@ -36,26 +40,46 @@ export const ResidentSpecialistsMolecule = ({
     return SPECIALTY_OPTIONS.find(option => option.value === value)?.label || value;
   };
 
-  const addSpecialist = (specialistData: {
+  const addSpecialist = async (specialistData: {
     name: string;
     specialty: string;
     phone: string;
     email: string;
     notes: string;
   }) => {
-    if (editingSpecialist) {
-      // Update existing specialist
-      onSpecialistsChange(
-        specialists.map(s => (s.id === editingSpecialist.id ? { ...s, ...specialistData } : s))
-      );
-      setEditingSpecialist(null);
-    } else {
-      // Add new specialist
-      const newSpecialist: Specialist = {
-        id: Date.now().toString(),
-        ...specialistData,
-      };
-      onSpecialistsChange([...specialists, newSpecialist]);
+    if (!residentId) return;
+
+    try {
+      if (editingSpecialist) {
+        // Update existing specialist
+        const response = await fetch(`/api/residents/${residentId}/specialists/${editingSpecialist.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(specialistData),
+        });
+
+        if (response.ok) {
+          const updatedSpecialist = await response.json();
+          onSpecialistsChange(
+            safeSpecialists.map(s => (s.id === editingSpecialist.id ? updatedSpecialist : s))
+          );
+        }
+        setEditingSpecialist(null);
+      } else {
+        // Add new specialist
+        const response = await fetch(`/api/residents/${residentId}/specialists`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(specialistData),
+        });
+
+        if (response.ok) {
+          const newSpecialist = await response.json();
+          onSpecialistsChange([...safeSpecialists, newSpecialist]);
+        }
+      }
+    } catch (error) {
+      console.error('Error saving specialist:', error);
     }
   };
 
@@ -69,8 +93,20 @@ export const ResidentSpecialistsMolecule = ({
     setShowModal(true);
   };
 
-  const removeSpecialist = (id: string) => {
-    onSpecialistsChange(specialists.filter(s => s.id !== id));
+  const removeSpecialist = async (id: string) => {
+    if (!residentId) return;
+
+    try {
+      const response = await fetch(`/api/residents/${residentId}/specialists/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        onSpecialistsChange(safeSpecialists.filter(s => s.id !== id));
+      }
+    } catch (error) {
+      console.error('Error deleting specialist:', error);
+    }
   };
 
   return (
@@ -81,7 +117,7 @@ export const ResidentSpecialistsMolecule = ({
 
       {/* Existing Specialists */}
       <div className="space-y-3 mb-4">
-        {specialists.map(specialist => (
+        {safeSpecialists.map(specialist => (
           <div key={specialist.id} className="p-4 bg-gray-50 rounded-md">
             <div className="flex items-start justify-between mb-2">
               <div className="flex-1">
@@ -120,7 +156,7 @@ export const ResidentSpecialistsMolecule = ({
             </div>
           </div>
         ))}
-        {specialists.length === 0 && (
+        {safeSpecialists.length === 0 && (
           <TextAtom variant="small" color="muted" className="text-center py-4">
             No specialists or doctors recorded
           </TextAtom>

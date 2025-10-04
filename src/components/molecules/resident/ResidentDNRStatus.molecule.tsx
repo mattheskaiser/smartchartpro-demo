@@ -17,7 +17,7 @@ interface DNRStatus {
 }
 
 interface ResidentDNRStatusProps {
-  dnrStatus: DNRStatus;
+  dnrStatus?: DNRStatus | null;
   isEditing: boolean;
   onDNRStatusChange: (field: keyof DNRStatus, value: any) => void;
 }
@@ -27,6 +27,16 @@ export const ResidentDNRStatusMolecule = ({
   isEditing,
   onDNRStatusChange,
 }: ResidentDNRStatusProps) => {
+  // Provide safe defaults for DNR status
+  const safeDNRStatus: DNRStatus = {
+    hasDNR: false,
+    hasDNI: false,
+    dnrDate: undefined,
+    dniDate: undefined,
+    physicianName: undefined,
+    notes: undefined,
+    ...dnrStatus,
+  };
   return (
     <CardAtom>
       <TextAtom variant="h3" weight="medium" className="mb-4">
@@ -38,13 +48,13 @@ export const ResidentDNRStatusMolecule = ({
             <LabelAtom>DNR (Do Not Resuscitate)</LabelAtom>
             {isEditing ? (
               <CheckboxAtom
-                checked={dnrStatus.hasDNR}
+                checked={safeDNRStatus.hasDNR}
                 onCheckedChange={checked => onDNRStatusChange('hasDNR', checked)}
                 label="Has DNR order"
               />
             ) : (
-              <BadgeAtom variant={dnrStatus.hasDNR ? 'warning' : 'success'}>
-                {dnrStatus.hasDNR ? 'DNR Active' : 'No DNR'}
+              <BadgeAtom variant={safeDNRStatus.hasDNR ? 'warning' : 'success'}>
+                {safeDNRStatus.hasDNR ? 'DNR Active' : 'No DNR'}
               </BadgeAtom>
             )}
           </div>
@@ -52,51 +62,51 @@ export const ResidentDNRStatusMolecule = ({
             <LabelAtom>DNI (Do Not Intubate)</LabelAtom>
             {isEditing ? (
               <CheckboxAtom
-                checked={dnrStatus.hasDNI}
+                checked={safeDNRStatus.hasDNI}
                 onCheckedChange={checked => onDNRStatusChange('hasDNI', checked)}
                 label="Has DNI order"
               />
             ) : (
-              <BadgeAtom variant={dnrStatus.hasDNI ? 'warning' : 'success'}>
-                {dnrStatus.hasDNI ? 'DNI Active' : 'No DNI'}
+              <BadgeAtom variant={safeDNRStatus.hasDNI ? 'warning' : 'success'}>
+                {safeDNRStatus.hasDNI ? 'DNI Active' : 'No DNI'}
               </BadgeAtom>
             )}
           </div>
         </div>
 
-        {(dnrStatus.hasDNR || dnrStatus.hasDNI) && (
+        {(safeDNRStatus.hasDNR || safeDNRStatus.hasDNI) && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
-            {dnrStatus.hasDNR && (
+            {safeDNRStatus.hasDNR && (
               <div>
                 <LabelAtom>DNR Date</LabelAtom>
                 {isEditing ? (
                   <DatePickerMolecule
-                    value={dnrStatus.dnrDate || ''}
+                    value={safeDNRStatus.dnrDate || ''}
                     onChange={date => onDNRStatusChange('dnrDate', date)}
                     placeholder="Select DNR date"
                   />
                 ) : (
                   <TextAtom>
-                    {dnrStatus.dnrDate
-                      ? new Date(dnrStatus.dnrDate).toLocaleDateString()
+                    {safeDNRStatus.dnrDate
+                      ? new Date(safeDNRStatus.dnrDate).toLocaleDateString()
                       : 'Not specified'}
                   </TextAtom>
                 )}
               </div>
             )}
-            {dnrStatus.hasDNI && (
+            {safeDNRStatus.hasDNI && (
               <div>
                 <LabelAtom>DNI Date</LabelAtom>
                 {isEditing ? (
                   <DatePickerMolecule
-                    value={dnrStatus.dniDate || ''}
+                    value={safeDNRStatus.dniDate || ''}
                     onChange={date => onDNRStatusChange('dniDate', date)}
                     placeholder="Select DNI date"
                   />
                 ) : (
                   <TextAtom>
-                    {dnrStatus.dniDate
-                      ? new Date(dnrStatus.dniDate).toLocaleDateString()
+                    {safeDNRStatus.dniDate
+                      ? new Date(safeDNRStatus.dniDate).toLocaleDateString()
                       : 'Not specified'}
                   </TextAtom>
                 )}

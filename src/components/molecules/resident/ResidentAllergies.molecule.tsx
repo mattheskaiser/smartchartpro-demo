@@ -16,42 +16,57 @@ interface Allergy {
 }
 
 interface ResidentAllergiesProps {
-  allergies: Allergy[];
+  allergies?: Allergy[] | null;
   isEditing: boolean;
   onAllergiesChange: (allergies: Allergy[]) => void;
+  residentId?: string;
 }
 
 export const ResidentAllergiesMolecule = ({
-  allergies,
+  allergies = [],
   isEditing,
   onAllergiesChange,
+  residentId,
 }: ResidentAllergiesProps) => {
+  // Ensure allergies is always an array
+  const safeAllergies = Array.isArray(allergies) ? allergies : [];
   const [showModal, setShowModal] = useState(false);
   const [editingAllergy, setEditingAllergy] = useState<Allergy | null>(null);
 
-  const addAllergy = (allergyData: { name: string; severity: string; reaction: string }) => {
-    if (editingAllergy) {
-      // Update existing allergy
-      onAllergiesChange(
-        allergies.map(a =>
-          a.id === editingAllergy.id
-            ? {
-                ...a,
-                ...allergyData,
-                severity: allergyData.severity as 'mild' | 'moderate' | 'severe',
-              }
-            : a
-        )
-      );
-      setEditingAllergy(null);
-    } else {
-      // Add new allergy
-      const allergy: Allergy = {
-        id: Date.now().toString(),
-        ...allergyData,
-        severity: allergyData.severity as 'mild' | 'moderate' | 'severe',
-      };
-      onAllergiesChange([...allergies, allergy]);
+  const addAllergy = async (allergyData: { name: string; severity: string; reaction: string }) => {
+    if (!residentId) return;
+
+    try {
+      if (editingAllergy) {
+        // Update existing allergy
+        const response = await fetch(`/api/residents/${residentId}/allergies/${editingAllergy.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(allergyData),
+        });
+
+        if (response.ok) {
+          const updatedAllergy = await response.json();
+          onAllergiesChange(
+            safeAllergies.map(a => (a.id === editingAllergy.id ? updatedAllergy : a))
+          );
+        }
+        setEditingAllergy(null);
+      } else {
+        // Add new allergy
+        const response = await fetch(`/api/residents/${residentId}/allergies`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(allergyData),
+        });
+
+        if (response.ok) {
+          const newAllergy = await response.json();
+          onAllergiesChange([...safeAllergies, newAllergy]);
+        }
+      }
+    } catch (error) {
+      console.error('Error saving allergy:', error);
     }
   };
 
@@ -65,8 +80,20 @@ export const ResidentAllergiesMolecule = ({
     setShowModal(true);
   };
 
-  const removeAllergy = (id: string) => {
-    onAllergiesChange(allergies.filter(a => a.id !== id));
+  const removeAllergy = async (id: string) => {
+    if (!residentId) return;
+
+    try {
+      const response = await fetch(`/api/residents/${residentId}/allergies/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        onAllergiesChange(safeAllergies.filter(a => a.id !== id));
+      }
+    } catch (error) {
+      console.error('Error deleting allergy:', error);
+    }
   };
 
   const getSeverityColor = (severity: string) => {
@@ -88,7 +115,7 @@ export const ResidentAllergiesMolecule = ({
 
       {/* Existing Allergies */}
       <div className="space-y-3 mb-4">
-        {allergies.map(allergy => (
+        {safeAllergies.map(allergy => (
           <div
             key={allergy.id}
             className="flex items-center justify-between p-3 bg-gray-50 rounded-md"
@@ -119,7 +146,7 @@ export const ResidentAllergiesMolecule = ({
             )}
           </div>
         ))}
-        {allergies.length === 0 && (
+        {safeAllergies.length === 0 && (
           <TextAtom variant="small" color="muted" className="text-center py-4">
             No allergies recorded
           </TextAtom>

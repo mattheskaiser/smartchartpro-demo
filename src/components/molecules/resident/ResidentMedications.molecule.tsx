@@ -22,43 +22,64 @@ interface Medication {
 }
 
 interface ResidentMedicationsProps {
-  medications: Medication[];
+  medications?: Medication[] | null;
   isEditing: boolean;
   onMedicationsChange: (medications: Medication[]) => void;
+  residentId?: string;
 }
 
 export const ResidentMedicationsMolecule = ({
-  medications,
+  medications = [],
   isEditing,
   onMedicationsChange,
+  residentId,
 }: ResidentMedicationsProps) => {
+  // Ensure medications is always an array
+  const safeMedications = Array.isArray(medications) ? medications : [];
   const [activeTab, setActiveTab] = useState<'current' | 'past'>('current');
   const [showModal, setShowModal] = useState(false);
   const [editingMedication, setEditingMedication] = useState<Medication | null>(null);
 
-  const addMedication = (medicationData: {
+  const addMedication = async (medicationData: {
     name: string;
     dosage: string;
     frequency: string;
     instructions: string;
     startDate: string;
   }) => {
-    if (editingMedication) {
-      // Update existing medication
-      onMedicationsChange(
-        medications.map(m => (m.id === editingMedication.id ? { ...m, ...medicationData } : m))
-      );
-      setEditingMedication(null);
-    } else {
-      // Add new medication
-      const medication: Medication = {
-        id: Date.now().toString(),
-        ...medicationData,
-        status: 'current',
-        endDate: undefined,
-        discontinuedReason: undefined,
-      };
-      onMedicationsChange([...medications, medication]);
+    if (!residentId) return;
+
+    try {
+      if (editingMedication) {
+        // Update existing medication
+        const response = await fetch(`/api/residents/${residentId}/medications/${editingMedication.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(medicationData),
+        });
+
+        if (response.ok) {
+          const updatedMedication = await response.json();
+          onMedicationsChange(
+            safeMedications.map(m => (m.id === editingMedication.id ? updatedMedication : m))
+          );
+        }
+        setEditingMedication(null);
+      } else {
+        // Add new medication
+        const response = await fetch(`/api/residents/${residentId}/medications`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...medicationData, status: 'current' }),
+        });
+
+        if (response.ok) {
+          const newMedication = await response.json();
+          onMedicationsChange([...safeMedications, newMedication]);
+        }
+      }
+    } catch (error) {
+      console.error('Error saving medication:', error);
     }
   };
 
@@ -72,27 +93,51 @@ export const ResidentMedicationsMolecule = ({
     setShowModal(true);
   };
 
-  const removeMedication = (id: string) => {
-    onMedicationsChange(medications.filter(m => m.id !== id));
+  const removeMedication = async (id: string) => {
+    if (!residentId) return;
+
+    try {
+      const response = await fetch(`/api/residents/${residentId}/medications/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        onMedicationsChange(safeMedications.filter(m => m.id !== id));
+      }
+    } catch (error) {
+      console.error('Error deleting medication:', error);
+    }
   };
 
-  const discontinueMedication = (id: string, reason: string) => {
-    onMedicationsChange(
-      medications.map(m =>
-        m.id === id
-          ? {
-              ...m,
-              status: 'past',
-              endDate: new Date().toISOString().split('T')[0],
-              discontinuedReason: reason,
-            }
-          : m
-      )
-    );
+  const discontinueMedication = async (id: string, reason: string) => {
+    if (!residentId) return;
+
+    try {
+      const updateData = {
+        status: 'past',
+        endDate: new Date().toISOString(),
+        discontinuedReason: reason,
+      };
+
+      const response = await fetch(`/api/residents/${residentId}/medications/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updateData),
+      });
+
+      if (response.ok) {
+        const updatedMedication = await response.json();
+        onMedicationsChange(
+          safeMedications.map(m => (m.id === id ? updatedMedication : m))
+        );
+      }
+    } catch (error) {
+      console.error('Error discontinuing medication:', error);
+    }
   };
 
-  const currentMedications = medications.filter(m => m.status === 'current');
-  const pastMedications = medications.filter(m => m.status === 'past');
+  const currentMedications = safeMedications.filter(m => m.status === 'current');
+  const pastMedications = safeMedications.filter(m => m.status === 'past');
 
   return (
     <CardAtom>
@@ -104,11 +149,10 @@ export const ResidentMedicationsMolecule = ({
       <div className="flex space-x-1 mb-4 bg-gray-100 p-1 rounded-lg">
         <button
           onClick={() => setActiveTab('current')}
-          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${
-            activeTab === 'current'
-              ? 'bg-white text-blue-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${activeTab === 'current'
+            ? 'bg-white text-blue-600 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
+            }`}
         >
           <ClockIcon className="h-4 w-4 mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
@@ -117,11 +161,10 @@ export const ResidentMedicationsMolecule = ({
         </button>
         <button
           onClick={() => setActiveTab('past')}
-          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${
-            activeTab === 'past'
-              ? 'bg-white text-blue-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${activeTab === 'past'
+            ? 'bg-white text-blue-600 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
+            }`}
         >
           <CheckCircleIcon className="h-4 w-4 mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
@@ -182,17 +225,17 @@ export const ResidentMedicationsMolecule = ({
                   items={
                     medication.status === 'current'
                       ? [
-                          {
-                            id: 'discontinue',
-                            label: 'Discontinue',
-                            icon: Clock,
-                            onClick: () => {
-                              const reason = prompt('Reason for discontinuing this medication:');
-                              if (reason) discontinueMedication(medication.id, reason);
-                            },
-                            variant: 'warning',
+                        {
+                          id: 'discontinue',
+                          label: 'Discontinue',
+                          icon: Clock,
+                          onClick: () => {
+                            const reason = prompt('Reason for discontinuing this medication:');
+                            if (reason) discontinueMedication(medication.id, reason);
                           },
-                        ]
+                          variant: 'warning',
+                        },
+                      ]
                       : []
                   }
                 />
