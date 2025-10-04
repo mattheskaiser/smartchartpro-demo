@@ -23,8 +23,37 @@ export const DatePickerMolecule = ({
   disabled = false,
   className,
 }: DatePickerProps) => {
-  // Parse date string properly to avoid timezone issues
-  const dateValue = value ? new Date(value + 'T00:00:00') : undefined;
+  // Parse date string safely to avoid invalid dates
+  const dateValue = React.useMemo(() => {
+    if (!value) return undefined;
+
+    try {
+      // Handle different date formats
+      let parsedDate: Date;
+
+      if (value.includes('T')) {
+        // ISO string format
+        parsedDate = new Date(value);
+      } else if (value.includes('-')) {
+        // YYYY-MM-DD format
+        parsedDate = new Date(value + 'T00:00:00');
+      } else {
+        // Try parsing as-is
+        parsedDate = new Date(value);
+      }
+
+      // Check if the date is valid
+      if (isNaN(parsedDate.getTime())) {
+        console.warn('Invalid date value:', value);
+        return undefined;
+      }
+
+      return parsedDate;
+    } catch (error) {
+      console.warn('Error parsing date:', value, error);
+      return undefined;
+    }
+  }, [value]);
 
   const handleDateSelect = (date: Date | undefined) => {
     if (date && onChange) {
@@ -49,7 +78,7 @@ export const DatePickerMolecule = ({
           disabled={disabled}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {dateValue ? format(dateValue, 'PPP') : <span>{placeholder}</span>}
+          {dateValue ? format(dateValue, 'MM/dd/yyyy') : <span>{placeholder}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

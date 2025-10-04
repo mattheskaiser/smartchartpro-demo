@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useChartingStore } from '@/stores/chartingStore';
+import { QueryProvider } from '@/providers/QueryProvider';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -33,32 +34,34 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="h-full">
       <body className={`${inter.className} h-full antialiased`}>
-        {isAdminRoute ? (
-          // Admin routes use their own fullscreen layout
-          children
-        ) : (
-          <div className="min-h-screen bg-gray-50">
-            {showHeader && (
-              <header className="bg-white border-b border-gray-200 px-4 py-4">
-                <div className="max-w-7xl mx-auto flex items-center justify-between">
-                  <h1 className="text-xl font-semibold text-gray-900">
-                    {pathname === '/charting'
-                      ? 'Chart ADLs'
-                      : pathname === '/review'
-                        ? 'Review Charting'
-                        : 'SmartChart Pro'}
-                  </h1>
-                  {isChartingActive && (
-                    <div className="text-sm text-gray-500">
-                      {selectedResidents.length} residents selected
-                    </div>
-                  )}
-                </div>
-              </header>
-            )}
-            <main className="max-w-7xl mx-auto px-4 py-6">{children}</main>
-          </div>
-        )}
+        <QueryProvider>
+          {isAdminRoute ? (
+            // Admin routes use their own fullscreen layout
+            children
+          ) : (
+            <div className="min-h-screen bg-gray-50">
+              {showHeader && (
+                <header className="bg-white border-b border-gray-200 px-4 py-4">
+                  <div className="max-w-7xl mx-auto flex items-center justify-between">
+                    <h1 className="text-xl font-semibold text-gray-900">
+                      {pathname === '/charting'
+                        ? 'Chart ADLs'
+                        : pathname === '/review'
+                          ? 'Review Charting'
+                          : 'SmartChart Pro'}
+                    </h1>
+                    {isChartingActive && (
+                      <div className="text-sm text-gray-500">
+                        {selectedResidents.length} residents selected
+                      </div>
+                    )}
+                  </div>
+                </header>
+              )}
+              <main className="max-w-7xl mx-auto px-4 py-6">{children}</main>
+            </div>
+          )}
+        </QueryProvider>
       </body>
     </html>
   );

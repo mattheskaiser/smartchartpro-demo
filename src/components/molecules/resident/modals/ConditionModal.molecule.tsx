@@ -69,7 +69,6 @@ export const ConditionModalMolecule = ({
       onSubmit={handleSubmit}
       title={editingCondition ? 'Edit Medical Condition' : 'Add Medical Condition'}
       submitLabel={editingCondition ? 'Update Condition' : 'Add Condition'}
-      size="md"
     >
       <div>
         <LabelAtom required>Condition Name</LabelAtom>

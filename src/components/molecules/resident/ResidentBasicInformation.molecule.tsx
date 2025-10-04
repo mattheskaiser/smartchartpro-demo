@@ -9,14 +9,14 @@ import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { DatePickerMolecule } from '@/components/molecules/DatePicker.molecule';
 
 interface ResidentBasicInformationProps {
-  resident: {
-    name: string;
-    room: string;
-    dateOfBirth: string;
-    admissionDate: string;
-    status: string;
-    assignedCNA: string;
-  };
+  resident?: {
+    name?: string;
+    room?: string;
+    dateOfBirth?: string;
+    admissionDate?: string;
+    status?: string;
+    assignedCNA?: string;
+  } | null;
   isEditing: boolean;
   onInputChange: (field: string, value: string) => void;
 }
@@ -26,6 +26,16 @@ export const ResidentBasicInformationMolecule = ({
   isEditing,
   onInputChange,
 }: ResidentBasicInformationProps) => {
+  // Provide safe defaults
+  const safeResident = {
+    name: '',
+    room: '',
+    dateOfBirth: '',
+    admissionDate: '',
+    status: 'independent',
+    assignedCNA: '',
+    ...resident,
+  };
   return (
     <CardAtom>
       <TextAtom variant="h3" weight="medium" className="mb-4">
@@ -37,11 +47,11 @@ export const ResidentBasicInformationMolecule = ({
           {isEditing ? (
             <InputAtom
               type="text"
-              value={resident.name}
+              value={safeResident.name}
               onChange={e => onInputChange('name', e.target.value)}
             />
           ) : (
-            <TextAtom>{resident.name}</TextAtom>
+            <TextAtom>{safeResident.name}</TextAtom>
           )}
         </div>
         <div>
@@ -49,42 +59,50 @@ export const ResidentBasicInformationMolecule = ({
           {isEditing ? (
             <InputAtom
               type="text"
-              value={resident.room}
+              value={safeResident.room}
               onChange={e => onInputChange('room', e.target.value)}
             />
           ) : (
-            <TextAtom>{resident.room}</TextAtom>
+            <TextAtom>{safeResident.room}</TextAtom>
           )}
         </div>
         <div>
           <LabelAtom>Date of Birth</LabelAtom>
           {isEditing ? (
             <DatePickerMolecule
-              value={resident.dateOfBirth}
+              value={safeResident.dateOfBirth}
               onChange={date => onInputChange('dateOfBirth', date)}
               placeholder="Select date of birth"
             />
           ) : (
-            <TextAtom>{new Date(resident.dateOfBirth).toLocaleDateString()}</TextAtom>
+            <TextAtom>
+              {safeResident.dateOfBirth
+                ? new Date(safeResident.dateOfBirth).toLocaleDateString()
+                : 'Not specified'}
+            </TextAtom>
           )}
         </div>
         <div>
           <LabelAtom>Admission Date</LabelAtom>
           {isEditing ? (
             <DatePickerMolecule
-              value={resident.admissionDate}
+              value={safeResident.admissionDate}
               onChange={date => onInputChange('admissionDate', date)}
               placeholder="Select admission date"
             />
           ) : (
-            <TextAtom>{new Date(resident.admissionDate).toLocaleDateString()}</TextAtom>
+            <TextAtom>
+              {safeResident.admissionDate
+                ? new Date(safeResident.admissionDate).toLocaleDateString()
+                : 'Not specified'}
+            </TextAtom>
           )}
         </div>
         <div>
           <LabelAtom>Care Status</LabelAtom>
           {isEditing ? (
             <DropdownAtom
-              value={resident.status}
+              value={safeResident.status}
               onValueChange={value => onInputChange('status', value)}
               placeholder="Select care status"
               options={[
@@ -94,8 +112,8 @@ export const ResidentBasicInformationMolecule = ({
               ]}
             />
           ) : (
-            <BadgeAtom variant={resident.status as 'info' | 'warning' | 'success'}>
-              {resident.status}
+            <BadgeAtom variant={safeResident.status as 'info' | 'warning' | 'success'}>
+              {safeResident.status}
             </BadgeAtom>
           )}
         </div>
@@ -104,11 +122,11 @@ export const ResidentBasicInformationMolecule = ({
           {isEditing ? (
             <InputAtom
               type="text"
-              value={resident.assignedCNA}
+              value={safeResident.assignedCNA}
               onChange={e => onInputChange('assignedCNA', e.target.value)}
             />
           ) : (
-            <TextAtom>{resident.assignedCNA}</TextAtom>
+            <TextAtom>{safeResident.assignedCNA || 'Not assigned'}</TextAtom>
           )}
         </div>
       </div>

@@ -19,17 +19,8 @@ interface ModalProps {
   description?: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-
   className?: string;
 }
-
-const sizeClasses = {
-  sm: 'max-w-md',
-  md: 'max-w-lg',
-  lg: 'max-w-2xl',
-  xl: 'max-w-4xl',
-};
 
 export const ModalOrganism = ({
   isOpen,
@@ -38,20 +29,19 @@ export const ModalOrganism = ({
   description,
   children,
   footer,
-  size = 'md',
   className,
 }: ModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={cn(sizeClasses[size], className)}>
-        <DialogHeader>
+      <DialogContent className={cn('w-full max-w-lg h-[450px] flex flex-col', className)}>
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
 
-        <div className="py-4">{children}</div>
+        <div className="flex-1 overflow-y-auto px-1 py-4">{children}</div>
 
-        {footer && <DialogFooter>{footer}</DialogFooter>}
+        {footer && <DialogFooter className="flex-shrink-0">{footer}</DialogFooter>}
       </DialogContent>
     </Dialog>
   );

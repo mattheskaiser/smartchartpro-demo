@@ -6,11 +6,11 @@ import { LabelAtom } from '@/components/atoms/Label.atom';
 import { InputAtom } from '@/components/atoms/Input.atom';
 
 interface ResidentEmergencyContactProps {
-  emergencyContact: {
-    name: string;
-    relationship: string;
-    phone: string;
-  };
+  emergencyContact?: {
+    name?: string;
+    relationship?: string;
+    phone?: string;
+  } | null;
   isEditing: boolean;
   onInputChange: (field: string, value: string) => void;
 }
@@ -20,6 +20,13 @@ export const ResidentEmergencyContactMolecule = ({
   isEditing,
   onInputChange,
 }: ResidentEmergencyContactProps) => {
+  // Provide safe defaults
+  const safeEmergencyContact = {
+    name: '',
+    relationship: '',
+    phone: '',
+    ...emergencyContact,
+  };
   return (
     <CardAtom>
       <TextAtom variant="h3" weight="medium" className="mb-4">
@@ -31,11 +38,11 @@ export const ResidentEmergencyContactMolecule = ({
           {isEditing ? (
             <InputAtom
               type="text"
-              value={emergencyContact.name}
+              value={safeEmergencyContact.name}
               onChange={e => onInputChange('name', e.target.value)}
             />
           ) : (
-            <TextAtom>{emergencyContact.name}</TextAtom>
+            <TextAtom>{safeEmergencyContact.name || 'Not specified'}</TextAtom>
           )}
         </div>
         <div>
@@ -43,11 +50,11 @@ export const ResidentEmergencyContactMolecule = ({
           {isEditing ? (
             <InputAtom
               type="text"
-              value={emergencyContact.relationship}
+              value={safeEmergencyContact.relationship}
               onChange={e => onInputChange('relationship', e.target.value)}
             />
           ) : (
-            <TextAtom>{emergencyContact.relationship}</TextAtom>
+            <TextAtom>{safeEmergencyContact.relationship || 'Not specified'}</TextAtom>
           )}
         </div>
         <div className="md:col-span-2">
@@ -55,11 +62,11 @@ export const ResidentEmergencyContactMolecule = ({
           {isEditing ? (
             <InputAtom
               type="tel"
-              value={emergencyContact.phone}
+              value={safeEmergencyContact.phone}
               onChange={e => onInputChange('phone', e.target.value)}
             />
           ) : (
-            <TextAtom>{emergencyContact.phone}</TextAtom>
+            <TextAtom>{safeEmergencyContact.phone || 'Not specified'}</TextAtom>
           )}
         </div>
       </div>

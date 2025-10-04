@@ -54,7 +54,6 @@ export const AllergyModalMolecule = ({
       onSubmit={handleSubmit}
       title={editingAllergy ? 'Edit Allergy' : 'Add Allergy'}
       submitLabel={editingAllergy ? 'Update Allergy' : 'Add Allergy'}
-      size="sm"
     >
       <div>
         <LabelAtom required>Allergy Name</LabelAtom>

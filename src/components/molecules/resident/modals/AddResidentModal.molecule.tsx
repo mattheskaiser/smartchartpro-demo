@@ -1,102 +1,128 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { InputAtom } from '@/components/atoms/Input.atom';
-import { DropdownAtom } from '@/components/atoms/Dropdown.atom';
 import { LabelAtom } from '@/components/atoms/Label.atom';
-import { TextAtom } from '@/components/atoms/Text.atom';
-import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
 import { FormModalOrganism } from '@/components/organisms/Modal.organism';
-import { ADL_OPTIONS, CARE_STATUS_OPTIONS } from '@/constants/adl';
-
-interface ResidentFormData {
-  name: string;
-  room: string;
-  status: string;
-  adls: string[];
-}
+import { DatePickerMolecule } from '@/components/molecules/DatePicker.molecule';
 
 interface AddResidentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (formData: ResidentFormData) => void;
+  onSubmit: (resident: {
+    name: string;
+    room: string;
+    dateOfBirth: string;
+    emergencyContactName: string;
+    emergencyContactPhone: string;
+  }) => void;
+  isLoading?: boolean;
 }
 
-export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit }: AddResidentModalProps) => {
+export const AddResidentModalMolecule = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  isLoading = false,
+}: AddResidentModalProps) => {
   const [form, setForm] = useState({
     name: '',
     room: '',
-    status: 'independent',
-    adls: [] as string[],
+    dateOfBirth: '',
+    emergencyContactName: '',
+    emergencyContactPhone: '',
   });
-
-  const handleChange = (field: string, value: string) => {
-    setForm({ ...form, [field]: value });
-  };
-
-  const handleAdlChange = (adl: string) => {
-    setForm(prev => ({
-      ...prev,
-      adls: prev.adls.includes(adl) ? prev.adls.filter(a => a !== adl) : [...prev.adls, adl],
-    }));
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(form);
-    setForm({ name: '', room: '', status: 'independent', adls: [] });
+    if (
+      !isLoading &&
+      form.name.trim() &&
+      form.room.trim() &&
+      form.dateOfBirth.trim() &&
+      form.emergencyContactName.trim() &&
+      form.emergencyContactPhone.trim()
+    ) {
+      onSubmit(form);
+      // Don't reset form or close modal here - let the parent handle success
+    }
+  };
+
+  // Reset form when modal closes
+  const handleClose = () => {
+    if (!isLoading) {
+      setForm({
+        name: '',
+        room: '',
+        dateOfBirth: '',
+        emergencyContactName: '',
+        emergencyContactPhone: '',
+      });
+      onClose();
+    }
   };
 
   return (
     <FormModalOrganism
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       onSubmit={handleSubmit}
       title="Add Resident"
-      submitLabel="Add"
-      size="sm"
+      submitLabel="Add Resident"
+      isSubmitting={isLoading}
     >
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <LabelAtom required>Full Name</LabelAtom>
+          <InputAtom
+            type="text"
+            value={form.name}
+            onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
+            placeholder="Enter resident's full name"
+            required
+          />
+        </div>
+        <div>
+          <LabelAtom required>Room Number</LabelAtom>
+          <InputAtom
+            type="text"
+            value={form.room}
+            onChange={e => setForm(prev => ({ ...prev, room: e.target.value }))}
+            placeholder="e.g., 101"
+            required
+          />
+        </div>
+      </div>
+
       <div>
-        <LabelAtom required>Name</LabelAtom>
-        <InputAtom
-          type="text"
-          value={form.name}
-          onChange={e => handleChange('name', e.target.value)}
-          required
+        <LabelAtom required>Date of Birth</LabelAtom>
+        <DatePickerMolecule
+          value={form.dateOfBirth}
+          onChange={date => setForm(prev => ({ ...prev, dateOfBirth: date }))}
+          placeholder="Select date of birth"
         />
       </div>
-      <div>
-        <LabelAtom required>Room</LabelAtom>
-        <InputAtom
-          type="text"
-          value={form.room}
-          onChange={e => handleChange('room', e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <LabelAtom>Status</LabelAtom>
-        <DropdownAtom
-          value={form.status}
-          onValueChange={value => handleChange('status', value)}
-          placeholder="Select care status"
-          options={CARE_STATUS_OPTIONS}
-        />
-      </div>
-      <div>
-        <LabelAtom>ADLs</LabelAtom>
-        <div className="flex flex-wrap gap-2">
-          {ADL_OPTIONS.map(adl => (
-            <label key={adl} className="flex items-center gap-1 text-sm">
-              <CheckboxAtom
-                checked={form.adls.includes(adl)}
-                onCheckedChange={() => handleAdlChange(adl)}
-              />
-              <TextAtom variant="small" className="capitalize">
-                {adl}
-              </TextAtom>
-            </label>
-          ))}
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <LabelAtom required>Emergency Contact Name</LabelAtom>
+          <InputAtom
+            type="text"
+            value={form.emergencyContactName}
+            onChange={e => setForm(prev => ({ ...prev, emergencyContactName: e.target.value }))}
+            placeholder="Contact name"
+            required
+          />
+        </div>
+        <div>
+          <LabelAtom required>Emergency Contact Phone</LabelAtom>
+          <InputAtom
+            type="tel"
+            value={form.emergencyContactPhone}
+            onChange={e => setForm(prev => ({ ...prev, emergencyContactPhone: e.target.value }))}
+            placeholder="(555) 123-4567"
+            required
+          />
         </div>
       </div>
     </FormModalOrganism>

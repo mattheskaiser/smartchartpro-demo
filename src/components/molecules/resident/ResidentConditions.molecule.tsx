@@ -17,47 +17,65 @@ interface Condition {
 }
 
 interface ResidentConditionsProps {
-  conditions: Condition[];
+  conditions?: Condition[] | null;
   isEditing: boolean;
   onConditionsChange: (conditions: Condition[]) => void;
+  residentId?: string;
 }
 
 export const ResidentConditionsMolecule = ({
-  conditions,
+  conditions = [],
   isEditing,
   onConditionsChange,
+  residentId,
 }: ResidentConditionsProps) => {
+  // Ensure conditions is always an array
+  const safeConditions = Array.isArray(conditions) ? conditions : [];
   const [showModal, setShowModal] = useState(false);
   const [editingCondition, setEditingCondition] = useState<Condition | null>(null);
 
-  const addCondition = (conditionData: {
+  const addCondition = async (conditionData: {
     name: string;
     diagnosedDate: string;
     status: string;
     notes: string;
   }) => {
-    if (editingCondition) {
-      // Update existing condition
-      onConditionsChange(
-        conditions.map(c =>
-          c.id === editingCondition.id
-            ? {
-                ...c,
-                ...conditionData,
-                status: conditionData.status as 'active' | 'managed' | 'resolved',
-              }
-            : c
-        )
-      );
-      setEditingCondition(null);
-    } else {
-      // Add new condition
-      const condition: Condition = {
-        id: Date.now().toString(),
-        ...conditionData,
-        status: conditionData.status as 'active' | 'managed' | 'resolved',
-      };
-      onConditionsChange([...conditions, condition]);
+    if (!residentId) return;
+
+    try {
+      if (editingCondition) {
+        // Update existing condition
+        const response = await fetch(
+          `/api/residents/${residentId}/conditions/${editingCondition.id}`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(conditionData),
+          }
+        );
+
+        if (response.ok) {
+          const updatedCondition = await response.json();
+          onConditionsChange(
+            safeConditions.map(c => (c.id === editingCondition.id ? updatedCondition : c))
+          );
+        }
+        setEditingCondition(null);
+      } else {
+        // Add new condition
+        const response = await fetch(`/api/residents/${residentId}/conditions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(conditionData),
+        });
+
+        if (response.ok) {
+          const newCondition = await response.json();
+          onConditionsChange([...safeConditions, newCondition]);
+        }
+      }
+    } catch (error) {
+      console.error('Error saving condition:', error);
     }
   };
 
@@ -71,8 +89,20 @@ export const ResidentConditionsMolecule = ({
     setShowModal(true);
   };
 
-  const removeCondition = (id: string) => {
-    onConditionsChange(conditions.filter(c => c.id !== id));
+  const removeCondition = async (id: string) => {
+    if (!residentId) return;
+
+    try {
+      const response = await fetch(`/api/residents/${residentId}/conditions/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        onConditionsChange(safeConditions.filter(c => c.id !== id));
+      }
+    } catch (error) {
+      console.error('Error deleting condition:', error);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -94,7 +124,7 @@ export const ResidentConditionsMolecule = ({
 
       {/* Existing Conditions */}
       <div className="space-y-3 mb-4">
-        {conditions.map(condition => (
+        {safeConditions.map(condition => (
           <div key={condition.id} className="p-4 bg-gray-50 rounded-md">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
@@ -127,7 +157,7 @@ export const ResidentConditionsMolecule = ({
             )}
           </div>
         ))}
-        {conditions.length === 0 && (
+        {safeConditions.length === 0 && (
           <TextAtom variant="small" color="muted" className="text-center py-4">
             No medical conditions recorded
           </TextAtom>
