@@ -52,11 +52,14 @@ export const ResidentMedicationsMolecule = ({
     try {
       if (editingMedication) {
         // Update existing medication
-        const response = await fetch(`/api/residents/${residentId}/medications/${editingMedication.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(medicationData),
-        });
+        const response = await fetch(
+          `/api/residents/${residentId}/medications/${editingMedication.id}`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(medicationData),
+          }
+        );
 
         if (response.ok) {
           const updatedMedication = await response.json();
@@ -127,9 +130,7 @@ export const ResidentMedicationsMolecule = ({
 
       if (response.ok) {
         const updatedMedication = await response.json();
-        onMedicationsChange(
-          safeMedications.map(m => (m.id === id ? updatedMedication : m))
-        );
+        onMedicationsChange(safeMedications.map(m => (m.id === id ? updatedMedication : m)));
       }
     } catch (error) {
       console.error('Error discontinuing medication:', error);
@@ -149,10 +150,11 @@ export const ResidentMedicationsMolecule = ({
       <div className="flex space-x-1 mb-4 bg-gray-100 p-1 rounded-lg">
         <button
           onClick={() => setActiveTab('current')}
-          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${activeTab === 'current'
-            ? 'bg-white text-blue-600 shadow-sm'
-            : 'text-gray-600 hover:text-gray-900'
-            }`}
+          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${
+            activeTab === 'current'
+              ? 'bg-white text-blue-600 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
         >
           <ClockIcon className="h-4 w-4 mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
@@ -161,10 +163,11 @@ export const ResidentMedicationsMolecule = ({
         </button>
         <button
           onClick={() => setActiveTab('past')}
-          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${activeTab === 'past'
-            ? 'bg-white text-blue-600 shadow-sm'
-            : 'text-gray-600 hover:text-gray-900'
-            }`}
+          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${
+            activeTab === 'past'
+              ? 'bg-white text-blue-600 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
         >
           <CheckCircleIcon className="h-4 w-4 mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
@@ -225,17 +228,17 @@ export const ResidentMedicationsMolecule = ({
                   items={
                     medication.status === 'current'
                       ? [
-                        {
-                          id: 'discontinue',
-                          label: 'Discontinue',
-                          icon: Clock,
-                          onClick: () => {
-                            const reason = prompt('Reason for discontinuing this medication:');
-                            if (reason) discontinueMedication(medication.id, reason);
+                          {
+                            id: 'discontinue',
+                            label: 'Discontinue',
+                            icon: Clock,
+                            onClick: () => {
+                              const reason = prompt('Reason for discontinuing this medication:');
+                              if (reason) discontinueMedication(medication.id, reason);
+                            },
+                            variant: 'warning',
                           },
-                          variant: 'warning',
-                        },
-                      ]
+                        ]
                       : []
                   }
                 />

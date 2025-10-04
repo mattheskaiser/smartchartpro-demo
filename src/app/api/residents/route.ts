@@ -13,10 +13,7 @@ export async function GET() {
     return NextResponse.json(residents);
   } catch (error) {
     console.error('Error fetching residents:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch residents' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch residents' }, { status: 500 });
   }
 }
 
@@ -30,10 +27,7 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!name || !room || !emergencyContactName) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     // Create resident with all fields
@@ -57,7 +51,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: 'Failed to create resident',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

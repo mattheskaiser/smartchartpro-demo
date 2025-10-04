@@ -5,49 +5,43 @@ const prisma = new PrismaClient();
 
 // PUT /api/residents/[id]/specialists/[specialistId] - Update specialist
 export async function PUT(
-    request: NextRequest,
-    { params }: { params: { id: string; specialistId: string } }
+  request: NextRequest,
+  { params }: { params: { id: string; specialistId: string } }
 ) {
-    try {
-        const body = await request.json();
+  try {
+    const body = await request.json();
 
-        const specialist = await prisma.specialist.update({
-            where: {
-                id: params.specialistId,
-                residentId: params.id,
-            },
-            data: body,
-        });
+    const specialist = await prisma.specialist.update({
+      where: {
+        id: params.specialistId,
+        residentId: params.id,
+      },
+      data: body,
+    });
 
-        return NextResponse.json(specialist);
-    } catch (error) {
-        console.error('Error updating specialist:', error);
-        return NextResponse.json(
-            { error: 'Failed to update specialist' },
-            { status: 500 }
-        );
-    }
+    return NextResponse.json(specialist);
+  } catch (error) {
+    console.error('Error updating specialist:', error);
+    return NextResponse.json({ error: 'Failed to update specialist' }, { status: 500 });
+  }
 }
 
 // DELETE /api/residents/[id]/specialists/[specialistId] - Delete specialist
 export async function DELETE(
-    request: NextRequest,
-    { params }: { params: { id: string; specialistId: string } }
+  request: NextRequest,
+  { params }: { params: { id: string; specialistId: string } }
 ) {
-    try {
-        await prisma.specialist.delete({
-            where: {
-                id: params.specialistId,
-                residentId: params.id,
-            },
-        });
+  try {
+    await prisma.specialist.delete({
+      where: {
+        id: params.specialistId,
+        residentId: params.id,
+      },
+    });
 
-        return NextResponse.json({ message: 'Specialist deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting specialist:', error);
-        return NextResponse.json(
-            { error: 'Failed to delete specialist' },
-            { status: 500 }
-        );
-    }
+    return NextResponse.json({ message: 'Specialist deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting specialist:', error);
+    return NextResponse.json({ error: 'Failed to delete specialist' }, { status: 500 });
+  }
 }

@@ -52,11 +52,14 @@ export const ResidentSpecialistsMolecule = ({
     try {
       if (editingSpecialist) {
         // Update existing specialist
-        const response = await fetch(`/api/residents/${residentId}/specialists/${editingSpecialist.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(specialistData),
-        });
+        const response = await fetch(
+          `/api/residents/${residentId}/specialists/${editingSpecialist.id}`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(specialistData),
+          }
+        );
 
         if (response.ok) {
           const updatedSpecialist = await response.json();

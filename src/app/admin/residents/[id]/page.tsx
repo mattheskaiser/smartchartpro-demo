@@ -2,6 +2,30 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+
+// Type definition for resident data
+interface ResidentData {
+  id?: string;
+  name?: string;
+  room?: string;
+  status?: string;
+  imageUrl?: string;
+  dateOfBirth?: string;
+  admissionDate?: string;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  emergencyContactRelationship?: string;
+  assignedCNA?: string;
+  notes?: string;
+  adlNeeds?: string[];
+  allergies?: any[];
+  conditions?: any[];
+  medications?: any[];
+  specialists?: any[];
+  dnrStatus?: any;
+  createdAt?: string;
+  updatedAt?: string;
+}
 import { StickyPageHeaderMolecule } from '@/components/molecules/StickyPageHeader.molecule';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ResidentBasicInformationMolecule } from '@/components/molecules/resident/ResidentBasicInformation.molecule';
@@ -27,7 +51,7 @@ export default function ResidentDetail() {
   const updateResidentMutation = useUpdateResident();
 
   // Local state for editing (synced with fetched data)
-  const [resident, setResident] = useState<any>(null);
+  const [resident, setResident] = useState<ResidentData | null>(null);
 
   // Sync local state with fetched data
   useEffect(() => {
@@ -51,55 +75,57 @@ export default function ResidentDetail() {
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setResident(prev => ({ ...prev, [field]: value }));
+    setResident((prev: ResidentData | null) => ({ ...prev, [field]: value }));
   };
 
   const handleEmergencyContactChange = (field: string, value: string) => {
-    setResident(prev => ({
+    setResident((prev: ResidentData | null) => ({
       ...prev,
-      emergencyContact: { ...prev.emergencyContact, [field]: value },
+      [field]: value,
     }));
   };
 
   const handleNotesChange = (notes: string) => {
-    setResident(prev => ({ ...prev, notes }));
+    setResident((prev: ResidentData | null) => ({ ...prev, notes }));
   };
 
   const toggleADL = (adl: string) => {
-    setResident(prev => {
+    setResident((prev: ResidentData | null) => {
       if (!prev) return prev;
       const currentAdlNeeds = Array.isArray(prev.adlNeeds) ? prev.adlNeeds : [];
       return {
         ...prev,
         adlNeeds: currentAdlNeeds.includes(adl)
-          ? currentAdlNeeds.filter(a => a !== adl)
+          ? currentAdlNeeds.filter((a: string) => a !== adl)
           : [...currentAdlNeeds, adl],
       };
     });
   };
 
   const handleAllergiesChange = (allergies: any[]) => {
-    setResident(prev => ({
+    setResident((prev: ResidentData | null) => ({
       ...prev,
       allergies,
     }));
   };
 
   const handleConditionsChange = (conditions: any[]) => {
-    setResident(prev => ({
+    setResident((prev: ResidentData | null) => ({
       ...prev,
       conditions,
     }));
   };
 
   const handleMedicationsChange = (medications: any[]) => {
-    setResident(prev => ({
+    setResident((prev: ResidentData | null) => ({
       ...prev,
       medications,
     }));
   };
 
   const handleDNRStatusChange = async (field: string, value: any) => {
+    if (!resident) return;
+
     try {
       const updatedDNRStatus = { ...resident.dnrStatus, [field]: value };
 
@@ -113,7 +139,7 @@ export default function ResidentDetail() {
 
       if (response.ok) {
         const newDNRStatus = await response.json();
-        setResident(prev => ({
+        setResident((prev: ResidentData | null) => ({
           ...prev,
           dnrStatus: newDNRStatus,
         }));
@@ -124,7 +150,7 @@ export default function ResidentDetail() {
   };
 
   const handleSpecialistsChange = (specialists: any[]) => {
-    setResident(prev => ({
+    setResident((prev: ResidentData | null) => ({
       ...prev,
       specialists,
     }));
@@ -179,8 +205,8 @@ export default function ResidentDetail() {
   return (
     <div className="mx-auto max-w-7xl">
       <StickyPageHeaderMolecule
-        title={resident.name}
-        subtitle={`Room ${resident.room}`}
+        title={resident.name || 'Unknown Resident'}
+        subtitle={`Room ${resident.room || 'N/A'}`}
         isEditing={isEditing}
         onBack={() => router.back()}
         onToggleEdit={() => (isEditing ? handleSave() : setIsEditing(true))}
@@ -210,7 +236,7 @@ export default function ResidentDetail() {
           </div>
           <div className="mt-6">
             <ResidentNotesMolecule
-              notes={resident.notes}
+              notes={resident.notes || ''}
               isEditing={isEditing}
               onNotesChange={handleNotesChange}
             />

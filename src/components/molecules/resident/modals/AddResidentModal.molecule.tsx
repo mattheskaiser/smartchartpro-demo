@@ -19,7 +19,12 @@ interface AddResidentModalProps {
   isLoading?: boolean;
 }
 
-export const AddResidentModalMolecule = ({ isOpen, onClose, onSubmit, isLoading = false }: AddResidentModalProps) => {
+export const AddResidentModalMolecule = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  isLoading = false,
+}: AddResidentModalProps) => {
   const [form, setForm] = useState({
     name: '',
     room: '',

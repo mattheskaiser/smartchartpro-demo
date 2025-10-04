@@ -45,11 +45,14 @@ export const ResidentConditionsMolecule = ({
     try {
       if (editingCondition) {
         // Update existing condition
-        const response = await fetch(`/api/residents/${residentId}/conditions/${editingCondition.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(conditionData),
-        });
+        const response = await fetch(
+          `/api/residents/${residentId}/conditions/${editingCondition.id}`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(conditionData),
+          }
+        );
 
         if (response.ok) {
           const updatedCondition = await response.json();

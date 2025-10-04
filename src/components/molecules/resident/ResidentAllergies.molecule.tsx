@@ -39,11 +39,14 @@ export const ResidentAllergiesMolecule = ({
     try {
       if (editingAllergy) {
         // Update existing allergy
-        const response = await fetch(`/api/residents/${residentId}/allergies/${editingAllergy.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(allergyData),
-        });
+        const response = await fetch(
+          `/api/residents/${residentId}/allergies/${editingAllergy.id}`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(allergyData),
+          }
+        );
 
         if (response.ok) {
           const updatedAllergy = await response.json();
