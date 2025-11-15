@@ -37,6 +37,14 @@
       {
         "rule": "Modal centering and scrolling",
         "details": "All modals are automatically centered with fixed dimensions (450px height, max-w-lg width). Content automatically scrolls if it exceeds the modal height. Proper padding prevents content from being cut off at edges."
+      },
+      {
+        "rule": "Check for already existing components before creating new ones",
+        "details": "Before creating a new component always check whats already there and if possible create a new component by combining existing components. This all comes down to using the atomic design pattern. I something is going to include a button use the Button.atom component for it and dont use html tags or create a new button component"
+      },
+      {
+        "rule": "Follow Atomic Design Pattern",
+        "details": "Always follow the atomic design principles to keep component reusable and maintainable. This means splitting up components and using components that already exist to keep everything consistent."
       }
     ]
   }
