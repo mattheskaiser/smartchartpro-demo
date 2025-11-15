@@ -14,6 +14,8 @@ module.exports = {
         primary: colors.primary,
         secondary: colors.secondary,
         tertiary: colors.tertiary,
+        lightGray: colors.lightGray,
+        darkGray: colors.darkGray,
       },
     },
   },
