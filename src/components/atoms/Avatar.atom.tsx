@@ -20,7 +20,7 @@ export const AvatarAtom = ({ src, alt, size = 'md', className }: AvatarAtomProps
 
   return (
     <div
-      className={clsx('relative rounded-full overflow-hidden bg-gray-200', className)}
+      className={clsx('relative rounded-full overflow-hidden bg-gray-200 border-2 border-gray-500/50', className)}
       style={{
         width: pixelSize,
         height: pixelSize,

@@ -4,11 +4,12 @@ import { PlusIcon } from '@heroicons/react/20/solid';
 import { UserGroupIcon } from '@heroicons/react/24/outline';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
-import { ResidentListTableMolecule } from '@/components/molecules/resident/ResidentListTable.molecule';
+import { ResidentCardGridMolecule } from '@/components/molecules/resident/ResidentCardGrid.molecule';
 import { AddResidentModalMolecule } from '@/components/molecules/resident/modals/AddResidentModal.molecule';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
 import { useResidents, useCreateResident } from '@/hooks/useResidents';
+import { ResidentCardMolecule } from '@/components/molecules/resident/ResidentCard.molecule';
 
 export default function ResidentManagement() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -75,7 +76,11 @@ export default function ResidentManagement() {
             />
           </div>
         ) : (
-          <ResidentListTableMolecule residents={residents} />
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {residents.map(resident => (
+              <ResidentCardMolecule key={resident.id} resident={resident} />
+            ))}
+          </div>
         )}
       </div>
 
