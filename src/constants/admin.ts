@@ -1,9 +1,8 @@
-import { UserIcon, ClockIcon } from '@heroicons/react/24/outline';
-
 // Dashboard statistics
 export const DASHBOARD_STATS = [
-  { name: 'Total CNAs', value: '12', icon: UserIcon },
-  { name: 'Active CNAs', value: '8', icon: ClockIcon },
+  { name: 'Total CNAs', value: '12', icon: 'user-round' },
+  { name: 'Active CNAs', value: '8', icon: 'clock' },
+  { name: 'Total Residents', value: '45', icon: 'users-round' },
 ] as const;
 
 // Recent activity data
