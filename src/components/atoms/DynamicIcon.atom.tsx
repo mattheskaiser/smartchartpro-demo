@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 interface IconAtomProps {
   name: IconName;
   size?: 'sm' | 'md' | 'lg';
+  color?: 'primary' | 'secondary' | 'tertiary' | 'lightGray' | 'darkGray';
   className?: string;
 }
 
@@ -14,6 +15,11 @@ const iconSizes = {
   lg: 'w-8 h-8',
 };
 
-export const DynamicIconAtom = ({ name, size = 'md', className }: IconAtomProps) => {
-  return <DynamicIcon name={name} size={iconSizes[size]} className={cn('', className)} />;
+export const DynamicIconAtom = ({
+  name,
+  size = 'md',
+  color = 'primary',
+  className,
+}: IconAtomProps) => {
+  return <DynamicIcon name={name} color={color} className={cn(iconSizes[size], className)} />;
 };
