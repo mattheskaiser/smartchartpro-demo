@@ -1,7 +1,7 @@
-import { UserIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { DASHBOARD_STATS, RECENT_ACTIVITY } from '@/constants/admin';
 import { StatisticMolecule } from '@/components/molecules/Statistic.molecule';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 
 const stats = [...DASHBOARD_STATS];
 
@@ -48,9 +48,10 @@ export default function AdminDashboard() {
                               : 'bg-gray-100'
                         )}
                       >
-                        <UserIcon
+                        <DynamicIconAtom
+                          name="User"
+                          size="sm"
                           className={clsx(
-                            'h-5 w-5',
                             activity.status === 'completed'
                               ? 'text-green-600'
                               : activity.status === 'active'

@@ -1,9 +1,8 @@
 'use client';
 import { useState } from 'react';
-import { PlusIcon } from '@heroicons/react/20/solid';
-import { UsersIcon } from '@heroicons/react/24/outline';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
 
@@ -38,7 +37,7 @@ export default function CNAManagement() {
               <LoadingStateMolecule message="Adding CNA..." size="sm" inline />
             ) : (
               <ButtonAtom variant="primary" onClick={handleAddCNA}>
-                <PlusIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
+                <DynamicIconAtom name="Plus" size="sm" className="-ml-0.5 mr-1.5" />
                 Add CNA
               </ButtonAtom>
             )}
@@ -54,7 +53,7 @@ export default function CNAManagement() {
         ) : cnas.length === 0 ? (
           <div className="flex items-center justify-center min-h-[400px]">
             <EmptyStateMolecule
-              icon={UsersIcon}
+              iconName="UserRound"
               title="No CNAs found"
               description="Get started by adding certified nursing assistants to your team. You can manage their schedules, resident assignments, and contact information."
             />

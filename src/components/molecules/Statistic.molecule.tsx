@@ -1,10 +1,10 @@
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
-import { IconName } from 'lucide-react/dynamic';
+import { icons } from 'lucide-react';
 import { TextAtom } from '@/components/atoms/Text.atom';
 
 type StatisticMoleculeProps = {
   name: string;
-  icon: IconName;
+  icon: keyof typeof icons;
   value: string;
 };
 

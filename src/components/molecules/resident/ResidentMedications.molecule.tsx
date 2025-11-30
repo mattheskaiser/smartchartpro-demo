@@ -4,9 +4,8 @@ import { useState } from 'react';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
-import { PlusIcon, ClockIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
-import { Clock } from 'lucide-react';
 import { MedicationModalMolecule } from '@/components/molecules/resident/modals/MedicationModal.molecule';
 
 interface Medication {
@@ -154,26 +153,24 @@ export const ResidentMedicationsMolecule = ({
       <div className="flex space-x-1 mb-4 bg-gray-100 p-1 rounded-lg">
         <button
           onClick={() => setActiveTab('current')}
-          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${
-            activeTab === 'current'
-              ? 'bg-white text-blue-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${activeTab === 'current'
+            ? 'bg-white text-blue-600 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
+            }`}
         >
-          <ClockIcon className="h-4 w-4 mr-2" />
+          <DynamicIconAtom name="Clock" size="sm" className="mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
             Current ({currentMedications.length})
           </TextAtom>
         </button>
         <button
           onClick={() => setActiveTab('past')}
-          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${
-            activeTab === 'past'
-              ? 'bg-white text-blue-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${activeTab === 'past'
+            ? 'bg-white text-blue-600 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
+            }`}
         >
-          <CheckCircleIcon className="h-4 w-4 mr-2" />
+          <DynamicIconAtom name="CircleCheck" size="sm" className="mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
             Past ({pastMedications.length})
           </TextAtom>
@@ -232,17 +229,18 @@ export const ResidentMedicationsMolecule = ({
                   items={
                     medication.status === 'current'
                       ? [
-                          {
-                            id: 'discontinue',
-                            label: 'Discontinue',
-                            icon: Clock,
-                            onClick: () => {
-                              const reason = prompt('Reason for discontinuing this medication:');
-                              if (reason) discontinueMedication(medication.id, reason);
-                            },
-                            variant: 'warning',
+                        {
+                          id: 'discontinue',
+                          label: 'Discontinue',
+                          icon: <DynamicIconAtom name="Clock" size="sm" className="mr-2" />
+                          ,
+                          onClick: () => {
+                            const reason = prompt('Reason for discontinuing this medication:');
+                            if (reason) discontinueMedication(medication.id, reason);
                           },
-                        ]
+                          variant: 'warning',
+                        },
+                      ]
                       : []
                   }
                 />
@@ -261,7 +259,7 @@ export const ResidentMedicationsMolecule = ({
       {isEditing && activeTab === 'current' && (
         <div className="border-t pt-4">
           <ButtonAtom variant="primary" onClick={handleAdd}>
-            <PlusIcon className="h-4 w-4 mr-2" />
+            <DynamicIconAtom name="Plus" size="sm" className="mr-2" />
             Add Medication
           </ButtonAtom>
         </div>

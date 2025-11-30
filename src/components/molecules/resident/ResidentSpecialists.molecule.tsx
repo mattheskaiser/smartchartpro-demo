@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
@@ -175,7 +175,7 @@ export const ResidentSpecialistsMolecule = ({
       {isEditing && (
         <div className="border-t pt-4">
           <ButtonAtom variant="primary" onClick={handleAdd}>
-            <PlusIcon className="h-4 w-4 mr-2" />
+            <DynamicIconAtom name="plus" size="sm" className="mr-2" />
             Add Specialist
           </ButtonAtom>
         </div>

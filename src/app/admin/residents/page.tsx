@@ -1,9 +1,8 @@
 'use client';
 import { useState } from 'react';
-import { PlusIcon } from '@heroicons/react/20/solid';
-import { UserGroupIcon } from '@heroicons/react/24/outline';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { AddResidentModalMolecule } from '@/components/molecules/resident/modals/AddResidentModal.molecule';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
@@ -46,7 +45,7 @@ export default function ResidentManagement() {
         {!isLoading && (
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
             <ButtonAtom variant="primary" onClick={handleAddResident}>
-              <PlusIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
+              <DynamicIconAtom name="Plus" size="sm" className="-ml-0.5 mr-1.5" />
               Add Resident
             </ButtonAtom>
           </div>
@@ -61,7 +60,7 @@ export default function ResidentManagement() {
         ) : error ? (
           <div className="flex items-center justify-center min-h-[400px]">
             <EmptyStateMolecule
-              icon={UserGroupIcon}
+              iconName="Users"
               title="Error loading residents"
               description="There was an error loading the residents. Please try refreshing the page."
             />
@@ -69,7 +68,7 @@ export default function ResidentManagement() {
         ) : residents.length === 0 ? (
           <div className="flex items-center justify-center min-h-[400px]">
             <EmptyStateMolecule
-              icon={UserGroupIcon}
+              iconName="Users"
               title="No residents found"
               description="Get started by adding your first resident to the system. You can manage their care levels, medical information, and CNA assignments."
             />

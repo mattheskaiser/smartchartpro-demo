@@ -4,6 +4,7 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import { usePathname } from 'next/navigation';
 import { ADMIN_NAVIGATION, ADMIN_BOTTOM_NAVIGATION } from '@/constants/navigation';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 
 export const AdminSidebarMolecule = () => {
   const pathname = usePathname();
@@ -30,9 +31,11 @@ export const AdminSidebarMolecule = () => {
                   : 'text-lightGray hover:bg-gray-50 hover:text-darkGray'
               )}
             >
-              <item.icon
+              <DynamicIconAtom
+                name={item.icon}
+                size="sm"
                 className={clsx(
-                  'mr-3 h-5 w-5 group-hover:text-darkGray',
+                  'mr-3 group-hover:text-darkGray',
                   isActive(item.href) ? 'text-primary group-hover:text-primary' : 'text-lightGray'
                 )}
               />
@@ -53,9 +56,11 @@ export const AdminSidebarMolecule = () => {
                   : 'text-lightGray hover:bg-gray-50 hover:text-darkGray'
               )}
             >
-              <item.icon
+              <DynamicIconAtom
+                name={item.icon}
+                size="sm"
                 className={clsx(
-                  'mr-3 h-5 w-5 group-hover:text-darkGray',
+                  'mr-3 group-hover:text-darkGray',
                   isActive(item.href) ? 'text-primary group-hover:text-primary' : 'text-lightGray'
                 )}
               />

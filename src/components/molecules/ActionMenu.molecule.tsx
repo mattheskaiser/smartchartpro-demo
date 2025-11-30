@@ -1,16 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { EllipsisVertical, Pencil, Trash2 } from 'lucide-react';
 
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
+import { DynamicIconAtom } from '../atoms/DynamicIcon.atom';
 
 export interface ActionMenuItem {
   id: string;
   label: string;
-  icon?: React.ComponentType<{ className?: string }>;
+  icon?: ReactNode;
   onClick: () => void;
   variant?: 'default' | 'destructive' | 'warning';
   disabled?: boolean;
@@ -42,7 +43,8 @@ export const ActionMenuMolecule = ({
     standardActions.push({
       id: 'edit',
       label: 'Edit',
-      icon: Pencil,
+      icon: <DynamicIconAtom name="Pencil" size="sm" className="mr-2" />
+      ,
       onClick: () => {
         onEdit();
         setOpen(false);
@@ -55,7 +57,8 @@ export const ActionMenuMolecule = ({
     standardActions.push({
       id: 'delete',
       label: 'Delete',
-      icon: Trash2,
+      icon: <DynamicIconAtom name="Trash" size="sm" className="mr-2" />
+      ,
       onClick: () => {
         onDelete();
         setOpen(false);
@@ -108,7 +111,7 @@ export const ActionMenuMolecule = ({
                     disabled={item.disabled}
                     className={`cursor-pointer ${getItemClassName(item.variant)}`}
                   >
-                    {IconComponent && <IconComponent className="mr-2 h-4 w-4" />}
+                    {IconComponent}
                     <TextAtom variant="small" as="span">
                       {item.label}
                     </TextAtom>
