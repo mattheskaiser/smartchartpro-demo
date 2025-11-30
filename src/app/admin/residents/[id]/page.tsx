@@ -3,29 +3,47 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 
-// Type definition for resident data
-interface ResidentData {
-  id?: string;
-  name?: string;
-  room?: string;
-  status?: string;
-  imageUrl?: string;
-  dateOfBirth?: string;
-  admissionDate?: string;
-  emergencyContactName?: string;
-  emergencyContactPhone?: string;
-  emergencyContactRelationship?: string;
-  assignedCNA?: string;
-  notes?: string;
-  adlNeeds?: string[];
-  allergies?: any[];
-  conditions?: any[];
-  medications?: any[];
-  specialists?: any[];
-  dnrStatus?: any;
-  createdAt?: string;
-  updatedAt?: string;
+// Import types from the hook
+import type { Resident } from '@/hooks/useResidents';
+
+// Component-specific types for the molecules
+interface AllergyDisplay {
+  id: string;
+  name: string;
+  severity: 'mild' | 'moderate' | 'severe';
+  reaction: string;
 }
+
+interface ConditionDisplay {
+  id: string;
+  name: string;
+  diagnosedDate: string;
+  status: 'active' | 'managed' | 'resolved';
+  notes: string;
+}
+
+interface MedicationDisplay {
+  id: string;
+  name: string;
+  dosage: string;
+  frequency: string;
+  instructions: string;
+  startDate: string;
+  endDate?: string;
+  status: 'current' | 'past';
+  discontinuedReason?: string;
+}
+
+interface SpecialistDisplay {
+  id: string;
+  name: string;
+  specialty: string;
+  phone: string;
+  email?: string;
+  notes?: string;
+}
+
+type ResidentData = Resident;
 import { StickyPageHeaderMolecule } from '@/components/molecules/StickyPageHeader.molecule';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ResidentBasicInformationMolecule } from '@/components/molecules/resident/ResidentBasicInformation.molecule';
@@ -62,8 +80,7 @@ export default function ResidentDetail() {
     if (fetchedResident && !isEditing) {
       setResident(fetchedResident);
       // Store original basic data (excluding related models)
-      const { allergies, conditions, medications, specialists, dnrStatus, ...basicData } =
-        fetchedResident;
+      const { ...basicData } = fetchedResident;
       setOriginalBasicData(basicData);
     }
   }, [fetchedResident, isEditing]);
@@ -72,8 +89,7 @@ export default function ResidentDetail() {
   const hasBasicDataChanged = () => {
     if (!resident || !originalBasicData) return false;
 
-    const { allergies, conditions, medications, specialists, dnrStatus, ...currentBasicData } =
-      resident;
+    const { ...currentBasicData } = resident;
 
     // Compare each field
     const fieldsToCompare = [
@@ -115,8 +131,7 @@ export default function ResidentDetail() {
     try {
       // Only make a request if basic resident data has changed
       if (hasBasicDataChanged()) {
-        const { allergies, conditions, medications, specialists, dnrStatus, ...basicResidentData } =
-          resident;
+        const { ...basicResidentData } = resident;
 
         await updateResidentMutation.mutateAsync({
           id: params.id as string,
@@ -131,7 +146,10 @@ export default function ResidentDetail() {
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setResident((prev: ResidentData | null) => ({ ...prev, [field]: value }));
+    setResident((prev: ResidentData | null) => {
+      if (!prev) return prev;
+      return { ...prev, [field]: value };
+    });
   };
 
   const handleEmergencyContactChange = (field: string, value: string) => {
@@ -144,14 +162,20 @@ export default function ResidentDetail() {
 
     const actualField = fieldMap[field] || field;
 
-    setResident((prev: ResidentData | null) => ({
-      ...prev,
-      [actualField]: value,
-    }));
+    setResident((prev: ResidentData | null) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        [actualField]: value,
+      };
+    });
   };
 
   const handleNotesChange = (notes: string) => {
-    setResident((prev: ResidentData | null) => ({ ...prev, notes }));
+    setResident((prev: ResidentData | null) => {
+      if (!prev) return prev;
+      return { ...prev, notes };
+    });
   };
 
   const toggleADL = (adl: string) => {
@@ -167,34 +191,22 @@ export default function ResidentDetail() {
     });
   };
 
-  const handleAllergiesChange = (allergies: any[]) => {
-    setResident((prev: ResidentData | null) => ({
-      ...prev,
-      allergies,
-    }));
+  const handleAllergiesChange = () => {
     // Invalidate query to ensure fresh data on next fetch
     queryClient.invalidateQueries({ queryKey: ['residents', params.id] });
   };
 
-  const handleConditionsChange = (conditions: any[]) => {
-    setResident((prev: ResidentData | null) => ({
-      ...prev,
-      conditions,
-    }));
+  const handleConditionsChange = () => {
     // Invalidate query to ensure fresh data on next fetch
     queryClient.invalidateQueries({ queryKey: ['residents', params.id] });
   };
 
-  const handleMedicationsChange = (medications: any[]) => {
-    setResident((prev: ResidentData | null) => ({
-      ...prev,
-      medications,
-    }));
+  const handleMedicationsChange = () => {
     // Invalidate query to ensure fresh data on next fetch
     queryClient.invalidateQueries({ queryKey: ['residents', params.id] });
   };
 
-  const handleDNRStatusChange = async (field: string, value: any) => {
+  const handleDNRStatusChange = async (field: string, value: boolean | string | undefined) => {
     if (!resident) return;
 
     try {
@@ -209,22 +221,15 @@ export default function ResidentDetail() {
       });
 
       if (response.ok) {
-        const newDNRStatus = await response.json();
-        setResident((prev: ResidentData | null) => ({
-          ...prev,
-          dnrStatus: newDNRStatus,
-        }));
+        // Invalidate query to refetch with updated data
+        queryClient.invalidateQueries({ queryKey: ['residents', params.id] });
       }
     } catch (error) {
       console.error('Error updating DNR status:', error);
     }
   };
 
-  const handleSpecialistsChange = (specialists: any[]) => {
-    setResident((prev: ResidentData | null) => ({
-      ...prev,
-      specialists,
-    }));
+  const handleSpecialistsChange = () => {
     // Invalidate query to ensure fresh data on next fetch
     queryClient.invalidateQueries({ queryKey: ['residents', params.id] });
   };
@@ -329,7 +334,7 @@ export default function ResidentDetail() {
               onToggleADL={toggleADL}
             />
             <ResidentAllergiesMolecule
-              allergies={resident.allergies || []}
+              allergies={resident.allergies as AllergyDisplay[] | undefined}
               isEditing={isEditing}
               onAllergiesChange={handleAllergiesChange}
               residentId={params.id as string}
@@ -350,20 +355,20 @@ export default function ResidentDetail() {
                 onDNRStatusChange={handleDNRStatusChange}
               />
               <ResidentSpecialistsMolecule
-                specialists={resident.specialists || []}
+                specialists={resident.specialists as SpecialistDisplay[] | undefined}
                 isEditing={isEditing}
                 onSpecialistsChange={handleSpecialistsChange}
                 residentId={params.id as string}
               />
             </div>
             <ResidentConditionsMolecule
-              conditions={resident.conditions || []}
+              conditions={resident.conditions as ConditionDisplay[] | undefined}
               isEditing={isEditing}
               onConditionsChange={handleConditionsChange}
               residentId={params.id as string}
             />
             <ResidentMedicationsMolecule
-              medications={resident.medications || []}
+              medications={resident.medications as MedicationDisplay[] | undefined}
               isEditing={isEditing}
               onMedicationsChange={handleMedicationsChange}
               residentId={params.id as string}

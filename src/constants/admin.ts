@@ -1,8 +1,10 @@
+import { icons } from 'lucide-react';
+
 // Dashboard statistics
 export const DASHBOARD_STATS = [
-  { name: 'Total CNAs', value: '12', icon: 'user-round' },
-  { name: 'Active CNAs', value: '8', icon: 'clock' },
-  { name: 'Total Residents', value: '45', icon: 'users-round' },
+  { name: 'Total CNAs', value: '12', icon: 'UserRound' as keyof typeof icons },
+  { name: 'Active CNAs', value: '8', icon: 'Clock' as keyof typeof icons },
+  { name: 'Total Residents', value: '45', icon: 'Users' as keyof typeof icons },
 ] as const;
 
 // Recent activity data

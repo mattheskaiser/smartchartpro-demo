@@ -3,9 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
-import { ClockIcon, UserIcon, HomeIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
-import { DoorClosed } from 'lucide-react';
 
 interface Resident {
   id: string;
@@ -46,7 +45,7 @@ export const ResidentCardMolecule = ({ resident }: ResidentCardProps) => {
       <div className="flex flex-col gap-y-4">
         <div className="flex gap-x-2 items-center rounded-lg">
           <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary">
-            <DoorClosed className="h-6 w-6 text-primary" />
+            <DynamicIconAtom name="DoorClosed" size="md" className="text-primary" />
           </div>
           <div className="">
             <TextAtom variant="small" color="muted">
@@ -59,7 +58,7 @@ export const ResidentCardMolecule = ({ resident }: ResidentCardProps) => {
         </div>
         <div className="flex gap-x-2 items-center rounded-lg">
           <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary">
-            <ClockIcon className="h-6 w-6 text-primary" />
+            <DynamicIconAtom name="Clock" size="md" className="text-primary" />
           </div>
           <div className="">
             <TextAtom variant="small" color="muted" className="block">
@@ -72,7 +71,7 @@ export const ResidentCardMolecule = ({ resident }: ResidentCardProps) => {
         </div>
         <div className="flex gap-x-2 items-center rounded-lg">
           <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary">
-            <UserIcon className="h-6 w-6 text-primary" />
+            <DynamicIconAtom name="User" size="md" className="text-primary" />
           </div>
           <div className="">
             <TextAtom variant="small" color="muted" className="block">

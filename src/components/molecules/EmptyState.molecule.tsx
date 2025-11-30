@@ -37,9 +37,11 @@
 import React from 'react';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
+import { icons } from 'lucide-react';
 
 interface EmptyStateProps {
-  icon: React.ComponentType<{ className?: string }>;
+  iconName: keyof typeof icons;
   title: string;
   description?: string;
   actionLabel?: string;
@@ -49,7 +51,7 @@ interface EmptyStateProps {
 }
 
 export const EmptyStateMolecule = ({
-  icon: Icon,
+  iconName,
   title,
   description,
   actionLabel,
@@ -61,17 +63,17 @@ export const EmptyStateMolecule = ({
     sm: {
       container: 'py-8',
       iconContainer: 'h-12 w-12',
-      icon: 'h-6 w-6',
+      iconSize: 'sm' as const,
     },
     md: {
       container: 'py-12',
       iconContainer: 'h-16 w-16',
-      icon: 'h-8 w-8',
+      iconSize: 'md' as const,
     },
     lg: {
       container: 'py-16',
       iconContainer: 'h-20 w-20',
-      icon: 'h-10 w-10',
+      iconSize: 'lg' as const,
     },
   };
 
@@ -82,7 +84,7 @@ export const EmptyStateMolecule = ({
       <div
         className={`mx-auto flex ${classes.iconContainer} items-center justify-center rounded-full bg-gray-100`}
       >
-        <Icon className={`${classes.icon} text-gray-400`} />
+        <DynamicIconAtom name={iconName} size={classes.iconSize} className="text-gray-400" />
       </div>
 
       <div className="mt-4">

@@ -19,7 +19,7 @@ interface DNRStatus {
 interface ResidentDNRStatusProps {
   dnrStatus?: DNRStatus | null;
   isEditing: boolean;
-  onDNRStatusChange: (field: keyof DNRStatus, value: any) => void;
+  onDNRStatusChange: (field: keyof DNRStatus, value: boolean | string | undefined) => void;
 }
 
 export const ResidentDNRStatusMolecule = ({

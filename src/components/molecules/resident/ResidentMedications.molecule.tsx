@@ -4,9 +4,8 @@ import { useState } from 'react';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
-import { PlusIcon, ClockIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
-import { Clock } from 'lucide-react';
 import { MedicationModalMolecule } from '@/components/molecules/resident/modals/MedicationModal.molecule';
 
 interface Medication {
@@ -160,7 +159,7 @@ export const ResidentMedicationsMolecule = ({
               : 'text-gray-600 hover:text-gray-900'
           }`}
         >
-          <ClockIcon className="h-4 w-4 mr-2" />
+          <DynamicIconAtom name="Clock" size="sm" className="mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
             Current ({currentMedications.length})
           </TextAtom>
@@ -173,7 +172,7 @@ export const ResidentMedicationsMolecule = ({
               : 'text-gray-600 hover:text-gray-900'
           }`}
         >
-          <CheckCircleIcon className="h-4 w-4 mr-2" />
+          <DynamicIconAtom name="CircleCheck" size="sm" className="mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
             Past ({pastMedications.length})
           </TextAtom>
@@ -235,7 +234,7 @@ export const ResidentMedicationsMolecule = ({
                           {
                             id: 'discontinue',
                             label: 'Discontinue',
-                            icon: Clock,
+                            icon: <DynamicIconAtom name="Clock" size="sm" className="mr-2" />,
                             onClick: () => {
                               const reason = prompt('Reason for discontinuing this medication:');
                               if (reason) discontinueMedication(medication.id, reason);
@@ -261,7 +260,7 @@ export const ResidentMedicationsMolecule = ({
       {isEditing && activeTab === 'current' && (
         <div className="border-t pt-4">
           <ButtonAtom variant="primary" onClick={handleAdd}>
-            <PlusIcon className="h-4 w-4 mr-2" />
+            <DynamicIconAtom name="Plus" size="sm" className="mr-2" />
             Add Medication
           </ButtonAtom>
         </div>

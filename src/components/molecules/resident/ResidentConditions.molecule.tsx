@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { ConditionModalMolecule } from './modals/ConditionModal.molecule';
-import { PlusIcon } from '@heroicons/react/24/outline';
 import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
 
 interface Condition {
@@ -172,7 +172,7 @@ export const ResidentConditionsMolecule = ({
       {isEditing && (
         <div className="border-t pt-4">
           <ButtonAtom variant="primary" onClick={handleAdd}>
-            <PlusIcon className="h-4 w-4 mr-2" />
+            <DynamicIconAtom name="Plus" size="sm" className="mr-2" />
             Add Condition
           </ButtonAtom>
         </div>

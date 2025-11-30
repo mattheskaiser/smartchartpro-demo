@@ -70,7 +70,7 @@ interface DNRStatus {
   updatedAt: string;
 }
 
-interface Resident {
+export interface Resident {
   id: string;
   name: string;
   room: string;

@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeftIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 
@@ -26,7 +26,7 @@ export function StickyPageHeaderMolecule({
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <ButtonAtom variant="secondary" size="sm" onClick={onBack} className="mr-4 p-2">
-            <ArrowLeftIcon className="h-5 w-5" />
+            <DynamicIconAtom name="ArrowLeft" size="md" />
           </ButtonAtom>
           <div>
             <TextAtom variant="h1" weight="semibold">
@@ -45,7 +45,7 @@ export function StickyPageHeaderMolecule({
           isLoading={isSaving}
           loadingText="Saving..."
         >
-          <PencilIcon className="h-4 w-4 mr-2" />
+          <DynamicIconAtom name="Pencil" size="sm" className="mr-2" />
           {isEditing ? 'Save Changes' : 'Edit'}
         </ButtonAtom>
       </div>
