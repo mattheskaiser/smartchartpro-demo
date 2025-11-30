@@ -172,7 +172,7 @@ export const ResidentConditionsMolecule = ({
       {isEditing && (
         <div className="border-t pt-4">
           <ButtonAtom variant="primary" onClick={handleAdd}>
-            <DynamicIconAtom name="plus" size="sm" className="mr-2" />
+            <DynamicIconAtom name="Plus" size="sm" className="mr-2" />
             Add Condition
           </ButtonAtom>
         </div>

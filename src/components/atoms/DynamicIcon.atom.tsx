@@ -1,5 +1,5 @@
 import React from 'react';
-import { icons, LucideProps } from 'lucide-react';
+import { icons } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface IconAtomProps {
@@ -14,11 +14,7 @@ const iconSizes = {
   lg: 32,
 };
 
-export const DynamicIconAtom = ({
-  name,
-  size = 'md',
-  className,
-}: IconAtomProps) => {
+export const DynamicIconAtom = ({ name, size = 'md', className }: IconAtomProps) => {
   const LucideIcon = icons[name];
 
   if (!LucideIcon) {

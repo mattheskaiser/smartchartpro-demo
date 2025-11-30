@@ -153,10 +153,11 @@ export const ResidentMedicationsMolecule = ({
       <div className="flex space-x-1 mb-4 bg-gray-100 p-1 rounded-lg">
         <button
           onClick={() => setActiveTab('current')}
-          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${activeTab === 'current'
-            ? 'bg-white text-blue-600 shadow-sm'
-            : 'text-gray-600 hover:text-gray-900'
-            }`}
+          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${
+            activeTab === 'current'
+              ? 'bg-white text-blue-600 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
         >
           <DynamicIconAtom name="Clock" size="sm" className="mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
@@ -165,10 +166,11 @@ export const ResidentMedicationsMolecule = ({
         </button>
         <button
           onClick={() => setActiveTab('past')}
-          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${activeTab === 'past'
-            ? 'bg-white text-blue-600 shadow-sm'
-            : 'text-gray-600 hover:text-gray-900'
-            }`}
+          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${
+            activeTab === 'past'
+              ? 'bg-white text-blue-600 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
         >
           <DynamicIconAtom name="CircleCheck" size="sm" className="mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
@@ -229,18 +231,17 @@ export const ResidentMedicationsMolecule = ({
                   items={
                     medication.status === 'current'
                       ? [
-                        {
-                          id: 'discontinue',
-                          label: 'Discontinue',
-                          icon: <DynamicIconAtom name="Clock" size="sm" className="mr-2" />
-                          ,
-                          onClick: () => {
-                            const reason = prompt('Reason for discontinuing this medication:');
-                            if (reason) discontinueMedication(medication.id, reason);
+                          {
+                            id: 'discontinue',
+                            label: 'Discontinue',
+                            icon: <DynamicIconAtom name="Clock" size="sm" className="mr-2" />,
+                            onClick: () => {
+                              const reason = prompt('Reason for discontinuing this medication:');
+                              if (reason) discontinueMedication(medication.id, reason);
+                            },
+                            variant: 'warning',
                           },
-                          variant: 'warning',
-                        },
-                      ]
+                        ]
                       : []
                   }
                 />

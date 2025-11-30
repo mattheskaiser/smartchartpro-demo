@@ -43,8 +43,7 @@ export const ActionMenuMolecule = ({
     standardActions.push({
       id: 'edit',
       label: 'Edit',
-      icon: <DynamicIconAtom name="Pencil" size="sm" className="mr-2" />
-      ,
+      icon: <DynamicIconAtom name="Pencil" size="sm" className="mr-2" />,
       onClick: () => {
         onEdit();
         setOpen(false);
@@ -57,8 +56,7 @@ export const ActionMenuMolecule = ({
     standardActions.push({
       id: 'delete',
       label: 'Delete',
-      icon: <DynamicIconAtom name="Trash" size="sm" className="mr-2" />
-      ,
+      icon: <DynamicIconAtom name="Trash" size="sm" className="mr-2" />,
       onClick: () => {
         onDelete();
         setOpen(false);
