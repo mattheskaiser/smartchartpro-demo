@@ -6,8 +6,13 @@ import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
 
+interface CNA {
+  id: string;
+  name: string;
+}
+
 export default function CNAManagement() {
-  const [cnas] = useState<any[]>([]); // Empty for demonstration
+  const [cnas] = useState<CNA[]>([]); // Empty for demonstration
   const [loading] = useState(false);
   const [saving, setSaving] = useState(false);
 

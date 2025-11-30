@@ -19,7 +19,13 @@ export async function GET() {
 
 // POST /api/residents - Create a new resident
 export async function POST(request: NextRequest) {
-  let body: any;
+  let body: {
+    name?: string;
+    room?: string;
+    dateOfBirth?: string;
+    emergencyContactName?: string;
+    emergencyContactPhone?: string;
+  } = {};
 
   try {
     body = await request.json();

@@ -20,7 +20,13 @@ export default function ResidentManagement() {
     setIsAddModalOpen(true);
   };
 
-  const handleSubmitResident = async (formData: any) => {
+  const handleSubmitResident = async (formData: {
+    name: string;
+    room: string;
+    dateOfBirth: string;
+    emergencyContactName: string;
+    emergencyContactPhone: string;
+  }) => {
     try {
       await createResidentMutation.mutateAsync(formData);
       setIsAddModalOpen(false);

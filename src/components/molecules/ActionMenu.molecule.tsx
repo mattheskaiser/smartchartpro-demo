@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode } from 'react';
-import { EllipsisVertical, Pencil, Trash2 } from 'lucide-react';
+import { EllipsisVertical } from 'lucide-react';
 
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
