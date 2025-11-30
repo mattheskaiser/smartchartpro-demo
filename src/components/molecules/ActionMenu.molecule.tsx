@@ -91,7 +91,7 @@ export const ActionMenuMolecule = ({
           <EllipsisVertical className="h-4 w-4" />
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-48 p-0" align="end">
+      <PopoverContent className="w-48 p-0 bg-white" align="end">
         <Command>
           <CommandList>
             <CommandGroup>

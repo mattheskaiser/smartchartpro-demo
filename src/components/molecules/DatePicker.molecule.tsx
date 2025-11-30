@@ -81,7 +81,7 @@ export const DatePickerMolecule = ({
           {dateValue ? format(dateValue, 'MM/dd/yyyy') : <span>{placeholder}</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className="w-auto p-0 bg-white">
         <Calendar
           mode="single"
           selected={dateValue}

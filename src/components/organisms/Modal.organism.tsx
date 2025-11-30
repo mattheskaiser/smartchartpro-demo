@@ -33,7 +33,7 @@ export const ModalOrganism = ({
 }: ModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={cn('w-full max-w-lg h-[450px] flex flex-col', className)}>
+      <DialogContent className={cn('w-full max-w-lg h-[450px] flex flex-col bg-white', className)}>
         <DialogHeader className="flex-shrink-0">
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
