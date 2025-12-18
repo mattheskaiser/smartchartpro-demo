@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { InputAtom } from '@/components/atoms/Input.atom';
 import { LabelAtom } from '@/components/atoms/Label.atom';
 import { SelectAtom } from '@/components/atoms/Select.atom';
@@ -8,8 +8,9 @@ import { TextareaAtom } from '@/components/atoms/Textarea.atom';
 import { FormModalOrganism } from '@/components/organisms/Modal.organism';
 import { DatePickerMolecule } from '@/components/molecules/DatePicker.molecule';
 import { ImageUploadMolecule } from '@/components/molecules/ImageUpload.molecule';
+import { CNA } from '@/types/cna';
 
-interface AddCNAModalProps {
+interface EditCNAModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSubmit: (cna: {
@@ -21,16 +22,19 @@ interface AddCNAModalProps {
         hireDate?: string;
         notes?: string;
         imageFile?: File;
+        imageUrl?: string;
     }) => void;
+    editingCNA?: CNA;
     isLoading?: boolean;
 }
 
-export const AddCNAModalMolecule = ({
+export const EditCNAModalMolecule = ({
     isOpen,
     onClose,
     onSubmit,
+    editingCNA,
     isLoading = false,
-}: AddCNAModalProps) => {
+}: EditCNAModalProps) => {
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -41,6 +45,23 @@ export const AddCNAModalMolecule = ({
         notes: '',
     });
     const [imageFile, setImageFile] = useState<File | null>(null);
+    const [currentImageUrl, setCurrentImageUrl] = useState<string>('');
+
+    // Update form when editing CNA changes
+    useEffect(() => {
+        if (editingCNA) {
+            setForm({
+                name: editingCNA.name || '',
+                email: editingCNA.email || '',
+                phone: editingCNA.phone || '',
+                shift: editingCNA.shift || 'Morning',
+                certificationNumber: editingCNA.certificationNumber || '',
+                hireDate: editingCNA.hireDate || '',
+                notes: editingCNA.notes || '',
+            });
+            setCurrentImageUrl(editingCNA.imageUrl || '');
+        }
+    }, [editingCNA]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -54,6 +75,7 @@ export const AddCNAModalMolecule = ({
                 hireDate: form.hireDate || undefined,
                 notes: form.notes || undefined,
                 imageFile: imageFile || undefined,
+                imageUrl: currentImageUrl,
             });
             // Don't reset form or close modal here - let the parent handle success
         }
@@ -72,7 +94,15 @@ export const AddCNAModalMolecule = ({
                 notes: '',
             });
             setImageFile(null);
+            setCurrentImageUrl('');
             onClose();
+        }
+    };
+
+    const handleImageChange = (file: File | null, previewUrl: string | null) => {
+        setImageFile(file);
+        if (previewUrl) {
+            setCurrentImageUrl(previewUrl);
         }
     };
 
@@ -81,12 +111,13 @@ export const AddCNAModalMolecule = ({
             isOpen={isOpen}
             onClose={handleClose}
             onSubmit={handleSubmit}
-            title="Add CNA"
-            submitLabel="Add CNA"
+            title={editingCNA ? 'Edit CNA' : 'Add CNA'}
+            submitLabel={editingCNA ? 'Update CNA' : 'Add CNA'}
             isSubmitting={isLoading}
         >
             <ImageUploadMolecule
-                onImageChange={(file) => setImageFile(file)}
+                currentImage={currentImageUrl}
+                onImageChange={handleImageChange}
                 label="Profile Picture"
             />
 

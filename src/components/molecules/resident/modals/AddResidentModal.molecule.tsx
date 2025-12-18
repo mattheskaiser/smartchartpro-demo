@@ -5,6 +5,7 @@ import { InputAtom } from '@/components/atoms/Input.atom';
 import { LabelAtom } from '@/components/atoms/Label.atom';
 import { FormModalOrganism } from '@/components/organisms/Modal.organism';
 import { DatePickerMolecule } from '@/components/molecules/DatePicker.molecule';
+import { ImageUploadMolecule } from '@/components/molecules/ImageUpload.molecule';
 
 interface AddResidentModalProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ interface AddResidentModalProps {
     dateOfBirth: string;
     emergencyContactName: string;
     emergencyContactPhone: string;
+    imageFile?: File;
   }) => void;
   isLoading?: boolean;
 }
@@ -32,6 +34,7 @@ export const AddResidentModalMolecule = ({
     emergencyContactName: '',
     emergencyContactPhone: '',
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +46,10 @@ export const AddResidentModalMolecule = ({
       form.emergencyContactName.trim() &&
       form.emergencyContactPhone.trim()
     ) {
-      onSubmit(form);
+      onSubmit({
+        ...form,
+        imageFile: imageFile || undefined,
+      });
       // Don't reset form or close modal here - let the parent handle success
     }
   };
@@ -58,6 +64,7 @@ export const AddResidentModalMolecule = ({
         emergencyContactName: '',
         emergencyContactPhone: '',
       });
+      setImageFile(null);
       onClose();
     }
   };
@@ -71,6 +78,11 @@ export const AddResidentModalMolecule = ({
       submitLabel="Add Resident"
       isSubmitting={isLoading}
     >
+      <ImageUploadMolecule
+        onImageChange={(file) => setImageFile(file)}
+        label="Profile Picture"
+      />
+
       <div className="grid grid-cols-2 gap-4">
         <div>
           <LabelAtom required>Full Name</LabelAtom>

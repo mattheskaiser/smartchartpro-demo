@@ -23,4 +23,5 @@ export interface CreateCNAData {
     certificationNumber?: string;
     hireDate?: string;
     notes?: string;
+    imageFile?: File;
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
@@ -9,14 +10,17 @@ import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
-import { useCNA } from '@/hooks/useCNAs';
+import { useCNA, useUpdateCNA } from '@/hooks/useCNAs';
+import { EditCNAModalMolecule } from '@/components/molecules/cna/EditCNAModal.molecule';
 
 export default function CNADetailPage() {
     const params = useParams();
     const router = useRouter();
     const cnaId = params.id as string;
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const { data: cna, isLoading, error } = useCNA(cnaId);
+    const updateCNAMutation = useUpdateCNA();
 
     if (isLoading) {
         return (
@@ -62,21 +66,58 @@ export default function CNADetailPage() {
         }
     };
 
+    const handleEditSubmit = async (formData: {
+        name: string;
+        email: string;
+        phone?: string;
+        shift: 'Morning' | 'Evening' | 'Night';
+        certificationNumber?: string;
+        hireDate?: string;
+        notes?: string;
+        imageFile?: File;
+        imageUrl?: string;
+    }) => {
+        try {
+            await updateCNAMutation.mutateAsync({
+                id: cnaId,
+                data: {
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    shift: formData.shift,
+                    certificationNumber: formData.certificationNumber,
+                    hireDate: formData.hireDate,
+                    notes: formData.notes,
+                    imageUrl: formData.imageUrl,
+                },
+            });
+            setIsEditModalOpen(false);
+        } catch (error) {
+            console.error('Error updating CNA:', error);
+        }
+    };
+
     return (
         <div className="mx-auto max-w-7xl">
             {/* Header */}
             <div className="mb-8">
-                <div className="flex items-center gap-4 mb-4">
-                    <ButtonAtom
-                        variant="ghost"
-                        onClick={() => router.back()}
-                        className="p-2"
-                    >
-                        <DynamicIconAtom name="ArrowLeft" size="md" />
+                <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-4">
+                        <ButtonAtom
+                            variant="ghost"
+                            onClick={() => router.back()}
+                            className="p-2"
+                        >
+                            <DynamicIconAtom name="ArrowLeft" size="md" />
+                        </ButtonAtom>
+                        <TextAtom variant="h1" weight="semibold">
+                            CNA Details
+                        </TextAtom>
+                    </div>
+                    <ButtonAtom variant="primary" onClick={() => setIsEditModalOpen(true)}>
+                        <DynamicIconAtom name="Pencil" size="sm" className="mr-2" />
+                        Edit CNA
                     </ButtonAtom>
-                    <TextAtom variant="h1" weight="semibold">
-                        CNA Details
-                    </TextAtom>
                 </div>
             </div>
 
@@ -202,6 +243,14 @@ export default function CNADetailPage() {
                     </CardAtom>
                 </div>
             </div>
+
+            <EditCNAModalMolecule
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                onSubmit={handleEditSubmit}
+                editingCNA={cna}
+                isLoading={updateCNAMutation.isPending}
+            />
         </div>
     );
 }

@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { uploadImage } from '@/lib/imageUpload';
 
 // Types
 interface CreateResidentData {
@@ -7,6 +8,7 @@ interface CreateResidentData {
   dateOfBirth: string;
   emergencyContactName: string;
   emergencyContactPhone: string;
+  imageFile?: File;
 }
 
 interface Allergy {
@@ -104,12 +106,30 @@ const fetchResidents = async (): Promise<Resident[]> => {
 };
 
 const createResident = async (data: CreateResidentData): Promise<Resident> => {
+  let imageUrl = '';
+
+  // Upload image if provided
+  if (data.imageFile) {
+    try {
+      imageUrl = await uploadImage(data.imageFile);
+    } catch (error) {
+      console.error('Failed to upload image:', error);
+      // Continue without image if upload fails
+    }
+  }
+
+  const { imageFile, ...residentData } = data;
+  const payload = {
+    ...residentData,
+    imageUrl,
+  };
+
   const response = await fetch('/api/residents', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(payload),
   });
 
   if (!response.ok) {

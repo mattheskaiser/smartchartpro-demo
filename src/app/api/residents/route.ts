@@ -25,11 +25,12 @@ export async function POST(request: NextRequest) {
     dateOfBirth?: string;
     emergencyContactName?: string;
     emergencyContactPhone?: string;
+    imageUrl?: string;
   } = {};
 
   try {
     body = await request.json();
-    const { name, room, dateOfBirth, emergencyContactName, emergencyContactPhone } = body;
+    const { name, room, dateOfBirth, emergencyContactName, emergencyContactPhone, imageUrl } = body;
 
     // Validate required fields
     if (!name || !room || !emergencyContactName) {
@@ -44,7 +45,7 @@ export async function POST(request: NextRequest) {
         emergencyContactName,
         emergencyContactPhone,
         status: 'independent',
-        imageUrl: `https://i.pravatar.cc/150?u=${encodeURIComponent(name)}`,
+        imageUrl: imageUrl || null,
         adlNeeds: [],
         ...(dateOfBirth && { dateOfBirth: new Date(dateOfBirth) }),
       },

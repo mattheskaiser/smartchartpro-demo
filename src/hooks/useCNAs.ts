@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CNA, CreateCNAData } from '@/types/cna';
+import { uploadImage } from '@/lib/imageUpload';
 
 // API functions
 const fetchCNAs = async (): Promise<CNA[]> => {
@@ -11,12 +12,30 @@ const fetchCNAs = async (): Promise<CNA[]> => {
 };
 
 const createCNA = async (data: CreateCNAData): Promise<CNA> => {
+    let imageUrl = '';
+
+    // Upload image if provided
+    if (data.imageFile) {
+        try {
+            imageUrl = await uploadImage(data.imageFile);
+        } catch (error) {
+            console.error('Failed to upload image:', error);
+            // Continue without image if upload fails
+        }
+    }
+
+    const { imageFile, ...cnaData } = data;
+    const payload = {
+        ...cnaData,
+        imageUrl,
+    };
+
     const response = await fetch('/api/cnas', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
