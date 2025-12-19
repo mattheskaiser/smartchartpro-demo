@@ -50,6 +50,7 @@ import { ResidentBasicInformationMolecule } from '@/components/molecules/residen
 import { ResidentEmergencyContactMolecule } from '@/components/molecules/resident/ResidentEmergencyContact.molecule';
 import { ResidentADLRequirementsMolecule } from '@/components/molecules/resident/ResidentADLRequirements.molecule';
 import { ResidentNotesMolecule } from '@/components/molecules/resident/ResidentNotes.molecule';
+import { ResidentImageUploadMolecule } from '@/components/molecules/resident/ResidentImageUpload.molecule';
 
 import { ResidentAllergiesMolecule } from '@/components/molecules/resident/ResidentAllergies.molecule';
 import { ResidentConditionsMolecule } from '@/components/molecules/resident/ResidentConditions.molecule';
@@ -131,7 +132,21 @@ export default function ResidentDetail() {
     try {
       // Only make a request if basic resident data has changed
       if (hasBasicDataChanged()) {
-        const { ...basicResidentData } = resident;
+        // Extract only the basic resident fields, excluding relations
+        const basicResidentData = {
+          name: resident.name,
+          room: resident.room,
+          status: resident.status,
+          imageUrl: resident.imageUrl,
+          dateOfBirth: resident.dateOfBirth,
+          admissionDate: resident.admissionDate,
+          emergencyContactName: resident.emergencyContactName,
+          emergencyContactPhone: resident.emergencyContactPhone,
+          emergencyContactRelationship: resident.emergencyContactRelationship,
+          assignedCNA: resident.assignedCNA,
+          notes: resident.notes,
+          adlNeeds: resident.adlNeeds,
+        };
 
         await updateResidentMutation.mutateAsync({
           id: params.id as string,
@@ -175,6 +190,13 @@ export default function ResidentDetail() {
     setResident((prev: ResidentData | null) => {
       if (!prev) return prev;
       return { ...prev, notes };
+    });
+  };
+
+  const handleImageChange = (imageData: string | null) => {
+    setResident((prev: ResidentData | null) => {
+      if (!prev) return prev;
+      return { ...prev, imageUrl: imageData };
     });
   };
 
@@ -292,6 +314,16 @@ export default function ResidentDetail() {
       />
 
       <div className="space-y-8">
+        {/* Profile Picture Section */}
+        <ResidentImageUploadMolecule
+          currentImage={resident.imageUrl}
+          residentName={resident.name || 'Unknown Resident'}
+          isEditing={isEditing}
+          onImageChange={handleImageChange}
+          isUpdating={updateResidentMutation.isPending}
+          avatarSize="3xl"
+        />
+
         {/* Basic Information Section */}
         <div>
           <TextAtom variant="h2" weight="semibold" className="mb-4 text-gray-900">

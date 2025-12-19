@@ -6,7 +6,7 @@ import { DynamicIconAtom } from './DynamicIcon.atom';
 interface AvatarAtomProps {
   src?: string | null; // Can be base64 data or URL
   alt: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
   className?: string;
 }
 
@@ -17,12 +17,18 @@ export const AvatarAtom = ({ src, alt, size = 'md', className }: AvatarAtomProps
     sm: 32,
     md: 48,
     lg: 64,
+    xl: 128,
+    '2xl': 160,
+    '3xl': 192,
   };
 
   const iconSizes = {
     sm: 'sm' as const,
     md: 'md' as const,
     lg: 'lg' as const,
+    xl: 'lg' as const,
+    '2xl': 'lg' as const,
+    '3xl': 'lg' as const,
   };
 
   const pixelSize = dimensions[size];

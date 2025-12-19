@@ -144,15 +144,15 @@ export const useUpdateResident = () => {
   return useMutation({
     mutationFn: updateResident,
     onSuccess: (updatedResident, variables) => {
-      // Invalidate and refetch the specific resident to get updated related data
-      queryClient.invalidateQueries({ queryKey: ['residents', variables.id] });
+      // Immediately update the specific resident cache with the response data
+      queryClient.setQueryData(['residents', variables.id], updatedResident);
 
       // Update the residents list cache
       queryClient.setQueryData(['residents'], (old: Resident[] = []) =>
         old.map(resident => (resident.id === updatedResident.id ? updatedResident : resident))
       );
 
-      // Invalidate related queries
+      // Invalidate related queries (but not the main resident query since we just updated it)
       queryClient.invalidateQueries({ queryKey: ['residents'] });
     },
     onError: error => {

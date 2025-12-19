@@ -28,14 +28,14 @@ export const ResidentBasicInformationMolecule = ({
 }: ResidentBasicInformationProps) => {
   // Provide safe defaults
   const safeResident = {
-    name: '',
-    room: '',
-    dateOfBirth: '',
-    admissionDate: '',
-    status: 'independent',
-    assignedCNA: '',
-    ...resident,
+    name: resident?.name || '',
+    room: resident?.room || '',
+    dateOfBirth: resident?.dateOfBirth || '',
+    admissionDate: resident?.admissionDate || '',
+    status: resident?.status || 'independent',
+    assignedCNA: resident?.assignedCNA || '',
   };
+
   return (
     <CardAtom>
       <TextAtom variant="h3" weight="medium" className="mb-4">
@@ -70,8 +70,8 @@ export const ResidentBasicInformationMolecule = ({
           <LabelAtom>Date of Birth</LabelAtom>
           {isEditing ? (
             <DatePickerMolecule
-              value={safeResident.dateOfBirth ?? undefined}
-              onChange={date => onInputChange('dateOfBirth', date)}
+              value={safeResident.dateOfBirth || undefined}
+              onChange={date => onInputChange('dateOfBirth', date || '')}
               placeholder="Select date of birth"
             />
           ) : (
@@ -86,8 +86,8 @@ export const ResidentBasicInformationMolecule = ({
           <LabelAtom>Admission Date</LabelAtom>
           {isEditing ? (
             <DatePickerMolecule
-              value={safeResident.admissionDate ?? undefined}
-              onChange={date => onInputChange('admissionDate', date)}
+              value={safeResident.admissionDate || undefined}
+              onChange={date => onInputChange('admissionDate', date || '')}
               placeholder="Select admission date"
             />
           ) : (
