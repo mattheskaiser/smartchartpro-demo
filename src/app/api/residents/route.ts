@@ -10,7 +10,13 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     });
 
-    return NextResponse.json(residents);
+    // Transform imageData to imageUrl for frontend compatibility
+    const transformedResidents = residents.map(resident => ({
+      ...resident,
+      imageUrl: resident.imageData || null,
+    }));
+
+    return NextResponse.json(transformedResidents);
   } catch (error) {
     console.error('Error fetching residents:', error);
     return NextResponse.json({ error: 'Failed to fetch residents' }, { status: 500 });
@@ -52,7 +58,13 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(resident, { status: 201 });
+    // Transform imageData to imageUrl for frontend compatibility
+    const transformedResident = {
+      ...resident,
+      imageUrl: resident.imageData || null,
+    };
+
+    return NextResponse.json(transformedResident, { status: 201 });
   } catch (error) {
     console.error('Error creating resident:', error);
     console.error('Request body:', body);

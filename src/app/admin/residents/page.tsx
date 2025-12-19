@@ -26,6 +26,8 @@ export default function ResidentManagement() {
     dateOfBirth: string;
     emergencyContactName: string;
     emergencyContactPhone: string;
+    imageFile?: File;
+    imageData?: string;
   }) => {
     try {
       await createResidentMutation.mutateAsync(formData);

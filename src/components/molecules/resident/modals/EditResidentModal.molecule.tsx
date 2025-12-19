@@ -94,6 +94,9 @@ export const EditResidentModalMolecule = ({
     setImageFile(file);
     if (previewUrl) {
       setCurrentImageUrl(previewUrl);
+    } else if (file === null) {
+      // Handle image removal
+      setCurrentImageUrl('');
     }
   };
 

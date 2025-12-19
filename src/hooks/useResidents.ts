@@ -10,6 +10,7 @@ interface CreateResidentData {
   emergencyContactName: string;
   emergencyContactPhone: string;
   imageFile?: File;
+  imageData?: string;
 }
 
 // API functions
@@ -22,10 +23,10 @@ const fetchResidents = async (): Promise<Resident[]> => {
 };
 
 const createResident = async (data: CreateResidentData): Promise<Resident> => {
-  let imageData = '';
+  let imageData = data.imageData || '';
 
-  // Convert image to base64 if provided
-  if (data.imageFile) {
+  // Convert image to base64 if provided and no imageData exists
+  if (data.imageFile && !imageData) {
     try {
       imageData = await resizeImage(data.imageFile);
     } catch (error) {
@@ -35,7 +36,7 @@ const createResident = async (data: CreateResidentData): Promise<Resident> => {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { imageFile: _, ...residentData } = data;
+  const { imageFile: _, imageData: __, ...residentData } = data;
   const payload = {
     ...residentData,
     imageData,
@@ -70,14 +71,30 @@ const updateResident = async ({
   data,
 }: {
   id: string;
-  data: Partial<Resident>;
+  data: Partial<Resident> & { imageFile?: File };
 }): Promise<Resident> => {
+  let updateData = { ...data };
+
+  // Handle image file if provided
+  if (data.imageFile) {
+    try {
+      const imageData = await resizeImage(data.imageFile);
+      updateData = { ...updateData, imageUrl: imageData };
+      // Remove imageFile from the data sent to API
+      delete updateData.imageFile;
+    } catch (error) {
+      console.error('Failed to process image:', error);
+      // Continue without image if processing fails
+      delete updateData.imageFile;
+    }
+  }
+
   const response = await fetch(`/api/residents/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(updateData),
   });
 
   if (!response.ok) {
