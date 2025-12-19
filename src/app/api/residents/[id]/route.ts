@@ -21,7 +21,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: 'Resident not found' }, { status: 404 });
     }
 
-    return NextResponse.json(resident);
+    // Transform imageData to imageUrl for frontend compatibility
+    const transformedResident = {
+      ...resident,
+      imageUrl: resident.imageData || null,
+    };
+
+    return NextResponse.json(transformedResident);
   } catch (error) {
     console.error('Error fetching resident:', error);
     return NextResponse.json({ error: 'Failed to fetch resident' }, { status: 500 });
@@ -43,12 +49,24 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       updateData.admissionDate = new Date(updateData.admissionDate);
     }
 
+    // Handle imageUrl -> imageData transformation for updates
+    if (updateData.imageUrl !== undefined) {
+      updateData.imageData = updateData.imageUrl;
+      delete updateData.imageUrl;
+    }
+
     const resident = await prisma.resident.update({
       where: { id: params.id },
       data: updateData,
     });
 
-    return NextResponse.json(resident);
+    // Transform imageData to imageUrl for frontend compatibility
+    const transformedResident = {
+      ...resident,
+      imageUrl: resident.imageData || null,
+    };
+
+    return NextResponse.json(transformedResident);
   } catch (error) {
     console.error('Error updating resident:', error);
     console.error('Error details:', error instanceof Error ? error.message : error);

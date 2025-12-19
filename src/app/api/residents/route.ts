@@ -10,7 +10,13 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     });
 
-    return NextResponse.json(residents);
+    // Transform imageData to imageUrl for frontend compatibility
+    const transformedResidents = residents.map(resident => ({
+      ...resident,
+      imageUrl: resident.imageData || null,
+    }));
+
+    return NextResponse.json(transformedResidents);
   } catch (error) {
     console.error('Error fetching residents:', error);
     return NextResponse.json({ error: 'Failed to fetch residents' }, { status: 500 });
@@ -25,11 +31,13 @@ export async function POST(request: NextRequest) {
     dateOfBirth?: string;
     emergencyContactName?: string;
     emergencyContactPhone?: string;
+    imageData?: string;
   } = {};
 
   try {
     body = await request.json();
-    const { name, room, dateOfBirth, emergencyContactName, emergencyContactPhone } = body;
+    const { name, room, dateOfBirth, emergencyContactName, emergencyContactPhone, imageData } =
+      body;
 
     // Validate required fields
     if (!name || !room || !emergencyContactName) {
@@ -44,13 +52,19 @@ export async function POST(request: NextRequest) {
         emergencyContactName,
         emergencyContactPhone,
         status: 'independent',
-        imageUrl: `https://i.pravatar.cc/150?u=${encodeURIComponent(name)}`,
+        imageData: imageData || null,
         adlNeeds: [],
         ...(dateOfBirth && { dateOfBirth: new Date(dateOfBirth) }),
       },
     });
 
-    return NextResponse.json(resident, { status: 201 });
+    // Transform imageData to imageUrl for frontend compatibility
+    const transformedResident = {
+      ...resident,
+      imageUrl: resident.imageData || null,
+    };
+
+    return NextResponse.json(transformedResident, { status: 201 });
   } catch (error) {
     console.error('Error creating resident:', error);
     console.error('Request body:', body);

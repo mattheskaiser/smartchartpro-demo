@@ -10,7 +10,7 @@ datasource db {
 model Resident {
   id                           String       @id @default(cuid())
   name                         String
-  imageUrl                     String
+  imageData                    String?      // Base64 encoded image data
   room                         String
   status                       String
   createdAt                    DateTime     @default(now())
@@ -116,4 +116,21 @@ model DNRStatus {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   resident      Resident  @relation(fields: [residentId], references: [id], onDelete: Cascade)
+}
+
+model Cna {
+  id                  String   @id @default(cuid())
+  name                String
+  email               String   @unique
+  phone               String?
+  status              String   @default("active")
+  shift               String
+  residents           Int      @default(0)
+  lastActive          String   @default("Just added")
+  imageData           String?  // Base64 encoded image data
+  hireDate            DateTime?
+  certificationNumber String?
+  notes               String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }

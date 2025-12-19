@@ -7,9 +7,9 @@ import { InputAtom } from '@/components/atoms/Input.atom';
 
 interface ResidentEmergencyContactProps {
   emergencyContact?: {
-    name?: string;
-    relationship?: string;
-    phone?: string;
+    name?: string | null;
+    relationship?: string | null;
+    phone?: string | null;
   } | null;
   isEditing: boolean;
   onInputChange: (field: string, value: string) => void;
@@ -38,7 +38,7 @@ export const ResidentEmergencyContactMolecule = ({
           {isEditing ? (
             <InputAtom
               type="text"
-              value={safeEmergencyContact.name}
+              value={safeEmergencyContact.name ?? ''}
               onChange={e => onInputChange('name', e.target.value)}
             />
           ) : (
@@ -50,7 +50,7 @@ export const ResidentEmergencyContactMolecule = ({
           {isEditing ? (
             <InputAtom
               type="text"
-              value={safeEmergencyContact.relationship}
+              value={safeEmergencyContact.relationship ?? ''}
               onChange={e => onInputChange('relationship', e.target.value)}
             />
           ) : (
@@ -62,7 +62,7 @@ export const ResidentEmergencyContactMolecule = ({
           {isEditing ? (
             <InputAtom
               type="tel"
-              value={safeEmergencyContact.phone}
+              value={safeEmergencyContact.phone ?? ''}
               onChange={e => onInputChange('phone', e.target.value)}
             />
           ) : (

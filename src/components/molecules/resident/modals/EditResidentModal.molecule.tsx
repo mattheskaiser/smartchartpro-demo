@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { InputAtom } from '@/components/atoms/Input.atom';
 import { LabelAtom } from '@/components/atoms/Label.atom';
 import { FormModalOrganism } from '@/components/organisms/Modal.organism';
 import { DatePickerMolecule } from '@/components/molecules/DatePicker.molecule';
 import { ImageUploadMolecule } from '@/components/molecules/ImageUpload.molecule';
+import { Resident } from '@/types/resident';
 
-interface AddResidentModalProps {
+interface EditResidentModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (resident: {
@@ -17,17 +18,19 @@ interface AddResidentModalProps {
     emergencyContactName: string;
     emergencyContactPhone: string;
     imageFile?: File;
-    imageData?: string;
+    imageUrl?: string;
   }) => void;
+  editingResident?: Resident;
   isLoading?: boolean;
 }
 
-export const AddResidentModalMolecule = ({
+export const EditResidentModalMolecule = ({
   isOpen,
   onClose,
   onSubmit,
+  editingResident,
   isLoading = false,
-}: AddResidentModalProps) => {
+}: EditResidentModalProps) => {
   const [form, setForm] = useState({
     name: '',
     room: '',
@@ -36,7 +39,21 @@ export const AddResidentModalMolecule = ({
     emergencyContactPhone: '',
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imageData, setImageData] = useState<string | null>(null);
+  const [currentImageUrl, setCurrentImageUrl] = useState<string>('');
+
+  // Update form when editing resident changes
+  useEffect(() => {
+    if (editingResident) {
+      setForm({
+        name: editingResident.name || '',
+        room: editingResident.room || '',
+        dateOfBirth: editingResident.dateOfBirth || '',
+        emergencyContactName: editingResident.emergencyContactName || '',
+        emergencyContactPhone: editingResident.emergencyContactPhone || '',
+      });
+      setCurrentImageUrl(editingResident.imageUrl || '');
+    }
+  }, [editingResident]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,7 +68,7 @@ export const AddResidentModalMolecule = ({
       onSubmit({
         ...form,
         imageFile: imageFile || undefined,
-        imageData: imageData || undefined,
+        imageUrl: currentImageUrl,
       });
       // Don't reset form or close modal here - let the parent handle success
     }
@@ -68,8 +85,18 @@ export const AddResidentModalMolecule = ({
         emergencyContactPhone: '',
       });
       setImageFile(null);
-      setImageData(null);
+      setCurrentImageUrl('');
       onClose();
+    }
+  };
+
+  const handleImageChange = (file: File | null, previewUrl: string | null) => {
+    setImageFile(file);
+    if (previewUrl) {
+      setCurrentImageUrl(previewUrl);
+    } else if (file === null) {
+      // Handle image removal
+      setCurrentImageUrl('');
     }
   };
 
@@ -78,15 +105,13 @@ export const AddResidentModalMolecule = ({
       isOpen={isOpen}
       onClose={handleClose}
       onSubmit={handleSubmit}
-      title="Add Resident"
-      submitLabel="Add Resident"
+      title={editingResident ? 'Edit Resident' : 'Add Resident'}
+      submitLabel={editingResident ? 'Update Resident' : 'Add Resident'}
       isSubmitting={isLoading}
     >
       <ImageUploadMolecule
-        onImageChange={(file, base64Data) => {
-          setImageFile(file);
-          setImageData(base64Data);
-        }}
+        currentImage={currentImageUrl}
+        onImageChange={handleImageChange}
         label="Profile Picture"
       />
 

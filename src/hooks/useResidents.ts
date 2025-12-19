@@ -1,4 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { resizeImage } from '@/lib/imageUpload';
+import { Resident } from '@/types/resident';
 
 // Types
 interface CreateResidentData {
@@ -7,91 +9,8 @@ interface CreateResidentData {
   dateOfBirth: string;
   emergencyContactName: string;
   emergencyContactPhone: string;
-}
-
-interface Allergy {
-  id: string;
-  residentId: string;
-  name: string;
-  severity: string;
-  reaction?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Condition {
-  id: string;
-  residentId: string;
-  name: string;
-  diagnosedDate?: string;
-  status: string;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Medication {
-  id: string;
-  residentId: string;
-  name: string;
-  dosage: string;
-  frequency: string;
-  instructions?: string;
-  startDate: string;
-  endDate?: string;
-  status: string;
-  discontinuedReason?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Specialist {
-  id: string;
-  residentId: string;
-  name: string;
-  specialty: string;
-  phone?: string;
-  email?: string;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface DNRStatus {
-  id: string;
-  residentId: string;
-  hasDNR: boolean;
-  hasDNI: boolean;
-  dnrDate?: string;
-  dniDate?: string;
-  physicianName?: string;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface Resident {
-  id: string;
-  name: string;
-  room: string;
-  status: string;
-  imageUrl: string;
-  dateOfBirth?: string;
-  admissionDate?: string;
-  emergencyContactName?: string;
-  emergencyContactPhone?: string;
-  emergencyContactRelationship?: string;
-  assignedCNA?: string;
-  notes?: string;
-  adlNeeds?: string[];
-  createdAt: string;
-  updatedAt: string;
-  // Related models (included when fetching individual resident)
-  allergies?: Allergy[];
-  conditions?: Condition[];
-  medications?: Medication[];
-  specialists?: Specialist[];
-  dnrStatus?: DNRStatus;
+  imageFile?: File;
+  imageData?: string;
 }
 
 // API functions
@@ -104,12 +23,31 @@ const fetchResidents = async (): Promise<Resident[]> => {
 };
 
 const createResident = async (data: CreateResidentData): Promise<Resident> => {
+  let imageData = data.imageData || '';
+
+  // Convert image to base64 if provided and no imageData exists
+  if (data.imageFile && !imageData) {
+    try {
+      imageData = await resizeImage(data.imageFile);
+    } catch (error) {
+      console.error('Failed to process image:', error);
+      // Continue without image if processing fails
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { imageFile: _, imageData: __, ...residentData } = data;
+  const payload = {
+    ...residentData,
+    imageData,
+  };
+
   const response = await fetch('/api/residents', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(payload),
   });
 
   if (!response.ok) {
@@ -133,14 +71,30 @@ const updateResident = async ({
   data,
 }: {
   id: string;
-  data: Partial<Resident>;
+  data: Partial<Resident> & { imageFile?: File };
 }): Promise<Resident> => {
+  let updateData = { ...data };
+
+  // Handle image file if provided
+  if (data.imageFile) {
+    try {
+      const imageData = await resizeImage(data.imageFile);
+      updateData = { ...updateData, imageUrl: imageData };
+      // Remove imageFile from the data sent to API
+      delete updateData.imageFile;
+    } catch (error) {
+      console.error('Failed to process image:', error);
+      // Continue without image if processing fails
+      delete updateData.imageFile;
+    }
+  }
+
   const response = await fetch(`/api/residents/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(updateData),
   });
 
   if (!response.ok) {
@@ -190,15 +144,15 @@ export const useUpdateResident = () => {
   return useMutation({
     mutationFn: updateResident,
     onSuccess: (updatedResident, variables) => {
-      // Invalidate and refetch the specific resident to get updated related data
-      queryClient.invalidateQueries({ queryKey: ['residents', variables.id] });
+      // Immediately update the specific resident cache with the response data
+      queryClient.setQueryData(['residents', variables.id], updatedResident);
 
       // Update the residents list cache
       queryClient.setQueryData(['residents'], (old: Resident[] = []) =>
         old.map(resident => (resident.id === updatedResident.id ? updatedResident : resident))
       );
 
-      // Invalidate related queries
+      // Invalidate related queries (but not the main resident query since we just updated it)
       queryClient.invalidateQueries({ queryKey: ['residents'] });
     },
     onError: error => {
