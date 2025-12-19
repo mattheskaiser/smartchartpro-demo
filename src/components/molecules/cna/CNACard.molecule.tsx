@@ -46,7 +46,7 @@ export const CNACardMolecule = ({ cna }: CNACardProps) => {
         >
             <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-4">
-                    <AvatarAtom src={cna.imageUrl} alt={cna.name} size="lg" />
+                    <AvatarAtom src={cna.imageData} alt={cna.name} size="lg" />
                     <div>
                         <TextAtom variant="h3" weight="semibold">
                             {cna.name}

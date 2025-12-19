@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         certificationNumber?: string;
         hireDate?: string;
         notes?: string;
-        imageUrl?: string;
+        imageData?: string;
     } = {};
 
     try {
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
                 certificationNumber: body.certificationNumber,
                 hireDate: body.hireDate ? new Date(body.hireDate) : null,
                 notes: body.notes,
-                imageUrl: body.imageUrl || null,
+                imageData: body.imageData || null,
             },
         });
 

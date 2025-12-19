@@ -10,7 +10,7 @@ datasource db {
 model Resident {
   id                           String       @id @default(cuid())
   name                         String
-  imageUrl                     String?
+  imageData                    String?      // Base64 encoded image data
   room                         String
   status                       String
   createdAt                    DateTime     @default(now())
@@ -127,7 +127,7 @@ model Cna {
   shift               String
   residents           Int      @default(0)
   lastActive          String   @default("Just added")
-  imageUrl            String?
+  imageData           String?  // Base64 encoded image data
   hireDate            DateTime?
   certificationNumber String?
   notes               String?

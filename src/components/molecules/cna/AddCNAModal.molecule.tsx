@@ -21,6 +21,7 @@ interface AddCNAModalProps {
         hireDate?: string;
         notes?: string;
         imageFile?: File;
+        imageData?: string;
     }) => void;
     isLoading?: boolean;
 }
@@ -41,6 +42,7 @@ export const AddCNAModalMolecule = ({
         notes: '',
     });
     const [imageFile, setImageFile] = useState<File | null>(null);
+    const [imageData, setImageData] = useState<string | null>(null);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -54,6 +56,7 @@ export const AddCNAModalMolecule = ({
                 hireDate: form.hireDate || undefined,
                 notes: form.notes || undefined,
                 imageFile: imageFile || undefined,
+                imageData: imageData || undefined,
             });
             // Don't reset form or close modal here - let the parent handle success
         }
@@ -72,6 +75,7 @@ export const AddCNAModalMolecule = ({
                 notes: '',
             });
             setImageFile(null);
+            setImageData(null);
             onClose();
         }
     };
@@ -86,7 +90,10 @@ export const AddCNAModalMolecule = ({
             isSubmitting={isLoading}
         >
             <ImageUploadMolecule
-                onImageChange={(file) => setImageFile(file)}
+                onImageChange={(file, base64Data) => {
+                    setImageFile(file);
+                    setImageData(base64Data);
+                }}
                 label="Profile Picture"
             />
 

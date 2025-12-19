@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { uploadImage } from '@/lib/imageUpload';
+import { resizeImage } from '@/lib/imageUpload';
 
 // Types
 interface CreateResidentData {
@@ -77,7 +77,7 @@ export interface Resident {
   name: string;
   room: string;
   status: string;
-  imageUrl: string;
+  imageData?: string;
   dateOfBirth?: string;
   admissionDate?: string;
   emergencyContactName?: string;
@@ -106,22 +106,22 @@ const fetchResidents = async (): Promise<Resident[]> => {
 };
 
 const createResident = async (data: CreateResidentData): Promise<Resident> => {
-  let imageUrl = '';
+  let imageData = '';
 
-  // Upload image if provided
+  // Convert image to base64 if provided
   if (data.imageFile) {
     try {
-      imageUrl = await uploadImage(data.imageFile);
+      imageData = await resizeImage(data.imageFile);
     } catch (error) {
-      console.error('Failed to upload image:', error);
-      // Continue without image if upload fails
+      console.error('Failed to process image:', error);
+      // Continue without image if processing fails
     }
   }
 
   const { imageFile, ...residentData } = data;
   const payload = {
     ...residentData,
-    imageUrl,
+    imageData,
   };
 
   const response = await fetch('/api/residents', {

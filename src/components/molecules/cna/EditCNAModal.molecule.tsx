@@ -22,7 +22,7 @@ interface EditCNAModalProps {
         hireDate?: string;
         notes?: string;
         imageFile?: File;
-        imageUrl?: string;
+        imageData?: string;
     }) => void;
     editingCNA?: CNA;
     isLoading?: boolean;
@@ -45,7 +45,7 @@ export const EditCNAModalMolecule = ({
         notes: '',
     });
     const [imageFile, setImageFile] = useState<File | null>(null);
-    const [currentImageUrl, setCurrentImageUrl] = useState<string>('');
+    const [currentImageData, setCurrentImageData] = useState<string>('');
 
     // Update form when editing CNA changes
     useEffect(() => {
@@ -59,7 +59,7 @@ export const EditCNAModalMolecule = ({
                 hireDate: editingCNA.hireDate || '',
                 notes: editingCNA.notes || '',
             });
-            setCurrentImageUrl(editingCNA.imageUrl || '');
+            setCurrentImageData(editingCNA.imageData || '');
         }
     }, [editingCNA]);
 
@@ -75,7 +75,7 @@ export const EditCNAModalMolecule = ({
                 hireDate: form.hireDate || undefined,
                 notes: form.notes || undefined,
                 imageFile: imageFile || undefined,
-                imageUrl: currentImageUrl,
+                imageData: currentImageData,
             });
             // Don't reset form or close modal here - let the parent handle success
         }
@@ -94,15 +94,15 @@ export const EditCNAModalMolecule = ({
                 notes: '',
             });
             setImageFile(null);
-            setCurrentImageUrl('');
+            setCurrentImageData('');
             onClose();
         }
     };
 
-    const handleImageChange = (file: File | null, previewUrl: string | null) => {
+    const handleImageChange = (file: File | null, base64Data: string | null) => {
         setImageFile(file);
-        if (previewUrl) {
-            setCurrentImageUrl(previewUrl);
+        if (base64Data) {
+            setCurrentImageData(base64Data);
         }
     };
 
@@ -116,7 +116,7 @@ export const EditCNAModalMolecule = ({
             isSubmitting={isLoading}
         >
             <ImageUploadMolecule
-                currentImage={currentImageUrl}
+                currentImage={currentImageData}
                 onImageChange={handleImageChange}
                 label="Profile Picture"
             />

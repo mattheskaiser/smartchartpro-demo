@@ -32,7 +32,7 @@ export const ResidentCardMolecule = ({ resident }: ResidentCardProps) => {
     >
       <div className="flex items-start justify-between">
         <div className="flex items-center space-x-4">
-          <AvatarAtom src={resident.imageUrl} alt={resident.name} size="lg" />
+          <AvatarAtom src={resident.imageData} alt={resident.name} size="lg" />
           <div>
             <TextAtom variant="h3" weight="semibold">
               {resident.name}

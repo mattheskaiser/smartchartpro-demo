@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { DynamicIconAtom } from './DynamicIcon.atom';
 
 interface AvatarAtomProps {
-  src?: string | null;
+  src?: string | null; // Can be base64 data or URL
   alt: string;
   size?: 'sm' | 'md' | 'lg';
   className?: string;

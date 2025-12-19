@@ -88,7 +88,7 @@ export default function CNADetailPage() {
                     certificationNumber: formData.certificationNumber,
                     hireDate: formData.hireDate,
                     notes: formData.notes,
-                    imageUrl: formData.imageUrl,
+                    imageData: formData.imageData,
                 },
             });
             setIsEditModalOpen(false);
@@ -127,7 +127,7 @@ export default function CNADetailPage() {
                 <div className="lg:col-span-2">
                     <CardAtom className="p-6">
                         <div className="flex items-start gap-6">
-                            <AvatarAtom src={cna.imageUrl} alt={cna.name} size="lg" />
+                            <AvatarAtom src={cna.imageData} alt={cna.name} size="lg" />
                             <div className="flex-1">
                                 <div className="flex items-center gap-3 mb-2">
                                     <TextAtom variant="h2" weight="semibold">

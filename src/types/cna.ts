@@ -7,7 +7,7 @@ export interface CNA {
     shift: 'Morning' | 'Evening' | 'Night';
     residents: number;
     lastActive: string;
-    imageUrl: string;
+    imageData?: string;
     hireDate?: string;
     certificationNumber?: string;
     notes?: string;

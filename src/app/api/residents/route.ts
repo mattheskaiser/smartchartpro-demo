@@ -25,12 +25,12 @@ export async function POST(request: NextRequest) {
     dateOfBirth?: string;
     emergencyContactName?: string;
     emergencyContactPhone?: string;
-    imageUrl?: string;
+    imageData?: string;
   } = {};
 
   try {
     body = await request.json();
-    const { name, room, dateOfBirth, emergencyContactName, emergencyContactPhone, imageUrl } = body;
+    const { name, room, dateOfBirth, emergencyContactName, emergencyContactPhone, imageData } = body;
 
     // Validate required fields
     if (!name || !room || !emergencyContactName) {
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
         emergencyContactName,
         emergencyContactPhone,
         status: 'independent',
-        imageUrl: imageUrl || null,
+        imageData: imageData || null,
         adlNeeds: [],
         ...(dateOfBirth && { dateOfBirth: new Date(dateOfBirth) }),
       },

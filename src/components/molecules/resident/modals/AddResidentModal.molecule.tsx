@@ -17,6 +17,7 @@ interface AddResidentModalProps {
     emergencyContactName: string;
     emergencyContactPhone: string;
     imageFile?: File;
+    imageData?: string;
   }) => void;
   isLoading?: boolean;
 }
@@ -35,6 +36,7 @@ export const AddResidentModalMolecule = ({
     emergencyContactPhone: '',
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageData, setImageData] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +51,7 @@ export const AddResidentModalMolecule = ({
       onSubmit({
         ...form,
         imageFile: imageFile || undefined,
+        imageData: imageData || undefined,
       });
       // Don't reset form or close modal here - let the parent handle success
     }
@@ -65,6 +68,7 @@ export const AddResidentModalMolecule = ({
         emergencyContactPhone: '',
       });
       setImageFile(null);
+      setImageData(null);
       onClose();
     }
   };
@@ -79,7 +83,10 @@ export const AddResidentModalMolecule = ({
       isSubmitting={isLoading}
     >
       <ImageUploadMolecule
-        onImageChange={(file) => setImageFile(file)}
+        onImageChange={(file, base64Data) => {
+          setImageFile(file);
+          setImageData(base64Data);
+        }}
         label="Profile Picture"
       />
 

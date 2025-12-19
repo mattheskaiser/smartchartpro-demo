@@ -6,10 +6,11 @@ import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { LabelAtom } from '@/components/atoms/Label.atom';
+import { resizeImage } from '@/lib/imageUpload';
 
 interface ImageUploadProps {
     currentImage?: string | null;
-    onImageChange: (file: File | null, previewUrl: string | null) => void;
+    onImageChange: (file: File | null, base64Data: string | null) => void;
     label?: string;
     required?: boolean;
     className?: string;
@@ -26,11 +27,15 @@ export const ImageUploadMolecule = ({
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleFileSelect = (file: File) => {
+    const handleFileSelect = async (file: File) => {
         if (file && file.type.startsWith('image/')) {
-            const url = URL.createObjectURL(file);
-            setPreviewUrl(url);
-            onImageChange(file, url);
+            try {
+                const base64Data = await resizeImage(file);
+                setPreviewUrl(base64Data);
+                onImageChange(file, base64Data);
+            } catch (error) {
+                console.error('Error processing image:', error);
+            }
         }
     };
 

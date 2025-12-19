@@ -36,7 +36,7 @@ export async function PUT(
         certificationNumber?: string;
         hireDate?: string;
         notes?: string;
-        imageUrl?: string;
+        imageData?: string;
     } = {};
 
     try {
