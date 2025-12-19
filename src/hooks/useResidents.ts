@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { resizeImage } from '@/lib/imageUpload';
+import { Resident } from '@/types/resident';
 
 // Types
 interface CreateResidentData {
@@ -9,91 +10,6 @@ interface CreateResidentData {
   emergencyContactName: string;
   emergencyContactPhone: string;
   imageFile?: File;
-}
-
-interface Allergy {
-  id: string;
-  residentId: string;
-  name: string;
-  severity: string;
-  reaction?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Condition {
-  id: string;
-  residentId: string;
-  name: string;
-  diagnosedDate?: string;
-  status: string;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Medication {
-  id: string;
-  residentId: string;
-  name: string;
-  dosage: string;
-  frequency: string;
-  instructions?: string;
-  startDate: string;
-  endDate?: string;
-  status: string;
-  discontinuedReason?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Specialist {
-  id: string;
-  residentId: string;
-  name: string;
-  specialty: string;
-  phone?: string;
-  email?: string;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface DNRStatus {
-  id: string;
-  residentId: string;
-  hasDNR: boolean;
-  hasDNI: boolean;
-  dnrDate?: string;
-  dniDate?: string;
-  physicianName?: string;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface Resident {
-  id: string;
-  name: string;
-  room: string;
-  status: string;
-  imageData?: string;
-  dateOfBirth?: string;
-  admissionDate?: string;
-  emergencyContactName?: string;
-  emergencyContactPhone?: string;
-  emergencyContactRelationship?: string;
-  assignedCNA?: string;
-  notes?: string;
-  adlNeeds?: string[];
-  createdAt: string;
-  updatedAt: string;
-  // Related models (included when fetching individual resident)
-  allergies?: Allergy[];
-  conditions?: Condition[];
-  medications?: Medication[];
-  specialists?: Specialist[];
-  dnrStatus?: DNRStatus;
 }
 
 // API functions
@@ -118,7 +34,8 @@ const createResident = async (data: CreateResidentData): Promise<Resident> => {
     }
   }
 
-  const { imageFile, ...residentData } = data;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { imageFile: _, ...residentData } = data;
   const payload = {
     ...residentData,
     imageData,

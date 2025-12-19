@@ -40,11 +40,7 @@ export const AvatarAtom = ({ src, alt, size = 'md', className }: AvatarAtomProps
       }}
     >
       {showFallback ? (
-        <DynamicIconAtom
-          name="User"
-          size={iconSizes[size]}
-          className="text-gray-400"
-        />
+        <DynamicIconAtom name="User" size={iconSizes[size]} className="text-gray-400" />
       ) : (
         <Image
           src={src}

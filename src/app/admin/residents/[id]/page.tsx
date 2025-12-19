@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 
 // Import types from the hook
-import type { Resident } from '@/hooks/useResidents';
+import type { Resident } from '@/types/resident';
 
 // Component-specific types for the molecules
 interface AllergyDisplay {

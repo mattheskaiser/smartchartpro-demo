@@ -2,19 +2,20 @@
 export interface Resident {
   id: string;
   name: string;
-  imageUrl: string;
+  imageUrl?: string | null;
   room: string;
   status: 'independent' | 'partial' | 'full';
-  dateOfBirth?: Date | null;
-  admissionDate?: Date | null;
+  dateOfBirth?: string | null;
+  admissionDate?: string | null;
   emergencyContactName?: string | null;
   emergencyContactPhone?: string | null;
   emergencyContactRelationship?: string | null;
   assignedCNA?: string | null;
   notes?: string | null;
-  adlNeeds: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  adlNeeds?: string[];
+  lastADL?: string;
+  createdAt: string;
+  updatedAt: string;
 
   // Relations
   allergies?: Allergy[];
@@ -30,19 +31,19 @@ export interface Allergy {
   name: string;
   severity: 'mild' | 'moderate' | 'severe';
   reaction?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Condition {
   id: string;
   residentId: string;
   name: string;
-  diagnosedDate?: Date | null;
+  diagnosedDate?: string | null;
   status: 'active' | 'managed' | 'resolved';
   notes?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Medication {
@@ -52,12 +53,12 @@ export interface Medication {
   dosage: string;
   frequency: string;
   instructions?: string | null;
-  startDate: Date;
-  endDate?: Date | null;
+  startDate: string;
+  endDate?: string | null;
   status: 'current' | 'past' | 'discontinued';
   discontinuedReason?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Specialist {
@@ -68,8 +69,8 @@ export interface Specialist {
   phone?: string | null;
   email?: string | null;
   notes?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface DNRStatus {
@@ -77,12 +78,12 @@ export interface DNRStatus {
   residentId: string;
   hasDNR: boolean;
   hasDNI: boolean;
-  dnrDate?: Date | null;
-  dniDate?: Date | null;
+  dnrDate?: string | null;
+  dniDate?: string | null;
   physicianName?: string | null;
   notes?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type ResidentStatus = Resident['status'];

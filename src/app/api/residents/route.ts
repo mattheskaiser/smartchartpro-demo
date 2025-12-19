@@ -30,7 +30,8 @@ export async function POST(request: NextRequest) {
 
   try {
     body = await request.json();
-    const { name, room, dateOfBirth, emergencyContactName, emergencyContactPhone, imageData } = body;
+    const { name, room, dateOfBirth, emergencyContactName, emergencyContactPhone, imageData } =
+      body;
 
     // Validate required fields
     if (!name || !room || !emergencyContactName) {

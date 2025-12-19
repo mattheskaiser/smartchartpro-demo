@@ -5,18 +5,7 @@ import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
-
-interface Resident {
-  id: string;
-  name: string;
-  imageUrl: string;
-  room: string;
-  status: string;
-  lastADL?: string;
-  assignedCNA?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
+import { Resident } from '@/types/resident';
 
 interface ResidentCardProps {
   resident: Resident;
@@ -32,7 +21,7 @@ export const ResidentCardMolecule = ({ resident }: ResidentCardProps) => {
     >
       <div className="flex items-start justify-between">
         <div className="flex items-center space-x-4">
-          <AvatarAtom src={resident.imageData} alt={resident.name} size="lg" />
+          <AvatarAtom src={resident.imageUrl} alt={resident.name} size="lg" />
           <div>
             <TextAtom variant="h3" weight="semibold">
               {resident.name}

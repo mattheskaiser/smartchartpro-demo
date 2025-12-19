@@ -12,10 +12,10 @@ interface ResidentBasicInformationProps {
   resident?: {
     name?: string;
     room?: string;
-    dateOfBirth?: string;
-    admissionDate?: string;
+    dateOfBirth?: string | null;
+    admissionDate?: string | null;
     status?: string;
-    assignedCNA?: string;
+    assignedCNA?: string | null;
   } | null;
   isEditing: boolean;
   onInputChange: (field: string, value: string) => void;
@@ -70,7 +70,7 @@ export const ResidentBasicInformationMolecule = ({
           <LabelAtom>Date of Birth</LabelAtom>
           {isEditing ? (
             <DatePickerMolecule
-              value={safeResident.dateOfBirth}
+              value={safeResident.dateOfBirth ?? undefined}
               onChange={date => onInputChange('dateOfBirth', date)}
               placeholder="Select date of birth"
             />
@@ -86,7 +86,7 @@ export const ResidentBasicInformationMolecule = ({
           <LabelAtom>Admission Date</LabelAtom>
           {isEditing ? (
             <DatePickerMolecule
-              value={safeResident.admissionDate}
+              value={safeResident.admissionDate ?? undefined}
               onChange={date => onInputChange('admissionDate', date)}
               placeholder="Select admission date"
             />
@@ -122,7 +122,7 @@ export const ResidentBasicInformationMolecule = ({
           {isEditing ? (
             <InputAtom
               type="text"
-              value={safeResident.assignedCNA}
+              value={safeResident.assignedCNA ?? ''}
               onChange={e => onInputChange('assignedCNA', e.target.value)}
             />
           ) : (

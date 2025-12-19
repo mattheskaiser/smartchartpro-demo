@@ -10,10 +10,10 @@ import { DatePickerMolecule } from '@/components/molecules/DatePicker.molecule';
 interface DNRStatus {
   hasDNR: boolean;
   hasDNI: boolean;
-  dnrDate?: string;
-  dniDate?: string;
-  physicianName?: string;
-  notes?: string;
+  dnrDate?: string | null;
+  dniDate?: string | null;
+  physicianName?: string | null;
+  notes?: string | null;
 }
 
 interface ResidentDNRStatusProps {

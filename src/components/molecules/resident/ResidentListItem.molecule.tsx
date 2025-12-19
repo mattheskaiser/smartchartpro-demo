@@ -4,7 +4,7 @@ import { BadgeAtom } from '../../atoms/Badge.atom';
 
 interface ResidentCardMoleculeProps {
   name: string;
-  imageUrl: string;
+  imageUrl?: string | null;
   status: 'independent' | 'partial' | 'full';
   room: string;
   className?: string;
