@@ -71,6 +71,16 @@ const updateCNA = async ({ id, data }: { id: string; data: Partial<CNA> }): Prom
   return response.json();
 };
 
+const deleteCNA = async (id: string): Promise<void> => {
+  const response = await fetch(`/api/cnas/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to delete CNA');
+  }
+};
+
 // Hooks
 export const useCNAs = () => {
   return useQuery({
@@ -124,6 +134,29 @@ export const useUpdateCNA = () => {
     },
     onError: error => {
       console.error('Error updating CNA:', error);
+    },
+  });
+};
+
+export const useDeleteCNA = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteCNA,
+    onSuccess: (_, deletedId) => {
+      // Remove from CNAs list cache
+      queryClient.setQueryData(['cnas'], (old: CNA[] = []) =>
+        old.filter(cna => cna.id !== deletedId)
+      );
+
+      // Remove the specific CNA cache
+      queryClient.removeQueries({ queryKey: ['cnas', deletedId] });
+
+      // Invalidate CNAs list to ensure consistency
+      queryClient.invalidateQueries({ queryKey: ['cnas'] });
+    },
+    onError: error => {
+      console.error('Error deleting CNA:', error);
     },
   });
 };

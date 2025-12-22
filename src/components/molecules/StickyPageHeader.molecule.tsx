@@ -46,8 +46,7 @@ export function StickyPageHeaderMolecule({
         <div className="flex items-center gap-3">
           {showDelete && onDelete && !isEditing && (
             <ButtonAtom
-              variant="destructive"
-              size="sm"
+              variant="delete"
               onClick={onDelete}
             >
               <DynamicIconAtom name="Trash2" size="sm" className="mr-2" />

@@ -10,7 +10,8 @@ import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
-import { useCNA, useUpdateCNA } from '@/hooks/useCNAs';
+import { ConfirmationModalMolecule } from '@/components/molecules/ConfirmationModal.molecule';
+import { useCNA, useUpdateCNA, useDeleteCNA } from '@/hooks/useCNAs';
 import { EditCNAModalMolecule } from '@/components/molecules/cna/EditCNAModal.molecule';
 
 export default function CNADetailPage() {
@@ -18,9 +19,11 @@ export default function CNADetailPage() {
   const router = useRouter();
   const cnaId = params.id as string;
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const { data: cna, isLoading, error } = useCNA(cnaId);
   const updateCNAMutation = useUpdateCNA();
+  const deleteCNAMutation = useDeleteCNA();
 
   if (isLoading) {
     return (
@@ -97,6 +100,17 @@ export default function CNADetailPage() {
     }
   };
 
+  const handleDeleteCNA = async () => {
+    try {
+      await deleteCNAMutation.mutateAsync(cnaId);
+      // Navigate back to CNAs list after successful deletion
+      router.push('/admin/cnas');
+    } catch (error) {
+      console.error('Error deleting CNA:', error);
+      // Error is already handled by the mutation
+    }
+  };
+
   return (
     <div className="mx-auto max-w-7xl">
       {/* Header */}
@@ -110,10 +124,19 @@ export default function CNADetailPage() {
               CNA Details
             </TextAtom>
           </div>
-          <ButtonAtom variant="primary" onClick={() => setIsEditModalOpen(true)}>
-            <DynamicIconAtom name="Pencil" size="sm" className="mr-2" />
-            Edit CNA
-          </ButtonAtom>
+          <div className="flex items-center gap-3">
+            <ButtonAtom
+              variant="delete"
+              onClick={() => setShowDeleteModal(true)}
+            >
+              <DynamicIconAtom name="Trash2" size="sm" className="mr-2" />
+              Delete CNA
+            </ButtonAtom>
+            <ButtonAtom variant="primary" onClick={() => setIsEditModalOpen(true)}>
+              <DynamicIconAtom name="Pencil" size="sm" className="mr-2" />
+              Edit CNA
+            </ButtonAtom>
+          </div>
         </div>
       </div>
 
@@ -248,6 +271,19 @@ export default function CNADetailPage() {
         onSubmit={handleEditSubmit}
         editingCNA={cna}
         isLoading={updateCNAMutation.isPending}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModalMolecule
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteCNA}
+        title="Delete CNA"
+        message={`Are you sure you want to delete ${cna.name}? This action cannot be undone and will permanently remove all CNA data including shift history and resident assignments.`}
+        confirmText="Delete CNA"
+        cancelText="Cancel"
+        variant="danger"
+        isLoading={deleteCNAMutation.isPending}
       />
     </div>
   );

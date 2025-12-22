@@ -54,3 +54,16 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     return NextResponse.json({ error: 'Failed to update CNA' }, { status: 500 });
   }
 }
+
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    await prisma.cna.delete({
+      where: { id: params.id },
+    });
+
+    return NextResponse.json({ message: 'CNA deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting CNA:', error);
+    return NextResponse.json({ error: 'Failed to delete CNA' }, { status: 500 });
+  }
+}

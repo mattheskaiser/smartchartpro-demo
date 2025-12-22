@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { SpinnerAtom } from '@/components/atoms/Spinner.atom';
 
 interface ButtonAtomProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'delete';
   size?: 'sm' | 'md' | 'lg' | 'icon';
   isFullWidth?: boolean;
   children: React.ReactNode;
@@ -38,6 +38,7 @@ export const ButtonAtom = ({
       'border-2 border-blue-600 text-blue-600 hover:bg-blue-50 focus:ring-blue-500 bg-transparent',
     ghost: 'text-gray-600 hover:bg-gray-100',
     destructive: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+    delete: 'bg-red-50 text-red-600 hover:bg-red-100 focus:ring-red-500 border border-red-200',
   };
 
   // Determine spinner size based on button size
