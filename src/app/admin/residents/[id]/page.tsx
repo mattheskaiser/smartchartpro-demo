@@ -67,6 +67,7 @@ export default function ResidentDetail() {
   const params = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isImageUpdating, setIsImageUpdating] = useState(false);
   const queryClient = useQueryClient();
 
   // Use TanStack Query hooks
@@ -95,12 +96,11 @@ export default function ResidentDetail() {
 
     const { ...currentBasicData } = resident;
 
-    // Compare each field
+    // Compare each field (excluding imageUrl since it's handled separately)
     const fieldsToCompare = [
       'name',
       'room',
       'status',
-      'imageUrl',
       'dateOfBirth',
       'admissionDate',
       'emergencyContactName',
@@ -135,12 +135,11 @@ export default function ResidentDetail() {
     try {
       // Only make a request if basic resident data has changed
       if (hasBasicDataChanged()) {
-        // Extract only the basic resident fields, excluding relations
+        // Extract only the basic resident fields, excluding imageUrl (handled separately)
         const basicResidentData = {
           name: resident.name,
           room: resident.room,
           status: resident.status,
-          imageUrl: resident.imageUrl,
           dateOfBirth: resident.dateOfBirth,
           admissionDate: resident.admissionDate,
           emergencyContactName: resident.emergencyContactName,
@@ -196,11 +195,32 @@ export default function ResidentDetail() {
     });
   };
 
-  const handleImageChange = (imageData: string | null) => {
+  const handleImageChange = async (imageData: string | null) => {
+    if (!resident) return;
+
+    // Update local state immediately for UI responsiveness
     setResident((prev: ResidentData | null) => {
       if (!prev) return prev;
       return { ...prev, imageUrl: imageData };
     });
+
+    // Save image change immediately to the server
+    try {
+      setIsImageUpdating(true);
+      await updateResidentMutation.mutateAsync({
+        id: params.id as string,
+        data: { imageUrl: imageData },
+      });
+    } catch (error) {
+      console.error('Error updating resident image:', error);
+      // Revert the local state change on error
+      setResident((prev: ResidentData | null) => {
+        if (!prev) return prev;
+        return { ...prev, imageUrl: resident.imageUrl };
+      });
+    } finally {
+      setIsImageUpdating(false);
+    }
   };
 
   const toggleADL = (adl: string) => {
@@ -336,7 +356,7 @@ export default function ResidentDetail() {
           residentName={resident.name || 'Unknown Resident'}
           isEditing={isEditing}
           onImageChange={handleImageChange}
-          isUpdating={updateResidentMutation.isPending}
+          isUpdating={isImageUpdating}
           avatarSize="3xl"
         />
 
