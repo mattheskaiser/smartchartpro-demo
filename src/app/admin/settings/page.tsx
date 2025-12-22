@@ -42,6 +42,23 @@ export default function Settings() {
   const [shiftOverlapTime, setShiftOverlapTime] = useState('15');
   const [autoAssignResidents, setAutoAssignResidents] = useState(false);
 
+  // ADL & Care Settings
+  const [adlReminderInterval, setAdlReminderInterval] = useState('2');
+  const [requireAdlNotes, setRequireAdlNotes] = useState(true);
+  const [autoMarkOverdue, setAutoMarkOverdue] = useState(true);
+  const [adlCompletionWindow, setAdlCompletionWindow] = useState('4');
+
+  // Reporting Settings
+  const [reportingFrequency, setReportingFrequency] = useState('weekly');
+  const [includePhotos, setIncludePhotos] = useState(false);
+  const [autoGenerateReports, setAutoGenerateReports] = useState(true);
+  const [reportRecipients, setReportRecipients] = useState('admin@facility.com');
+
+  // Compliance Settings
+  const [hipaaLogging, setHipaaLogging] = useState(true);
+  const [requireDigitalSignatures, setRequireDigitalSignatures] = useState(false);
+  const [medicationDoubleCheck, setMedicationDoubleCheck] = useState(true);
+
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
@@ -199,6 +216,242 @@ export default function Settings() {
                   <TextAtom variant="small" className="text-gray-500">
                     Automatically assign new residents to CNAs based on workload and shift.
                   </TextAtom>
+                </div>
+              </div>
+            </div>
+          </CardAtom>
+        </div>
+
+        {/* ADL & Care Settings */}
+        <div>
+          <TextAtom variant="h2" weight="semibold" className="mb-4 text-gray-900">
+            ADL & Care Management
+          </TextAtom>
+          <CardAtom>
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                  <LabelAtom htmlFor="adl-reminder">
+                    ADL Reminder Interval (hours)
+                  </LabelAtom>
+                  <SelectAtom
+                    id="adl-reminder"
+                    value={adlReminderInterval}
+                    onChange={(e) => setAdlReminderInterval(e.target.value)}
+                  >
+                    <option value="1">Every Hour</option>
+                    <option value="2">Every 2 Hours</option>
+                    <option value="3">Every 3 Hours</option>
+                    <option value="4">Every 4 Hours</option>
+                  </SelectAtom>
+                </div>
+                <div>
+                  <LabelAtom htmlFor="completion-window">
+                    ADL Completion Window (hours)
+                  </LabelAtom>
+                  <SelectAtom
+                    id="completion-window"
+                    value={adlCompletionWindow}
+                    onChange={(e) => setAdlCompletionWindow(e.target.value)}
+                  >
+                    <option value="2">2 Hours</option>
+                    <option value="4">4 Hours</option>
+                    <option value="6">6 Hours</option>
+                    <option value="8">8 Hours</option>
+                  </SelectAtom>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="flex items-center h-6">
+                    <CheckboxAtom
+                      id="require-notes"
+                      checked={requireAdlNotes}
+                      onCheckedChange={setRequireAdlNotes}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <LabelAtom htmlFor="require-notes" className="font-medium text-gray-900 mb-0">
+                      Require Notes for ADL Completion
+                    </LabelAtom>
+                    <TextAtom variant="small" className="text-gray-500">
+                      CNAs must add notes when completing ADL activities.
+                    </TextAtom>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="flex items-center h-6">
+                    <CheckboxAtom
+                      id="auto-overdue"
+                      checked={autoMarkOverdue}
+                      onCheckedChange={setAutoMarkOverdue}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <LabelAtom htmlFor="auto-overdue" className="font-medium text-gray-900 mb-0">
+                      Auto-mark Overdue ADLs
+                    </LabelAtom>
+                    <TextAtom variant="small" className="text-gray-500">
+                      Automatically flag ADL activities that exceed the completion window.
+                    </TextAtom>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardAtom>
+        </div>
+
+        {/* Reporting Settings */}
+        <div>
+          <TextAtom variant="h2" weight="semibold" className="mb-4 text-gray-900">
+            Reporting & Documentation
+          </TextAtom>
+          <CardAtom>
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                  <LabelAtom htmlFor="report-frequency">
+                    Report Generation Frequency
+                  </LabelAtom>
+                  <SelectAtom
+                    id="report-frequency"
+                    value={reportingFrequency}
+                    onChange={(e) => setReportingFrequency(e.target.value)}
+                  >
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                  </SelectAtom>
+                </div>
+                <div>
+                  <LabelAtom htmlFor="report-recipients">
+                    Report Recipients (Email)
+                  </LabelAtom>
+                  <InputAtom
+                    id="report-recipients"
+                    type="email"
+                    value={reportRecipients}
+                    onChange={(e) => setReportRecipients(e.target.value)}
+                    placeholder="admin@facility.com"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="flex items-center h-6">
+                    <CheckboxAtom
+                      id="auto-reports"
+                      checked={autoGenerateReports}
+                      onCheckedChange={setAutoGenerateReports}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <LabelAtom htmlFor="auto-reports" className="font-medium text-gray-900 mb-0">
+                      Auto-generate Reports
+                    </LabelAtom>
+                    <TextAtom variant="small" className="text-gray-500">
+                      Automatically generate and email reports based on the schedule above.
+                    </TextAtom>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="flex items-center h-6">
+                    <CheckboxAtom
+                      id="include-photos"
+                      checked={includePhotos}
+                      onCheckedChange={setIncludePhotos}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <LabelAtom htmlFor="include-photos" className="font-medium text-gray-900 mb-0">
+                      Include Photos in Reports
+                    </LabelAtom>
+                    <TextAtom variant="small" className="text-gray-500">
+                      Include resident and CNA profile photos in generated reports.
+                    </TextAtom>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardAtom>
+        </div>
+
+        {/* Compliance Settings */}
+        <div>
+          <TextAtom variant="h2" weight="semibold" className="mb-4 text-gray-900">
+            Compliance & Regulations
+          </TextAtom>
+          <CardAtom>
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="flex items-center h-6">
+                    <CheckboxAtom
+                      id="hipaa-logging"
+                      checked={hipaaLogging}
+                      onCheckedChange={setHipaaLogging}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <LabelAtom htmlFor="hipaa-logging" className="font-medium text-gray-900 mb-0">
+                      HIPAA Compliance Logging
+                    </LabelAtom>
+                    <TextAtom variant="small" className="text-gray-500">
+                      Log all access to protected health information for HIPAA compliance.
+                    </TextAtom>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="flex items-center h-6">
+                    <CheckboxAtom
+                      id="digital-signatures"
+                      checked={requireDigitalSignatures}
+                      onCheckedChange={setRequireDigitalSignatures}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <LabelAtom htmlFor="digital-signatures" className="font-medium text-gray-900 mb-0">
+                      Require Digital Signatures
+                    </LabelAtom>
+                    <TextAtom variant="small" className="text-gray-500">
+                      Require CNAs to digitally sign off on completed care activities.
+                    </TextAtom>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="flex items-center h-6">
+                    <CheckboxAtom
+                      id="medication-double-check"
+                      checked={medicationDoubleCheck}
+                      onCheckedChange={setMedicationDoubleCheck}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <LabelAtom htmlFor="medication-double-check" className="font-medium text-gray-900 mb-0">
+                      Medication Double-Check
+                    </LabelAtom>
+                    <TextAtom variant="small" className="text-gray-500">
+                      Require two staff members to verify medication administration.
+                    </TextAtom>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+                <div className="flex">
+                  <DynamicIconAtom name="Info" className="h-5 w-5 text-blue-400" />
+                  <div className="ml-3">
+                    <TextAtom variant="small" className="text-blue-800">
+                      <strong>Note:</strong> These compliance settings help meet regulatory requirements. Consult with your compliance officer before making changes.
+                    </TextAtom>
+                  </div>
                 </div>
               </div>
             </div>
