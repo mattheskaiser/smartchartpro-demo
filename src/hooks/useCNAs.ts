@@ -160,3 +160,60 @@ export const useDeleteCNA = () => {
     },
   });
 };
+
+// CNA Availability hooks
+const fetchCNAAvailability = async (cnaId: string): Promise<{ [key: string]: string[] }> => {
+  const response = await fetch(`/api/cnas/${cnaId}/availability`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch CNA availability');
+  }
+  return response.json();
+};
+
+const updateCNAAvailability = async ({
+  cnaId,
+  availability
+}: {
+  cnaId: string;
+  availability: { [key: string]: string[] }
+}): Promise<{ [key: string]: string[] }> => {
+  const response = await fetch(`/api/cnas/${cnaId}/availability`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(availability),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to update CNA availability');
+  }
+
+  return response.json();
+};
+
+export const useCNAAvailability = (cnaId: string) => {
+  return useQuery({
+    queryKey: ['cnas', cnaId, 'availability'],
+    queryFn: () => fetchCNAAvailability(cnaId),
+    enabled: !!cnaId,
+  });
+};
+
+export const useUpdateCNAAvailability = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateCNAAvailability,
+    onSuccess: (updatedAvailability, variables) => {
+      // Update the availability cache
+      queryClient.setQueryData(['cnas', variables.cnaId, 'availability'], updatedAvailability);
+
+      // Invalidate related queries
+      queryClient.invalidateQueries({ queryKey: ['shifts'] });
+    },
+    onError: error => {
+      console.error('Error updating CNA availability:', error);
+    },
+  });
+};

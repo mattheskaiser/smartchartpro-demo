@@ -26,7 +26,6 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     email?: string;
     phone?: string;
     status?: string;
-    shift?: string;
     certificationNumber?: string;
     hireDate?: string;
     notes?: string;

@@ -16,7 +16,6 @@ interface AddCNAModalProps {
     name: string;
     email: string;
     phone?: string;
-    shift: 'Morning' | 'Evening' | 'Night';
     certificationNumber?: string;
     hireDate?: string;
     notes?: string;
@@ -36,7 +35,6 @@ export const AddCNAModalMolecule = ({
     name: '',
     email: '',
     phone: '',
-    shift: 'Morning' as 'Morning' | 'Evening' | 'Night',
     certificationNumber: '',
     hireDate: '',
     notes: '',
@@ -46,12 +44,11 @@ export const AddCNAModalMolecule = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isLoading && form.name.trim() && form.email.trim() && form.shift) {
+    if (!isLoading && form.name.trim() && form.email.trim()) {
       onSubmit({
         name: form.name,
         email: form.email,
         phone: form.phone || undefined,
-        shift: form.shift,
         certificationNumber: form.certificationNumber || undefined,
         hireDate: form.hireDate || undefined,
         notes: form.notes || undefined,
@@ -69,7 +66,6 @@ export const AddCNAModalMolecule = ({
         name: '',
         email: '',
         phone: '',
-        shift: 'Morning',
         certificationNumber: '',
         hireDate: '',
         notes: '',
@@ -131,25 +127,6 @@ export const AddCNAModalMolecule = ({
           />
         </div>
         <div>
-          <LabelAtom required>Shift</LabelAtom>
-          <SelectAtom
-            value={form.shift}
-            onChange={e =>
-              setForm(prev => ({
-                ...prev,
-                shift: e.target.value as 'Morning' | 'Evening' | 'Night',
-              }))
-            }
-          >
-            <option value="Morning">Morning</option>
-            <option value="Evening">Evening</option>
-            <option value="Night">Night</option>
-          </SelectAtom>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
           <LabelAtom>Certification Number</LabelAtom>
           <InputAtom
             type="text"
@@ -158,6 +135,9 @@ export const AddCNAModalMolecule = ({
             placeholder="CNA-12345"
           />
         </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
         <div>
           <LabelAtom>Hire Date</LabelAtom>
           <DatePickerMolecule

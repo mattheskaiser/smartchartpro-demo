@@ -24,7 +24,6 @@ export default function CNAManagement() {
     name: string;
     email: string;
     phone?: string;
-    shift: 'Morning' | 'Evening' | 'Night';
     certificationNumber?: string;
     hireDate?: string;
     notes?: string;
