@@ -47,5 +47,30 @@
         "details": "Always follow the atomic design principles to keep component reusable and maintainable. This means splitting up components and using components that already exist to keep everything consistent."
       }
     ]
+  },
+  "database_migration_rules": {
+    "description": "Critical rules for handling database migrations safely",
+    "rules": [
+      {
+        "rule": "NEVER USE PRISMA MIGRATE RESET",
+        "details": "Never use 'prisma migrate reset' as it will drop the entire database and lose all data. This is strictly forbidden in production environments."
+      },
+      {
+        "rule": "Handle schema drift with db push for development",
+        "details": "When encountering schema drift, use 'prisma db push' to sync the schema without creating migration files, or resolve drift manually."
+      },
+      {
+        "rule": "Use baseline migrations for existing databases",
+        "details": "For existing databases with data, use 'prisma migrate resolve --applied' to mark migrations as applied without running them."
+      },
+      {
+        "rule": "Always backup before major schema changes",
+        "details": "Create database backups before making significant schema changes, especially in production."
+      },
+      {
+        "rule": "Test migrations on development data first",
+        "details": "Always test schema changes on development environment with real data before applying to production."
+      }
+    ]
   }
 }

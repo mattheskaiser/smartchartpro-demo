@@ -21,7 +21,6 @@ export async function POST(request: NextRequest) {
     name?: string;
     email?: string;
     phone?: string;
-    shift?: string;
     certificationNumber?: string;
     hireDate?: string;
     notes?: string;
@@ -35,8 +34,8 @@ export async function POST(request: NextRequest) {
   }
 
   // Validate required fields
-  if (!body.name || !body.email || !body.shift) {
-    return NextResponse.json({ error: 'Name, email, and shift are required' }, { status: 400 });
+  if (!body.name || !body.email) {
+    return NextResponse.json({ error: 'Name and email are required' }, { status: 400 });
   }
 
   try {
@@ -45,7 +44,6 @@ export async function POST(request: NextRequest) {
         name: body.name,
         email: body.email,
         phone: body.phone,
-        shift: body.shift,
         certificationNumber: body.certificationNumber,
         hireDate: body.hireDate ? new Date(body.hireDate) : null,
         notes: body.notes,

@@ -11,6 +11,8 @@ interface StickyPageHeaderProps {
   onBack: () => void;
   onToggleEdit: () => void;
   isSaving?: boolean;
+  onDelete?: () => void;
+  showDelete?: boolean;
 }
 
 export function StickyPageHeaderMolecule({
@@ -20,6 +22,8 @@ export function StickyPageHeaderMolecule({
   onBack,
   onToggleEdit,
   isSaving = false,
+  onDelete,
+  showDelete = false,
 }: StickyPageHeaderProps) {
   return (
     <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-200 py-4 mb-6 -mx-6 px-6 -mt-8 pt-8">
@@ -39,15 +43,23 @@ export function StickyPageHeaderMolecule({
             )}
           </div>
         </div>
-        <ButtonAtom
-          variant="primary"
-          onClick={onToggleEdit}
-          isLoading={isSaving}
-          loadingText="Saving..."
-        >
-          <DynamicIconAtom name="Pencil" size="sm" className="mr-2" />
-          {isEditing ? 'Save Changes' : 'Edit'}
-        </ButtonAtom>
+        <div className="flex items-center gap-3">
+          {showDelete && onDelete && !isEditing && (
+            <ButtonAtom variant="delete" onClick={onDelete}>
+              <DynamicIconAtom name="Trash2" size="sm" className="mr-2" />
+              Delete
+            </ButtonAtom>
+          )}
+          <ButtonAtom
+            variant="primary"
+            onClick={onToggleEdit}
+            isLoading={isSaving}
+            loadingText="Saving..."
+          >
+            <DynamicIconAtom name="Pencil" size="sm" className="mr-2" />
+            {isEditing ? 'Save Changes' : 'Edit'}
+          </ButtonAtom>
+        </div>
       </div>
     </div>
   );

@@ -71,6 +71,16 @@ const updateCNA = async ({ id, data }: { id: string; data: Partial<CNA> }): Prom
   return response.json();
 };
 
+const deleteCNA = async (id: string): Promise<void> => {
+  const response = await fetch(`/api/cnas/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to delete CNA');
+  }
+};
+
 // Hooks
 export const useCNAs = () => {
   return useQuery({
@@ -124,6 +134,86 @@ export const useUpdateCNA = () => {
     },
     onError: error => {
       console.error('Error updating CNA:', error);
+    },
+  });
+};
+
+export const useDeleteCNA = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteCNA,
+    onSuccess: (_, deletedId) => {
+      // Remove from CNAs list cache
+      queryClient.setQueryData(['cnas'], (old: CNA[] = []) =>
+        old.filter(cna => cna.id !== deletedId)
+      );
+
+      // Remove the specific CNA cache
+      queryClient.removeQueries({ queryKey: ['cnas', deletedId] });
+
+      // Invalidate CNAs list to ensure consistency
+      queryClient.invalidateQueries({ queryKey: ['cnas'] });
+    },
+    onError: error => {
+      console.error('Error deleting CNA:', error);
+    },
+  });
+};
+
+// CNA Availability hooks
+const fetchCNAAvailability = async (cnaId: string): Promise<{ [key: string]: string[] }> => {
+  const response = await fetch(`/api/cnas/${cnaId}/availability`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch CNA availability');
+  }
+  return response.json();
+};
+
+const updateCNAAvailability = async ({
+  cnaId,
+  availability,
+}: {
+  cnaId: string;
+  availability: { [key: string]: string[] };
+}): Promise<{ [key: string]: string[] }> => {
+  const response = await fetch(`/api/cnas/${cnaId}/availability`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(availability),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to update CNA availability');
+  }
+
+  return response.json();
+};
+
+export const useCNAAvailability = (cnaId: string) => {
+  return useQuery({
+    queryKey: ['cnas', cnaId, 'availability'],
+    queryFn: () => fetchCNAAvailability(cnaId),
+    enabled: !!cnaId,
+  });
+};
+
+export const useUpdateCNAAvailability = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateCNAAvailability,
+    onSuccess: (updatedAvailability, variables) => {
+      // Update the availability cache
+      queryClient.setQueryData(['cnas', variables.cnaId, 'availability'], updatedAvailability);
+
+      // Invalidate related queries
+      queryClient.invalidateQueries({ queryKey: ['shifts'] });
+    },
+    onError: error => {
+      console.error('Error updating CNA availability:', error);
     },
   });
 };

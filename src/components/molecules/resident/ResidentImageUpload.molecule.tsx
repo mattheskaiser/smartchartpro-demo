@@ -105,11 +105,7 @@ export const ResidentImageUploadMolecule = ({
                   Change Photo
                 </ButtonAtom>
 
-                <ButtonAtom
-                  variant="ghost"
-                  onClick={handleRemoveImage}
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                >
+                <ButtonAtom variant="delete" onClick={handleRemoveImage}>
                   <DynamicIconAtom name="Trash2" size="sm" className="mr-2" />
                   Remove
                 </ButtonAtom>

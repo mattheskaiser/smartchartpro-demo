@@ -104,6 +104,16 @@ const updateResident = async ({
   return response.json();
 };
 
+const deleteResident = async (id: string): Promise<void> => {
+  const response = await fetch(`/api/residents/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to delete resident');
+  }
+};
+
 // Hooks
 export const useResidents = () => {
   return useQuery({
@@ -157,6 +167,29 @@ export const useUpdateResident = () => {
     },
     onError: error => {
       console.error('Error updating resident:', error);
+    },
+  });
+};
+
+export const useDeleteResident = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteResident,
+    onSuccess: (_, deletedId) => {
+      // Remove from residents list cache
+      queryClient.setQueryData(['residents'], (old: Resident[] = []) =>
+        old.filter(resident => resident.id !== deletedId)
+      );
+
+      // Remove the specific resident cache
+      queryClient.removeQueries({ queryKey: ['residents', deletedId] });
+
+      // Invalidate residents list to ensure consistency
+      queryClient.invalidateQueries({ queryKey: ['residents'] });
+    },
+    onError: error => {
+      console.error('Error deleting resident:', error);
     },
   });
 };

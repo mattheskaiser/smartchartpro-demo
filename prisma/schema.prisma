@@ -8,15 +8,15 @@ datasource db {
 }
 
 model Resident {
-  id                           String       @id @default(cuid())
+  id                           String                @id @default(cuid())
   name                         String
-  imageData                    String?      // Base64 encoded image data
+  imageData                    String?               // Base64 encoded image data
   room                         String
   status                       String
-  createdAt                    DateTime     @default(now())
-  updatedAt                    DateTime     @updatedAt
+  createdAt                    DateTime              @default(now())
+  updatedAt                    DateTime              @updatedAt
   adlNeeds                     String[]
-  admissionDate                DateTime?    @default(now())
+  admissionDate                DateTime?             @default(now())
   assignedCNA                  String?
   dateOfBirth                  DateTime?
   emergencyContactName         String?
@@ -29,6 +29,7 @@ model Resident {
   dnrStatus                    DNRStatus?
   medications                  Medication[]
   specialists                  Specialist[]
+  residentAssignments          ResidentAssignment[]  // Shift assignments
 }
 
 model ADLLog {
@@ -119,18 +120,109 @@ model DNRStatus {
 }
 
 model Cna {
-  id                  String   @id @default(cuid())
+  id                  String              @id @default(cuid())
   name                String
-  email               String   @unique
+  email               String              @unique
   phone               String?
-  status              String   @default("active")
-  shift               String
-  residents           Int      @default(0)
-  lastActive          String   @default("Just added")
-  imageData           String?  // Base64 encoded image data
+  status              String              @default("active")
+  imageData           String?             // Base64 encoded image data
   hireDate            DateTime?
   certificationNumber String?
   notes               String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  
+  // Shift management relationships
+  availableShifts     CnaAvailability[]   // Which shifts they can work
+  assignedShifts      ShiftAssignment[]   // Actual shift assignments
+  timeEntries         TimeEntry[]         // Clock in/out records
+}
+
+// CNA availability - which shifts a CNA can work
+model CnaAvailability {
+  id        String   @id @default(cuid())
+  cnaId     String
+  shiftType String   // "Morning", "Evening", "Night"
+  dayOfWeek Int      // 0-6 (Sunday-Saturday)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  cna Cna @relation(fields: [cnaId], references: [id], onDelete: Cascade)
+  
+  @@unique([cnaId, shiftType, dayOfWeek])
+  @@index([cnaId])
+}
+
+// Daily shift assignments
+model ShiftAssignment {
+  id          String   @id @default(cuid())
+  date        DateTime // The specific date for this shift
+  shiftType   String   // "Morning", "Evening", "Night"
+  cnaId       String?  // Assigned CNA (nullable for unassigned shifts)
+  status      String   @default("scheduled") // "scheduled", "in_progress", "completed", "cancelled"
+  startTime   DateTime?
+  endTime     DateTime?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  cna               Cna?                    @relation(fields: [cnaId], references: [id])
+  residentAssignments ResidentAssignment[] // Which residents are assigned to this shift
+  
+  @@unique([date, shiftType]) // Only one assignment per shift per day
+  @@index([date])
+  @@index([cnaId])
+}
+
+// Resident assignments to specific shifts
+model ResidentAssignment {
+  id              String          @id @default(cuid())
+  shiftAssignmentId String
+  residentId      String
+  createdAt       DateTime        @default(now())
+  
+  shiftAssignment ShiftAssignment @relation(fields: [shiftAssignmentId], references: [id], onDelete: Cascade)
+  resident        Resident        @relation(fields: [residentId], references: [id], onDelete: Cascade)
+  
+  @@unique([shiftAssignmentId, residentId])
+  @@index([shiftAssignmentId])
+  @@index([residentId])
+}
+
+// Shift templates/definitions for the facility
+model ShiftTemplate {
+  id          String   @id @default(cuid())
+  name        String   // "Morning", "Day", "Evening", "Night", etc.
+  startTime   String   // "06:00" (24-hour format)
+  endTime     String   // "14:00" (24-hour format)
+  isActive    Boolean  @default(true)
+  color       String?  // Hex color for UI display
+  description String?
+  sortOrder   Int      @default(0) // For ordering in UI
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([name])
+  @@index([isActive, sortOrder])
+}
+
+// Time tracking for CNAs
+model TimeEntry {
+  id        String    @id @default(cuid())
+  cnaId     String
+  shiftAssignmentId String?
+  clockIn   DateTime
+  clockOut  DateTime?
+  breakStart DateTime?
+  breakEnd   DateTime?
+  totalHours Float?
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  
+  cna Cna @relation(fields: [cnaId], references: [id], onDelete: Cascade)
+  
+  @@index([cnaId])
+  @@index([clockIn])
 }

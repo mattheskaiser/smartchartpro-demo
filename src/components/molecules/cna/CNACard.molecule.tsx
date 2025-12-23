@@ -26,19 +26,6 @@ export const CNACardMolecule = ({ cna }: CNACardProps) => {
     }
   };
 
-  const getShiftIcon = (shift: string) => {
-    switch (shift) {
-      case 'Morning':
-        return 'Sun';
-      case 'Evening':
-        return 'Sunset';
-      case 'Night':
-        return 'Moon';
-      default:
-        return 'Clock';
-    }
-  };
-
   return (
     <div
       onClick={() => router.push(`/admin/cnas/${cna.id}`)}
@@ -61,43 +48,47 @@ export const CNACardMolecule = ({ cna }: CNACardProps) => {
       <div className="flex flex-col gap-y-4">
         <div className="flex gap-x-2 items-center rounded-lg">
           <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary">
-            <DynamicIconAtom name={getShiftIcon(cna.shift)} size="md" className="text-primary" />
+            <DynamicIconAtom name="Mail" size="md" className="text-primary" />
           </div>
           <div className="">
             <TextAtom variant="small" color="muted">
-              Shift
+              Email
             </TextAtom>
             <TextAtom variant="small" weight="semibold">
-              {cna.shift}
+              {cna.email}
             </TextAtom>
           </div>
         </div>
-        <div className="flex gap-x-2 items-center rounded-lg">
-          <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary">
-            <DynamicIconAtom name="Users" size="md" className="text-primary" />
+        {cna.phone && (
+          <div className="flex gap-x-2 items-center rounded-lg">
+            <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary">
+              <DynamicIconAtom name="Phone" size="md" className="text-primary" />
+            </div>
+            <div className="">
+              <TextAtom variant="small" color="muted" className="block">
+                Phone
+              </TextAtom>
+              <TextAtom variant="small" weight="semibold">
+                {cna.phone}
+              </TextAtom>
+            </div>
           </div>
-          <div className="">
-            <TextAtom variant="small" color="muted" className="block">
-              Assigned Residents
-            </TextAtom>
-            <TextAtom variant="small" weight="semibold">
-              {cna.residents} residents
-            </TextAtom>
+        )}
+        {cna.certificationNumber && (
+          <div className="flex gap-x-2 items-center rounded-lg">
+            <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary">
+              <DynamicIconAtom name="Award" size="md" className="text-primary" />
+            </div>
+            <div className="">
+              <TextAtom variant="small" color="muted" className="block">
+                Certification
+              </TextAtom>
+              <TextAtom variant="small" weight="semibold" className="text-gray-900">
+                {cna.certificationNumber}
+              </TextAtom>
+            </div>
           </div>
-        </div>
-        <div className="flex gap-x-2 items-center rounded-lg">
-          <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary">
-            <DynamicIconAtom name="Clock" size="md" className="text-primary" />
-          </div>
-          <div className="">
-            <TextAtom variant="small" color="muted" className="block">
-              Last Active
-            </TextAtom>
-            <TextAtom variant="small" weight="semibold" className="text-gray-900">
-              {cna.lastActive}
-            </TextAtom>
-          </div>
-        </div>
+        )}
       </div>
       <ButtonAtom>More Details</ButtonAtom>
     </div>

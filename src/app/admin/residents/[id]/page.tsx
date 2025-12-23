@@ -58,18 +58,22 @@ import { ResidentMedicationsMolecule } from '@/components/molecules/resident/Res
 import { ResidentDNRStatusMolecule } from '@/components/molecules/resident/ResidentDNRStatus.molecule';
 import { ResidentSpecialistsMolecule } from '@/components/molecules/resident/ResidentSpecialists.molecule';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
-import { useResident, useUpdateResident } from '@/hooks/useResidents';
+import { ConfirmationModalMolecule } from '@/components/molecules/ConfirmationModal.molecule';
+import { useResident, useUpdateResident, useDeleteResident } from '@/hooks/useResidents';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function ResidentDetail() {
   const router = useRouter();
   const params = useParams();
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isImageUpdating, setIsImageUpdating] = useState(false);
   const queryClient = useQueryClient();
 
   // Use TanStack Query hooks
   const { data: fetchedResident, isLoading, error } = useResident(params.id as string);
   const updateResidentMutation = useUpdateResident();
+  const deleteResidentMutation = useDeleteResident();
 
   // Local state for editing (synced with fetched data)
   const [resident, setResident] = useState<ResidentData | null>(null);
@@ -92,12 +96,11 @@ export default function ResidentDetail() {
 
     const { ...currentBasicData } = resident;
 
-    // Compare each field
+    // Compare each field (excluding imageUrl since it's handled separately)
     const fieldsToCompare = [
       'name',
       'room',
       'status',
-      'imageUrl',
       'dateOfBirth',
       'admissionDate',
       'emergencyContactName',
@@ -132,12 +135,11 @@ export default function ResidentDetail() {
     try {
       // Only make a request if basic resident data has changed
       if (hasBasicDataChanged()) {
-        // Extract only the basic resident fields, excluding relations
+        // Extract only the basic resident fields, excluding imageUrl (handled separately)
         const basicResidentData = {
           name: resident.name,
           room: resident.room,
           status: resident.status,
-          imageUrl: resident.imageUrl,
           dateOfBirth: resident.dateOfBirth,
           admissionDate: resident.admissionDate,
           emergencyContactName: resident.emergencyContactName,
@@ -193,11 +195,32 @@ export default function ResidentDetail() {
     });
   };
 
-  const handleImageChange = (imageData: string | null) => {
+  const handleImageChange = async (imageData: string | null) => {
+    if (!resident) return;
+
+    // Update local state immediately for UI responsiveness
     setResident((prev: ResidentData | null) => {
       if (!prev) return prev;
       return { ...prev, imageUrl: imageData };
     });
+
+    // Save image change immediately to the server
+    try {
+      setIsImageUpdating(true);
+      await updateResidentMutation.mutateAsync({
+        id: params.id as string,
+        data: { imageUrl: imageData },
+      });
+    } catch (error) {
+      console.error('Error updating resident image:', error);
+      // Revert the local state change on error
+      setResident((prev: ResidentData | null) => {
+        if (!prev) return prev;
+        return { ...prev, imageUrl: resident.imageUrl };
+      });
+    } finally {
+      setIsImageUpdating(false);
+    }
   };
 
   const toggleADL = (adl: string) => {
@@ -256,6 +279,17 @@ export default function ResidentDetail() {
     queryClient.invalidateQueries({ queryKey: ['residents', params.id] });
   };
 
+  const handleDeleteResident = async () => {
+    try {
+      await deleteResidentMutation.mutateAsync(params.id as string);
+      // Navigate back to residents list after successful deletion
+      router.push('/admin/residents');
+    } catch (error) {
+      console.error('Error deleting resident:', error);
+      // Error is already handled by the mutation
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="mx-auto max-w-7xl">
@@ -311,6 +345,8 @@ export default function ResidentDetail() {
         onBack={() => router.back()}
         onToggleEdit={() => (isEditing ? handleSave() : setIsEditing(true))}
         isSaving={updateResidentMutation.isPending}
+        showDelete={true}
+        onDelete={() => setShowDeleteModal(true)}
       />
 
       <div className="space-y-8">
@@ -320,7 +356,7 @@ export default function ResidentDetail() {
           residentName={resident.name || 'Unknown Resident'}
           isEditing={isEditing}
           onImageChange={handleImageChange}
-          isUpdating={updateResidentMutation.isPending}
+          isUpdating={isImageUpdating}
           avatarSize="3xl"
         />
 
@@ -408,6 +444,19 @@ export default function ResidentDetail() {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModalMolecule
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteResident}
+        title="Delete Resident"
+        message={`Are you sure you want to delete ${resident.name}? This action cannot be undone and will permanently remove all resident data including medical records, ADL logs, and care history.`}
+        confirmText="Delete Resident"
+        cancelText="Cancel"
+        variant="danger"
+        isLoading={deleteResidentMutation.isPending}
+      />
     </div>
   );
 }
