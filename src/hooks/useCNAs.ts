@@ -172,10 +172,10 @@ const fetchCNAAvailability = async (cnaId: string): Promise<{ [key: string]: str
 
 const updateCNAAvailability = async ({
   cnaId,
-  availability
+  availability,
 }: {
   cnaId: string;
-  availability: { [key: string]: string[] }
+  availability: { [key: string]: string[] };
 }): Promise<{ [key: string]: string[] }> => {
   const response = await fetch(`/api/cnas/${cnaId}/availability`, {
     method: 'PUT',

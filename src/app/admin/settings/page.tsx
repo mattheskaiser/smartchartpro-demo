@@ -9,11 +9,14 @@ import { LabelAtom } from '@/components/atoms/Label.atom';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
+import { ShiftTemplateManagerMolecule } from '@/components/molecules/shift/ShiftTemplateManager.molecule';
 
 export default function Settings() {
   // Facility Settings
   const [facilityName, setFacilityName] = useState('SmartChart Pro Facility');
-  const [facilityAddress, setFacilityAddress] = useState('123 Healthcare Ave, Medical City, MC 12345');
+  const [facilityAddress, setFacilityAddress] = useState(
+    '123 Healthcare Ave, Medical City, MC 12345'
+  );
   const [facilityPhone, setFacilityPhone] = useState('(555) 123-4567');
   const [timezone, setTimezone] = useState('EST');
   const [licenseNumber, setLicenseNumber] = useState('HC-2024-001');
@@ -97,7 +100,7 @@ export default function Settings() {
                     id="facility-name"
                     type="text"
                     value={facilityName}
-                    onChange={(e) => setFacilityName(e.target.value)}
+                    onChange={e => setFacilityName(e.target.value)}
                     placeholder="Enter facility name"
                   />
                 </div>
@@ -109,35 +112,31 @@ export default function Settings() {
                     id="license-number"
                     type="text"
                     value={licenseNumber}
-                    onChange={(e) => setLicenseNumber(e.target.value)}
+                    onChange={e => setLicenseNumber(e.target.value)}
                     placeholder="Enter license number"
                   />
                 </div>
               </div>
 
               <div>
-                <LabelAtom htmlFor="facility-address">
-                  Facility Address
-                </LabelAtom>
+                <LabelAtom htmlFor="facility-address">Facility Address</LabelAtom>
                 <InputAtom
                   id="facility-address"
                   type="text"
                   value={facilityAddress}
-                  onChange={(e) => setFacilityAddress(e.target.value)}
+                  onChange={e => setFacilityAddress(e.target.value)}
                   placeholder="Enter complete address"
                 />
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
-                  <LabelAtom htmlFor="facility-phone">
-                    Phone Number
-                  </LabelAtom>
+                  <LabelAtom htmlFor="facility-phone">Phone Number</LabelAtom>
                   <InputAtom
                     id="facility-phone"
                     type="tel"
                     value={facilityPhone}
-                    onChange={(e) => setFacilityPhone(e.target.value)}
+                    onChange={e => setFacilityPhone(e.target.value)}
                     placeholder="(555) 123-4567"
                   />
                 </div>
@@ -148,7 +147,7 @@ export default function Settings() {
                   <SelectAtom
                     id="timezone"
                     value={timezone}
-                    onChange={(e) => setTimezone(e.target.value)}
+                    onChange={e => setTimezone(e.target.value)}
                   >
                     <option value="EST">Eastern Standard Time (EST)</option>
                     <option value="CST">Central Standard Time (CST)</option>
@@ -161,6 +160,16 @@ export default function Settings() {
           </CardAtom>
         </div>
 
+        {/* Shift Configuration */}
+        <div>
+          <TextAtom variant="h2" weight="semibold" className="mb-4 text-gray-900">
+            Shift Configuration
+          </TextAtom>
+          <CardAtom>
+            <ShiftTemplateManagerMolecule />
+          </CardAtom>
+        </div>
+
         {/* CNA Management */}
         <div>
           <TextAtom variant="h2" weight="semibold" className="mb-4 text-gray-900">
@@ -170,13 +179,11 @@ export default function Settings() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
-                  <LabelAtom htmlFor="max-residents">
-                    Maximum Residents per CNA
-                  </LabelAtom>
+                  <LabelAtom htmlFor="max-residents">Maximum Residents per CNA</LabelAtom>
                   <SelectAtom
                     id="max-residents"
                     value={maxResidentsPerCNA}
-                    onChange={(e) => setMaxResidentsPerCNA(e.target.value)}
+                    onChange={e => setMaxResidentsPerCNA(e.target.value)}
                   >
                     <option value="6">6 Residents</option>
                     <option value="8">8 Residents</option>
@@ -185,13 +192,11 @@ export default function Settings() {
                   </SelectAtom>
                 </div>
                 <div>
-                  <LabelAtom htmlFor="shift-overlap">
-                    Shift Overlap Time (minutes)
-                  </LabelAtom>
+                  <LabelAtom htmlFor="shift-overlap">Shift Overlap Time (minutes)</LabelAtom>
                   <SelectAtom
                     id="shift-overlap"
                     value={shiftOverlapTime}
-                    onChange={(e) => setShiftOverlapTime(e.target.value)}
+                    onChange={e => setShiftOverlapTime(e.target.value)}
                   >
                     <option value="0">No Overlap</option>
                     <option value="15">15 Minutes</option>
@@ -231,13 +236,11 @@ export default function Settings() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
-                  <LabelAtom htmlFor="adl-reminder">
-                    ADL Reminder Interval (hours)
-                  </LabelAtom>
+                  <LabelAtom htmlFor="adl-reminder">ADL Reminder Interval (hours)</LabelAtom>
                   <SelectAtom
                     id="adl-reminder"
                     value={adlReminderInterval}
-                    onChange={(e) => setAdlReminderInterval(e.target.value)}
+                    onChange={e => setAdlReminderInterval(e.target.value)}
                   >
                     <option value="1">Every Hour</option>
                     <option value="2">Every 2 Hours</option>
@@ -246,13 +249,11 @@ export default function Settings() {
                   </SelectAtom>
                 </div>
                 <div>
-                  <LabelAtom htmlFor="completion-window">
-                    ADL Completion Window (hours)
-                  </LabelAtom>
+                  <LabelAtom htmlFor="completion-window">ADL Completion Window (hours)</LabelAtom>
                   <SelectAtom
                     id="completion-window"
                     value={adlCompletionWindow}
-                    onChange={(e) => setAdlCompletionWindow(e.target.value)}
+                    onChange={e => setAdlCompletionWindow(e.target.value)}
                   >
                     <option value="2">2 Hours</option>
                     <option value="4">4 Hours</option>
@@ -312,13 +313,11 @@ export default function Settings() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
-                  <LabelAtom htmlFor="report-frequency">
-                    Report Generation Frequency
-                  </LabelAtom>
+                  <LabelAtom htmlFor="report-frequency">Report Generation Frequency</LabelAtom>
                   <SelectAtom
                     id="report-frequency"
                     value={reportingFrequency}
-                    onChange={(e) => setReportingFrequency(e.target.value)}
+                    onChange={e => setReportingFrequency(e.target.value)}
                   >
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
@@ -327,14 +326,12 @@ export default function Settings() {
                   </SelectAtom>
                 </div>
                 <div>
-                  <LabelAtom htmlFor="report-recipients">
-                    Report Recipients (Email)
-                  </LabelAtom>
+                  <LabelAtom htmlFor="report-recipients">Report Recipients (Email)</LabelAtom>
                   <InputAtom
                     id="report-recipients"
                     type="email"
                     value={reportRecipients}
-                    onChange={(e) => setReportRecipients(e.target.value)}
+                    onChange={e => setReportRecipients(e.target.value)}
                     placeholder="admin@facility.com"
                   />
                 </div>
@@ -416,7 +413,10 @@ export default function Settings() {
                     />
                   </div>
                   <div className="flex-1">
-                    <LabelAtom htmlFor="digital-signatures" className="font-medium text-gray-900 mb-0">
+                    <LabelAtom
+                      htmlFor="digital-signatures"
+                      className="font-medium text-gray-900 mb-0"
+                    >
                       Require Digital Signatures
                     </LabelAtom>
                     <TextAtom variant="small" className="text-gray-500">
@@ -434,7 +434,10 @@ export default function Settings() {
                     />
                   </div>
                   <div className="flex-1">
-                    <LabelAtom htmlFor="medication-double-check" className="font-medium text-gray-900 mb-0">
+                    <LabelAtom
+                      htmlFor="medication-double-check"
+                      className="font-medium text-gray-900 mb-0"
+                    >
                       Medication Double-Check
                     </LabelAtom>
                     <TextAtom variant="small" className="text-gray-500">
@@ -449,7 +452,8 @@ export default function Settings() {
                   <DynamicIconAtom name="Info" className="h-5 w-5 text-blue-400" />
                   <div className="ml-3">
                     <TextAtom variant="small" className="text-blue-800">
-                      <strong>Note:</strong> These compliance settings help meet regulatory requirements. Consult with your compliance officer before making changes.
+                      <strong>Note:</strong> These compliance settings help meet regulatory
+                      requirements. Consult with your compliance officer before making changes.
                     </TextAtom>
                   </div>
                 </div>
@@ -515,7 +519,10 @@ export default function Settings() {
                       />
                     </div>
                     <div className="flex-1">
-                      <LabelAtom htmlFor="medication-reminders" className="font-medium text-gray-900 mb-0">
+                      <LabelAtom
+                        htmlFor="medication-reminders"
+                        className="font-medium text-gray-900 mb-0"
+                      >
                         Medication Reminders
                       </LabelAtom>
                       <TextAtom variant="small" className="text-gray-500">
@@ -533,7 +540,10 @@ export default function Settings() {
                       />
                     </div>
                     <div className="flex-1">
-                      <LabelAtom htmlFor="emergency-alerts" className="font-medium text-gray-900 mb-0">
+                      <LabelAtom
+                        htmlFor="emergency-alerts"
+                        className="font-medium text-gray-900 mb-0"
+                      >
                         Emergency Alerts
                       </LabelAtom>
                       <TextAtom variant="small" className="text-gray-500">
@@ -551,7 +561,10 @@ export default function Settings() {
                       />
                     </div>
                     <div className="flex-1">
-                      <LabelAtom htmlFor="report-notifications" className="font-medium text-gray-900 mb-0">
+                      <LabelAtom
+                        htmlFor="report-notifications"
+                        className="font-medium text-gray-900 mb-0"
+                      >
                         Daily Reports
                       </LabelAtom>
                       <TextAtom variant="small" className="text-gray-500">
@@ -574,13 +587,11 @@ export default function Settings() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
-                  <LabelAtom htmlFor="session-timeout">
-                    Session Timeout (minutes)
-                  </LabelAtom>
+                  <LabelAtom htmlFor="session-timeout">Session Timeout (minutes)</LabelAtom>
                   <SelectAtom
                     id="session-timeout"
                     value={sessionTimeout}
-                    onChange={(e) => setSessionTimeout(e.target.value)}
+                    onChange={e => setSessionTimeout(e.target.value)}
                   >
                     <option value="15">15 Minutes</option>
                     <option value="30">30 Minutes</option>
@@ -658,13 +669,11 @@ export default function Settings() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
-                  <LabelAtom htmlFor="backup-frequency">
-                    Backup Frequency
-                  </LabelAtom>
+                  <LabelAtom htmlFor="backup-frequency">Backup Frequency</LabelAtom>
                   <SelectAtom
                     id="backup-frequency"
                     value={backupFrequency}
-                    onChange={(e) => setBackupFrequency(e.target.value)}
+                    onChange={e => setBackupFrequency(e.target.value)}
                   >
                     <option value="hourly">Every Hour</option>
                     <option value="daily">Daily</option>
@@ -672,13 +681,11 @@ export default function Settings() {
                   </SelectAtom>
                 </div>
                 <div>
-                  <LabelAtom htmlFor="data-retention">
-                    Data Retention (years)
-                  </LabelAtom>
+                  <LabelAtom htmlFor="data-retention">Data Retention (years)</LabelAtom>
                   <SelectAtom
                     id="data-retention"
                     value={dataRetention}
-                    onChange={(e) => setDataRetention(e.target.value)}
+                    onChange={e => setDataRetention(e.target.value)}
                   >
                     <option value="5">5 Years</option>
                     <option value="7">7 Years</option>
@@ -716,7 +723,10 @@ export default function Settings() {
                     />
                   </div>
                   <div className="flex-1">
-                    <LabelAtom htmlFor="maintenance-mode" className="font-medium text-gray-900 mb-0">
+                    <LabelAtom
+                      htmlFor="maintenance-mode"
+                      className="font-medium text-gray-900 mb-0"
+                    >
                       Maintenance Mode
                     </LabelAtom>
                     <TextAtom variant="small" className="text-gray-500">
@@ -732,7 +742,8 @@ export default function Settings() {
                     <DynamicIconAtom name="TriangleAlert" className="h-5 w-5 text-yellow-400" />
                     <div className="ml-3">
                       <TextAtom variant="small" className="text-yellow-800">
-                        <strong>Warning:</strong> Maintenance mode will prevent all users from accessing the system.
+                        <strong>Warning:</strong> Maintenance mode will prevent all users from
+                        accessing the system.
                       </TextAtom>
                     </div>
                   </div>

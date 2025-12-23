@@ -12,7 +12,13 @@ import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecu
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
 import { ConfirmationModalMolecule } from '@/components/molecules/ConfirmationModal.molecule';
 import { CNAAvailabilityMolecule } from '@/components/molecules/cna/CNAAvailability.molecule';
-import { useCNA, useUpdateCNA, useDeleteCNA, useCNAAvailability, useUpdateCNAAvailability } from '@/hooks/useCNAs';
+import {
+  useCNA,
+  useUpdateCNA,
+  useDeleteCNA,
+  useCNAAvailability,
+  useUpdateCNAAvailability,
+} from '@/hooks/useCNAs';
 import { EditCNAModalMolecule } from '@/components/molecules/cna/EditCNAModal.molecule';
 
 export default function CNADetailPage() {
@@ -151,10 +157,7 @@ export default function CNADetailPage() {
             </TextAtom>
           </div>
           <div className="flex items-center gap-3">
-            <ButtonAtom
-              variant="delete"
-              onClick={() => setShowDeleteModal(true)}
-            >
+            <ButtonAtom variant="delete" onClick={() => setShowDeleteModal(true)}>
               <DynamicIconAtom name="Trash2" size="sm" className="mr-2" />
               Delete CNA
             </ButtonAtom>
@@ -241,10 +244,7 @@ export default function CNADetailPage() {
                 Shift Availability
               </TextAtom>
               {!isEditingAvailability ? (
-                <ButtonAtom
-                  variant="secondary"
-                  onClick={handleStartAvailabilityEdit}
-                >
+                <ButtonAtom variant="secondary" onClick={handleStartAvailabilityEdit}>
                   <DynamicIconAtom name="Pencil" size="sm" className="mr-2" />
                   Edit Availability
                 </ButtonAtom>
@@ -290,7 +290,10 @@ export default function CNADetailPage() {
                   Available Shifts
                 </TextAtom>
                 <TextAtom variant="h3" weight="semibold">
-                  {Object.values(isEditingAvailability ? localAvailability : availability).flat().length}
+                  {
+                    Object.values(isEditingAvailability ? localAvailability : availability).flat()
+                      .length
+                  }
                 </TextAtom>
               </div>
             </div>

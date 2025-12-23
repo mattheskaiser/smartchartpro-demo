@@ -190,6 +190,23 @@ model ResidentAssignment {
   @@index([residentId])
 }
 
+// Shift templates/definitions for the facility
+model ShiftTemplate {
+  id          String   @id @default(cuid())
+  name        String   // "Morning", "Day", "Evening", "Night", etc.
+  startTime   String   // "06:00" (24-hour format)
+  endTime     String   // "14:00" (24-hour format)
+  isActive    Boolean  @default(true)
+  color       String?  // Hex color for UI display
+  description String?
+  sortOrder   Int      @default(0) // For ordering in UI
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([name])
+  @@index([isActive, sortOrder])
+}
+
 // Time tracking for CNAs
 model TimeEntry {
   id        String    @id @default(cuid())
