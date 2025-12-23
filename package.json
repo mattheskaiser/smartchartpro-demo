@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "build:full": "prisma generate && next build",
+    "build": "node scripts/build.js",
+    "build:simple": "next build",
+    "check": "node scripts/pre-commit-check.js",
     "prisma:generate": "prisma generate",
     "seed:shifts": "node scripts/seed-default-shifts.js",
     "start": "next start",
