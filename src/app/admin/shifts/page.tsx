@@ -7,14 +7,9 @@ import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
-import { ShiftAssignmentModalMolecule } from '@/components/molecules/shift/ShiftAssignmentModal.molecule';
-import { useShifts, useUpdateShift } from '@/hooks/useShifts';
 import { useShiftTemplates, formatShiftTime } from '@/hooks/useShiftTemplates';
-import { useCNAs } from '@/hooks/useCNAs';
-import { useResidents } from '@/hooks/useResidents';
 
 export default function ShiftManagement() {
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedView, setSelectedView] = useState<'daily' | 'weekly'>('daily');
 
   const { data: shiftTemplates, isLoading: templatesLoading } = useShiftTemplates();
@@ -129,7 +124,7 @@ export default function ShiftManagement() {
                 <DynamicIconAtom name="ChevronLeft" size="sm" />
               </ButtonAtom>
               <TextAtom variant="h3" weight="medium">
-                {selectedDate.toLocaleDateString('en-US', {
+                {new Date().toLocaleDateString('en-US', {
                   weekday: 'long',
                   year: 'numeric',
                   month: 'long',
@@ -193,7 +188,15 @@ export default function ShiftManagement() {
                     </TextAtom>
                   </div>
                 </div>
-                <BadgeAtom variant={getStatusColor(shiftAssignment?.status || 'unassigned') as any}>
+                <BadgeAtom
+                  variant={
+                    getStatusColor(shiftAssignment?.status || 'unassigned') as
+                      | 'error'
+                      | 'warning'
+                      | 'info'
+                      | 'success'
+                  }
+                >
                   {shiftAssignment?.status?.replace('_', ' ') || 'unassigned'}
                 </BadgeAtom>
               </div>

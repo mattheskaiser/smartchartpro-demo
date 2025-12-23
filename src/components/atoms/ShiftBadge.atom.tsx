@@ -1,6 +1,5 @@
 'use client';
 
-import { TextAtom } from './Text.atom';
 import { DynamicIconAtom } from './DynamicIcon.atom';
 import { formatShiftTime } from '@/hooks/useShiftTemplates';
 

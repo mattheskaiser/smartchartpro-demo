@@ -31,7 +31,7 @@ export default function CNADetailPage() {
   const [localAvailability, setLocalAvailability] = useState<{ [key: string]: string[] }>({});
 
   const { data: cna, isLoading, error } = useCNA(cnaId);
-  const { data: availability = {}, isLoading: availabilityLoading } = useCNAAvailability(cnaId);
+  const { data: availability = {} } = useCNAAvailability(cnaId);
   const updateCNAMutation = useUpdateCNA();
   const deleteCNAMutation = useDeleteCNA();
   const updateAvailabilityMutation = useUpdateCNAAvailability();
@@ -270,7 +270,6 @@ export default function CNADetailPage() {
               )}
             </div>
             <CNAAvailabilityMolecule
-              cnaId={cnaId}
               availability={localAvailability}
               isEditing={isEditingAvailability}
               onAvailabilityChange={handleAvailabilityChange}

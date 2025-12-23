@@ -112,7 +112,7 @@ export const ShiftAssignmentModalMolecule = ({
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
             <DynamicIconAtom
-              name={getShiftIcon(shift.type) as any}
+              name={getShiftIcon(shift.type) as 'Sun' | 'Sunset' | 'Moon' | 'Clock'}
               size="md"
               className="text-blue-600"
             />

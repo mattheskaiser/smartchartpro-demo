@@ -51,7 +51,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     const { cnaId, residentIds, notes, status } = body;
 
     // Update the shift
-    const shift = await prisma.shiftAssignment.update({
+    await prisma.shiftAssignment.update({
       where: { id: params.id },
       data: {
         cnaId: cnaId || null,

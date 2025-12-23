@@ -3,14 +3,12 @@
 import { useState } from 'react';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
-import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
 import { useShiftTemplates, formatShiftTime } from '@/hooks/useShiftTemplates';
 
 interface CNAAvailabilityProps {
-  cnaId: string;
   availability?: {
     [key: string]: string[]; // day -> shift types
   };
@@ -19,7 +17,6 @@ interface CNAAvailabilityProps {
 }
 
 export const CNAAvailabilityMolecule = ({
-  cnaId,
   availability = {},
   isEditing,
   onAvailabilityChange,
@@ -133,7 +130,7 @@ export const CNAAvailabilityMolecule = ({
                         style={{ backgroundColor: shift.color }}
                       />
                       <DynamicIconAtom
-                        name={getShiftIcon(shift.name) as any}
+                        name={getShiftIcon(shift.name) as 'Sun' | 'Sunset' | 'Moon' | 'Clock'}
                         size="sm"
                         className={isSelected ? 'text-blue-600' : 'text-gray-500'}
                       />

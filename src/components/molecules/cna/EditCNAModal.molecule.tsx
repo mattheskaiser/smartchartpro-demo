@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { InputAtom } from '@/components/atoms/Input.atom';
 import { LabelAtom } from '@/components/atoms/Label.atom';
-import { SelectAtom } from '@/components/atoms/Select.atom';
 import { TextareaAtom } from '@/components/atoms/Textarea.atom';
 import { FormModalOrganism } from '@/components/organisms/Modal.organism';
 import { DatePickerMolecule } from '@/components/molecules/DatePicker.molecule';

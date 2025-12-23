@@ -54,15 +54,20 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     });
 
     return NextResponse.json(shiftTemplate);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating shift template:', error);
 
-    if (error.code === 'P2025') {
-      return NextResponse.json({ error: 'Shift template not found' }, { status: 404 });
-    }
+    if (error && typeof error === 'object' && 'code' in error) {
+      if (error.code === 'P2025') {
+        return NextResponse.json({ error: 'Shift template not found' }, { status: 404 });
+      }
 
-    if (error.code === 'P2002') {
-      return NextResponse.json({ error: 'A shift with this name already exists' }, { status: 409 });
+      if (error.code === 'P2002') {
+        return NextResponse.json(
+          { error: 'A shift with this name already exists' },
+          { status: 409 }
+        );
+      }
     }
 
     return NextResponse.json({ error: 'Failed to update shift template' }, { status: 500 });
@@ -97,10 +102,10 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     });
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error deleting shift template:', error);
 
-    if (error.code === 'P2025') {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2025') {
       return NextResponse.json({ error: 'Shift template not found' }, { status: 404 });
     }
 

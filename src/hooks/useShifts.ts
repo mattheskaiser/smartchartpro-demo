@@ -139,7 +139,7 @@ export const useCreateShift = () => {
 
   return useMutation({
     mutationFn: createShift,
-    onSuccess: newShift => {
+    onSuccess: () => {
       // Invalidate shifts queries
       queryClient.invalidateQueries({ queryKey: ['shifts'] });
     },
