@@ -5,6 +5,7 @@ export const ADMIN_NAVIGATION = [
   { name: 'Dashboard', href: '/admin', icon: 'House' as keyof typeof icons },
   { name: 'Residents', href: '/admin/residents', icon: 'Users' as keyof typeof icons },
   { name: 'CNAs', href: '/admin/cnas', icon: 'UserRound' as keyof typeof icons },
+  { name: 'Shifts', href: '/admin/shifts', icon: 'Calendar' as keyof typeof icons },
   { name: 'Settings', href: '/admin/settings', icon: 'Settings' as keyof typeof icons },
 ] as const;
 
