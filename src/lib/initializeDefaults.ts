@@ -10,7 +10,7 @@ const DEFAULT_SHIFTS = [
     endTime: '14:00',
     color: '#F59E0B', // Amber
     description: 'Morning shift covering breakfast and early activities',
-    sortOrder: 1,
+    sortOrder: 6 * 60, // 6:00 AM = 360 minutes
     isActive: true,
   },
   {
@@ -19,7 +19,7 @@ const DEFAULT_SHIFTS = [
     endTime: '22:00',
     color: '#EF4444', // Red
     description: 'Day shift covering lunch, dinner and evening activities',
-    sortOrder: 2,
+    sortOrder: 14 * 60, // 2:00 PM = 840 minutes
     isActive: true,
   },
   {
@@ -28,7 +28,7 @@ const DEFAULT_SHIFTS = [
     endTime: '06:00',
     color: '#6366F1', // Indigo
     description: 'Overnight shift for monitoring and emergency care',
-    sortOrder: 3,
+    sortOrder: 22 * 60, // 10:00 PM = 1320 minutes
     isActive: true,
   },
 ];

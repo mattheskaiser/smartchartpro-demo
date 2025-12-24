@@ -101,11 +101,33 @@ const deleteShiftTemplate = async (id: string): Promise<void> => {
   }
 };
 
+// Utility function to calculate sort order based on start time
+export const calculateSortOrder = (startTime: string): number => {
+  const [hours, minutes] = startTime.split(':').map(Number);
+  return hours * 60 + minutes; // Convert to minutes since midnight
+};
+
+// Utility function to sort shifts by start time
+const sortShiftsByStartTime = (shifts: ShiftTemplate[]): ShiftTemplate[] => {
+  return [...shifts].sort((a, b) => {
+    // Convert time strings to minutes for comparison
+    const timeToMinutes = (time: string) => {
+      const [hours, minutes] = time.split(':').map(Number);
+      return hours * 60 + minutes;
+    };
+
+    return timeToMinutes(a.startTime) - timeToMinutes(b.startTime);
+  });
+};
+
 // Hooks
 export const useShiftTemplates = () => {
   return useQuery({
     queryKey: ['shift-templates'],
-    queryFn: fetchShiftTemplates,
+    queryFn: async () => {
+      const shifts = await fetchShiftTemplates();
+      return sortShiftsByStartTime(shifts);
+    },
   });
 };
 

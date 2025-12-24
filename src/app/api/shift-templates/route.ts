@@ -9,6 +9,9 @@ export async function GET() {
     // Ensure default shifts exist before fetching
     await initializeDefaultShifts();
 
+    // Update sortOrder for existing shifts that have sortOrder = 0
+    await updateShiftSortOrders();
+
     const shiftTemplates = await prisma.shiftTemplate.findMany({
       orderBy: [{ sortOrder: 'asc' }, { startTime: 'asc' }],
     });
@@ -17,6 +20,29 @@ export async function GET() {
   } catch (error) {
     console.error('Error fetching shift templates:', error);
     return NextResponse.json({ error: 'Failed to fetch shift templates' }, { status: 500 });
+  }
+}
+
+// Helper function to update sortOrder for existing shifts
+async function updateShiftSortOrders() {
+  try {
+    // Get all shifts with sortOrder = 0 (default)
+    const shiftsToUpdate = await prisma.shiftTemplate.findMany({
+      where: { sortOrder: 0 },
+    });
+
+    // Update each shift with calculated sortOrder based on start time
+    for (const shift of shiftsToUpdate) {
+      const [hours, minutes] = shift.startTime.split(':').map(Number);
+      const sortOrder = hours * 60 + minutes; // Convert to minutes since midnight
+
+      await prisma.shiftTemplate.update({
+        where: { id: shift.id },
+        data: { sortOrder },
+      });
+    }
+  } catch (error) {
+    console.error('Error updating shift sort orders:', error);
   }
 }
 
