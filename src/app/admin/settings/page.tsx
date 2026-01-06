@@ -154,8 +154,7 @@ export default function Settings() {
         </div>
 
         {/* Main Settings Groups */}
-        <Accordion type="multiple" defaultValue={["general"]} className="space-y-6">
-
+        <Accordion type="multiple" defaultValue={['general']} className="space-y-6">
           {/* GENERAL SETTINGS */}
           <AccordionItem value="general" className="border border-gray-200 rounded-lg">
             <AccordionTrigger className="text-xl font-semibold px-6 py-4 hover:no-underline">
@@ -173,7 +172,6 @@ export default function Settings() {
             </AccordionTrigger>
             <AccordionContent className="px-6 pb-6">
               <div className="space-y-8">
-
                 {/* Facility Information */}
                 <div>
                   <div className="flex items-center gap-2 mb-4">
@@ -286,7 +284,10 @@ export default function Settings() {
                               />
                             </div>
                             <div className="flex-1">
-                              <LabelAtom htmlFor="shifts" className="font-medium text-gray-900 mb-0">
+                              <LabelAtom
+                                htmlFor="shifts"
+                                className="font-medium text-gray-900 mb-0"
+                              >
                                 Shift Changes
                               </LabelAtom>
                               <TextAtom variant="small" className="text-gray-500">
@@ -304,7 +305,10 @@ export default function Settings() {
                               />
                             </div>
                             <div className="flex-1">
-                              <LabelAtom htmlFor="adl-alerts" className="font-medium text-gray-900 mb-0">
+                              <LabelAtom
+                                htmlFor="adl-alerts"
+                                className="font-medium text-gray-900 mb-0"
+                              >
                                 ADL Alerts
                               </LabelAtom>
                               <TextAtom variant="small" className="text-gray-500">
@@ -401,7 +405,6 @@ export default function Settings() {
             </AccordionTrigger>
             <AccordionContent className="px-6 pb-6">
               <div className="space-y-8">
-
                 {/* CNA Management */}
                 <div>
                   <div className="flex items-center gap-2 mb-4">
@@ -423,7 +426,9 @@ export default function Settings() {
                           />
                         </div>
                         <div>
-                          <LabelAtom htmlFor="shift-overlap">Shift Overlap Time (minutes)</LabelAtom>
+                          <LabelAtom htmlFor="shift-overlap">
+                            Shift Overlap Time (minutes)
+                          </LabelAtom>
                           <DropdownAtom
                             value={shiftOverlapTime}
                             onValueChange={setShiftOverlapTime}
@@ -442,7 +447,10 @@ export default function Settings() {
                           />
                         </div>
                         <div className="flex-1">
-                          <LabelAtom htmlFor="auto-assign" className="font-medium text-gray-900 mb-0">
+                          <LabelAtom
+                            htmlFor="auto-assign"
+                            className="font-medium text-gray-900 mb-0"
+                          >
                             Auto-assign Residents
                           </LabelAtom>
                           <TextAtom variant="small" className="text-gray-500">
@@ -466,7 +474,9 @@ export default function Settings() {
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
-                          <LabelAtom htmlFor="adl-reminder">ADL Reminder Interval (hours)</LabelAtom>
+                          <LabelAtom htmlFor="adl-reminder">
+                            ADL Reminder Interval (hours)
+                          </LabelAtom>
                           <DropdownAtom
                             value={adlReminderInterval}
                             onValueChange={setAdlReminderInterval}
@@ -475,7 +485,9 @@ export default function Settings() {
                           />
                         </div>
                         <div>
-                          <LabelAtom htmlFor="completion-window">ADL Completion Window (hours)</LabelAtom>
+                          <LabelAtom htmlFor="completion-window">
+                            ADL Completion Window (hours)
+                          </LabelAtom>
                           <DropdownAtom
                             value={adlCompletionWindow}
                             onValueChange={setAdlCompletionWindow}
@@ -495,7 +507,10 @@ export default function Settings() {
                             />
                           </div>
                           <div className="flex-1">
-                            <LabelAtom htmlFor="require-notes" className="font-medium text-gray-900 mb-0">
+                            <LabelAtom
+                              htmlFor="require-notes"
+                              className="font-medium text-gray-900 mb-0"
+                            >
                               Require Notes for ADL Completion
                             </LabelAtom>
                             <TextAtom variant="small" className="text-gray-500">
@@ -513,7 +528,10 @@ export default function Settings() {
                             />
                           </div>
                           <div className="flex-1">
-                            <LabelAtom htmlFor="auto-overdue" className="font-medium text-gray-900 mb-0">
+                            <LabelAtom
+                              htmlFor="auto-overdue"
+                              className="font-medium text-gray-900 mb-0"
+                            >
                               Auto-mark Overdue ADLs
                             </LabelAtom>
                             <TextAtom variant="small" className="text-gray-500">
@@ -538,7 +556,9 @@ export default function Settings() {
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
-                          <LabelAtom htmlFor="report-frequency">Report Generation Frequency</LabelAtom>
+                          <LabelAtom htmlFor="report-frequency">
+                            Report Generation Frequency
+                          </LabelAtom>
                           <DropdownAtom
                             value={reportingFrequency}
                             onValueChange={setReportingFrequency}
@@ -547,7 +567,9 @@ export default function Settings() {
                           />
                         </div>
                         <div>
-                          <LabelAtom htmlFor="report-recipients">Report Recipients (Email)</LabelAtom>
+                          <LabelAtom htmlFor="report-recipients">
+                            Report Recipients (Email)
+                          </LabelAtom>
                           <InputAtom
                             id="report-recipients"
                             type="email"
@@ -568,7 +590,10 @@ export default function Settings() {
                             />
                           </div>
                           <div className="flex-1">
-                            <LabelAtom htmlFor="auto-reports" className="font-medium text-gray-900 mb-0">
+                            <LabelAtom
+                              htmlFor="auto-reports"
+                              className="font-medium text-gray-900 mb-0"
+                            >
                               Auto-generate Reports
                             </LabelAtom>
                             <TextAtom variant="small" className="text-gray-500">
@@ -586,7 +611,10 @@ export default function Settings() {
                             />
                           </div>
                           <div className="flex-1">
-                            <LabelAtom htmlFor="include-photos" className="font-medium text-gray-900 mb-0">
+                            <LabelAtom
+                              htmlFor="include-photos"
+                              className="font-medium text-gray-900 mb-0"
+                            >
                               Include Photos in Reports
                             </LabelAtom>
                             <TextAtom variant="small" className="text-gray-500">
@@ -619,7 +647,6 @@ export default function Settings() {
             </AccordionTrigger>
             <AccordionContent className="px-6 pb-6">
               <div className="space-y-8">
-
                 {/* Security & Access */}
                 <div>
                   <div className="flex items-center gap-2 mb-4">
@@ -652,7 +679,10 @@ export default function Settings() {
                             />
                           </div>
                           <div className="flex-1">
-                            <LabelAtom htmlFor="password-change" className="font-medium text-gray-900 mb-0">
+                            <LabelAtom
+                              htmlFor="password-change"
+                              className="font-medium text-gray-900 mb-0"
+                            >
                               Require Regular Password Changes
                             </LabelAtom>
                             <TextAtom variant="small" className="text-gray-500">
@@ -670,7 +700,10 @@ export default function Settings() {
                             />
                           </div>
                           <div className="flex-1">
-                            <LabelAtom htmlFor="two-factor" className="font-medium text-gray-900 mb-0">
+                            <LabelAtom
+                              htmlFor="two-factor"
+                              className="font-medium text-gray-900 mb-0"
+                            >
                               Two-Factor Authentication
                             </LabelAtom>
                             <TextAtom variant="small" className="text-gray-500">
@@ -688,7 +721,10 @@ export default function Settings() {
                             />
                           </div>
                           <div className="flex-1">
-                            <LabelAtom htmlFor="audit-logging" className="font-medium text-gray-900 mb-0">
+                            <LabelAtom
+                              htmlFor="audit-logging"
+                              className="font-medium text-gray-900 mb-0"
+                            >
                               Audit Logging
                             </LabelAtom>
                             <TextAtom variant="small" className="text-gray-500">
@@ -721,7 +757,10 @@ export default function Settings() {
                             />
                           </div>
                           <div className="flex-1">
-                            <LabelAtom htmlFor="hipaa-logging" className="font-medium text-gray-900 mb-0">
+                            <LabelAtom
+                              htmlFor="hipaa-logging"
+                              className="font-medium text-gray-900 mb-0"
+                            >
                               HIPAA Compliance Logging
                             </LabelAtom>
                             <TextAtom variant="small" className="text-gray-500">
@@ -779,7 +818,8 @@ export default function Settings() {
                           <div className="ml-3">
                             <TextAtom variant="small" className="text-blue-800">
                               <strong>Note:</strong> These compliance settings help meet regulatory
-                              requirements. Consult with your compliance officer before making changes.
+                              requirements. Consult with your compliance officer before making
+                              changes.
                             </TextAtom>
                           </div>
                         </div>
@@ -808,7 +848,6 @@ export default function Settings() {
             </AccordionTrigger>
             <AccordionContent className="px-6 pb-6">
               <div className="space-y-8">
-
                 {/* System Configuration */}
                 <div>
                   <div className="flex items-center gap-2 mb-4">
@@ -850,7 +889,10 @@ export default function Settings() {
                             />
                           </div>
                           <div className="flex-1">
-                            <LabelAtom htmlFor="auto-backup" className="font-medium text-gray-900 mb-0">
+                            <LabelAtom
+                              htmlFor="auto-backup"
+                              className="font-medium text-gray-900 mb-0"
+                            >
                               Automatic Backups
                             </LabelAtom>
                             <TextAtom variant="small" className="text-gray-500">
@@ -884,11 +926,14 @@ export default function Settings() {
                       {maintenanceMode && (
                         <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
                           <div className="flex">
-                            <DynamicIconAtom name="TriangleAlert" className="h-5 w-5 text-yellow-400" />
+                            <DynamicIconAtom
+                              name="TriangleAlert"
+                              className="h-5 w-5 text-yellow-400"
+                            />
                             <div className="ml-3">
                               <TextAtom variant="small" className="text-yellow-800">
-                                <strong>Warning:</strong> Maintenance mode will prevent all users from
-                                accessing the system.
+                                <strong>Warning:</strong> Maintenance mode will prevent all users
+                                from accessing the system.
                               </TextAtom>
                             </div>
                           </div>

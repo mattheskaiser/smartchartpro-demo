@@ -11,19 +11,61 @@ import { useShiftTemplates, formatShiftTime } from '@/hooks/useShiftTemplates';
 
 // Mock data - replace with actual API calls
 const mockCNAs = [
-  { id: '1', name: 'Sarah Johnson', email: 'sarah@facility.com', imageData: '', certificationNumber: 'CNA-001' },
-  { id: '2', name: 'Mike Chen', email: 'mike@facility.com', imageData: '', certificationNumber: 'CNA-002' },
-  { id: '3', name: 'Lisa Rodriguez', email: 'lisa@facility.com', imageData: '', certificationNumber: 'CNA-003' },
-  { id: '4', name: 'David Kim', email: 'david@facility.com', imageData: '', certificationNumber: 'CNA-004' },
+  {
+    id: '1',
+    name: 'Sarah Johnson',
+    email: 'sarah@facility.com',
+    imageData: '',
+    certificationNumber: 'CNA-001',
+  },
+  {
+    id: '2',
+    name: 'Mike Chen',
+    email: 'mike@facility.com',
+    imageData: '',
+    certificationNumber: 'CNA-002',
+  },
+  {
+    id: '3',
+    name: 'Lisa Rodriguez',
+    email: 'lisa@facility.com',
+    imageData: '',
+    certificationNumber: 'CNA-003',
+  },
+  {
+    id: '4',
+    name: 'David Kim',
+    email: 'david@facility.com',
+    imageData: '',
+    certificationNumber: 'CNA-004',
+  },
 ];
 
 const mockResidents = [
-  { id: '1', name: 'John Smith', room: '101', imageUrl: '', adlNeeds: ['Bathing', 'Dressing', 'Mobility'] },
+  {
+    id: '1',
+    name: 'John Smith',
+    room: '101',
+    imageUrl: '',
+    adlNeeds: ['Bathing', 'Dressing', 'Mobility'],
+  },
   { id: '2', name: 'Mary Johnson', room: '102', imageUrl: '', adlNeeds: ['Feeding', 'Toileting'] },
   { id: '3', name: 'Robert Brown', room: '103', imageUrl: '', adlNeeds: ['Bathing', 'Medication'] },
-  { id: '4', name: 'Patricia Davis', room: '104', imageUrl: '', adlNeeds: ['Dressing', 'Mobility', 'Feeding'] },
+  {
+    id: '4',
+    name: 'Patricia Davis',
+    room: '104',
+    imageUrl: '',
+    adlNeeds: ['Dressing', 'Mobility', 'Feeding'],
+  },
   { id: '5', name: 'James Wilson', room: '105', imageUrl: '', adlNeeds: ['Bathing', 'Toileting'] },
-  { id: '6', name: 'Linda Miller', room: '106', imageUrl: '', adlNeeds: ['Medication', 'Mobility'] },
+  {
+    id: '6',
+    name: 'Linda Miller',
+    room: '106',
+    imageUrl: '',
+    adlNeeds: ['Medication', 'Mobility'],
+  },
 ];
 
 // Mock shift assignments
@@ -61,7 +103,11 @@ export default function ShiftManagement() {
     setAssignmentModal({ isOpen: true, shift });
   };
 
-  const handleAssignmentSubmit = (assignment: { cnaId: string; residentIds: string[]; notes?: string }) => {
+  const handleAssignmentSubmit = (assignment: {
+    cnaId: string;
+    residentIds: string[];
+    notes?: string;
+  }) => {
     console.log('Assignment submitted:', assignment);
     // TODO: Save assignment to backend
     setAssignmentModal({ isOpen: false });
@@ -138,9 +184,9 @@ export default function ShiftManagement() {
         {activeShifts.map(shift => {
           const assignment = getAssignmentForShift(shift.id);
           const assignedCNA = assignment ? getCNAById(assignment.cnaId) : null;
-          const assignedResidents = assignment ? assignment.residentIds.map(id =>
-            mockResidents.find(r => r.id === id)
-          ).filter(Boolean) : [];
+          const assignedResidents = assignment
+            ? assignment.residentIds.map(id => mockResidents.find(r => r.id === id)).filter(Boolean)
+            : [];
 
           return (
             <div key={shift.id} className="bg-white rounded-lg border border-gray-200 p-6">
@@ -149,13 +195,9 @@ export default function ShiftManagement() {
                 <div className="flex items-center gap-4">
                   <div
                     className="w-12 h-12 rounded-lg flex items-center justify-center"
-                    style={{ backgroundColor: `${shift.color}20` }}
+                    style={{ backgroundColor: `${shift.color}20`, color: shift.color }}
                   >
-                    <DynamicIconAtom
-                      name={getShiftIcon(shift.name)}
-                      size="lg"
-                      style={{ color: shift.color }}
-                    />
+                    <DynamicIconAtom name={getShiftIcon(shift.name)} size="lg" />
                   </div>
                   <div>
                     <TextAtom variant="h2" weight="semibold">
@@ -167,11 +209,15 @@ export default function ShiftManagement() {
                   </div>
                 </div>
                 <ButtonAtom
-                  variant={assignedCNA ? "secondary" : "primary"}
+                  variant={assignedCNA ? 'secondary' : 'primary'}
                   onClick={() => handleAssignShift(shift)}
                 >
-                  <DynamicIconAtom name={assignedCNA ? "Edit" : "UserPlus"} size="sm" className="mr-2" />
-                  {assignedCNA ? "Edit Assignment" : "Assign CNA"}
+                  <DynamicIconAtom
+                    name={assignedCNA ? 'Pencil' : 'UserCheck'}
+                    size="sm"
+                    className="mr-2"
+                  />
+                  {assignedCNA ? 'Edit Assignment' : 'Assign CNA'}
                 </ButtonAtom>
               </div>
 
@@ -207,8 +253,15 @@ export default function ShiftManagement() {
                       </TextAtom>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {assignedResidents.map(resident => (
-                          <div key={resident?.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                            <AvatarAtom src={resident?.imageUrl} alt={resident?.name} size="sm" />
+                          <div
+                            key={resident?.id}
+                            className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+                          >
+                            <AvatarAtom
+                              src={resident?.imageUrl}
+                              alt={resident?.name || 'Resident'}
+                              size="sm"
+                            />
                             <div className="flex-1">
                               <TextAtom variant="body" weight="medium">
                                 {resident?.name}
@@ -244,12 +297,19 @@ export default function ShiftManagement() {
         isOpen={assignmentModal.isOpen}
         onClose={() => setAssignmentModal({ isOpen: false })}
         onSubmit={handleAssignmentSubmit}
-        shift={assignmentModal.shift ? {
-          id: assignmentModal.shift.id,
-          type: assignmentModal.shift.name,
-          date: selectedDate.toISOString(),
-          time: formatShiftTime(assignmentModal.shift.startTime, assignmentModal.shift.endTime),
-        } : { id: '', type: '', date: '', time: '' }}
+        shift={
+          assignmentModal.shift
+            ? {
+                id: assignmentModal.shift.id,
+                type: assignmentModal.shift.name,
+                date: selectedDate.toISOString(),
+                time: formatShiftTime(
+                  assignmentModal.shift.startTime,
+                  assignmentModal.shift.endTime
+                ),
+              }
+            : { id: '', type: '', date: '', time: '' }
+        }
         availableCNAs={mockCNAs}
         availableResidents={mockResidents}
       />
