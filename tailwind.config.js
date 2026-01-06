@@ -1,5 +1,3 @@
-const colors = require('./src/styles/colors');
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
@@ -11,11 +9,33 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: colors.primary,
-        secondary: colors.secondary,
-        tertiary: colors.tertiary,
-        lightGray: colors.lightGray,
-        darkGray: colors.darkGray,
+        primary: '#2563ea',
+        secondary: '#dbeaff',
+        tertiary: '#111827',
+        lightGray: '#4B5563',
+        darkGray: '#111827',
+      },
+      keyframes: {
+        'accordion-down': {
+          from: {
+            height: '0',
+          },
+          to: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+        },
+        'accordion-up': {
+          from: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+          to: {
+            height: '0',
+          },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
     },
   },

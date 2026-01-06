@@ -11,6 +11,7 @@ import {
   useUpdateShiftTemplate,
   formatShiftTime,
   calculateShiftDuration,
+  calculateSortOrder,
 } from '@/hooks/useShiftTemplates';
 
 interface ShiftTemplate {
@@ -85,12 +86,22 @@ export function ShiftTemplateModalMolecule({
 
     try {
       if (isEditing && shiftTemplate) {
+        // Calculate sortOrder based on start time for edited shifts too
+        const sortOrder = calculateSortOrder(formData.startTime);
         await updateMutation.mutateAsync({
           id: shiftTemplate.id,
-          data: formData,
+          data: {
+            ...formData,
+            sortOrder,
+          },
         });
       } else {
-        await createMutation.mutateAsync(formData);
+        // Calculate sortOrder based on start time for new shifts
+        const sortOrder = calculateSortOrder(formData.startTime);
+        await createMutation.mutateAsync({
+          ...formData,
+          sortOrder,
+        });
       }
       onClose();
     } catch (error) {

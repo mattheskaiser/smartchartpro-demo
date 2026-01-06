@@ -8,6 +8,10 @@
   "kiroAgent.configureMCP": "Disabled",
   "prettier.requireConfig": true,
   "prettier.useEditorConfig": false,
+  "kiroAgent.preferences": {
+    "useExistingComponents": true,
+    "note": "Always use existing components/molecules instead of creating inline replacements. Modify the existing component if UI changes are needed."
+  },
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features",
     "editor.formatOnSave": true

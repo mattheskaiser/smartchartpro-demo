@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
-import { SelectAtom } from '@/components/atoms/Select.atom';
+import { DropdownAtom } from '@/components/atoms/Dropdown.atom';
 import { LabelAtom } from '@/components/atoms/Label.atom';
 import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
@@ -53,6 +53,12 @@ export const ShiftAssignmentModalMolecule = ({
   const [selectedCNA, setSelectedCNA] = useState('');
   const [selectedResidents, setSelectedResidents] = useState<string[]>([]);
   const [notes, setNotes] = useState('');
+
+  // Create dropdown options for CNAs
+  const cnaOptions = availableCNAs.map(cna => ({
+    value: cna.id,
+    label: `${cna.name} - ${cna.email}`,
+  }));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,14 +137,12 @@ export const ShiftAssignmentModalMolecule = ({
       {/* CNA Selection */}
       <div className="mb-6">
         <LabelAtom required>Select CNA</LabelAtom>
-        <SelectAtom value={selectedCNA} onChange={e => setSelectedCNA(e.target.value)} required>
-          <option value="">Choose a CNA...</option>
-          {availableCNAs.map(cna => (
-            <option key={cna.id} value={cna.id}>
-              {cna.name} - {cna.email}
-            </option>
-          ))}
-        </SelectAtom>
+        <DropdownAtom
+          value={selectedCNA}
+          onValueChange={setSelectedCNA}
+          options={cnaOptions}
+          placeholder="Choose a CNA..."
+        />
 
         {selectedCNAData && (
           <div className="mt-3 p-3 bg-gray-50 rounded-lg">
