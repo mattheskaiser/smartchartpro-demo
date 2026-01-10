@@ -3,6 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useChartingStore } from '@/stores/chartingStore';
 import { format } from 'date-fns';
+import { ButtonAtom } from '@/components/atoms/Button.atom';
+import { TextAtom } from '@/components/atoms/Text.atom';
+import { CardAtom } from '@/components/atoms/Card.atom';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 
 const ADL_TYPES = [
   { id: 'bathing', label: 'Bathing' },
@@ -19,7 +23,7 @@ const ASSISTANCE_LEVELS = [
   { id: 'full', label: 'Full Assist' },
 ];
 
-export default function ReviewPage() {
+export default function ChartingReviewPage() {
   const router = useRouter();
   const { selectedResidents, entries, endCharting } = useChartingStore();
 
@@ -27,7 +31,7 @@ export default function ReviewPage() {
     // Here you would typically save all entries to the database
     // and generate a PDF report
     endCharting();
-    router.push('/start');
+    router.push('/charting/start');
   };
 
   const entriesByResident = entries.reduce(
@@ -49,9 +53,11 @@ export default function ReviewPage() {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-medium text-gray-900 mb-4">Charting Summary</h2>
+    <div className="mx-auto max-w-7xl p-6 space-y-6">
+      <CardAtom>
+        <TextAtom variant="h2" className="text-gray-900 mb-6">
+          Charting Summary
+        </TextAtom>
 
         <div className="space-y-8">
           {Object.values(entriesByResident).map(({ resident, entries }) => (
@@ -59,27 +65,31 @@ export default function ReviewPage() {
               key={resident.id}
               className="border-b border-gray-200 pb-6 last:border-0 last:pb-0"
             >
-              <h3 className="font-medium text-gray-900 mb-2">
+              <TextAtom variant="h3" className="text-gray-900 mb-4">
                 {resident.name} - Room {resident.room}
-              </h3>
+              </TextAtom>
 
               <div className="space-y-3">
                 {entries.map((entry, index) => (
                   <div key={index} className="bg-gray-50 rounded-lg p-4">
                     <div className="flex justify-between items-start">
                       <div>
-                        <p className="font-medium text-gray-900">
+                        <TextAtom className="font-medium text-gray-900">
                           {ADL_TYPES.find(t => t.id === entry.activityType)?.label}
-                        </p>
-                        <p className="text-sm text-gray-500">
+                        </TextAtom>
+                        <TextAtom variant="small" className="text-gray-500">
                           {ASSISTANCE_LEVELS.find(l => l.id === entry.assistance)?.label}
-                        </p>
+                        </TextAtom>
                       </div>
-                      <p className="text-sm text-gray-500">
+                      <TextAtom variant="small" className="text-gray-500">
                         {format(new Date(entry.timestamp), 'h:mm a')}
-                      </p>
+                      </TextAtom>
                     </div>
-                    {entry.notes && <p className="mt-2 text-sm text-gray-600">{entry.notes}</p>}
+                    {entry.notes && (
+                      <TextAtom variant="small" className="mt-2 text-gray-600">
+                        {entry.notes}
+                      </TextAtom>
+                    )}
                   </div>
                 ))}
               </div>
@@ -87,36 +97,36 @@ export default function ReviewPage() {
           ))}
 
           {Object.keys(entriesByResident).length === 0 && (
-            <p className="text-gray-500 text-center py-4">No entries recorded yet.</p>
+            <div className="text-center py-8">
+              <DynamicIconAtom name="FileText" size="lg" className="mx-auto text-gray-400 mb-4" />
+              <TextAtom className="text-gray-500">No entries recorded yet.</TextAtom>
+            </div>
           )}
         </div>
-      </div>
+      </CardAtom>
 
       <div className="flex justify-between">
-        <button
-          onClick={() => router.push('/charting')}
-          className="px-4 py-2 rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200"
-        >
+        <ButtonAtom variant="outline" onClick={() => router.push('/charting/adls')}>
+          <DynamicIconAtom name="ArrowLeft" size="sm" className="mr-2" />
           Back to Charting
-        </button>
+        </ButtonAtom>
 
-        <div className="space-x-4">
-          <button
+        <div className="flex items-center space-x-4">
+          <ButtonAtom
+            variant="outline"
             onClick={() => {
               // Here you would trigger PDF generation
               console.log('Generating PDF...');
             }}
-            className="px-4 py-2 rounded-lg font-medium bg-white border border-gray-200 text-gray-700 hover:bg-gray-50"
           >
+            <DynamicIconAtom name="Download" size="sm" className="mr-2" />
             Export PDF
-          </button>
+          </ButtonAtom>
 
-          <button
-            onClick={handleEndCharting}
-            className="px-4 py-2 rounded-lg font-medium bg-blue-600 text-white hover:bg-blue-700"
-          >
+          <ButtonAtom onClick={handleEndCharting}>
+            <DynamicIconAtom name="Check" size="sm" className="mr-2" />
             End Charting
-          </button>
+          </ButtonAtom>
         </div>
       </div>
     </div>

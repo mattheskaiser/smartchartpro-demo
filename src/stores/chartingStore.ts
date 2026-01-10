@@ -2,7 +2,16 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Resident } from '@/constants/residents';
+
+// Flexible resident type that works with both dummy data and database data
+interface ChartingResident {
+  id: string;
+  name: string;
+  room: string;
+  status: string;
+  imageUrl?: string | null;
+  imageData?: string | null;
+}
 
 interface ADLEntry {
   residentId: string;
@@ -14,9 +23,9 @@ interface ADLEntry {
 
 interface ChartingStore {
   isChartingActive: boolean;
-  selectedResidents: Resident[];
+  selectedResidents: ChartingResident[];
   entries: ADLEntry[];
-  startCharting: (residents: Resident[]) => void;
+  startCharting: (residents: ChartingResident[]) => void;
   endCharting: () => void;
   addEntry: (entry: ADLEntry) => void;
 }

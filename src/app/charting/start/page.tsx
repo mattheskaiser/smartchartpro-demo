@@ -1,25 +1,62 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { DUMMY_RESIDENTS } from '@/constants/residents';
 import { useChartingStore } from '@/stores/chartingStore';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
+import { TextAtom } from '@/components/atoms/Text.atom';
+import { ButtonAtom } from '@/components/atoms/Button.atom';
+import { CardAtom } from '@/components/atoms/Card.atom';
+import { AvatarAtom } from '@/components/atoms/Avatar.atom';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
+import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
 
-export default function StartChartingPage() {
+type Resident = {
+  id: string;
+  name: string;
+  room: string;
+  status: string;
+  imageUrl?: string | null;
+  imageData?: string | null;
+};
+
+export default function ChartingStartPage() {
   const router = useRouter();
   const { startCharting } = useChartingStore();
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [residents, setResidents] = useState<Resident[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch residents from the database
+  useEffect(() => {
+    const fetchResidents = async () => {
+      try {
+        const response = await fetch('/api/residents');
+        if (!response.ok) {
+          throw new Error('Failed to fetch residents');
+        }
+        const data = await response.json();
+        setResidents(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load residents');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResidents();
+  }, []);
 
   const handleStartCharting = () => {
-    const selectedResidents = DUMMY_RESIDENTS.filter(r => selectedIds.has(r.id));
+    const selectedResidents = residents.filter(r => selectedIds.has(r.id));
     startCharting(selectedResidents);
-    router.push('/charting/chart');
+    router.push('/charting/adls');
   };
 
   const getStatusVariant = (status: string) => {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case 'independent':
         return 'success';
       case 'partial':
@@ -31,30 +68,87 @@ export default function StartChartingPage() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
-      <div className="mx-auto max-w-7xl space-y-6">
-        {/* Header */}
-        <header>
-          <h1 className="text-3xl font-bold text-gray-900">SmartChart Pro</h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Select the residents you'll be charting for during your session
-          </p>
-        </header>
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-7xl p-6">
+        <LoadingStateMolecule message="Loading residents..." />
+      </div>
+    );
+  }
 
-        {/* Resident Selection */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <div className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Available Residents</h2>
+  if (error) {
+    return (
+      <div className="mx-auto max-w-7xl p-6">
+        <CardAtom className="text-center">
+          <DynamicIconAtom name="TriangleAlert" size="lg" className="mx-auto text-red-500 mb-4" />
+          <TextAtom variant="h2" className="text-red-600 mb-2">
+            Error Loading Residents
+          </TextAtom>
+          <TextAtom className="text-gray-600 mb-4">{error}</TextAtom>
+          <ButtonAtom onClick={() => window.location.reload()} variant="outline">
+            Try Again
+          </ButtonAtom>
+        </CardAtom>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-7xl p-6 space-y-6">
+      {/* Resident Selection */}
+      <CardAtom padding="none">
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <TextAtom variant="h2" className="text-gray-900">
+              Available Residents
+            </TextAtom>
+            <div className="flex items-center space-x-4">
+              <ButtonAtom
+                variant="outline"
+                onClick={() => setSelectedIds(new Set(residents.map(r => r.id)))}
+                disabled={residents.length === 0}
+              >
+                Select All
+              </ButtonAtom>
+              <ButtonAtom
+                variant="ghost"
+                onClick={() => setSelectedIds(new Set())}
+                disabled={selectedIds.size === 0}
+              >
+                Clear All
+              </ButtonAtom>
+            </div>
+          </div>
+
+          {residents.length === 0 ? (
+            <div className="text-center py-12">
+              <DynamicIconAtom name="Users" size="lg" className="mx-auto text-gray-400 mb-4" />
+              <TextAtom variant="h3" className="text-gray-500 mb-2">
+                No Residents Found
+              </TextAtom>
+              <TextAtom className="text-gray-400">
+                Add residents in the admin panel to start charting
+              </TextAtom>
+            </div>
+          ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {DUMMY_RESIDENTS.map(resident => (
+              {residents.map(resident => (
                 <div
                   key={resident.id}
-                  className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-colors ${
+                  className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${
                     selectedIds.has(resident.id)
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:bg-gray-50'
+                      ? 'border-primary bg-secondary ring-1 ring-primary/20'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                   }`}
+                  onClick={() => {
+                    const newSelected = new Set(selectedIds);
+                    if (selectedIds.has(resident.id)) {
+                      newSelected.delete(resident.id);
+                    } else {
+                      newSelected.add(resident.id);
+                    }
+                    setSelectedIds(newSelected);
+                  }}
                 >
                   <CheckboxAtom
                     checked={selectedIds.has(resident.id)}
@@ -68,41 +162,51 @@ export default function StartChartingPage() {
                       setSelectedIds(newSelected);
                     }}
                   />
+                  <AvatarAtom
+                    src={resident.imageUrl || resident.imageData || undefined}
+                    alt={resident.name}
+                    size="md"
+                  />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <p className="text-sm font-medium text-gray-900 truncate">{resident.name}</p>
+                      <TextAtom className="font-medium text-gray-900 truncate">
+                        {resident.name}
+                      </TextAtom>
                       <BadgeAtom variant={getStatusVariant(resident.status)}>
                         {resident.status.charAt(0).toUpperCase() + resident.status.slice(1)}
                       </BadgeAtom>
                     </div>
-                    <p className="text-sm text-gray-500">Room {resident.room}</p>
+                    <div className="flex items-center text-sm text-gray-500">
+                      <DynamicIconAtom name="MapPin" size="sm" className="mr-1" />
+                      Room {resident.room}
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          )}
+        </div>
 
-          {/* Footer */}
-          <div className="border-t border-gray-200 px-6 py-4 bg-gray-50 rounded-b-lg">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-600">
+        {/* Footer */}
+        <div className="border-t border-gray-200 px-6 py-4 bg-gray-50 rounded-b-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <DynamicIconAtom name="Check" size="sm" className="text-primary" />
+              <TextAtom className="text-gray-600">
                 {selectedIds.size} resident{selectedIds.size !== 1 ? 's' : ''} selected
-              </p>
-              <button
-                onClick={handleStartCharting}
-                disabled={selectedIds.size === 0}
-                className={`px-4 py-2 rounded-lg font-medium ${
-                  selectedIds.size === 0
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-blue-600 text-white hover:bg-blue-700'
-                }`}
-              >
-                Start Charting
-              </button>
+              </TextAtom>
             </div>
+            <ButtonAtom
+              onClick={handleStartCharting}
+              disabled={selectedIds.size === 0}
+              className="min-w-[140px]"
+            >
+              <DynamicIconAtom name="Hospital" size="sm" className="mr-2" />
+              Start Charting
+            </ButtonAtom>
           </div>
         </div>
-      </div>
+      </CardAtom>
     </div>
   );
 }

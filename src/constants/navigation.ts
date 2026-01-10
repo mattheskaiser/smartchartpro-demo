@@ -11,7 +11,7 @@ export const ADMIN_NAVIGATION = [
 
 // Bottom navigation item for charting workflow
 export const ADMIN_BOTTOM_NAVIGATION = [
-  { name: 'Start Charting', href: '/start', icon: 'Hospital' as keyof typeof icons },
+  { name: 'Start Charting', href: '/charting/start', icon: 'Hospital' as keyof typeof icons },
 ] as const;
 
 export type AdminNavItem = (typeof ADMIN_NAVIGATION)[number];

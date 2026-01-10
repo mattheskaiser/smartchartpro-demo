@@ -87,11 +87,11 @@ export const ImageUploadMolecule = ({
           <div className="flex items-center gap-4">
             <AvatarAtom src={previewUrl} alt="Preview" size="lg" />
             <div className="flex flex-col gap-2">
-              <ButtonAtom variant="secondary" onClick={handleButtonClick}>
+              <ButtonAtom variant="secondary" size="sm" onClick={handleButtonClick}>
                 <DynamicIconAtom name="Upload" size="sm" className="mr-2" />
                 Change Image
               </ButtonAtom>
-              <ButtonAtom variant="ghost" onClick={handleRemoveImage}>
+              <ButtonAtom variant="ghost" size="sm" onClick={handleRemoveImage}>
                 <DynamicIconAtom name="Trash2" size="sm" className="mr-2" />
                 Remove
               </ButtonAtom>
