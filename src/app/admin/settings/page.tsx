@@ -951,7 +951,6 @@ export default function Settings() {
         <div className="flex justify-end">
           <ButtonAtom
             variant="primary"
-            size="lg"
             onClick={handleSave}
             isLoading={isSaving}
             loadingText="Saving Settings..."

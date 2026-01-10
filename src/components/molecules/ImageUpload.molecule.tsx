@@ -87,11 +87,11 @@ export const ImageUploadMolecule = ({
           <div className="flex items-center gap-4">
             <AvatarAtom src={previewUrl} alt="Preview" size="lg" />
             <div className="flex flex-col gap-2">
-              <ButtonAtom variant="secondary" onClick={handleButtonClick}>
+              <ButtonAtom variant="secondary" size="sm" onClick={handleButtonClick}>
                 <DynamicIconAtom name="Upload" size="sm" className="mr-2" />
                 Change Image
               </ButtonAtom>
-              <ButtonAtom variant="ghost" onClick={handleRemoveImage}>
+              <ButtonAtom variant="ghost" size="sm" onClick={handleRemoveImage}>
                 <DynamicIconAtom name="Trash2" size="sm" className="mr-2" />
                 Remove
               </ButtonAtom>
@@ -101,8 +101,7 @@ export const ImageUploadMolecule = ({
           <div
             className={`
               border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors
-              ${
-                isDragging ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-gray-400'
+              ${isDragging ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-gray-400'
               }
             `}
             onDragOver={handleDragOver}

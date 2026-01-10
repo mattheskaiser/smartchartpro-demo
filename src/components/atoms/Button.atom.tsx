@@ -17,7 +17,7 @@ interface ButtonAtomProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
 
 export const ButtonAtom = ({
   variant = 'primary',
-  size = 'md',
+  size = 'lg',
   isFullWidth = false,
   children,
   className,

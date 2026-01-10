@@ -126,7 +126,6 @@ export default function StartPage() {
               <div className="flex items-center space-x-4">
                 <ButtonAtom
                   variant="outline"
-                  size="sm"
                   onClick={() => setSelectedIds(new Set(residents.map(r => r.id)))}
                   disabled={residents.length === 0}
                 >
@@ -134,7 +133,6 @@ export default function StartPage() {
                 </ButtonAtom>
                 <ButtonAtom
                   variant="ghost"
-                  size="sm"
                   onClick={() => setSelectedIds(new Set())}
                   disabled={selectedIds.size === 0}
                 >
@@ -158,11 +156,10 @@ export default function StartPage() {
                 {residents.map(resident => (
                   <div
                     key={resident.id}
-                    className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${
-                      selectedIds.has(resident.id)
+                    className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${selectedIds.has(resident.id)
                         ? 'border-primary bg-secondary ring-1 ring-primary/20'
                         : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                    }`}
+                      }`}
                     onClick={() => {
                       const newSelected = new Set(selectedIds);
                       if (selectedIds.has(resident.id)) {
