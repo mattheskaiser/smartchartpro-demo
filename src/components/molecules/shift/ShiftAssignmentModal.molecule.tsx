@@ -246,7 +246,7 @@ export const ShiftAssignmentModalMolecule = ({
           value={notes}
           onChange={e => setNotes(e.target.value)}
           placeholder="Any special instructions or notes for this shift..."
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-blue-500 resize-none"
           rows={3}
         />
       </div>
