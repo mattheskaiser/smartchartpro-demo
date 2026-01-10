@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Protected routes that require active charting session
-  if (pathname === '/charting' || pathname === '/review') {
+  if (pathname.startsWith('/charting/adls') || pathname.startsWith('/charting/review')) {
     // Here you would typically check for authentication
     // For now, we'll just let it through
 

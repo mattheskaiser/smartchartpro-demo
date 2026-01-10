@@ -34,8 +34,7 @@ export const ButtonAtom = ({
   const variantClasses = {
     primary: 'bg-blue-600 text-white hover:bg-blue-700',
     secondary: 'bg-gray-100 text-gray-800 hover:bg-gray-200',
-    outline:
-      'border-2 border-blue-600 text-blue-600 hover:bg-blue-50 bg-transparent',
+    outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50 bg-transparent',
     ghost: 'text-gray-600 hover:bg-gray-100',
     destructive: 'bg-red-600 text-white hover:bg-red-700',
     delete: 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200',

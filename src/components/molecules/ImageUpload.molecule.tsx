@@ -101,7 +101,8 @@ export const ImageUploadMolecule = ({
           <div
             className={`
               border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors
-              ${isDragging ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-gray-400'
+              ${
+                isDragging ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-gray-400'
               }
             `}
             onDragOver={handleDragOver}
