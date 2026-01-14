@@ -19,6 +19,10 @@
         "details": "Use useState with form object, useEffect for editing mode, and consistent form reset patterns"
       },
       {
+        "rule": "Always use Tailwind CSS, not standard CSS unless absolutely necessary",
+        "details": "Always use Tailwind CSS, not standard CSS unless absolutely necessary"
+      },
+      {
         "rule": "Follow consistent field layout patterns",
         "details": "Use grid layouts for multiple fields, single divs for single fields, consistent spacing with space-y-4"
       },
