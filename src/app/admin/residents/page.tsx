@@ -8,6 +8,7 @@ import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
 import { useResidents, useCreateResident } from '@/hooks/useResidents';
 import { ResidentCardMolecule } from '@/components/molecules/resident/ResidentCard.molecule';
+import { toast } from '@/lib/toast';
 
 export default function ResidentManagement() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -32,9 +33,18 @@ export default function ResidentManagement() {
     try {
       await createResidentMutation.mutateAsync(formData);
       setIsAddModalOpen(false);
+      toast({
+        title: 'Resident created successfully',
+        description: `${formData.name} has been added to the system`,
+        type: 'success',
+      });
     } catch (error) {
       console.error('Error creating resident:', error);
-      // Error is already handled by the mutation
+      toast({
+        title: 'Failed to create resident',
+        description: 'There was an error creating the resident. Please try again.',
+        type: 'error',
+      });
     }
   };
 

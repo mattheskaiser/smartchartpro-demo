@@ -7,6 +7,7 @@ import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { AllergyModalMolecule } from './modals/AllergyModal.molecule';
 import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
+import { toast } from '@/lib/toast';
 
 interface Allergy {
   id: string;
@@ -55,6 +56,13 @@ export const ResidentAllergiesMolecule = ({
           onAllergiesChange(
             safeAllergies.map(a => (a.id === editingAllergy.id ? updatedAllergy : a))
           );
+          toast({
+            title: 'Allergy updated',
+            description: `${allergyData.name} has been updated`,
+            type: 'success',
+          });
+        } else {
+          throw new Error('Failed to update allergy');
         }
         setEditingAllergy(null);
       } else {
@@ -68,10 +76,22 @@ export const ResidentAllergiesMolecule = ({
         if (response.ok) {
           const newAllergy = await response.json();
           onAllergiesChange([...safeAllergies, newAllergy]);
+          toast({
+            title: 'Allergy added',
+            description: `${allergyData.name} has been added to the allergy list`,
+            type: 'success',
+          });
+        } else {
+          throw new Error('Failed to add allergy');
         }
       }
     } catch (error) {
       console.error('Error saving allergy:', error);
+      toast({
+        title: 'Failed to save allergy',
+        description: 'There was an error saving the allergy. Please try again.',
+        type: 'error',
+      });
     } finally {
       setIsLoading(false);
     }
@@ -96,10 +116,23 @@ export const ResidentAllergiesMolecule = ({
       });
 
       if (response.ok) {
+        const deletedAllergy = safeAllergies.find(a => a.id === id);
         onAllergiesChange(safeAllergies.filter(a => a.id !== id));
+        toast({
+          title: 'Allergy removed',
+          description: deletedAllergy ? `${deletedAllergy.name} has been removed` : 'Allergy has been removed',
+          type: 'success',
+        });
+      } else {
+        throw new Error('Failed to delete allergy');
       }
     } catch (error) {
       console.error('Error deleting allergy:', error);
+      toast({
+        title: 'Failed to remove allergy',
+        description: 'There was an error removing the allergy. Please try again.',
+        type: 'error',
+      });
     }
   };
 

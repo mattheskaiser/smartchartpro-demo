@@ -8,6 +8,7 @@ import { QueryProvider } from '@/providers/QueryProvider';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { ChartingProgressStepperMolecule } from '@/components/molecules/ChartingProgressStepper.molecule';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
+import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className="h-full">
       <body className={`${inter.className} h-full antialiased`}>
         <QueryProvider>
+          <Toaster />
           {isAdminRoute ? (
             // Admin routes use their own fullscreen layout
             children

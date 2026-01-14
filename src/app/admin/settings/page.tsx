@@ -16,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { toast } from '@/lib/toast';
 
 export default function Settings() {
   // Dropdown options
@@ -135,9 +136,23 @@ export default function Settings() {
 
   const handleSave = async () => {
     setIsSaving(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsSaving(false);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      toast({
+        title: 'Settings saved successfully',
+        description: 'All your changes have been saved',
+        type: 'success',
+      });
+    } catch (error) {
+      toast({
+        title: 'Failed to save settings',
+        description: 'There was an error saving your settings. Please try again.',
+        type: 'error',
+      });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (

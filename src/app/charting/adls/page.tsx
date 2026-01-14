@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useChartingStore } from '@/stores/chartingStore';
+import { toast } from '@/lib/toast';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
@@ -39,6 +40,8 @@ export default function ChartingADLsPage() {
 
     setIsSubmitting(true);
 
+    const currentResident = selectedResidents.find(r => r.id === selectedResident);
+
     try {
       addEntry({
         residentId: selectedResident,
@@ -48,28 +51,24 @@ export default function ChartingADLsPage() {
         notes: notes.trim() || undefined,
       });
 
-      // Show success message using a toast-like notification
-      const successMessage = document.createElement('div');
-      successMessage.className =
-        'fixed top-4 right-4 bg-green-100 text-green-800 px-4 py-2 rounded-lg shadow-lg border border-green-200 z-50';
-      successMessage.innerHTML = `
-        <div class="flex items-center">
-          <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-          </svg>
-          Entry saved successfully
-        </div>
-      `;
-      document.body.appendChild(successMessage);
-
-      setTimeout(() => {
-        successMessage.remove();
-      }, 3000);
+      // Show success toast
+      toast({
+        title: 'Entry saved successfully',
+        description: `${selectedADL.charAt(0).toUpperCase() + selectedADL.slice(1)} activity recorded for ${currentResident?.name}`,
+        type: 'success',
+      });
 
       // Reset form
       resetForm();
     } catch (error) {
       console.error('Error saving entry:', error);
+
+      // Show error toast
+      toast({
+        title: 'Failed to save entry',
+        description: 'There was an error saving the entry. Please try again.',
+        type: 'error',
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -193,7 +192,7 @@ export default function ChartingADLsPage() {
                 <BadgeAtom variant={getStatusVariant(currentResident?.status || '')}>
                   {currentResident?.status
                     ? currentResident.status.charAt(0).toUpperCase() +
-                      currentResident.status.slice(1)
+                    currentResident.status.slice(1)
                     : ''}
                 </BadgeAtom>
               </div>

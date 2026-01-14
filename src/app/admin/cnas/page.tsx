@@ -8,6 +8,7 @@ import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecu
 import { AddCNAModalMolecule } from '@/components/molecules/cna/AddCNAModal.molecule';
 import { CNACardMolecule } from '@/components/molecules/cna/CNACard.molecule';
 import { useCNAs, useCreateCNA } from '@/hooks/useCNAs';
+import { toast } from '@/lib/toast';
 
 export default function CNAManagement() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -31,9 +32,18 @@ export default function CNAManagement() {
     try {
       await createCNAMutation.mutateAsync(formData);
       setIsAddModalOpen(false);
+      toast({
+        title: 'CNA created successfully',
+        description: `${formData.name} has been added to your team`,
+        type: 'success',
+      });
     } catch (error) {
       console.error('Error creating CNA:', error);
-      // Error is already handled by the mutation
+      toast({
+        title: 'Failed to create CNA',
+        description: 'There was an error creating the CNA. Please try again.',
+        type: 'error',
+      });
     }
   };
 
