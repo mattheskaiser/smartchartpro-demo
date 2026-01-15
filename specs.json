@@ -52,6 +52,31 @@
       }
     ]
   },
+  "ui_consistency_requirements": {
+    "description": "All pages and components must follow consistent UI patterns across the application",
+    "requirements": [
+      {
+        "rule": "Match existing page header patterns",
+        "details": "When creating new pages or components, always check existing pages to match the UI styling. Page headers should use: <div className='sm:flex sm:items-center'><div className='sm:flex-auto'><TextAtom variant='h1' weight='semibold'>Title</TextAtom><TextAtom variant='small' color='muted' className='mt-2'>Description</TextAtom></div></div>"
+      },
+      {
+        "rule": "Consistent button sizing",
+        "details": "Use default button size (not 'sm') for primary actions in cards and lists. Only use 'sm' size for secondary actions in tight spaces or inline elements."
+      },
+      {
+        "rule": "Check existing pages before creating new ones",
+        "details": "Before creating a new page, search for similar pages in the same section (e.g., admin pages) to understand and match the established patterns, layouts, and styling conventions."
+      },
+      {
+        "rule": "Maintain consistent spacing and layout",
+        "details": "Use consistent spacing patterns: max-w-7xl for page containers, p-6 for page padding, space-y-6 for section spacing, and sm:flex patterns for responsive layouts."
+      },
+      {
+        "rule": "Use consistent text styling",
+        "details": "Always use TextAtom component with consistent variants: 'h1' with weight='semibold' for page titles, 'small' with color='muted' for descriptions, and appropriate variants for other text elements."
+      }
+    ]
+  },
   "database_migration_rules": {
     "description": "Critical rules for handling database migrations safely",
     "rules": [

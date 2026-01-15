@@ -4,13 +4,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useChartingStore } from '@/stores/chartingStore';
 import { useFacilityStore } from '@/stores/facilityStore';
+import { useCreateChartingReport } from '@/hooks/useChartingReports';
 import { format } from 'date-fns';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
-import { ChartingReportPDF } from '@/components/pdf/ChartingReportPDF';
-import { generateAndDownloadPDF, generateChartingReportFilename } from '@/lib/pdfExport';
 import { toast } from '@/lib/toast';
 
 const ADL_TYPES = [
@@ -32,31 +31,37 @@ export default function ChartingReviewPage() {
   const router = useRouter();
   const { selectedResidents, entries, session, endCharting } = useChartingStore();
   const facilitySettings = useFacilityStore();
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const createReport = useCreateChartingReport();
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleExportPDF = async () => {
-    console.log('Starting PDF export...');
-    console.log('Session:', session);
-    console.log('Facility settings:', facilitySettings);
-    console.log('Selected residents:', selectedResidents);
-    console.log('Entries:', entries);
-
+  const handleEndCharting = async () => {
     if (!session) {
-      toast({ title: 'Session information is missing. Cannot generate PDF.', type: 'error' });
+      toast({ title: 'Session information is missing.', type: 'error' });
       return;
     }
 
-    setIsGeneratingPDF(true);
+    if (entries.length === 0) {
+      toast({
+        title: 'No activities recorded. Please add at least one activity.',
+        type: 'error',
+      });
+      return;
+    }
+
+    setIsSaving(true);
 
     try {
-      // Ensure startTime is a Date object
-      const startTime = session.startTime instanceof Date
-        ? session.startTime
-        : new Date(session.startTime);
+      const startTime =
+        session.startTime instanceof Date ? session.startTime : new Date(session.startTime);
+      const endTime = new Date();
 
-      console.log('Start time:', startTime);
+      console.log('Step 1: Generating PDF on client side...');
 
-      const pdfDocument = (
+      // Generate PDF on client side to avoid Next.js SSR issues
+      const { pdf } = await import('@react-pdf/renderer');
+      const { ChartingReportPDF } = await import('@/components/pdf/ChartingReportPDF');
+
+      const pdfBlob = await pdf(
         <ChartingReportPDF
           facilityName={facilitySettings.facilityName}
           facilityAddress={facilitySettings.facilityAddress}
@@ -68,36 +73,70 @@ export default function ChartingReviewPage() {
           selectedResidents={selectedResidents}
           entries={entries}
         />
-      );
+      ).toBlob();
 
-      const filename = generateChartingReportFilename(
-        facilitySettings.facilityName,
-        startTime,
-        session.cnaName
-      );
+      const arrayBuffer = await pdfBlob.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      const pdfData = buffer.toString('base64');
 
-      console.log('Generating PDF with filename:', filename);
+      console.log('Step 2: PDF generated, size:', pdfData.length);
 
-      await generateAndDownloadPDF(pdfDocument, filename);
-      toast({ title: 'PDF report generated successfully!', type: 'success' });
-    } catch (error) {
-      console.error('PDF generation error:', error);
-      console.error('Error details:', error instanceof Error ? error.message : 'Unknown error');
-      console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+      console.log('Step 3: Saving report to database...');
+
+      // Create the report with PDF data
+      await createReport.mutateAsync({
+        reportDate: startTime,
+        sessionStartTime: startTime,
+        sessionEndTime: endTime,
+        cnaId: session.cnaId,
+        cnaName: session.cnaName,
+        cnaCertification: session.cnaCertification,
+        totalResidents: selectedResidents.length,
+        totalActivities: entries.length,
+        residentsData: selectedResidents.map(r => ({
+          id: r.id,
+          name: r.name,
+          room: r.room,
+          status: r.status,
+          imageData: r.imageData || r.imageUrl || null,
+        })),
+        entriesData: entries.map(e => ({
+          residentId: e.residentId,
+          activityType: e.activityType,
+          assistance: e.assistance,
+          timestamp: e.timestamp,
+          notes: e.notes,
+        })),
+        pdfData: pdfData,
+      });
+
+      console.log('Step 4: Report saved successfully!');
+
+      // Clear charting session
+      endCharting();
+
       toast({
-        title: 'Failed to generate PDF',
-        description: error instanceof Error ? error.message : 'Unknown error',
-        type: 'error'
+        title: 'Session ended and report submitted',
+        type: 'success',
+      });
+
+      router.push('/charting/start');
+    } catch (error) {
+      console.error('Error saving charting session:', error);
+
+      let errorMessage = 'Unknown error';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      toast({
+        title: 'Failed to save charting session',
+        description: errorMessage,
+        type: 'error',
       });
     } finally {
-      setIsGeneratingPDF(false);
+      setIsSaving(false);
     }
-  };
-
-  const handleEndCharting = () => {
-    // Here you would typically save all entries to the database
-    endCharting();
-    router.push('/charting/start');
   };
 
   const entriesByResident = entries.reduce(
@@ -177,21 +216,10 @@ export default function ChartingReviewPage() {
           Back to Charting
         </ButtonAtom>
 
-        <div className="flex items-center space-x-4">
-          <ButtonAtom
-            variant="outline"
-            onClick={handleExportPDF}
-            disabled={isGeneratingPDF || entries.length === 0}
-          >
-            <DynamicIconAtom name="Download" size="sm" className="mr-2" />
-            {isGeneratingPDF ? 'Generating PDF...' : 'Export PDF'}
-          </ButtonAtom>
-
-          <ButtonAtom onClick={handleEndCharting}>
-            <DynamicIconAtom name="Check" size="sm" className="mr-2" />
-            End Charting
-          </ButtonAtom>
-        </div>
+        <ButtonAtom onClick={handleEndCharting} disabled={isSaving || entries.length === 0}>
+          <DynamicIconAtom name="Check" size="sm" className="mr-2" />
+          {isSaving ? 'Saving...' : 'End Charting'}
+        </ButtonAtom>
       </div>
     </div>
   );

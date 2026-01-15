@@ -136,6 +136,7 @@ model Cna {
   availableShifts     CnaAvailability[]   // Which shifts they can work
   assignedShifts      ShiftAssignment[]   // Actual shift assignments
   timeEntries         TimeEntry[]         // Clock in/out records
+  chartingReports     ChartingReport[]    // Charting reports created by this CNA
 }
 
 // CNA availability - which shifts a CNA can work
@@ -225,4 +226,46 @@ model TimeEntry {
   
   @@index([cnaId])
   @@index([clockIn])
+}
+
+// Charting reports - completed ADL charting sessions
+model ChartingReport {
+  id                String   @id @default(cuid())
+  reportDate        DateTime // Date of the charting session
+  sessionStartTime  DateTime // When charting started
+  sessionEndTime    DateTime // When charting ended
+  
+  // CNA information
+  cnaId             String?
+  cnaName           String?
+  cnaCertification  String?
+  
+  // Summary statistics
+  totalResidents    Int
+  totalActivities   Int
+  
+  // Report status and review
+  status            String   @default("pending") // "pending", "reviewed", "archived"
+  reviewedBy        String?  // Admin who reviewed
+  reviewedAt        DateTime?
+  notes             String?  // Admin notes
+  
+  // Actual charting data stored as JSON
+  residentsData     Json     // Array of residents: [{id, name, room, status, imageData}]
+  entriesData       Json     // Array of ADL entries: [{residentId, activityType, assistance, timestamp, notes}]
+  
+  // Generated PDF stored as base64
+  pdfData           String?  @db.Text // Base64 encoded PDF file
+  
+  // Metadata
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  // Relations
+  cna               Cna?     @relation(fields: [cnaId], references: [id], onDelete: SetNull)
+  
+  @@index([reportDate])
+  @@index([cnaId])
+  @@index([status])
+  @@index([createdAt])
 }
