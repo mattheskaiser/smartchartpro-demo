@@ -10,6 +10,10 @@ import {
 import { CreateSessionSchema, UpdateSessionSchema } from '@/lib/validations/session.schema';
 import { handleApiError, CommonErrors } from '@/lib/api-error';
 
+// Force dynamic rendering - don't cache this route
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 /**
  * GET /api/sessions - Get current user's active session
  */

@@ -3,6 +3,10 @@ import { prisma } from '@/lib/db';
 import { Prisma } from '@prisma/client';
 import { handleApiError, CommonErrors } from '@/lib/api-error';
 
+// Force dynamic rendering - don't cache this route
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET /api/residents - Get residents with pagination and filtering
 // Query params:
 // - page: Page number (default: 1)
