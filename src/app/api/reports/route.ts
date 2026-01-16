@@ -4,14 +4,27 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@prisma/client';
 
-// GET /api/reports - Get all charting reports
+// GET /api/reports - Get charting reports with pagination and optional details
+// Query params:
+// - page: Page number (default: 1)
+// - limit: Items per page (default: 50, max: 100)
+// - status: Filter by status (optional)
+// - cnaId: Filter by CNA ID (optional)
+// - startDate: Filter by start date (optional)
+// - endDate: Filter by end date (optional)
+// - includeDetails: Include CNA and createdBy relations (default: false)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '50')));
     const status = searchParams.get('status');
     const cnaId = searchParams.get('cnaId');
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
+    const includeDetails = searchParams.get('includeDetails') === 'true';
+
+    const skip = (page - 1) * limit;
 
     const where: Prisma.ChartingReportWhereInput = {};
 
@@ -33,31 +46,47 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Get total count for pagination
+    const totalCount = await prisma.chartingReport.count({ where });
+
     const reports = await prisma.chartingReport.findMany({
       where,
-      include: {
-        cna: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            certificationNumber: true,
+      include: includeDetails
+        ? {
+          cna: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              certificationNumber: true,
+            },
           },
-        },
-        createdBy: {
-          select: {
-            id: true,
-            email: true,
-            role: true,
+          createdBy: {
+            select: {
+              id: true,
+              email: true,
+              role: true,
+            },
           },
-        },
-      },
+        }
+        : undefined,
       orderBy: {
         reportDate: 'desc',
       },
+      take: limit,
+      skip,
     });
 
-    return NextResponse.json(reports);
+    return NextResponse.json({
+      reports,
+      pagination: {
+        page,
+        limit,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+        hasMore: skip + reports.length < totalCount,
+      },
+    });
   } catch (error) {
     console.error('Error fetching charting reports:', error);
     return NextResponse.json({ error: 'Failed to fetch charting reports' }, { status: 500 });

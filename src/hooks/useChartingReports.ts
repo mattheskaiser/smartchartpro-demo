@@ -11,12 +11,27 @@ const fetchReports = async (filters?: {
   cnaId?: string;
   startDate?: string;
   endDate?: string;
-}): Promise<ChartingReport[]> => {
+  page?: number;
+  limit?: number;
+  includeDetails?: boolean;
+}): Promise<{
+  reports: ChartingReport[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalCount: number;
+    totalPages: number;
+    hasMore: boolean;
+  };
+}> => {
   const params = new URLSearchParams();
   if (filters?.status) params.append('status', filters.status);
   if (filters?.cnaId) params.append('cnaId', filters.cnaId);
   if (filters?.startDate) params.append('startDate', filters.startDate);
   if (filters?.endDate) params.append('endDate', filters.endDate);
+  if (filters?.page) params.append('page', filters.page.toString());
+  if (filters?.limit) params.append('limit', filters.limit.toString());
+  if (filters?.includeDetails) params.append('includeDetails', 'true');
 
   const response = await fetch(`/api/reports?${params.toString()}`);
   if (!response.ok) {
@@ -88,6 +103,9 @@ export const useChartingReports = (filters?: {
   cnaId?: string;
   startDate?: string;
   endDate?: string;
+  page?: number;
+  limit?: number;
+  includeDetails?: boolean;
 }) => {
   return useQuery({
     queryKey: ['charting-reports', filters],
@@ -109,13 +127,20 @@ export const useCreateChartingReport = () => {
   return useMutation({
     mutationFn: createReport,
     onSuccess: newReport => {
-      // Update the reports list cache
-      queryClient.setQueryData(['charting-reports'], (old: ChartingReport[] = []) => [
-        newReport,
-        ...old,
-      ]);
+      // Update the reports list cache - handle paginated response
+      queryClient.setQueryData(['charting-reports', undefined], (old: any) => {
+        if (!old) return { reports: [newReport], pagination: { page: 1, limit: 50, totalCount: 1, totalPages: 1, hasMore: false } };
+        return {
+          ...old,
+          reports: [newReport, ...old.reports],
+          pagination: {
+            ...old.pagination,
+            totalCount: old.pagination.totalCount + 1,
+          },
+        };
+      });
 
-      // Invalidate and refetch reports list
+      // Invalidate all report queries to refetch
       queryClient.invalidateQueries({ queryKey: ['charting-reports'] });
     },
     onError: error => {
