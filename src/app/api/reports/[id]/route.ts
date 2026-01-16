@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@prisma/client';
+import { UpdateReportSchema } from '@/lib/validations/report.schema';
+import { handleApiError, CommonErrors } from '@/lib/api-error';
 
 // GET /api/reports/[id] - Get a specific charting report
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
@@ -27,13 +29,12 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     });
 
     if (!report) {
-      return NextResponse.json({ error: 'Report not found' }, { status: 404 });
+      return CommonErrors.notFound('Report');
     }
 
     return NextResponse.json(report);
   } catch (error) {
-    console.error('Error fetching charting report:', error);
-    return NextResponse.json({ error: 'Failed to fetch charting report' }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -41,14 +42,18 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const body = await request.json();
-    const { status, reviewedBy, reviewedAt, notes } = body;
+
+    // Validate request body
+    const validatedData = UpdateReportSchema.parse(body);
 
     const updateData: Prisma.ChartingReportUpdateInput = {};
 
-    if (status) updateData.status = status;
-    if (reviewedBy !== undefined) updateData.reviewedBy = reviewedBy;
-    if (reviewedAt !== undefined) updateData.reviewedAt = reviewedAt ? new Date(reviewedAt) : null;
-    if (notes !== undefined) updateData.notes = notes;
+    if (validatedData.status) updateData.status = validatedData.status;
+    if (validatedData.reviewedBy !== undefined) updateData.reviewedBy = validatedData.reviewedBy;
+    if (validatedData.reviewedAt !== undefined) {
+      updateData.reviewedAt = validatedData.reviewedAt ? new Date(validatedData.reviewedAt) : null;
+    }
+    if (validatedData.notes !== undefined) updateData.notes = validatedData.notes;
 
     const report = await prisma.chartingReport.update({
       where: { id: params.id },
@@ -74,8 +79,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 
     return NextResponse.json(report);
   } catch (error) {
-    console.error('Error updating charting report:', error);
-    return NextResponse.json({ error: 'Failed to update charting report' }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -88,7 +92,6 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error deleting charting report:', error);
-    return NextResponse.json({ error: 'Failed to delete charting report' }, { status: 500 });
+    return handleApiError(error);
   }
 }

@@ -128,6 +128,8 @@ export const useShiftTemplates = () => {
       const shifts = await fetchShiftTemplates();
       return sortShiftsByStartTime(shifts);
     },
+    staleTime: 10 * 60 * 1000, // 10 minutes (templates rarely change)
+    gcTime: 30 * 60 * 1000, // 30 minutes
   });
 };
 
@@ -136,6 +138,8 @@ export const useShiftTemplate = (id: string) => {
     queryKey: ['shift-templates', id],
     queryFn: () => fetchShiftTemplate(id),
     enabled: !!id,
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
   });
 };
 
@@ -146,9 +150,6 @@ export const useCreateShiftTemplate = () => {
     mutationFn: createShiftTemplate,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['shift-templates'] });
-    },
-    onError: error => {
-      console.error('Error creating shift template:', error);
     },
   });
 };
@@ -162,9 +163,6 @@ export const useUpdateShiftTemplate = () => {
       queryClient.setQueryData(['shift-templates', variables.id], updatedTemplate);
       queryClient.invalidateQueries({ queryKey: ['shift-templates'] });
     },
-    onError: error => {
-      console.error('Error updating shift template:', error);
-    },
   });
 };
 
@@ -176,9 +174,6 @@ export const useDeleteShiftTemplate = () => {
     onSuccess: (_, deletedId) => {
       queryClient.removeQueries({ queryKey: ['shift-templates', deletedId] });
       queryClient.invalidateQueries({ queryKey: ['shift-templates'] });
-    },
-    onError: error => {
-      console.error('Error deleting shift template:', error);
     },
   });
 };

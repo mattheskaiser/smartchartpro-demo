@@ -123,6 +123,8 @@ export const useShifts = (params?: { date?: string; startDate?: string; endDate?
   return useQuery({
     queryKey: ['shifts', params],
     queryFn: () => fetchShifts(params),
+    staleTime: 2 * 60 * 1000, // 2 minutes (shifts change frequently)
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 
@@ -131,6 +133,8 @@ export const useShift = (id: string) => {
     queryKey: ['shifts', id],
     queryFn: () => fetchShift(id),
     enabled: !!id,
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 
@@ -142,9 +146,6 @@ export const useCreateShift = () => {
     onSuccess: () => {
       // Invalidate shifts queries
       queryClient.invalidateQueries({ queryKey: ['shifts'] });
-    },
-    onError: error => {
-      console.error('Error creating shift:', error);
     },
   });
 };
@@ -161,9 +162,6 @@ export const useUpdateShift = () => {
       // Invalidate shifts queries
       queryClient.invalidateQueries({ queryKey: ['shifts'] });
     },
-    onError: error => {
-      console.error('Error updating shift:', error);
-    },
   });
 };
 
@@ -178,9 +176,6 @@ export const useDeleteShift = () => {
 
       // Invalidate shifts queries
       queryClient.invalidateQueries({ queryKey: ['shifts'] });
-    },
-    onError: error => {
-      console.error('Error deleting shift:', error);
     },
   });
 };

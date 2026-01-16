@@ -14,7 +14,8 @@ export default function ResidentManagement() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   // Use TanStack Query hooks
-  const { data: residents = [], isLoading, error } = useResidents();
+  const { data, isLoading, error } = useResidents();
+  const residents = data?.residents || [];
   const createResidentMutation = useCreateResident();
 
   const handleAddResident = () => {

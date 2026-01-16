@@ -10,7 +10,8 @@ import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecu
 import { toast } from '@/lib/toast';
 
 export default function ReportsPage() {
-  const { data: reports = [], isLoading, error } = useChartingReports();
+  const { data, isLoading, error } = useChartingReports();
+  const reports = data?.reports || [];
   const deleteReport = useDeleteChartingReport();
 
   const handleDelete = async (id: string, reportDate: string | Date) => {

@@ -10,8 +10,21 @@ export async function getActiveSession(userId: string) {
       isActive: true,
     },
     include: {
-      cna: true,
-      user: true,
+      cna: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          certificationNumber: true,
+        },
+      },
+      user: {
+        select: {
+          id: true,
+          email: true,
+          role: true,
+        },
+      },
     },
   });
 }
@@ -37,8 +50,21 @@ export async function createSession(userId: string, cnaId: string, residentIds: 
       currentStep: 'adls', // Session starts at adls once residents are selected
     },
     include: {
-      cna: true,
-      user: true,
+      cna: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          certificationNumber: true,
+        },
+      },
+      user: {
+        select: {
+          id: true,
+          email: true,
+          role: true,
+        },
+      },
     },
   });
 }

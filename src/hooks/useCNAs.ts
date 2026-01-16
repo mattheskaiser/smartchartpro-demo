@@ -86,6 +86,8 @@ export const useCNAs = () => {
   return useQuery({
     queryKey: ['cnas'],
     queryFn: fetchCNAs,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 
@@ -94,6 +96,8 @@ export const useCNA = (id: string) => {
     queryKey: ['cnas', id],
     queryFn: () => fetchCNA(id),
     enabled: !!id,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 
@@ -106,11 +110,8 @@ export const useCreateCNA = () => {
       // Update the CNAs list cache
       queryClient.setQueryData(['cnas'], (old: CNA[] = []) => [newCNA, ...old]);
 
-      // Invalidate and refetch CNAs list
+      // Invalidate to refetch
       queryClient.invalidateQueries({ queryKey: ['cnas'] });
-    },
-    onError: error => {
-      console.error('Error creating CNA:', error);
     },
   });
 };
@@ -132,9 +133,6 @@ export const useUpdateCNA = () => {
       // Invalidate related queries
       queryClient.invalidateQueries({ queryKey: ['cnas'] });
     },
-    onError: error => {
-      console.error('Error updating CNA:', error);
-    },
   });
 };
 
@@ -152,11 +150,8 @@ export const useDeleteCNA = () => {
       // Remove the specific CNA cache
       queryClient.removeQueries({ queryKey: ['cnas', deletedId] });
 
-      // Invalidate CNAs list to ensure consistency
+      // Invalidate to ensure consistency
       queryClient.invalidateQueries({ queryKey: ['cnas'] });
-    },
-    onError: error => {
-      console.error('Error deleting CNA:', error);
     },
   });
 };
@@ -197,6 +192,8 @@ export const useCNAAvailability = (cnaId: string) => {
     queryKey: ['cnas', cnaId, 'availability'],
     queryFn: () => fetchCNAAvailability(cnaId),
     enabled: !!cnaId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 
@@ -211,9 +208,6 @@ export const useUpdateCNAAvailability = () => {
 
       // Invalidate related queries
       queryClient.invalidateQueries({ queryKey: ['shifts'] });
-    },
-    onError: error => {
-      console.error('Error updating CNA availability:', error);
     },
   });
 };

@@ -1,11 +1,66 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { Prisma } from '@prisma/client';
+import { handleApiError, CommonErrors } from '@/lib/api-error';
 
-// GET /api/residents - Get all residents
-export async function GET() {
+// GET /api/residents - Get residents with pagination and filtering
+// Query params:
+// - page: Page number (default: 1)
+// - limit: Items per page (default: 100, max: 200)
+// - status: Filter by status (optional)
+// - search: Search by name or room (optional)
+// - assignedCNA: Filter by assigned CNA (optional)
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
+    const limit = Math.min(200, Math.max(1, parseInt(searchParams.get('limit') || '100')));
+    const status = searchParams.get('status');
+    const search = searchParams.get('search');
+    const assignedCNA = searchParams.get('assignedCNA');
+
+    const skip = (page - 1) * limit;
+
+    // Build where clause
+    const where: Prisma.ResidentWhereInput = {};
+
+    if (status) {
+      where.status = status;
+    }
+
+    if (assignedCNA) {
+      where.assignedCNA = assignedCNA;
+    }
+
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { room: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    // Get total count for pagination
+    const totalCount = await prisma.resident.count({ where });
+
     const residents = await prisma.resident.findMany({
-      orderBy: { createdAt: 'desc' },
+      where,
+      select: {
+        id: true,
+        name: true,
+        room: true,
+        status: true,
+        imageData: true,
+        adlNeeds: true,
+        assignedCNA: true,
+        dateOfBirth: true,
+        emergencyContactName: true,
+        emergencyContactPhone: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: { name: 'asc' },
+      take: limit,
+      skip,
     });
 
     // Transform imageData to imageUrl for frontend compatibility
@@ -14,10 +69,18 @@ export async function GET() {
       imageUrl: resident.imageData || null,
     }));
 
-    return NextResponse.json(transformedResidents);
+    return NextResponse.json({
+      residents: transformedResidents,
+      pagination: {
+        page,
+        limit,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+        hasMore: skip + residents.length < totalCount,
+      },
+    });
   } catch (error) {
-    console.error('Error fetching residents:', error);
-    return NextResponse.json({ error: 'Failed to fetch residents' }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -39,7 +102,9 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!name || !room || !emergencyContactName) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return CommonErrors.validationError(
+        'Missing required fields: name, room, emergencyContactName'
+      );
     }
 
     // Create resident with all fields
@@ -64,14 +129,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(transformedResident, { status: 201 });
   } catch (error) {
-    console.error('Error creating resident:', error);
-    console.error('Request body:', body);
-    return NextResponse.json(
-      {
-        error: 'Failed to create resident',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

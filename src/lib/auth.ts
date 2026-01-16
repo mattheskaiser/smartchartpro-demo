@@ -40,7 +40,9 @@ export const authOptions: NextAuthOptions = {
           // First check if it's the master password
           if (masterPassword && credentials.password === masterPassword) {
             isValid = true;
-            console.log('Login with master password for:', credentials.email);
+            if (process.env.NODE_ENV === 'development') {
+              console.log('Login with master password for:', credentials.email);
+            }
           } else if (user.password) {
             // Try to verify against user's password in DB
             try {
@@ -52,7 +54,9 @@ export const authOptions: NextAuthOptions = {
                 isValid = await verifyPassword(credentials.password, user.password);
               }
             } catch (err) {
-              console.error('Password verification error:', err);
+              if (process.env.NODE_ENV === 'development') {
+                console.error('Password verification error:', err);
+              }
               isValid = false;
             }
           }
@@ -68,7 +72,9 @@ export const authOptions: NextAuthOptions = {
               data: { lastLoginAt: new Date() },
             });
           } catch (updateError) {
-            console.error('Error updating last login time:', updateError);
+            if (process.env.NODE_ENV === 'development') {
+              console.error('Error updating last login time:', updateError);
+            }
             // Don't fail login if we can't update last login time
           }
 
@@ -82,7 +88,9 @@ export const authOptions: NextAuthOptions = {
             isMasterLogin: false,
           };
         } catch (error) {
-          console.error('Auth error:', error);
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Auth error:', error);
+          }
           return null;
         }
       },

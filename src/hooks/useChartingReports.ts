@@ -11,12 +11,27 @@ const fetchReports = async (filters?: {
   cnaId?: string;
   startDate?: string;
   endDate?: string;
-}): Promise<ChartingReport[]> => {
+  page?: number;
+  limit?: number;
+  includeDetails?: boolean;
+}): Promise<{
+  reports: ChartingReport[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalCount: number;
+    totalPages: number;
+    hasMore: boolean;
+  };
+}> => {
   const params = new URLSearchParams();
   if (filters?.status) params.append('status', filters.status);
   if (filters?.cnaId) params.append('cnaId', filters.cnaId);
   if (filters?.startDate) params.append('startDate', filters.startDate);
   if (filters?.endDate) params.append('endDate', filters.endDate);
+  if (filters?.page) params.append('page', filters.page.toString());
+  if (filters?.limit) params.append('limit', filters.limit.toString());
+  if (filters?.includeDetails) params.append('includeDetails', 'true');
 
   const response = await fetch(`/api/reports?${params.toString()}`);
   if (!response.ok) {
@@ -88,10 +103,15 @@ export const useChartingReports = (filters?: {
   cnaId?: string;
   startDate?: string;
   endDate?: string;
+  page?: number;
+  limit?: number;
+  includeDetails?: boolean;
 }) => {
   return useQuery({
     queryKey: ['charting-reports', filters],
     queryFn: () => fetchReports(filters),
+    staleTime: 2 * 60 * 1000, // 2 minutes (reports change frequently)
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 
@@ -100,6 +120,8 @@ export const useChartingReport = (id: string) => {
     queryKey: ['charting-reports', id],
     queryFn: () => fetchReport(id),
     enabled: !!id,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 
@@ -109,17 +131,41 @@ export const useCreateChartingReport = () => {
   return useMutation({
     mutationFn: createReport,
     onSuccess: newReport => {
-      // Update the reports list cache
-      queryClient.setQueryData(['charting-reports'], (old: ChartingReport[] = []) => [
-        newReport,
-        ...old,
-      ]);
+      // Update the reports list cache - handle paginated response
+      queryClient.setQueryData(
+        ['charting-reports', undefined],
+        (
+          old:
+            | {
+                reports: ChartingReport[];
+                pagination: {
+                  page: number;
+                  limit: number;
+                  totalCount: number;
+                  totalPages: number;
+                  hasMore: boolean;
+                };
+              }
+            | undefined
+        ) => {
+          if (!old)
+            return {
+              reports: [newReport],
+              pagination: { page: 1, limit: 50, totalCount: 1, totalPages: 1, hasMore: false },
+            };
+          return {
+            ...old,
+            reports: [newReport, ...old.reports],
+            pagination: {
+              ...old.pagination,
+              totalCount: old.pagination.totalCount + 1,
+            },
+          };
+        }
+      );
 
-      // Invalidate and refetch reports list
+      // Invalidate to refetch with updated data
       queryClient.invalidateQueries({ queryKey: ['charting-reports'] });
-    },
-    onError: error => {
-      console.error('Error creating report:', error);
     },
   });
 };
@@ -133,11 +179,8 @@ export const useUpdateChartingReport = () => {
       // Update the specific report cache
       queryClient.setQueryData(['charting-reports', id], updatedReport);
 
-      // Invalidate reports list to refetch
+      // Invalidate to refetch lists
       queryClient.invalidateQueries({ queryKey: ['charting-reports'] });
-    },
-    onError: error => {
-      console.error('Error updating report:', error);
     },
   });
 };
@@ -151,11 +194,8 @@ export const useDeleteChartingReport = () => {
       // Remove from cache
       queryClient.removeQueries({ queryKey: ['charting-reports', id] });
 
-      // Invalidate reports list to refetch
+      // Invalidate to refetch lists
       queryClient.invalidateQueries({ queryKey: ['charting-reports'] });
-    },
-    onError: error => {
-      console.error('Error deleting report:', error);
     },
   });
 };

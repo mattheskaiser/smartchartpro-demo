@@ -1,106 +1,49 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useChartingStore } from '@/stores/chartingStore';
-import { toast } from '@/lib/toast';
+import { useChartingADLForm } from '@/hooks/useChartingADLForm';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
-import { TextareaAtom } from '@/components/atoms/Textarea.atom';
-import { ADLButtonMolecule } from '@/components/molecules/ADLButton.molecule';
-import { AssistanceSelectorMolecule } from '@/components/molecules/AssistanceSelector.molecule';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
+import { ResidentSelectorMolecule } from '@/components/molecules/charting/ResidentSelector.molecule';
+import { ADLSelectorMolecule } from '@/components/molecules/charting/ADLSelector.molecule';
+import { AssistanceFormMolecule } from '@/components/molecules/charting/AssistanceForm.molecule';
 
-const ADL_TYPES = ['bathing', 'dressing', 'eating', 'toileting', 'mobility', 'health'] as const;
+const getStatusVariant = (status: string) => {
+  switch (status?.toLowerCase()) {
+    case 'independent':
+      return 'success';
+    case 'partial':
+      return 'warning';
+    case 'full':
+      return 'error';
+    default:
+      return 'info';
+  }
+};
 
 export default function ChartingADLsPage() {
   const router = useRouter();
-  const { selectedResidents, addEntry } = useChartingStore();
-  const [selectedResident, setSelectedResident] = useState<string | null>(null);
-  const [selectedADL, setSelectedADL] = useState<string | null>(null);
-  const [selectedAssistance, setSelectedAssistance] = useState<
-    'independent' | 'partial' | 'full' | null
-  >(null);
-  const [notes, setNotes] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const resetForm = () => {
-    setSelectedResident(null);
-    setSelectedADL(null);
-    setSelectedAssistance(null);
-    setNotes('');
-  };
-
-  const handleSubmit = async () => {
-    if (!selectedResident || !selectedADL || !selectedAssistance) return;
-
-    setIsSubmitting(true);
-
-    const currentResident = selectedResidents.find(r => r.id === selectedResident);
-
-    try {
-      addEntry({
-        residentId: selectedResident,
-        activityType: selectedADL,
-        assistance: selectedAssistance,
-        timestamp: new Date(),
-        notes: notes.trim() || undefined,
-      });
-
-      // Show success toast
-      toast({
-        title: 'Entry saved successfully',
-        description: `${selectedADL.charAt(0).toUpperCase() + selectedADL.slice(1)} activity recorded for ${currentResident?.name}`,
-        type: 'success',
-      });
-
-      // Reset form
-      resetForm();
-    } catch (error) {
-      console.error('Error saving entry:', error);
-
-      // Show error toast
-      toast({
-        title: 'Failed to save entry',
-        description: 'There was an error saving the entry. Please try again.',
-        type: 'error',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleFinishCharting = async () => {
-    // Update session step to 'review'
-    try {
-      await fetch('/api/sessions', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ currentStep: 'review' }),
-      });
-    } catch (error) {
-      console.error('Error updating session step:', error);
-    }
-
-    router.push('/charting/review');
-  };
-
-  const getStatusVariant = (status: string) => {
-    switch (status?.toLowerCase()) {
-      case 'independent':
-        return 'success';
-      case 'partial':
-        return 'warning';
-      case 'full':
-        return 'error';
-      default:
-        return 'info';
-    }
-  };
+  const {
+    selectedResidents,
+    selectedResident,
+    setSelectedResident,
+    selectedADL,
+    setSelectedADL,
+    selectedAssistance,
+    setSelectedAssistance,
+    notes,
+    setNotes,
+    isSubmitting,
+    currentResident,
+    resetForm,
+    handleSubmit,
+    handleFinishCharting,
+  } = useChartingADLForm();
 
   // If no residents are available
   if (selectedResidents.length === 0) {
@@ -123,42 +66,14 @@ export default function ChartingADLsPage() {
   if (!selectedResident) {
     return (
       <div className="mx-auto max-w-7xl p-6 space-y-6">
-        {/* Resident Selection */}
         <CardAtom padding="none">
           <div className="p-6">
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {selectedResidents.map(resident => (
-                <div
-                  key={resident.id}
-                  className="relative flex items-center space-x-4 p-4 border border-gray-200 rounded-lg transition-all cursor-pointer hover:shadow-sm hover:border-gray-300 hover:bg-gray-50"
-                  onClick={() => setSelectedResident(resident.id)}
-                >
-                  <AvatarAtom
-                    src={resident.imageUrl || resident.imageData || undefined}
-                    alt={resident.name}
-                    size="md"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <TextAtom className="font-medium text-gray-900 truncate">
-                        {resident.name}
-                      </TextAtom>
-                      <BadgeAtom variant={getStatusVariant(resident.status)}>
-                        {resident.status?.charAt(0).toUpperCase() + resident.status?.slice(1)}
-                      </BadgeAtom>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <DynamicIconAtom name="MapPin" size="sm" className="mr-1" />
-                      Room {resident.room}
-                    </div>
-                  </div>
-                  <DynamicIconAtom name="ChevronRight" size="sm" className="text-gray-400" />
-                </div>
-              ))}
-            </div>
+            <ResidentSelectorMolecule
+              residents={selectedResidents}
+              onSelect={setSelectedResident}
+            />
           </div>
 
-          {/* Footer */}
           <div className="border-t border-gray-200 px-6 py-4 bg-gray-50 rounded-b-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
@@ -177,8 +92,6 @@ export default function ChartingADLsPage() {
       </div>
     );
   }
-
-  const currentResident = selectedResidents.find(r => r.id === selectedResident);
 
   return (
     <div className="mx-auto max-w-7xl p-6 space-y-6">
@@ -218,66 +131,22 @@ export default function ChartingADLsPage() {
 
       {/* ADL Selection */}
       <CardAtom>
-        <div className="mb-6">
-          <TextAtom variant="h3" className="text-gray-900 mb-2">
-            Select Activity
-          </TextAtom>
-          <TextAtom className="text-gray-600">
-            Choose the activity you're documenting for {currentResident?.name}
-          </TextAtom>
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {ADL_TYPES.map(adl => (
-            <ADLButtonMolecule
-              key={adl}
-              type={adl}
-              selected={selectedADL === adl}
-              onClick={() => setSelectedADL(adl)}
-              className="w-full"
-            />
-          ))}
-        </div>
+        <ADLSelectorMolecule
+          residentName={currentResident?.name || ''}
+          selectedADL={selectedADL}
+          onSelect={setSelectedADL}
+        />
       </CardAtom>
 
-      {/* Assistance Level */}
+      {/* Assistance Level & Notes */}
       {selectedADL && (
         <CardAtom>
-          <div className="mb-6">
-            <TextAtom variant="h3" className="text-gray-900 mb-2">
-              Assistance Level
-            </TextAtom>
-            <TextAtom className="text-gray-600">
-              How much assistance did {currentResident?.name} need?
-            </TextAtom>
-          </div>
-
-          <AssistanceSelectorMolecule
-            value={selectedAssistance || undefined}
-            onChange={setSelectedAssistance}
-            className="w-full max-w-md"
-          />
-        </CardAtom>
-      )}
-
-      {/* Notes */}
-      {selectedAssistance && (
-        <CardAtom>
-          <div className="mb-6">
-            <TextAtom variant="h3" className="text-gray-900 mb-2">
-              Additional Notes
-            </TextAtom>
-            <TextAtom className="text-gray-600">
-              Add any relevant observations or details (optional)
-            </TextAtom>
-          </div>
-
-          <TextareaAtom
-            value={notes}
-            onChange={e => setNotes(e.target.value)}
-            placeholder="Add any additional notes about the activity..."
-            rows={4}
-            className="w-full"
+          <AssistanceFormMolecule
+            residentName={currentResident?.name || ''}
+            selectedAssistance={selectedAssistance}
+            notes={notes}
+            onAssistanceChange={setSelectedAssistance}
+            onNotesChange={setNotes}
           />
         </CardAtom>
       )}
