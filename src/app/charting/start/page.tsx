@@ -37,6 +37,9 @@ export default function ChartingStartPage() {
 
   // Check for existing active session and redirect
   useEffect(() => {
+    // Don't check until session has loaded
+    if (sessionLoading) return;
+
     if (activeSession && activeSession.isActive) {
       // Resume existing session - redirect based on current step
       if (activeSession.currentStep === 'adls') {
@@ -46,10 +49,16 @@ export default function ChartingStartPage() {
       }
       // If currentStep is 'start', stay on this page (shouldn't happen but safe fallback)
     }
-  }, [activeSession, router]);
+  }, [activeSession, sessionLoading, router]);
 
-  // Fetch residents from the database
+  // Fetch residents from the database - only if no active session
   useEffect(() => {
+    // Don't fetch residents if we're still checking for an active session
+    if (sessionLoading) return;
+
+    // Don't fetch residents if there's an active session (we'll redirect)
+    if (activeSession && activeSession.isActive) return;
+
     const fetchResidents = async () => {
       try {
         const response = await fetch('/api/residents');
@@ -67,7 +76,7 @@ export default function ChartingStartPage() {
     };
 
     fetchResidents();
-  }, []);
+  }, [sessionLoading, activeSession]);
 
   const handleStartCharting = async () => {
     if (selectedIds.size === 0) return;
@@ -124,6 +133,15 @@ export default function ChartingStartPage() {
     return (
       <div className="mx-auto max-w-7xl p-6">
         <LoadingStateMolecule message="Loading..." />
+      </div>
+    );
+  }
+
+  // If there's an active session, show loading while redirecting
+  if (activeSession && activeSession.isActive) {
+    return (
+      <div className="mx-auto max-w-7xl p-6">
+        <LoadingStateMolecule message="Resuming session..." />
       </div>
     );
   }

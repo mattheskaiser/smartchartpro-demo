@@ -37,6 +37,7 @@ interface ChartingStore {
     residents: ChartingResident[],
     cnaInfo?: { id: string; name: string; certificationNumber?: string }
   ) => void;
+  setResidents: (residents: ChartingResident[]) => void;
   endCharting: () => void;
   addEntry: (entry: ADLEntry) => void;
 }
@@ -60,6 +61,12 @@ export const useChartingStore = create<ChartingStore>()(
             cnaName: cnaInfo?.name,
             cnaCertification: cnaInfo?.certificationNumber,
           },
+        }),
+
+      setResidents: residents =>
+        set({
+          isChartingActive: true,
+          selectedResidents: residents,
         }),
 
       endCharting: () =>

@@ -39,11 +39,34 @@ export default function ChartingADLsPage() {
     notes,
     setNotes,
     isSubmitting,
+    isLoadingResidents,
     currentResident,
     resetForm,
     handleSubmit,
     handleFinishCharting,
   } = useChartingADLForm();
+
+  // Show loading while residents are being loaded from session
+  if (isLoadingResidents) {
+    return (
+      <div className="mx-auto max-w-7xl p-6">
+        <CardAtom>
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <DynamicIconAtom
+                name="Loader"
+                size="lg"
+                className="mx-auto text-primary animate-spin mb-4"
+              />
+              <TextAtom variant="h3" className="text-gray-700">
+                Loading session...
+              </TextAtom>
+            </div>
+          </div>
+        </CardAtom>
+      </div>
+    );
+  }
 
   // If no residents are available
   if (selectedResidents.length === 0) {
@@ -116,7 +139,7 @@ export default function ChartingADLsPage() {
                 <BadgeAtom variant={getStatusVariant(currentResident?.status || '')}>
                   {currentResident?.status
                     ? currentResident.status.charAt(0).toUpperCase() +
-                      currentResident.status.slice(1)
+                    currentResident.status.slice(1)
                     : ''}
                 </BadgeAtom>
               </div>
