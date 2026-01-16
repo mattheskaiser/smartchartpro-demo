@@ -110,6 +110,8 @@ export const useChartingReports = (filters?: {
   return useQuery({
     queryKey: ['charting-reports', filters],
     queryFn: () => fetchReports(filters),
+    staleTime: 2 * 60 * 1000, // 2 minutes (reports change frequently)
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 
@@ -118,6 +120,8 @@ export const useChartingReport = (id: string) => {
     queryKey: ['charting-reports', id],
     queryFn: () => fetchReport(id),
     enabled: !!id,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 
@@ -140,7 +144,7 @@ export const useCreateChartingReport = () => {
         };
       });
 
-      // Invalidate all report queries to refetch
+      // Invalidate to refetch with updated data
       queryClient.invalidateQueries({ queryKey: ['charting-reports'] });
     },
   });
@@ -155,7 +159,7 @@ export const useUpdateChartingReport = () => {
       // Update the specific report cache
       queryClient.setQueryData(['charting-reports', id], updatedReport);
 
-      // Invalidate reports list to refetch
+      // Invalidate to refetch lists
       queryClient.invalidateQueries({ queryKey: ['charting-reports'] });
     },
   });
@@ -170,7 +174,7 @@ export const useDeleteChartingReport = () => {
       // Remove from cache
       queryClient.removeQueries({ queryKey: ['charting-reports', id] });
 
-      // Invalidate reports list to refetch
+      // Invalidate to refetch lists
       queryClient.invalidateQueries({ queryKey: ['charting-reports'] });
     },
   });

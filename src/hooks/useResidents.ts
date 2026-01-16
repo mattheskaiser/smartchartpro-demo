@@ -147,6 +147,8 @@ export const useResidents = (filters?: {
   return useQuery({
     queryKey: ['residents', filters],
     queryFn: () => fetchResidents(filters),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 
@@ -155,6 +157,8 @@ export const useResident = (id: string) => {
     queryKey: ['residents', id],
     queryFn: () => fetchResident(id),
     enabled: !!id,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 
@@ -177,11 +181,8 @@ export const useCreateResident = () => {
         };
       });
 
-      // Invalidate all resident queries to refetch
+      // Invalidate to refetch with updated data
       queryClient.invalidateQueries({ queryKey: ['residents'] });
-    },
-    onError: error => {
-      console.error('Error creating resident:', error);
     },
   });
 };
@@ -206,11 +207,8 @@ export const useUpdateResident = () => {
         };
       });
 
-      // Invalidate related queries
+      // Invalidate to ensure consistency
       queryClient.invalidateQueries({ queryKey: ['residents'] });
-    },
-    onError: error => {
-      console.error('Error updating resident:', error);
     },
   });
 };
@@ -237,11 +235,8 @@ export const useDeleteResident = () => {
       // Remove the specific resident cache
       queryClient.removeQueries({ queryKey: ['residents', deletedId] });
 
-      // Invalidate residents list to ensure consistency
+      // Invalidate to ensure consistency
       queryClient.invalidateQueries({ queryKey: ['residents'] });
-    },
-    onError: error => {
-      console.error('Error deleting resident:', error);
     },
   });
 };
