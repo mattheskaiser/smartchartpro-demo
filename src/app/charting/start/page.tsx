@@ -145,27 +145,6 @@ export default function ChartingStartPage() {
 
   return (
     <div className="mx-auto max-w-7xl p-6 space-y-6">
-      {/* Info Card - Show logged in CNA */}
-      {session?.user && (
-        <CardAtom className="border-l-4 border-l-primary">
-          <div className="flex items-center gap-3">
-            <div className="flex-shrink-0">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <DynamicIconAtom name="UserRound" className="text-primary" size="md" />
-              </div>
-            </div>
-            <div>
-              <TextAtom variant="h3" className="text-gray-900">
-                {session.user.cnaName || session.user.email}
-              </TextAtom>
-              <TextAtom variant="small" className="text-gray-600">
-                Starting charting session
-              </TextAtom>
-            </div>
-          </div>
-        </CardAtom>
-      )}
-
       {/* Resident Selection */}
       <CardAtom padding="none">
         <div className="p-6">
@@ -206,11 +185,10 @@ export default function ChartingStartPage() {
               {residents.map(resident => (
                 <div
                   key={resident.id}
-                  className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${
-                    selectedIds.has(resident.id)
+                  className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${selectedIds.has(resident.id)
                       ? 'border-primary bg-secondary ring-1 ring-primary/20'
                       : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                  }`}
+                    }`}
                   onClick={() => {
                     const newSelected = new Set(selectedIds);
                     if (selectedIds.has(resident.id)) {

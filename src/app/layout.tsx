@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { useChartingStore } from '@/stores/chartingStore';
+import { useFacilityStore } from '@/stores/facilityStore';
 import { QueryProvider } from '@/providers/QueryProvider';
 import { SessionProvider } from '@/providers/SessionProvider';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const pathname = usePathname();
   const router = useRouter();
   const { isChartingActive, selectedResidents } = useChartingStore();
+  const { facilityName } = useFacilityStore();
 
   // Basic route protection
   useEffect(() => {
@@ -65,12 +67,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <div className="flex items-center justify-between">
                       {/* Left: SmartChart Pro Logo */}
                       <div className="flex items-center space-x-3 w-64">
-                        <div className="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-lg">
-                          <DynamicIconAtom name="Hospital" size="sm" className="text-primary" />
+                        <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg">
+                          <DynamicIconAtom name="Hospital" size="md" className="text-primary" />
                         </div>
                         <div>
-                          <h1 className="text-lg font-semibold text-gray-900">SmartChart Pro</h1>
-                          <p className="text-xs text-gray-500">Resident Care Documentation</p>
+                          <h1 className="text-lg font-semibold text-gray-900">{facilityName}</h1>
+                          <p className="text-xs text-gray-500">Care Documentation</p>
                         </div>
                       </div>
 
