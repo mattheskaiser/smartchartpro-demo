@@ -7,6 +7,60 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Enums
+enum Role {
+  ADMIN
+  CNA
+}
+
+// User authentication and accounts
+model User {
+  id                 String            @id @default(cuid())
+  email              String            @unique
+  password           String            // hashed with bcrypt
+  role               Role              @default(CNA)
+  cnaId              String?           @unique // Link to CNA record (null for admins)
+  isActive           Boolean           @default(true)
+  mustChangePassword Boolean           @default(true)
+  lastLoginAt        DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  
+  // Relations
+  cna                Cna?              @relation(fields: [cnaId], references: [id], onDelete: SetNull)
+  chartingSessions   ChartingSession[]
+  createdReports     ChartingReport[]  @relation("ReportCreator")
+  
+  @@index([email])
+  @@index([role])
+  @@index([isActive])
+}
+
+// Active charting sessions for CNAs
+model ChartingSession {
+  id           String    @id @default(cuid())
+  userId       String
+  cnaId        String
+  residentIds  String[]  // Array of resident IDs in this session
+  startTime    DateTime  @default(now())
+  endTime      DateTime?
+  isActive     Boolean   @default(true)
+  currentStep  String    @default("start") // "start", "adls", "review"
+  chartingData Json?     // Store in-progress charting data
+  reportId     String?   @unique
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  
+  // Relations
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cna          Cna            @relation(fields: [cnaId], references: [id], onDelete: Cascade)
+  report       ChartingReport? @relation(fields: [reportId], references: [id])
+  
+  @@index([userId, isActive])
+  @@index([cnaId, isActive])
+  @@index([isActive])
+}
+
 model Resident {
   id                           String                @id @default(cuid())
   name                         String
@@ -137,6 +191,10 @@ model Cna {
   assignedShifts      ShiftAssignment[]   // Actual shift assignments
   timeEntries         TimeEntry[]         // Clock in/out records
   chartingReports     ChartingReport[]    // Charting reports created by this CNA
+  
+  // Authentication relationship
+  user                User?               // User account for this CNA
+  chartingSessions    ChartingSession[]   // Active charting sessions
 }
 
 // CNA availability - which shifts a CNA can work
@@ -240,6 +298,9 @@ model ChartingReport {
   cnaName           String?
   cnaCertification  String?
   
+  // User who created this report
+  createdById       String?
+  
   // Summary statistics
   totalResidents    Int
   totalActivities   Int
@@ -263,9 +324,12 @@ model ChartingReport {
   
   // Relations
   cna               Cna?     @relation(fields: [cnaId], references: [id], onDelete: SetNull)
+  createdBy         User?    @relation("ReportCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  session           ChartingSession? // Linked session
   
   @@index([reportDate])
   @@index([cnaId])
+  @@index([createdById])
   @@index([status])
   @@index([createdAt])
 }
