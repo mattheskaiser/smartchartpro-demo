@@ -57,7 +57,8 @@ export default function ChartingStartPage() {
           throw new Error('Failed to fetch residents');
         }
         const data = await response.json();
-        setResidents(data);
+        // API returns { residents: [...], pagination: {...} }
+        setResidents(data.residents || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load residents');
       } finally {
