@@ -21,11 +21,22 @@ interface ADLEntry {
   notes?: string;
 }
 
+interface ChartingSession {
+  startTime: Date;
+  cnaId?: string;
+  cnaName?: string;
+  cnaCertification?: string;
+}
+
 interface ChartingStore {
   isChartingActive: boolean;
   selectedResidents: ChartingResident[];
   entries: ADLEntry[];
-  startCharting: (residents: ChartingResident[]) => void;
+  session: ChartingSession | null;
+  startCharting: (
+    residents: ChartingResident[],
+    cnaInfo?: { id: string; name: string; certificationNumber?: string }
+  ) => void;
   endCharting: () => void;
   addEntry: (entry: ADLEntry) => void;
 }
@@ -36,12 +47,19 @@ export const useChartingStore = create<ChartingStore>()(
       isChartingActive: false,
       selectedResidents: [],
       entries: [],
+      session: null,
 
-      startCharting: residents =>
+      startCharting: (residents, cnaInfo) =>
         set({
           isChartingActive: true,
           selectedResidents: residents,
           entries: [],
+          session: {
+            startTime: new Date(),
+            cnaId: cnaInfo?.id,
+            cnaName: cnaInfo?.name,
+            cnaCertification: cnaInfo?.certificationNumber,
+          },
         }),
 
       endCharting: () =>
@@ -49,6 +67,7 @@ export const useChartingStore = create<ChartingStore>()(
           isChartingActive: false,
           selectedResidents: [],
           entries: [],
+          session: null,
         }),
 
       addEntry: entry =>

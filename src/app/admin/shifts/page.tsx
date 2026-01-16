@@ -8,6 +8,7 @@ import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
 import { ShiftAssignmentModalMolecule } from '@/components/molecules/shift/ShiftAssignmentModal.molecule';
 import { useShiftTemplates, formatShiftTime } from '@/hooks/useShiftTemplates';
+import { toast } from '@/lib/toast';
 
 // Mock data - replace with actual API calls
 const mockCNAs = [
@@ -78,7 +79,13 @@ export default function ShiftManagement() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [assignmentModal, setAssignmentModal] = useState<{
     isOpen: boolean;
-    shift?: any;
+    shift?: {
+      id: string;
+      name: string;
+      startTime: string;
+      endTime: string;
+      color?: string;
+    };
   }>({ isOpen: false });
 
   const { data: shiftTemplates, isLoading: templatesLoading } = useShiftTemplates();
@@ -99,7 +106,13 @@ export default function ShiftManagement() {
     return mockCNAs.find(cna => cna.id === cnaId);
   };
 
-  const handleAssignShift = (shift: any) => {
+  const handleAssignShift = (shift: {
+    id: string;
+    name: string;
+    startTime: string;
+    endTime: string;
+    color?: string;
+  }) => {
     setAssignmentModal({ isOpen: true, shift });
   };
 
@@ -110,6 +123,11 @@ export default function ShiftManagement() {
   }) => {
     console.log('Assignment submitted:', assignment);
     // TODO: Save assignment to backend
+    toast({
+      title: 'Shift assigned successfully',
+      description: `CNA has been assigned to ${assignment.residentIds.length} resident${assignment.residentIds.length !== 1 ? 's' : ''}`,
+      type: 'success',
+    });
     setAssignmentModal({ isOpen: false });
   };
 

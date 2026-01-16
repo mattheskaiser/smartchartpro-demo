@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useChartingStore } from '@/stores/chartingStore';
+import { useCNAs } from '@/hooks/useCNAs';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
@@ -11,6 +12,8 @@ import { CardAtom } from '@/components/atoms/Card.atom';
 import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
+import { DropdownAtom } from '@/components/atoms/Dropdown.atom';
+import { LabelAtom } from '@/components/atoms/Label.atom';
 
 type Resident = {
   id: string;
@@ -25,9 +28,13 @@ export default function ChartingStartPage() {
   const router = useRouter();
   const { startCharting } = useChartingStore();
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [selectedCnaId, setSelectedCnaId] = useState<string>('');
   const [residents, setResidents] = useState<Resident[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Fetch CNAs
+  const { data: cnas = [], isLoading: cnasLoading } = useCNAs();
 
   // Fetch residents from the database
   useEffect(() => {
@@ -51,7 +58,18 @@ export default function ChartingStartPage() {
 
   const handleStartCharting = () => {
     const selectedResidents = residents.filter(r => selectedIds.has(r.id));
-    startCharting(selectedResidents);
+
+    // Get selected CNA info
+    const selectedCna = cnas.find(cna => cna.id === selectedCnaId);
+    const cnaInfo = selectedCna
+      ? {
+          id: selectedCna.id,
+          name: selectedCna.name,
+          certificationNumber: selectedCna.certificationNumber,
+        }
+      : undefined;
+
+    startCharting(selectedResidents, cnaInfo);
     router.push('/charting/adls');
   };
 
@@ -68,7 +86,7 @@ export default function ChartingStartPage() {
     }
   };
 
-  if (loading) {
+  if (loading || cnasLoading) {
     return (
       <div className="mx-auto max-w-7xl p-6">
         <LoadingStateMolecule message="Loading residents..." />
@@ -95,6 +113,34 @@ export default function ChartingStartPage() {
 
   return (
     <div className="mx-auto max-w-7xl p-6 space-y-6">
+      {/* CNA Selection */}
+      <CardAtom>
+        <div className="flex items-center gap-2 mb-4">
+          <DynamicIconAtom name="UserCheck" className="h-5 w-5 text-gray-600" />
+          <TextAtom variant="h3" className="text-gray-900">
+            Charting Information
+          </TextAtom>
+        </div>
+        <div className="max-w-md">
+          <LabelAtom htmlFor="cna-select">CNA/Nurse (Optional)</LabelAtom>
+          <DropdownAtom
+            value={selectedCnaId || undefined}
+            onValueChange={value => setSelectedCnaId(value || '')}
+            placeholder="Select CNA/Nurse"
+            options={cnas
+              .filter(cna => cna.status === 'active')
+              .map(cna => ({
+                value: cna.id,
+                label: `${cna.name}${cna.certificationNumber ? ` (${cna.certificationNumber})` : ''}`,
+              }))}
+          />
+          <TextAtom variant="small" className="text-gray-500 mt-2">
+            Select the CNA/Nurse performing this charting session. This will be included in the PDF
+            report.
+          </TextAtom>
+        </div>
+      </CardAtom>
+
       {/* Resident Selection */}
       <CardAtom padding="none">
         <div className="p-6">

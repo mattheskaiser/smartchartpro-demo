@@ -19,6 +19,10 @@
         "details": "Use useState with form object, useEffect for editing mode, and consistent form reset patterns"
       },
       {
+        "rule": "Always use Tailwind CSS, not standard CSS unless absolutely necessary",
+        "details": "Always use Tailwind CSS, not standard CSS unless absolutely necessary"
+      },
+      {
         "rule": "Follow consistent field layout patterns",
         "details": "Use grid layouts for multiple fields, single divs for single fields, consistent spacing with space-y-4"
       },
@@ -45,6 +49,31 @@
       {
         "rule": "Follow Atomic Design Pattern",
         "details": "Always follow the atomic design principles to keep component reusable and maintainable. This means splitting up components and using components that already exist to keep everything consistent."
+      }
+    ]
+  },
+  "ui_consistency_requirements": {
+    "description": "All pages and components must follow consistent UI patterns across the application",
+    "requirements": [
+      {
+        "rule": "Match existing page header patterns",
+        "details": "When creating new pages or components, always check existing pages to match the UI styling. Page headers should use: <div className='sm:flex sm:items-center'><div className='sm:flex-auto'><TextAtom variant='h1' weight='semibold'>Title</TextAtom><TextAtom variant='small' color='muted' className='mt-2'>Description</TextAtom></div></div>"
+      },
+      {
+        "rule": "Consistent button sizing",
+        "details": "Use default button size (not 'sm') for primary actions in cards and lists. Only use 'sm' size for secondary actions in tight spaces or inline elements."
+      },
+      {
+        "rule": "Check existing pages before creating new ones",
+        "details": "Before creating a new page, search for similar pages in the same section (e.g., admin pages) to understand and match the established patterns, layouts, and styling conventions."
+      },
+      {
+        "rule": "Maintain consistent spacing and layout",
+        "details": "Use consistent spacing patterns: max-w-7xl for page containers, p-6 for page padding, space-y-6 for section spacing, and sm:flex patterns for responsive layouts."
+      },
+      {
+        "rule": "Use consistent text styling",
+        "details": "Always use TextAtom component with consistent variants: 'h1' with weight='semibold' for page titles, 'small' with color='muted' for descriptions, and appropriate variants for other text elements."
       }
     ]
   },

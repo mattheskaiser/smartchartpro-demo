@@ -4,11 +4,12 @@ import React from 'react';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { cn } from '@/lib/utils';
+import { icons } from 'lucide-react';
 
 interface Step {
   id: string;
   title: string;
-  icon: string;
+  icon: keyof typeof icons;
 }
 
 interface ChartingProgressStepperProps {
@@ -76,7 +77,7 @@ export const ChartingProgressStepperMolecule = ({
                   {status === 'completed' ? (
                     <DynamicIconAtom name="Check" size="sm" />
                   ) : (
-                    <DynamicIconAtom name={step.icon as any} size="sm" />
+                    <DynamicIconAtom name={step.icon} size="sm" />
                   )}
                 </div>
 

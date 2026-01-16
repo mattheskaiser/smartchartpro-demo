@@ -61,6 +61,7 @@ import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecu
 import { ConfirmationModalMolecule } from '@/components/molecules/ConfirmationModal.molecule';
 import { useResident, useUpdateResident, useDeleteResident } from '@/hooks/useResidents';
 import { useQueryClient } from '@tanstack/react-query';
+import { toast } from '@/lib/toast';
 
 export default function ResidentDetail() {
   const router = useRouter();
@@ -154,11 +155,22 @@ export default function ResidentDetail() {
           id: params.id as string,
           data: basicResidentData,
         });
+
+        toast({
+          title: 'Resident updated successfully',
+          description: `${resident.name}'s information has been saved`,
+          type: 'success',
+        });
       }
 
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating resident:', error);
+      toast({
+        title: 'Failed to update resident',
+        description: 'There was an error saving the changes. Please try again.',
+        type: 'error',
+      });
     }
   };
 
@@ -211,8 +223,18 @@ export default function ResidentDetail() {
         id: params.id as string,
         data: { imageUrl: imageData },
       });
+      toast({
+        title: 'Image updated',
+        description: 'Profile picture has been updated successfully',
+        type: 'success',
+      });
     } catch (error) {
       console.error('Error updating resident image:', error);
+      toast({
+        title: 'Failed to update image',
+        description: 'There was an error updating the profile picture.',
+        type: 'error',
+      });
       // Revert the local state change on error
       setResident((prev: ResidentData | null) => {
         if (!prev) return prev;
@@ -268,9 +290,21 @@ export default function ResidentDetail() {
       if (response.ok) {
         // Invalidate query to refetch with updated data
         queryClient.invalidateQueries({ queryKey: ['residents', params.id] });
+        toast({
+          title: 'DNR status updated',
+          description: 'Do Not Resuscitate status has been saved',
+          type: 'success',
+        });
+      } else {
+        throw new Error('Failed to update DNR status');
       }
     } catch (error) {
       console.error('Error updating DNR status:', error);
+      toast({
+        title: 'Failed to update DNR status',
+        description: 'There was an error updating the DNR status. Please try again.',
+        type: 'error',
+      });
     }
   };
 
@@ -282,11 +316,20 @@ export default function ResidentDetail() {
   const handleDeleteResident = async () => {
     try {
       await deleteResidentMutation.mutateAsync(params.id as string);
+      toast({
+        title: 'Resident deleted successfully',
+        description: `${resident?.name} has been removed from the system`,
+        type: 'success',
+      });
       // Navigate back to residents list after successful deletion
       router.push('/admin/residents');
     } catch (error) {
       console.error('Error deleting resident:', error);
-      // Error is already handled by the mutation
+      toast({
+        title: 'Failed to delete resident',
+        description: 'There was an error deleting the resident. Please try again.',
+        type: 'error',
+      });
     }
   };
 

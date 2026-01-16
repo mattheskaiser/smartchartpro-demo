@@ -20,6 +20,7 @@ import {
   useUpdateCNAAvailability,
 } from '@/hooks/useCNAs';
 import { EditCNAModalMolecule } from '@/components/molecules/cna/EditCNAModal.molecule';
+import { toast } from '@/lib/toast';
 
 export default function CNADetailPage() {
   const params = useParams();
@@ -98,19 +99,38 @@ export default function CNADetailPage() {
         },
       });
       setIsEditModalOpen(false);
+      toast({
+        title: 'CNA updated successfully',
+        description: `${formData.name}'s information has been updated`,
+        type: 'success',
+      });
     } catch (error) {
       console.error('Error updating CNA:', error);
+      toast({
+        title: 'Failed to update CNA',
+        description: 'There was an error updating the CNA. Please try again.',
+        type: 'error',
+      });
     }
   };
 
   const handleDeleteCNA = async () => {
     try {
       await deleteCNAMutation.mutateAsync(cnaId);
+      toast({
+        title: 'CNA deleted successfully',
+        description: `${cna.name} has been removed from your team`,
+        type: 'success',
+      });
       // Navigate back to CNAs list after successful deletion
       router.push('/admin/cnas');
     } catch (error) {
       console.error('Error deleting CNA:', error);
-      // Error is already handled by the mutation
+      toast({
+        title: 'Failed to delete CNA',
+        description: 'There was an error deleting the CNA. Please try again.',
+        type: 'error',
+      });
     }
   };
 
@@ -126,8 +146,18 @@ export default function CNADetailPage() {
         availability: localAvailability,
       });
       setIsEditingAvailability(false);
+      toast({
+        title: 'Availability updated',
+        description: 'Shift availability has been saved successfully',
+        type: 'success',
+      });
     } catch (error) {
       console.error('Error updating availability:', error);
+      toast({
+        title: 'Failed to update availability',
+        description: 'There was an error saving the availability. Please try again.',
+        type: 'error',
+      });
     }
   };
 
