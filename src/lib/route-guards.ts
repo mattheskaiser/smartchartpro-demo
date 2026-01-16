@@ -2,11 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './auth';
 
+type RouteContext = { params: Record<string, string> };
+
 /**
  * Higher-order function to protect API routes with authentication
  */
-export function withAuth(handler: (req: NextRequest, context?: any) => Promise<NextResponse>) {
-  return async (req: NextRequest, context?: any) => {
+export function withAuth(
+  handler: (req: NextRequest, context?: RouteContext) => Promise<NextResponse>
+) {
+  return async (req: NextRequest, context?: RouteContext) => {
     const session = await getServerSession(authOptions);
 
     if (!session || !session.user) {
@@ -21,10 +25,10 @@ export function withAuth(handler: (req: NextRequest, context?: any) => Promise<N
  * Higher-order function to protect API routes with role-based access
  */
 export function withRole(
-  handler: (req: NextRequest, context?: any) => Promise<NextResponse>,
+  handler: (req: NextRequest, context?: RouteContext) => Promise<NextResponse>,
   requiredRole: 'ADMIN' | 'CNA'
 ) {
-  return async (req: NextRequest, context?: any) => {
+  return async (req: NextRequest, context?: RouteContext) => {
     const session = await getServerSession(authOptions);
 
     if (!session || !session.user) {
@@ -43,9 +47,9 @@ export function withRole(
  * Higher-order function to protect CNA routes that require an active session
  */
 export function withCNASession(
-  handler: (req: NextRequest, context?: any) => Promise<NextResponse>
+  handler: (req: NextRequest, context?: RouteContext) => Promise<NextResponse>
 ) {
-  return async (req: NextRequest, context?: any) => {
+  return async (req: NextRequest, context?: RouteContext) => {
     const session = await getServerSession(authOptions);
 
     if (!session || !session.user) {

@@ -7,7 +7,7 @@ export interface ChartingSession {
   endTime: Date | null;
   isActive: boolean;
   currentStep: 'start' | 'adls' | 'review';
-  chartingData: any | null;
+  chartingData: Record<string, unknown> | null;
   reportId: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -19,7 +19,7 @@ export interface CreateSessionData {
 
 export interface UpdateSessionData {
   currentStep?: 'start' | 'adls' | 'review';
-  chartingData?: any;
+  chartingData?: Record<string, unknown>;
 }
 
 export interface SessionWithDetails extends ChartingSession {

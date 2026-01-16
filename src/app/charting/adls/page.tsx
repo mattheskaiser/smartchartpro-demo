@@ -203,7 +203,7 @@ export default function ChartingADLsPage() {
                 <BadgeAtom variant={getStatusVariant(currentResident?.status || '')}>
                   {currentResident?.status
                     ? currentResident.status.charAt(0).toUpperCase() +
-                    currentResident.status.slice(1)
+                      currentResident.status.slice(1)
                     : ''}
                 </BadgeAtom>
               </div>

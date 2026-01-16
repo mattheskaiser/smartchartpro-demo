@@ -56,10 +56,11 @@ export async function updateSessionStep(sessionId: string, step: 'start' | 'adls
 /**
  * Update session charting data
  */
-export async function updateSessionData(sessionId: string, data: any) {
+export async function updateSessionData(sessionId: string, data: Record<string, unknown>) {
   return prisma.chartingSession.update({
     where: { id: sessionId },
-    data: { chartingData: data },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: { chartingData: data as any },
   });
 }
 

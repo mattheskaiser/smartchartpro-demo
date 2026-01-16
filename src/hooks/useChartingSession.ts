@@ -55,7 +55,7 @@ export function useChartingSession() {
 
   // Update session
   const updateSession = useCallback(
-    async (updates: { currentStep?: string; chartingData?: any }) => {
+    async (updates: { currentStep?: string; chartingData?: Record<string, unknown> }) => {
       if (!session) return;
 
       try {

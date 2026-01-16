@@ -91,14 +91,19 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      console.log(`User account created for CNA: ${body.email} with password: 1234, userId: ${user.id}, cnaId: ${user.cnaId}`);
+      console.log(
+        `User account created for CNA: ${body.email} with password: 1234, userId: ${user.id}, cnaId: ${user.cnaId}`
+      );
     } catch (userError) {
       console.error('Error creating user account for CNA:', userError);
       // Delete the CNA if user creation fails to keep data consistent
       await prisma.cna.delete({ where: { id: cna.id } });
-      return NextResponse.json({
-        error: 'Failed to create user account for CNA. Please try again.'
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to create user account for CNA. Please try again.',
+        },
+        { status: 500 }
+      );
     }
 
     // Fetch the complete CNA with user data to return

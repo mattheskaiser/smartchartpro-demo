@@ -3,7 +3,6 @@
 import { Inter } from 'next/font/google';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useSession, signOut } from 'next-auth/react';
 import { useChartingStore } from '@/stores/chartingStore';
 import { useFacilityStore } from '@/stores/facilityStore';
 import { QueryProvider } from '@/providers/QueryProvider';
@@ -11,9 +10,6 @@ import { SessionProvider } from '@/providers/SessionProvider';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { ChartingProgressStepperMolecule } from '@/components/molecules/ChartingProgressStepper.molecule';
 import { ChartingUserProfileMolecule } from '@/components/molecules/ChartingUserProfile.molecule';
-import { UserMenuMolecule } from '@/components/molecules/UserMenu.molecule';
-import { BadgeAtom } from '@/components/atoms/Badge.atom';
-import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
 
@@ -22,7 +18,7 @@ const inter = Inter({ subsets: ['latin'] });
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { isChartingActive, selectedResidents } = useChartingStore();
+  const { isChartingActive } = useChartingStore();
   const { facilityName } = useFacilityStore();
 
   // Basic route protection

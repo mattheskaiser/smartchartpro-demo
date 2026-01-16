@@ -60,7 +60,12 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const updateData: any = {};
+    const updateData: {
+      isActive?: boolean;
+      email?: string;
+      password?: string;
+      mustChangePassword?: boolean;
+    } = {};
 
     // Update active status
     if (typeof isActive === 'boolean') {

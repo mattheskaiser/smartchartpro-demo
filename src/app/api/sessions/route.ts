@@ -53,7 +53,11 @@ export async function POST(req: NextRequest) {
     // Get cnaId from session or fetch from database
     let cnaId = session.user.cnaId;
 
-    console.log('Session user:', { id: session.user.id, email: session.user.email, cnaId: session.user.cnaId });
+    console.log('Session user:', {
+      id: session.user.id,
+      email: session.user.email,
+      cnaId: session.user.cnaId,
+    });
 
     if (!cnaId) {
       // Fetch from database if not in session (can happen after fresh CNA creation)
@@ -67,9 +71,12 @@ export async function POST(req: NextRequest) {
       console.log('User from DB:', user);
 
       if (!user?.cnaId) {
-        return NextResponse.json({
-          error: 'CNA account not properly configured. Please log out and log back in.'
-        }, { status: 400 });
+        return NextResponse.json(
+          {
+            error: 'CNA account not properly configured. Please log out and log back in.',
+          },
+          { status: 400 }
+        );
       }
 
       cnaId = user.cnaId;
@@ -120,15 +127,16 @@ export async function PATCH(req: NextRequest) {
     const body = await req.json();
     const { currentStep, chartingData } = body;
 
-    let updatedSession = activeSession;
-
     if (currentStep) {
-      updatedSession = await updateSessionStep(activeSession.id, currentStep);
+      await updateSessionStep(activeSession.id, currentStep);
     }
 
     if (chartingData !== undefined) {
-      updatedSession = await updateSessionData(activeSession.id, chartingData);
+      await updateSessionData(activeSession.id, chartingData);
     }
+
+    // Fetch the updated session with details
+    const updatedSession = await getActiveSession(session.user.id);
 
     return NextResponse.json({ session: updatedSession });
   } catch (error) {

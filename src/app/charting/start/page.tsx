@@ -84,7 +84,7 @@ export default function ChartingStartPage() {
       startCharting(selectedResidents, {
         id: session?.user?.cnaId || '',
         name: session?.user?.cnaName || '',
-        certificationNumber: null,
+        certificationNumber: undefined,
       });
 
       toast({
@@ -186,10 +186,11 @@ export default function ChartingStartPage() {
               {residents.map(resident => (
                 <div
                   key={resident.id}
-                  className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${selectedIds.has(resident.id)
-                    ? 'border-primary bg-secondary ring-1 ring-primary/20'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                    }`}
+                  className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${
+                    selectedIds.has(resident.id)
+                      ? 'border-primary bg-secondary ring-1 ring-primary/20'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  }`}
                   onClick={() => {
                     const newSelected = new Set(selectedIds);
                     if (selectedIds.has(resident.id)) {

@@ -3,26 +3,17 @@
 import Link from 'next/link';
 import clsx from 'clsx';
 import { usePathname } from 'next/navigation';
-import { useSession, signOut } from 'next-auth/react';
 import { ADMIN_NAVIGATION, ADMIN_BOTTOM_NAVIGATION } from '@/constants/navigation';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
-import { ButtonAtom } from '@/components/atoms/Button.atom';
-import { TextAtom } from '@/components/atoms/Text.atom';
-import { BadgeAtom } from '@/components/atoms/Badge.atom';
 
 export const AdminSidebarMolecule = () => {
   const pathname = usePathname();
-  const { data: session } = useSession();
 
   const isActive = (href: string) => {
     if (href === '/admin') {
       return pathname === '/admin';
     }
     return pathname.startsWith(href);
-  };
-
-  const handleLogout = async () => {
-    await signOut({ callbackUrl: '/login' });
   };
 
   return (
