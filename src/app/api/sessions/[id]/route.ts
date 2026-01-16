@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/db';
 import { endSession, forceEndSession } from '@/lib/session-service';
-
-const prisma = new PrismaClient();
 
 /**
  * GET /api/sessions/[id] - Get specific session
@@ -20,8 +18,21 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     const chartingSession = await prisma.chartingSession.findUnique({
       where: { id: params.id },
       include: {
-        cna: true,
-        user: true,
+        cna: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            certificationNumber: true,
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            email: true,
+            role: true,
+          },
+        },
       },
     });
 
@@ -54,6 +65,11 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
 
     const chartingSession = await prisma.chartingSession.findUnique({
       where: { id: params.id },
+      select: {
+        id: true,
+        userId: true,
+        isActive: true,
+      },
     });
 
     if (!chartingSession) {
