@@ -5,9 +5,14 @@ import { prisma } from '@/lib/db';
 import { hashPassword, generateTemporaryPassword } from '@/lib/auth-helpers';
 
 /**
- * GET /api/admin/cna-accounts - List all CNA accounts
+ * GET /api/admin/cna-accounts - List CNA accounts with pagination
+ * Query params:
+ * - page: Page number (default: 1)
+ * - limit: Items per page (default: 50, max: 100)
+ * - status: Filter by CNA status (optional)
+ * - search: Search by name or email (optional)
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
@@ -15,8 +20,34 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
+    const { searchParams } = new URL(req.url);
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '50')));
+    const status = searchParams.get('status');
+    const search = searchParams.get('search');
+
+    const skip = (page - 1) * limit;
+
+    // Build where clause
+    const where: any = { role: 'CNA' };
+
+    if (status) {
+      where.cna = { status };
+    }
+
+    if (search) {
+      where.OR = [
+        { email: { contains: search, mode: 'insensitive' } },
+        { cna: { name: { contains: search, mode: 'insensitive' } } },
+      ];
+    }
+
+    // Get total count for pagination
+    const totalCount = await prisma.user.count({ where });
+
+    // Fetch users with pagination
     const users = await prisma.user.findMany({
-      where: { role: 'CNA' },
+      where,
       include: {
         cna: {
           select: {
@@ -35,12 +66,25 @@ export async function GET() {
             startTime: true,
             currentStep: true,
           },
+          take: 1, // Only get the most recent active session
+          orderBy: { startTime: 'desc' },
         },
       },
       orderBy: { createdAt: 'desc' },
+      take: limit,
+      skip,
     });
 
-    return NextResponse.json({ users });
+    return NextResponse.json({
+      users,
+      pagination: {
+        page,
+        limit,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+        hasMore: skip + users.length < totalCount,
+      },
+    });
   } catch (error) {
     console.error('Error fetching CNA accounts:', error);
     return NextResponse.json({ error: 'Failed to fetch CNA accounts' }, { status: 500 });

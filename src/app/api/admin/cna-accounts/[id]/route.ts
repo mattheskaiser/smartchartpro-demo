@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/db';
 import { hashPassword, generateTemporaryPassword } from '@/lib/auth-helpers';
-
-const prisma = new PrismaClient();
 
 /**
  * GET /api/admin/cna-accounts/[id] - Get specific CNA account
@@ -20,9 +18,25 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     const user = await prisma.user.findUnique({
       where: { id: params.id },
       include: {
-        cna: true,
+        cna: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            certificationNumber: true,
+            status: true,
+          },
+        },
         chartingSessions: {
           where: { isActive: true },
+          select: {
+            id: true,
+            startTime: true,
+            currentStep: true,
+          },
+          take: 1,
+          orderBy: { startTime: 'desc' },
         },
       },
     });
@@ -98,7 +112,16 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       where: { id: params.id },
       data: updateData,
       include: {
-        cna: true,
+        cna: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            certificationNumber: true,
+            status: true,
+          },
+        },
       },
     });
 
