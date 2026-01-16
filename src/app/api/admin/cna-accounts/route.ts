@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
+import { Prisma } from '@prisma/client';
 import { hashPassword, generateTemporaryPassword } from '@/lib/auth-helpers';
 import { CreateCNAAccountSchema } from '@/lib/validations/cna.schema';
 import { handleApiError, CommonErrors } from '@/lib/api-error';
@@ -31,7 +32,7 @@ export async function GET(req: NextRequest) {
     const skip = (page - 1) * limit;
 
     // Build where clause
-    const where: any = { role: 'CNA' };
+    const where: Prisma.UserWhereInput = { role: 'CNA' };
 
     if (status) {
       where.cna = { status };

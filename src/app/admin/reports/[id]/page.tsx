@@ -142,7 +142,7 @@ export default function ReportDetailPage() {
   const entriesByResident = report.entriesData.reduce(
     (acc, entry) => {
       if (!acc[entry.residentId]) {
-        const resident = report.residentsData.find((r) => r.id === entry.residentId);
+        const resident = report.residentsData.find(r => r.id === entry.residentId);
         if (resident) {
           acc[entry.residentId] = { resident, entries: [] };
         }

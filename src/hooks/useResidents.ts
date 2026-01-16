@@ -169,17 +169,37 @@ export const useCreateResident = () => {
     mutationFn: createResident,
     onSuccess: newResident => {
       // Update the residents list cache - handle paginated response
-      queryClient.setQueryData(['residents', undefined], (old: any) => {
-        if (!old) return { residents: [newResident], pagination: { page: 1, limit: 100, totalCount: 1, totalPages: 1, hasMore: false } };
-        return {
-          ...old,
-          residents: [newResident, ...old.residents],
-          pagination: {
-            ...old.pagination,
-            totalCount: old.pagination.totalCount + 1,
-          },
-        };
-      });
+      queryClient.setQueryData(
+        ['residents', undefined],
+        (
+          old:
+            | {
+                residents: Resident[];
+                pagination: {
+                  page: number;
+                  limit: number;
+                  totalCount: number;
+                  totalPages: number;
+                  hasMore: boolean;
+                };
+              }
+            | undefined
+        ) => {
+          if (!old)
+            return {
+              residents: [newResident],
+              pagination: { page: 1, limit: 100, totalCount: 1, totalPages: 1, hasMore: false },
+            };
+          return {
+            ...old,
+            residents: [newResident, ...old.residents],
+            pagination: {
+              ...old.pagination,
+              totalCount: old.pagination.totalCount + 1,
+            },
+          };
+        }
+      );
 
       // Invalidate to refetch with updated data
       queryClient.invalidateQueries({ queryKey: ['residents'] });
@@ -197,15 +217,31 @@ export const useUpdateResident = () => {
       queryClient.setQueryData(['residents', variables.id], updatedResident);
 
       // Update the residents list cache - handle paginated response
-      queryClient.setQueryData(['residents', undefined], (old: any) => {
-        if (!old) return old;
-        return {
-          ...old,
-          residents: old.residents.map((resident: Resident) =>
-            resident.id === updatedResident.id ? updatedResident : resident
-          ),
-        };
-      });
+      queryClient.setQueryData(
+        ['residents', undefined],
+        (
+          old:
+            | {
+                residents: Resident[];
+                pagination: {
+                  page: number;
+                  limit: number;
+                  totalCount: number;
+                  totalPages: number;
+                  hasMore: boolean;
+                };
+              }
+            | undefined
+        ) => {
+          if (!old) return old;
+          return {
+            ...old,
+            residents: old.residents.map((resident: Resident) =>
+              resident.id === updatedResident.id ? updatedResident : resident
+            ),
+          };
+        }
+      );
 
       // Invalidate to ensure consistency
       queryClient.invalidateQueries({ queryKey: ['residents'] });
@@ -220,17 +256,33 @@ export const useDeleteResident = () => {
     mutationFn: deleteResident,
     onSuccess: (_, deletedId) => {
       // Remove from residents list cache - handle paginated response
-      queryClient.setQueryData(['residents', undefined], (old: any) => {
-        if (!old) return old;
-        return {
-          ...old,
-          residents: old.residents.filter((resident: Resident) => resident.id !== deletedId),
-          pagination: {
-            ...old.pagination,
-            totalCount: old.pagination.totalCount - 1,
-          },
-        };
-      });
+      queryClient.setQueryData(
+        ['residents', undefined],
+        (
+          old:
+            | {
+                residents: Resident[];
+                pagination: {
+                  page: number;
+                  limit: number;
+                  totalCount: number;
+                  totalPages: number;
+                  hasMore: boolean;
+                };
+              }
+            | undefined
+        ) => {
+          if (!old) return old;
+          return {
+            ...old,
+            residents: old.residents.filter((resident: Resident) => resident.id !== deletedId),
+            pagination: {
+              ...old.pagination,
+              totalCount: old.pagination.totalCount - 1,
+            },
+          };
+        }
+      );
 
       // Remove the specific resident cache
       queryClient.removeQueries({ queryKey: ['residents', deletedId] });

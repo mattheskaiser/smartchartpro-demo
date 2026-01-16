@@ -132,17 +132,37 @@ export const useCreateChartingReport = () => {
     mutationFn: createReport,
     onSuccess: newReport => {
       // Update the reports list cache - handle paginated response
-      queryClient.setQueryData(['charting-reports', undefined], (old: any) => {
-        if (!old) return { reports: [newReport], pagination: { page: 1, limit: 50, totalCount: 1, totalPages: 1, hasMore: false } };
-        return {
-          ...old,
-          reports: [newReport, ...old.reports],
-          pagination: {
-            ...old.pagination,
-            totalCount: old.pagination.totalCount + 1,
-          },
-        };
-      });
+      queryClient.setQueryData(
+        ['charting-reports', undefined],
+        (
+          old:
+            | {
+                reports: ChartingReport[];
+                pagination: {
+                  page: number;
+                  limit: number;
+                  totalCount: number;
+                  totalPages: number;
+                  hasMore: boolean;
+                };
+              }
+            | undefined
+        ) => {
+          if (!old)
+            return {
+              reports: [newReport],
+              pagination: { page: 1, limit: 50, totalCount: 1, totalPages: 1, hasMore: false },
+            };
+          return {
+            ...old,
+            reports: [newReport, ...old.reports],
+            pagination: {
+              ...old.pagination,
+              totalCount: old.pagination.totalCount + 1,
+            },
+          };
+        }
+      );
 
       // Invalidate to refetch with updated data
       queryClient.invalidateQueries({ queryKey: ['charting-reports'] });

@@ -4,7 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@prisma/client';
 import { CreateReportSchema } from '@/lib/validations/report.schema';
-import { handleApiError, CommonErrors } from '@/lib/api-error';
+import { handleApiError } from '@/lib/api-error';
 
 // GET /api/reports - Get charting reports with pagination and optional details
 // Query params:
@@ -55,22 +55,22 @@ export async function GET(request: NextRequest) {
       where,
       include: includeDetails
         ? {
-          cna: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              certificationNumber: true,
+            cna: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                certificationNumber: true,
+              },
             },
-          },
-          createdBy: {
-            select: {
-              id: true,
-              email: true,
-              role: true,
+            createdBy: {
+              select: {
+                id: true,
+                email: true,
+                role: true,
+              },
             },
-          },
-        }
+          }
         : undefined,
       orderBy: {
         reportDate: 'desc',

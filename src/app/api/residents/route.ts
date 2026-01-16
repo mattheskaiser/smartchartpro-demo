@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { Prisma } from '@prisma/client';
 import { handleApiError, CommonErrors } from '@/lib/api-error';
 
 // GET /api/residents - Get residents with pagination and filtering
@@ -21,7 +22,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     // Build where clause
-    const where: any = {};
+    const where: Prisma.ResidentWhereInput = {};
 
     if (status) {
       where.status = status;
@@ -101,7 +102,9 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!name || !room || !emergencyContactName) {
-      return CommonErrors.validationError('Missing required fields: name, room, emergencyContactName');
+      return CommonErrors.validationError(
+        'Missing required fields: name, room, emergencyContactName'
+      );
     }
 
     // Create resident with all fields
