@@ -14,8 +14,30 @@ interface CreateResidentData {
 }
 
 // API functions
-const fetchResidents = async (): Promise<Resident[]> => {
-  const response = await fetch('/api/residents');
+const fetchResidents = async (filters?: {
+  page?: number;
+  limit?: number;
+  status?: string;
+  search?: string;
+  assignedCNA?: string;
+}): Promise<{
+  residents: Resident[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalCount: number;
+    totalPages: number;
+    hasMore: boolean;
+  };
+}> => {
+  const params = new URLSearchParams();
+  if (filters?.page) params.append('page', filters.page.toString());
+  if (filters?.limit) params.append('limit', filters.limit.toString());
+  if (filters?.status) params.append('status', filters.status);
+  if (filters?.search) params.append('search', filters.search);
+  if (filters?.assignedCNA) params.append('assignedCNA', filters.assignedCNA);
+
+  const response = await fetch(`/api/residents?${params.toString()}`);
   if (!response.ok) {
     throw new Error('Failed to fetch residents');
   }
@@ -115,10 +137,16 @@ const deleteResident = async (id: string): Promise<void> => {
 };
 
 // Hooks
-export const useResidents = () => {
+export const useResidents = (filters?: {
+  page?: number;
+  limit?: number;
+  status?: string;
+  search?: string;
+  assignedCNA?: string;
+}) => {
   return useQuery({
-    queryKey: ['residents'],
-    queryFn: fetchResidents,
+    queryKey: ['residents', filters],
+    queryFn: () => fetchResidents(filters),
   });
 };
 
@@ -136,10 +164,20 @@ export const useCreateResident = () => {
   return useMutation({
     mutationFn: createResident,
     onSuccess: newResident => {
-      // Update the residents list cache
-      queryClient.setQueryData(['residents'], (old: Resident[] = []) => [newResident, ...old]);
+      // Update the residents list cache - handle paginated response
+      queryClient.setQueryData(['residents', undefined], (old: any) => {
+        if (!old) return { residents: [newResident], pagination: { page: 1, limit: 100, totalCount: 1, totalPages: 1, hasMore: false } };
+        return {
+          ...old,
+          residents: [newResident, ...old.residents],
+          pagination: {
+            ...old.pagination,
+            totalCount: old.pagination.totalCount + 1,
+          },
+        };
+      });
 
-      // Invalidate and refetch residents list
+      // Invalidate all resident queries to refetch
       queryClient.invalidateQueries({ queryKey: ['residents'] });
     },
     onError: error => {
@@ -157,12 +195,18 @@ export const useUpdateResident = () => {
       // Immediately update the specific resident cache with the response data
       queryClient.setQueryData(['residents', variables.id], updatedResident);
 
-      // Update the residents list cache
-      queryClient.setQueryData(['residents'], (old: Resident[] = []) =>
-        old.map(resident => (resident.id === updatedResident.id ? updatedResident : resident))
-      );
+      // Update the residents list cache - handle paginated response
+      queryClient.setQueryData(['residents', undefined], (old: any) => {
+        if (!old) return old;
+        return {
+          ...old,
+          residents: old.residents.map((resident: Resident) =>
+            resident.id === updatedResident.id ? updatedResident : resident
+          ),
+        };
+      });
 
-      // Invalidate related queries (but not the main resident query since we just updated it)
+      // Invalidate related queries
       queryClient.invalidateQueries({ queryKey: ['residents'] });
     },
     onError: error => {
@@ -177,10 +221,18 @@ export const useDeleteResident = () => {
   return useMutation({
     mutationFn: deleteResident,
     onSuccess: (_, deletedId) => {
-      // Remove from residents list cache
-      queryClient.setQueryData(['residents'], (old: Resident[] = []) =>
-        old.filter(resident => resident.id !== deletedId)
-      );
+      // Remove from residents list cache - handle paginated response
+      queryClient.setQueryData(['residents', undefined], (old: any) => {
+        if (!old) return old;
+        return {
+          ...old,
+          residents: old.residents.filter((resident: Resident) => resident.id !== deletedId),
+          pagination: {
+            ...old.pagination,
+            totalCount: old.pagination.totalCount - 1,
+          },
+        };
+      });
 
       // Remove the specific resident cache
       queryClient.removeQueries({ queryKey: ['residents', deletedId] });
