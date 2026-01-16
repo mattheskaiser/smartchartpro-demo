@@ -86,7 +86,7 @@
       },
       {
         "rule": "Handle schema drift with db push for development",
-        "details": "When encountering schema drift, use 'prisma db push' to sync the schema without creating migration files, or resolve drift manually."
+        "details": "When encountering schema drift or adding new models, ALWAYS use 'npx prisma db push' to sync the schema without resetting data. This command safely updates the database schema while preserving all existing data. Never use 'prisma migrate dev' if it suggests resetting the database."
       },
       {
         "rule": "Use baseline migrations for existing databases",

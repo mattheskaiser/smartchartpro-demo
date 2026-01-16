@@ -11,7 +11,7 @@ type DashboardStats = {
   totalCnas: number;
   activeCnas: number;
   totalResidents: number;
-  activeShifts: number;
+  activeSessions: number;
 };
 
 export default function AdminDashboard() {
@@ -60,6 +60,11 @@ export default function AdminDashboard() {
           value: stats.totalResidents.toString(),
           icon: 'Users' as keyof typeof icons,
         },
+        {
+          name: 'Active Sessions',
+          value: stats.activeSessions.toString(),
+          icon: 'Activity' as keyof typeof icons,
+        },
       ]
     : [];
   return (
@@ -93,10 +98,10 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {loading
           ? // Loading skeleton
-            Array.from({ length: 3 }).map((_, index) => (
+            Array.from({ length: 4 }).map((_, index) => (
               <div
                 key={index}
                 className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"

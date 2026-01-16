@@ -90,7 +90,7 @@ export const CNACardMolecule = ({ cna }: CNACardProps) => {
           </div>
         )}
       </div>
-      <ButtonAtom>More Details</ButtonAtom>
+      <ButtonAtom onClick={() => router.push(`/admin/cnas/${cna.id}`)}>More Details</ButtonAtom>
     </div>
   );
 };

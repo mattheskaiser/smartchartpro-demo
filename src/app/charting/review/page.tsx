@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { useChartingStore } from '@/stores/chartingStore';
 import { useFacilityStore } from '@/stores/facilityStore';
 import { useCreateChartingReport } from '@/hooks/useChartingReports';
+import { useChartingSession } from '@/hooks/useChartingSession';
 import { format } from 'date-fns';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
@@ -30,6 +32,7 @@ const ASSISTANCE_LEVELS = [
 export default function ChartingReviewPage() {
   const router = useRouter();
   const { selectedResidents, entries, session, endCharting } = useChartingStore();
+  const { session: activeSession, endSession } = useChartingSession();
   const facilitySettings = useFacilityStore();
   const createReport = useCreateChartingReport();
   const [isSaving, setIsSaving] = useState(false);
@@ -84,7 +87,7 @@ export default function ChartingReviewPage() {
       console.log('Step 3: Saving report to database...');
 
       // Create the report with PDF data
-      await createReport.mutateAsync({
+      const report = await createReport.mutateAsync({
         reportDate: startTime,
         sessionStartTime: startTime,
         sessionEndTime: endTime,
@@ -112,15 +115,24 @@ export default function ChartingReviewPage() {
 
       console.log('Step 4: Report saved successfully!');
 
+      // End the session in database
+      if (activeSession) {
+        await endSession(report.id);
+      }
+
       // Clear charting session
       endCharting();
 
       toast({
-        title: 'Session ended and report submitted',
+        title: 'Session ended successfully',
+        description: 'Report generated and you will be logged out',
         type: 'success',
       });
 
-      router.push('/charting/start');
+      // Log out the user after ending session
+      setTimeout(() => {
+        signOut({ callbackUrl: '/login' });
+      }, 1500);
     } catch (error) {
       console.error('Error saving charting session:', error);
 
@@ -211,7 +223,22 @@ export default function ChartingReviewPage() {
       </CardAtom>
 
       <div className="flex justify-between">
-        <ButtonAtom variant="outline" onClick={() => router.push('/charting/adls')}>
+        <ButtonAtom
+          variant="outline"
+          onClick={async () => {
+            // Update session step back to 'adls'
+            try {
+              await fetch('/api/sessions', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ currentStep: 'adls' }),
+              });
+            } catch (error) {
+              console.error('Error updating session step:', error);
+            }
+            router.push('/charting/adls');
+          }}
+        >
           <DynamicIconAtom name="ArrowLeft" size="sm" className="mr-2" />
           Back to Charting
         </ButtonAtom>

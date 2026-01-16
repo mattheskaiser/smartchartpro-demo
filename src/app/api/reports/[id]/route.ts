@@ -16,6 +16,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
             certificationNumber: true,
           },
         },
+        createdBy: {
+          select: {
+            id: true,
+            email: true,
+            role: true,
+          },
+        },
       },
     });
 
@@ -53,6 +60,13 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
             name: true,
             email: true,
             certificationNumber: true,
+          },
+        },
+        createdBy: {
+          select: {
+            id: true,
+            email: true,
+            role: true,
           },
         },
       },
