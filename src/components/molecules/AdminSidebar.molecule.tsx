@@ -76,36 +76,6 @@ export const AdminSidebarMolecule = () => {
               {item.name}
             </Link>
           ))}
-
-          {/* User Info */}
-          {session?.user && (
-            <div className="mt-4 pt-4 border-t">
-              <div className="flex items-center space-x-3 px-2 py-3 bg-gray-50 rounded-lg">
-                <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <DynamicIconAtom name="Shield" size="sm" className="text-primary" />
-                  </div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <TextAtom variant="small" className="font-medium text-gray-900 truncate">
-                    {session.user.email}
-                  </TextAtom>
-                  <BadgeAtom variant="info" className="text-xs mt-1">
-                    {session.user.role}
-                  </BadgeAtom>
-                </div>
-              </div>
-
-              <ButtonAtom
-                variant="ghost"
-                className="w-full mt-2 justify-start"
-                onClick={handleLogout}
-              >
-                <DynamicIconAtom name="LogOut" size="sm" className="mr-3" />
-                Logout
-              </ButtonAtom>
-            </div>
-          )}
         </div>
       </nav>
     </div>
