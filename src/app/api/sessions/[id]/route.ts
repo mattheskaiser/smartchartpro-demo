@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { endSession, forceEndSession } from '@/lib/session-service';
+import { handleApiError, CommonErrors } from '@/lib/api-error';
 
 /**
  * GET /api/sessions/[id] - Get specific session
@@ -12,7 +13,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return CommonErrors.unauthorized();
     }
 
     const chartingSession = await prisma.chartingSession.findUnique({
@@ -37,18 +38,17 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     });
 
     if (!chartingSession) {
-      return NextResponse.json({ error: 'Session not found' }, { status: 404 });
+      return CommonErrors.notFound('Session');
     }
 
     // Check authorization - user can only view their own session unless admin
     if (session.user.role !== 'ADMIN' && chartingSession.userId !== session.user.id) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      return CommonErrors.forbidden();
     }
 
     return NextResponse.json({ session: chartingSession });
   } catch (error) {
-    console.error('Error fetching session:', error);
-    return NextResponse.json({ error: 'Failed to fetch session' }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -60,7 +60,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return CommonErrors.unauthorized();
     }
 
     const chartingSession = await prisma.chartingSession.findUnique({
@@ -73,12 +73,12 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     });
 
     if (!chartingSession) {
-      return NextResponse.json({ error: 'Session not found' }, { status: 404 });
+      return CommonErrors.notFound('Session');
     }
 
     // Check authorization
     if (session.user.role !== 'ADMIN' && chartingSession.userId !== session.user.id) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      return CommonErrors.forbidden();
     }
 
     // Get reportId from request body if provided
@@ -97,7 +97,6 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       session: updatedSession,
     });
   } catch (error) {
-    console.error('Error ending session:', error);
-    return NextResponse.json({ error: 'Failed to end session' }, { status: 500 });
+    return handleApiError(error);
   }
 }

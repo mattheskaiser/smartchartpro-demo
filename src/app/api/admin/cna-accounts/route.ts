@@ -3,6 +3,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { hashPassword, generateTemporaryPassword } from '@/lib/auth-helpers';
+import { CreateCNAAccountSchema } from '@/lib/validations/cna.schema';
+import { handleApiError, CommonErrors } from '@/lib/api-error';
 
 /**
  * GET /api/admin/cna-accounts - List CNA accounts with pagination
@@ -86,8 +88,7 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error fetching CNA accounts:', error);
-    return NextResponse.json({ error: 'Failed to fetch CNA accounts' }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -99,41 +100,39 @@ export async function POST(req: NextRequest) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+      return CommonErrors.forbidden();
     }
 
     const body = await req.json();
-    const { cnaId, email } = body;
 
-    if (!cnaId || !email) {
-      return NextResponse.json({ error: 'CNA ID and email are required' }, { status: 400 });
-    }
+    // Validate request body
+    const validatedData = CreateCNAAccountSchema.parse(body);
 
     // Check if CNA exists
     const cna = await prisma.cna.findUnique({
-      where: { id: cnaId },
+      where: { id: validatedData.cnaId },
     });
 
     if (!cna) {
-      return NextResponse.json({ error: 'CNA not found' }, { status: 404 });
+      return CommonErrors.notFound('CNA');
     }
 
     // Check if CNA already has a user account
     const existingUser = await prisma.user.findUnique({
-      where: { cnaId },
+      where: { cnaId: validatedData.cnaId },
     });
 
     if (existingUser) {
-      return NextResponse.json({ error: 'This CNA already has a user account' }, { status: 409 });
+      return CommonErrors.conflict('This CNA already has a user account');
     }
 
     // Check if email is already in use
     const existingEmail = await prisma.user.findUnique({
-      where: { email },
+      where: { email: validatedData.email },
     });
 
     if (existingEmail) {
-      return NextResponse.json({ error: 'Email is already in use' }, { status: 409 });
+      return CommonErrors.conflict('Email is already in use');
     }
 
     // Generate temporary password
@@ -143,10 +142,10 @@ export async function POST(req: NextRequest) {
     // Create user account
     const user = await prisma.user.create({
       data: {
-        email,
+        email: validatedData.email,
         password: hashedPassword,
         role: 'CNA',
-        cnaId,
+        cnaId: validatedData.cnaId,
         isActive: true,
         mustChangePassword: true,
       },
@@ -163,7 +162,6 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error creating CNA account:', error);
-    return NextResponse.json({ error: 'Failed to create CNA account' }, { status: 500 });
+    return handleApiError(error);
   }
 }

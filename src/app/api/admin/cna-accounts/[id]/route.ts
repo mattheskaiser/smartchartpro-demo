@@ -3,6 +3,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { hashPassword, generateTemporaryPassword } from '@/lib/auth-helpers';
+import { UpdateCNAAccountSchema } from '@/lib/validations/cna.schema';
+import { handleApiError, CommonErrors } from '@/lib/api-error';
 
 /**
  * GET /api/admin/cna-accounts/[id] - Get specific CNA account
@@ -12,7 +14,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     const session = await getServerSession(authOptions);
 
     if (!session?.user || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+      return CommonErrors.forbidden();
     }
 
     const user = await prisma.user.findUnique({
@@ -42,13 +44,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     });
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return CommonErrors.notFound('User');
     }
 
     return NextResponse.json({ user });
   } catch (error) {
-    console.error('Error fetching CNA account:', error);
-    return NextResponse.json({ error: 'Failed to fetch CNA account' }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -60,18 +61,20 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const session = await getServerSession(authOptions);
 
     if (!session?.user || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+      return CommonErrors.forbidden();
     }
 
     const body = await req.json();
-    const { isActive, resetPassword, email } = body;
+
+    // Validate request body
+    const validatedData = UpdateCNAAccountSchema.parse(body);
 
     const user = await prisma.user.findUnique({
       where: { id: params.id },
     });
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return CommonErrors.notFound('User');
     }
 
     const updateData: {
@@ -82,27 +85,27 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     } = {};
 
     // Update active status
-    if (typeof isActive === 'boolean') {
-      updateData.isActive = isActive;
+    if (typeof validatedData.isActive === 'boolean') {
+      updateData.isActive = validatedData.isActive;
     }
 
     // Update email
-    if (email && email !== user.email) {
+    if (validatedData.email && validatedData.email !== user.email) {
       // Check if email is already in use
       const existingEmail = await prisma.user.findUnique({
-        where: { email },
+        where: { email: validatedData.email },
       });
 
       if (existingEmail && existingEmail.id !== params.id) {
-        return NextResponse.json({ error: 'Email is already in use' }, { status: 409 });
+        return CommonErrors.conflict('Email is already in use');
       }
 
-      updateData.email = email;
+      updateData.email = validatedData.email;
     }
 
     // Reset password
     let temporaryPassword: string | undefined;
-    if (resetPassword) {
+    if (validatedData.resetPassword) {
       temporaryPassword = generateTemporaryPassword();
       updateData.password = await hashPassword(temporaryPassword);
       updateData.mustChangePassword = true;
@@ -130,8 +133,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       temporaryPassword, // Only returned if password was reset
     });
   } catch (error) {
-    console.error('Error updating CNA account:', error);
-    return NextResponse.json({ error: 'Failed to update CNA account' }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -143,7 +145,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     const session = await getServerSession(authOptions);
 
     if (!session?.user || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+      return CommonErrors.forbidden();
     }
 
     const user = await prisma.user.findUnique({
@@ -151,7 +153,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     });
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return CommonErrors.notFound('User');
     }
 
     // Soft delete by deactivating
@@ -164,7 +166,6 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       message: 'CNA account deactivated successfully',
     });
   } catch (error) {
-    console.error('Error deleting CNA account:', error);
-    return NextResponse.json({ error: 'Failed to delete CNA account' }, { status: 500 });
+    return handleApiError(error);
   }
 }

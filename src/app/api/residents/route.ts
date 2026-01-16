@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { handleApiError, CommonErrors } from '@/lib/api-error';
 
 // GET /api/residents - Get residents with pagination and filtering
 // Query params:
@@ -78,8 +79,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error fetching residents:', error);
-    return NextResponse.json({ error: 'Failed to fetch residents' }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!name || !room || !emergencyContactName) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return CommonErrors.validationError('Missing required fields: name, room, emergencyContactName');
     }
 
     // Create resident with all fields
@@ -126,14 +126,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(transformedResident, { status: 201 });
   } catch (error) {
-    console.error('Error creating resident:', error);
-    console.error('Request body:', body);
-    return NextResponse.json(
-      {
-        error: 'Failed to create resident',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

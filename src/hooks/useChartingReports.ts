@@ -143,9 +143,6 @@ export const useCreateChartingReport = () => {
       // Invalidate all report queries to refetch
       queryClient.invalidateQueries({ queryKey: ['charting-reports'] });
     },
-    onError: error => {
-      console.error('Error creating report:', error);
-    },
   });
 };
 
@@ -161,9 +158,6 @@ export const useUpdateChartingReport = () => {
       // Invalidate reports list to refetch
       queryClient.invalidateQueries({ queryKey: ['charting-reports'] });
     },
-    onError: error => {
-      console.error('Error updating report:', error);
-    },
   });
 };
 
@@ -178,9 +172,6 @@ export const useDeleteChartingReport = () => {
 
       // Invalidate reports list to refetch
       queryClient.invalidateQueries({ queryKey: ['charting-reports'] });
-    },
-    onError: error => {
-      console.error('Error deleting report:', error);
     },
   });
 };

@@ -7,6 +7,8 @@ import {
   updateSessionData,
   updateSessionStep,
 } from '@/lib/session-service';
+import { CreateSessionSchema, UpdateSessionSchema } from '@/lib/validations/session.schema';
+import { handleApiError, CommonErrors } from '@/lib/api-error';
 
 /**
  * GET /api/sessions - Get current user's active session
@@ -16,7 +18,7 @@ export async function GET() {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return CommonErrors.unauthorized();
     }
 
     const activeSession = await getActiveSession(session.user.id);
@@ -27,8 +29,7 @@ export async function GET() {
 
     return NextResponse.json({ session: activeSession });
   } catch (error) {
-    console.error('Error fetching session:', error);
-    return NextResponse.json({ error: 'Failed to fetch session' }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -40,70 +41,46 @@ export async function POST(req: NextRequest) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return CommonErrors.unauthorized();
     }
 
     if (session.user.role !== 'CNA') {
-      return NextResponse.json(
-        { error: 'Only CNAs can create charting sessions' },
-        { status: 403 }
-      );
+      return CommonErrors.forbidden();
     }
 
     // Get cnaId from session or fetch from database
     let cnaId = session.user.cnaId;
 
-    console.log('Session user:', {
-      id: session.user.id,
-      email: session.user.email,
-      cnaId: session.user.cnaId,
-    });
-
     if (!cnaId) {
-      // Fetch from database if not in session (can happen after fresh CNA creation)
-      console.log('cnaId not in session, fetching from database...');
+      // Fetch from database if not in session
       const { prisma } = await import('@/lib/db');
       const user = await prisma.user.findUnique({
         where: { id: session.user.id },
         select: { cnaId: true },
       });
 
-      console.log('User from DB:', user);
-
       if (!user?.cnaId) {
-        return NextResponse.json(
-          {
-            error: 'CNA account not properly configured. Please log out and log back in.',
-          },
-          { status: 400 }
+        return CommonErrors.validationError(
+          'CNA account not properly configured. Please log out and log back in.'
         );
       }
 
       cnaId = user.cnaId;
-      console.log('Found cnaId from DB:', cnaId);
     }
 
     const body = await req.json();
-    const { residentIds } = body;
 
-    if (!residentIds || !Array.isArray(residentIds) || residentIds.length === 0) {
-      return NextResponse.json(
-        { error: 'At least one resident must be selected' },
-        { status: 400 }
-      );
-    }
+    // Validate request body
+    const validatedData = CreateSessionSchema.parse(body);
 
-    const newSession = await createSession(session.user.id, cnaId, residentIds);
+    const newSession = await createSession(session.user.id, cnaId, validatedData.residentIds);
 
     return NextResponse.json({ session: newSession }, { status: 201 });
   } catch (error) {
-    console.error('Error creating session:', error);
-
     if (error instanceof Error && error.message.includes('already have an active session')) {
-      return NextResponse.json({ error: error.message }, { status: 409 });
+      return CommonErrors.conflict(error.message);
     }
-
-    return NextResponse.json({ error: 'Failed to create session' }, { status: 500 });
+    return handleApiError(error);
   }
 }
 
@@ -115,24 +92,26 @@ export async function PATCH(req: NextRequest) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return CommonErrors.unauthorized();
     }
 
     const activeSession = await getActiveSession(session.user.id);
 
     if (!activeSession) {
-      return NextResponse.json({ error: 'No active session found' }, { status: 404 });
+      return CommonErrors.notFound('Active session');
     }
 
     const body = await req.json();
-    const { currentStep, chartingData } = body;
 
-    if (currentStep) {
-      await updateSessionStep(activeSession.id, currentStep);
+    // Validate request body
+    const validatedData = UpdateSessionSchema.parse(body);
+
+    if (validatedData.currentStep) {
+      await updateSessionStep(activeSession.id, validatedData.currentStep);
     }
 
-    if (chartingData !== undefined) {
-      await updateSessionData(activeSession.id, chartingData);
+    if (validatedData.chartingData !== undefined) {
+      await updateSessionData(activeSession.id, validatedData.chartingData);
     }
 
     // Fetch the updated session with details
@@ -140,7 +119,6 @@ export async function PATCH(req: NextRequest) {
 
     return NextResponse.json({ session: updatedSession });
   } catch (error) {
-    console.error('Error updating session:', error);
-    return NextResponse.json({ error: 'Failed to update session' }, { status: 500 });
+    return handleApiError(error);
   }
 }
