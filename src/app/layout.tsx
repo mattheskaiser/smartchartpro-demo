@@ -9,6 +9,7 @@ import { QueryProvider } from '@/providers/QueryProvider';
 import { SessionProvider } from '@/providers/SessionProvider';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { ChartingProgressStepperMolecule } from '@/components/molecules/ChartingProgressStepper.molecule';
+import { ChartingUserProfileMolecule } from '@/components/molecules/ChartingUserProfile.molecule';
 import { UserMenuMolecule } from '@/components/molecules/UserMenu.molecule';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
@@ -62,8 +63,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
                   <div className="max-w-7xl mx-auto px-6 py-4">
                     <div className="flex items-center justify-between">
-                      {/* Left: SmartChart Pro */}
-                      <div className="flex items-center space-x-3">
+                      {/* Left: SmartChart Pro Logo */}
+                      <div className="flex items-center space-x-3 w-64">
                         <div className="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-lg">
                           <DynamicIconAtom name="Hospital" size="sm" className="text-primary" />
                         </div>
@@ -78,21 +79,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <ChartingProgressStepperMolecule currentStep={getCurrentStep()} />
                       </div>
 
-                      {/* Right: Resident Count */}
-                      <div className="flex items-center space-x-4">
-                        {isChartingActive && selectedResidents.length > 0 && (
-                          <>
-                            <div className="flex items-center space-x-2">
-                              <DynamicIconAtom name="Users" size="sm" className="text-gray-400" />
-                              <span className="text-sm text-gray-600">
-                                {selectedResidents.length} resident
-                                {selectedResidents.length !== 1 ? 's' : ''}
-                              </span>
-                            </div>
-                            <BadgeAtom variant="success">Active Session</BadgeAtom>
-                          </>
-                        )}
-                        <UserMenuMolecule />
+                      {/* Right: User Profile */}
+                      <div className="w-64 flex justify-end">
+                        <ChartingUserProfileMolecule />
                       </div>
                     </div>
                   </div>
