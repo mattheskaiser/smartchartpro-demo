@@ -74,7 +74,18 @@ export default function ChartingADLsPage() {
     }
   };
 
-  const handleFinishCharting = () => {
+  const handleFinishCharting = async () => {
+    // Update session step to 'review'
+    try {
+      await fetch('/api/sessions', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentStep: 'review' }),
+      });
+    } catch (error) {
+      console.error('Error updating session step:', error);
+    }
+
     router.push('/charting/review');
   };
 
@@ -192,7 +203,7 @@ export default function ChartingADLsPage() {
                 <BadgeAtom variant={getStatusVariant(currentResident?.status || '')}>
                   {currentResident?.status
                     ? currentResident.status.charAt(0).toUpperCase() +
-                      currentResident.status.slice(1)
+                    currentResident.status.slice(1)
                     : ''}
                 </BadgeAtom>
               </div>

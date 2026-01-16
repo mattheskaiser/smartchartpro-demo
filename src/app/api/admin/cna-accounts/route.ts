@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/db';
 import { hashPassword, generateTemporaryPassword } from '@/lib/auth-helpers';
-
-const prisma = new PrismaClient();
 
 /**
  * GET /api/admin/cna-accounts - List all CNA accounts

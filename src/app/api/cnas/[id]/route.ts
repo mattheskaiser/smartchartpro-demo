@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/db';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -56,9 +54,17 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    // First, delete the associated user account
+    await prisma.user.deleteMany({
+      where: { cnaId: params.id },
+    });
+
+    // Then delete the CNA
     await prisma.cna.delete({
       where: { id: params.id },
     });
+
+    console.log(`Deleted CNA ${params.id} and associated user account`);
 
     return NextResponse.json({ message: 'CNA deleted successfully' });
   } catch (error) {

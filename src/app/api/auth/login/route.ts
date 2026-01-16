@@ -53,7 +53,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
     }
 
-    // Return success with user info
+    // Check for active session (for CNAs)
+    let activeSession = null;
+    if (user.role === 'CNA') {
+      activeSession = await prisma.chartingSession.findFirst({
+        where: {
+          userId: user.id,
+          isActive: true,
+        },
+        select: {
+          id: true,
+          currentStep: true,
+          residentIds: true,
+        },
+      });
+    }
+
+    // Return success with user info and active session
     return NextResponse.json({
       success: true,
       user: {
@@ -63,6 +79,7 @@ export async function POST(req: NextRequest) {
         cnaId: user.cnaId,
         cnaName: user.cna?.name,
       },
+      activeSession,
     });
   } catch (error) {
     console.error('Login error:', error);

@@ -50,8 +50,30 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!session.user.cnaId) {
-      return NextResponse.json({ error: 'CNA account not properly configured' }, { status: 400 });
+    // Get cnaId from session or fetch from database
+    let cnaId = session.user.cnaId;
+
+    console.log('Session user:', { id: session.user.id, email: session.user.email, cnaId: session.user.cnaId });
+
+    if (!cnaId) {
+      // Fetch from database if not in session (can happen after fresh CNA creation)
+      console.log('cnaId not in session, fetching from database...');
+      const { prisma } = await import('@/lib/db');
+      const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { cnaId: true },
+      });
+
+      console.log('User from DB:', user);
+
+      if (!user?.cnaId) {
+        return NextResponse.json({
+          error: 'CNA account not properly configured. Please log out and log back in.'
+        }, { status: 400 });
+      }
+
+      cnaId = user.cnaId;
+      console.log('Found cnaId from DB:', cnaId);
     }
 
     const body = await req.json();
@@ -64,7 +86,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const newSession = await createSession(session.user.id, session.user.cnaId, residentIds);
+    const newSession = await createSession(session.user.id, cnaId, residentIds);
 
     return NextResponse.json({ session: newSession }, { status: 201 });
   } catch (error) {

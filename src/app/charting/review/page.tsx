@@ -223,7 +223,22 @@ export default function ChartingReviewPage() {
       </CardAtom>
 
       <div className="flex justify-between">
-        <ButtonAtom variant="outline" onClick={() => router.push('/charting/adls')}>
+        <ButtonAtom
+          variant="outline"
+          onClick={async () => {
+            // Update session step back to 'adls'
+            try {
+              await fetch('/api/sessions', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ currentStep: 'adls' }),
+              });
+            } catch (error) {
+              console.error('Error updating session step:', error);
+            }
+            router.push('/charting/adls');
+          }}
+        >
           <DynamicIconAtom name="ArrowLeft" size="sm" className="mr-2" />
           Back to Charting
         </ButtonAtom>

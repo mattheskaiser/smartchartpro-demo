@@ -38,12 +38,13 @@ export default function ChartingStartPage() {
   // Check for existing active session and redirect
   useEffect(() => {
     if (activeSession && activeSession.isActive) {
-      // Resume existing session
+      // Resume existing session - redirect based on current step
       if (activeSession.currentStep === 'adls') {
         router.push('/charting/adls');
       } else if (activeSession.currentStep === 'review') {
         router.push('/charting/review');
       }
+      // If currentStep is 'start', stay on this page (shouldn't happen but safe fallback)
     }
   }, [activeSession, router]);
 
@@ -186,8 +187,8 @@ export default function ChartingStartPage() {
                 <div
                   key={resident.id}
                   className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${selectedIds.has(resident.id)
-                      ? 'border-primary bg-secondary ring-1 ring-primary/20'
-                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    ? 'border-primary bg-secondary ring-1 ring-primary/20'
+                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                     }`}
                   onClick={() => {
                     const newSelected = new Set(selectedIds);

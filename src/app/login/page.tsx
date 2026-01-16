@@ -44,15 +44,30 @@ export default function LoginPage() {
         return;
       }
 
-      // Success - redirect
+      // Check for active session to determine redirect
+      const sessionResponse = await fetch('/api/sessions');
+      const sessionData = await sessionResponse.json();
+
+      // Success - redirect based on active session
       toast({
         title: 'Login Successful',
         description: 'Redirecting...',
         type: 'success',
       });
 
-      const callbackUrl = searchParams.get('callbackUrl') || '/charting/start';
-      window.location.href = callbackUrl;
+      let redirectUrl = searchParams.get('callbackUrl') || '/charting/start';
+
+      // If there's an active session, redirect to where they left off
+      if (sessionData.session?.isActive) {
+        const step = sessionData.session.currentStep;
+        if (step === 'adls') {
+          redirectUrl = '/charting/adls';
+        } else if (step === 'review') {
+          redirectUrl = '/charting/review';
+        }
+      }
+
+      window.location.href = redirectUrl;
     } catch (err) {
       const errorMsg = 'An unexpected error occurred. Please try again.';
       setError(errorMsg);

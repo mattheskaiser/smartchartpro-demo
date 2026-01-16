@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/db';
 import { initializeDefaultShifts } from '@/lib/initializeDefaults';
-
-const prisma = new PrismaClient();
 
 export async function GET() {
   try {

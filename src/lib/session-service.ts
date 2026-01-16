@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/db';
 
 /**
  * Get user's active session if exists
@@ -36,7 +34,7 @@ export async function createSession(userId: string, cnaId: string, residentIds: 
       cnaId,
       residentIds,
       isActive: true,
-      currentStep: 'start',
+      currentStep: 'adls', // Session starts at adls once residents are selected
     },
     include: {
       cna: true,

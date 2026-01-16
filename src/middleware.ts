@@ -41,6 +41,8 @@ export async function middleware(request: NextRequest) {
       if (userRole === 'ADMIN') {
         return NextResponse.redirect(new URL('/admin', request.url));
       } else if (userRole === 'CNA') {
+        // For CNAs, check if they have an active session
+        // This will be handled by the login page itself via API call
         return NextResponse.redirect(new URL('/charting/start', request.url));
       }
     }
