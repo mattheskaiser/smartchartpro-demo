@@ -79,7 +79,13 @@ export default function ShiftManagement() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [assignmentModal, setAssignmentModal] = useState<{
     isOpen: boolean;
-    shift?: any;
+    shift?: {
+      id: string;
+      name: string;
+      startTime: string;
+      endTime: string;
+      color?: string;
+    };
   }>({ isOpen: false });
 
   const { data: shiftTemplates, isLoading: templatesLoading } = useShiftTemplates();
@@ -100,7 +106,13 @@ export default function ShiftManagement() {
     return mockCNAs.find(cna => cna.id === cnaId);
   };
 
-  const handleAssignShift = (shift: any) => {
+  const handleAssignShift = (shift: {
+    id: string;
+    name: string;
+    startTime: string;
+    endTime: string;
+    color?: string;
+  }) => {
     setAssignmentModal({ isOpen: true, shift });
   };
 
@@ -306,14 +318,14 @@ export default function ShiftManagement() {
         shift={
           assignmentModal.shift
             ? {
-              id: assignmentModal.shift.id,
-              type: assignmentModal.shift.name,
-              date: selectedDate.toISOString(),
-              time: formatShiftTime(
-                assignmentModal.shift.startTime,
-                assignmentModal.shift.endTime
-              ),
-            }
+                id: assignmentModal.shift.id,
+                type: assignmentModal.shift.name,
+                date: selectedDate.toISOString(),
+                time: formatShiftTime(
+                  assignmentModal.shift.startTime,
+                  assignmentModal.shift.endTime
+                ),
+              }
             : { id: '', type: '', date: '', time: '' }
         }
         availableCNAs={mockCNAs}

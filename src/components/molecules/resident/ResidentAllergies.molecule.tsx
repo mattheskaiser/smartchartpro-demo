@@ -120,7 +120,9 @@ export const ResidentAllergiesMolecule = ({
         onAllergiesChange(safeAllergies.filter(a => a.id !== id));
         toast({
           title: 'Allergy removed',
-          description: deletedAllergy ? `${deletedAllergy.name} has been removed` : 'Allergy has been removed',
+          description: deletedAllergy
+            ? `${deletedAllergy.name} has been removed`
+            : 'Allergy has been removed',
           type: 'success',
         });
       } else {
