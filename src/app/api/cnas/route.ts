@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { hashPassword } from '@/lib/auth-helpers';
 
 const prisma = new PrismaClient();
 
 export async function GET() {
   try {
     const cnas = await prisma.cna.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            isActive: true,
+          },
+        },
+      },
       orderBy: { createdAt: 'desc' },
     });
 
@@ -50,6 +60,26 @@ export async function POST(request: NextRequest) {
         imageData: body.imageData || null,
       },
     });
+
+    // Automatically create user account with password "1234"
+    try {
+      // For testing: store plain password "1234" (no hashing)
+      await prisma.user.create({
+        data: {
+          email: body.email,
+          password: '1234', // Plain text for testing
+          role: 'CNA',
+          cnaId: cna.id,
+          isActive: true,
+          mustChangePassword: false,
+        },
+      });
+
+      console.log(`User account created for CNA: ${body.email} with password: 1234`);
+    } catch (userError) {
+      console.error('Error creating user account for CNA:', userError);
+      // Don't fail the CNA creation if user creation fails
+    }
 
     return NextResponse.json(cna, { status: 201 });
   } catch (error) {
