@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { Prisma } from '@prisma/client';
 
@@ -42,6 +44,13 @@ export async function GET(request: NextRequest) {
             certificationNumber: true,
           },
         },
+        createdBy: {
+          select: {
+            id: true,
+            email: true,
+            role: true,
+          },
+        },
       },
       orderBy: {
         reportDate: 'desc',
@@ -58,6 +67,9 @@ export async function GET(request: NextRequest) {
 // POST /api/reports - Create a new charting report
 export async function POST(request: NextRequest) {
   try {
+    // Get the current user session
+    const session = await getServerSession(authOptions);
+
     const body = await request.json();
     console.log('Received report data:', JSON.stringify(body, null, 2));
 
@@ -108,6 +120,7 @@ export async function POST(request: NextRequest) {
         cnaId: cnaId || null,
         cnaName: cnaName || null,
         cnaCertification: cnaCertification || null,
+        createdById: session?.user?.id || null,
         totalResidents,
         totalActivities,
         residentsData,
@@ -122,6 +135,13 @@ export async function POST(request: NextRequest) {
             name: true,
             email: true,
             certificationNumber: true,
+          },
+        },
+        createdBy: {
+          select: {
+            id: true,
+            email: true,
+            role: true,
           },
         },
       },

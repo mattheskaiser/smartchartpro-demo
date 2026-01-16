@@ -138,6 +138,9 @@ export default function ReportsPage() {
                     <TextAtom variant="small" className="text-gray-600">
                       {report.cnaName || 'Not specified'} • {report.totalResidents} residents •{' '}
                       {report.totalActivities} activities
+                      {report.createdBy && (
+                        <> • Created by: {report.createdBy.email}</>
+                      )}
                     </TextAtom>
                   </div>
                 </div>

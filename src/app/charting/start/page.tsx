@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useChartingStore } from '@/stores/chartingStore';
-import { useCNAs } from '@/hooks/useCNAs';
+import { useChartingSession } from '@/hooks/useChartingSession';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
@@ -12,8 +13,7 @@ import { CardAtom } from '@/components/atoms/Card.atom';
 import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
-import { DropdownAtom } from '@/components/atoms/Dropdown.atom';
-import { LabelAtom } from '@/components/atoms/Label.atom';
+import { toast } from '@/lib/toast';
 
 type Resident = {
   id: string;
@@ -26,15 +26,26 @@ type Resident = {
 
 export default function ChartingStartPage() {
   const router = useRouter();
+  const { data: session } = useSession();
   const { startCharting } = useChartingStore();
+  const { session: activeSession, isLoading: sessionLoading, createSession } = useChartingSession();
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [selectedCnaId, setSelectedCnaId] = useState<string>('');
   const [residents, setResidents] = useState<Resident[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isStarting, setIsStarting] = useState(false);
 
-  // Fetch CNAs
-  const { data: cnas = [], isLoading: cnasLoading } = useCNAs();
+  // Check for existing active session and redirect
+  useEffect(() => {
+    if (activeSession && activeSession.isActive) {
+      // Resume existing session
+      if (activeSession.currentStep === 'adls') {
+        router.push('/charting/adls');
+      } else if (activeSession.currentStep === 'review') {
+        router.push('/charting/review');
+      }
+    }
+  }, [activeSession, router]);
 
   // Fetch residents from the database
   useEffect(() => {
@@ -56,21 +67,42 @@ export default function ChartingStartPage() {
     fetchResidents();
   }, []);
 
-  const handleStartCharting = () => {
-    const selectedResidents = residents.filter(r => selectedIds.has(r.id));
+  const handleStartCharting = async () => {
+    if (selectedIds.size === 0) return;
 
-    // Get selected CNA info
-    const selectedCna = cnas.find(cna => cna.id === selectedCnaId);
-    const cnaInfo = selectedCna
-      ? {
-          id: selectedCna.id,
-          name: selectedCna.name,
-          certificationNumber: selectedCna.certificationNumber,
-        }
-      : undefined;
+    setIsStarting(true);
 
-    startCharting(selectedResidents, cnaInfo);
-    router.push('/charting/adls');
+    try {
+      const selectedResidents = residents.filter(r => selectedIds.has(r.id));
+      const residentIds = Array.from(selectedIds);
+
+      // Create session in database
+      await createSession(residentIds);
+
+      // Also update local store for backward compatibility
+      startCharting(selectedResidents, {
+        id: session?.user?.cnaId || '',
+        name: session?.user?.cnaName || '',
+        certificationNumber: null,
+      });
+
+      toast({
+        title: 'Session started',
+        description: `Charting session started for ${selectedIds.size} resident${selectedIds.size !== 1 ? 's' : ''}`,
+        type: 'success',
+      });
+
+      router.push('/charting/adls');
+    } catch (error) {
+      console.error('Error starting session:', error);
+      toast({
+        title: 'Failed to start session',
+        description: error instanceof Error ? error.message : 'Please try again',
+        type: 'error',
+      });
+    } finally {
+      setIsStarting(false);
+    }
   };
 
   const getStatusVariant = (status: string) => {
@@ -86,10 +118,10 @@ export default function ChartingStartPage() {
     }
   };
 
-  if (loading || cnasLoading) {
+  if (loading || sessionLoading) {
     return (
       <div className="mx-auto max-w-7xl p-6">
-        <LoadingStateMolecule message="Loading residents..." />
+        <LoadingStateMolecule message="Loading..." />
       </div>
     );
   }
@@ -113,33 +145,26 @@ export default function ChartingStartPage() {
 
   return (
     <div className="mx-auto max-w-7xl p-6 space-y-6">
-      {/* CNA Selection */}
-      <CardAtom>
-        <div className="flex items-center gap-2 mb-4">
-          <DynamicIconAtom name="UserCheck" className="h-5 w-5 text-gray-600" />
-          <TextAtom variant="h3" className="text-gray-900">
-            Charting Information
-          </TextAtom>
-        </div>
-        <div className="max-w-md">
-          <LabelAtom htmlFor="cna-select">CNA/Nurse (Optional)</LabelAtom>
-          <DropdownAtom
-            value={selectedCnaId || undefined}
-            onValueChange={value => setSelectedCnaId(value || '')}
-            placeholder="Select CNA/Nurse"
-            options={cnas
-              .filter(cna => cna.status === 'active')
-              .map(cna => ({
-                value: cna.id,
-                label: `${cna.name}${cna.certificationNumber ? ` (${cna.certificationNumber})` : ''}`,
-              }))}
-          />
-          <TextAtom variant="small" className="text-gray-500 mt-2">
-            Select the CNA/Nurse performing this charting session. This will be included in the PDF
-            report.
-          </TextAtom>
-        </div>
-      </CardAtom>
+      {/* Info Card - Show logged in CNA */}
+      {session?.user && (
+        <CardAtom className="border-l-4 border-l-primary">
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <DynamicIconAtom name="UserRound" className="text-primary" size="md" />
+              </div>
+            </div>
+            <div>
+              <TextAtom variant="h3" className="text-gray-900">
+                {session.user.cnaName || session.user.email}
+              </TextAtom>
+              <TextAtom variant="small" className="text-gray-600">
+                Starting charting session
+              </TextAtom>
+            </div>
+          </div>
+        </CardAtom>
+      )}
 
       {/* Resident Selection */}
       <CardAtom padding="none">
@@ -181,11 +206,10 @@ export default function ChartingStartPage() {
               {residents.map(resident => (
                 <div
                   key={resident.id}
-                  className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${
-                    selectedIds.has(resident.id)
-                      ? 'border-primary bg-secondary ring-1 ring-primary/20'
-                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                  }`}
+                  className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${selectedIds.has(resident.id)
+                    ? 'border-primary bg-secondary ring-1 ring-primary/20'
+                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    }`}
                   onClick={() => {
                     const newSelected = new Set(selectedIds);
                     if (selectedIds.has(resident.id)) {
@@ -244,7 +268,9 @@ export default function ChartingStartPage() {
             </div>
             <ButtonAtom
               onClick={handleStartCharting}
-              disabled={selectedIds.size === 0}
+              disabled={selectedIds.size === 0 || isStarting}
+              isLoading={isStarting}
+              loadingText="Starting..."
               className="min-w-[140px]"
             >
               <DynamicIconAtom name="Hospital" size="sm" className="mr-2" />
