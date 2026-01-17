@@ -123,7 +123,7 @@ export async function resumeSession(userId: string) {
  * Get all active sessions (for admin dashboard)
  */
 export async function getAllActiveSessions() {
-  return prisma.chartingSession.findMany({
+  const sessions = await prisma.chartingSession.findMany({
     where: { isActive: true },
     include: {
       cna: {
@@ -132,6 +132,7 @@ export async function getAllActiveSessions() {
           name: true,
           email: true,
           certificationNumber: true,
+          imageData: true,
         },
       },
       user: {
@@ -143,6 +144,22 @@ export async function getAllActiveSessions() {
     },
     orderBy: { startTime: 'desc' },
   });
+
+  // Filter out sessions with missing CNAs or users and end them
+  const validSessions = [];
+  for (const session of sessions) {
+    if (!session.cna || !session.user) {
+      console.warn(`Ending invalid session ${session.id} - missing CNA or user`);
+      await prisma.chartingSession.update({
+        where: { id: session.id },
+        data: { isActive: false, endTime: new Date() },
+      });
+    } else {
+      validSessions.push(session);
+    }
+  }
+
+  return validSessions;
 }
 
 /**

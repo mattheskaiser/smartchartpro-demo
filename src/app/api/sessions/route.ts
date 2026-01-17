@@ -60,16 +60,28 @@ export async function POST(req: NextRequest) {
       const { prisma } = await import('@/lib/db');
       const user = await prisma.user.findUnique({
         where: { id: session.user.id },
-        select: { cnaId: true },
+        include: { cna: true },
       });
 
-      if (!user?.cnaId) {
+      if (!user?.cnaId || !user.cna) {
         return CommonErrors.validationError(
-          'CNA account not properly configured. Please log out and log back in.'
+          'CNA account not properly configured. Please contact administrator.'
         );
       }
 
       cnaId = user.cnaId;
+    } else {
+      // Verify the CNA still exists
+      const { prisma } = await import('@/lib/db');
+      const cna = await prisma.cna.findUnique({
+        where: { id: cnaId },
+      });
+
+      if (!cna) {
+        return CommonErrors.validationError(
+          'CNA account no longer exists. Please contact administrator.'
+        );
+      }
     }
 
     const body = await req.json();

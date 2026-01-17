@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { getAllActiveSessions } from '@/lib/session-service';
 
 // Force dynamic rendering - don't cache this route
@@ -8,19 +6,21 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 /**
- * GET /api/admin/sessions - Get all active sessions (admin only)
+ * GET /api/admin/sessions - Get all active sessions
  */
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-
-    if (!session?.user || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-    }
-
     const activeSessions = await getAllActiveSessions();
 
-    return NextResponse.json({ sessions: activeSessions });
+    const response = NextResponse.json({ sessions: activeSessions });
+
+    // Add cache-busting headers
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+    response.headers.set('Surrogate-Control', 'no-store');
+
+    return response;
   } catch (error) {
     console.error('Error fetching active sessions:', error);
     return NextResponse.json({ error: 'Failed to fetch active sessions' }, { status: 500 });
