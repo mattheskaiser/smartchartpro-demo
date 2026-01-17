@@ -10,11 +10,6 @@ export async function GET() {
     // Get total CNAs
     const totalCnas = await prisma.cna.count();
 
-    // Get active CNAs
-    const activeCnas = await prisma.cna.count({
-      where: { status: 'active' },
-    });
-
     // Get total residents
     const totalResidents = await prisma.resident.count();
 
@@ -25,7 +20,6 @@ export async function GET() {
 
     return NextResponse.json({
       totalCnas,
-      activeCnas,
       totalResidents,
       activeSessions,
     });

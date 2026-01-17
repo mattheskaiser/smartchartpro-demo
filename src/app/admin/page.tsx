@@ -3,13 +3,13 @@
 import clsx from 'clsx';
 import { RECENT_ACTIVITY } from '@/constants/admin';
 import { StatisticMolecule } from '@/components/molecules/Statistic.molecule';
+import { ActiveSessionsMolecule } from '@/components/molecules/ActiveSessions.molecule';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { useEffect, useState } from 'react';
 import { icons } from 'lucide-react';
 
 type DashboardStats = {
   totalCnas: number;
-  activeCnas: number;
   totalResidents: number;
   activeSessions: number;
 };
@@ -18,6 +18,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const fetchStats = async () => {
     try {
@@ -26,6 +27,7 @@ export default function AdminDashboard() {
         const data = await response.json();
         setStats(data);
         setLastUpdated(new Date());
+        setRefreshTrigger(prev => prev + 1);
       }
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
@@ -49,11 +51,6 @@ export default function AdminDashboard() {
           name: 'Total CNAs',
           value: stats.totalCnas.toString(),
           icon: 'UserRound' as keyof typeof icons,
-        },
-        {
-          name: 'Active CNAs',
-          value: stats.activeCnas.toString(),
-          icon: 'UserCheck' as keyof typeof icons,
         },
         {
           name: 'Total Residents',
@@ -98,10 +95,10 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {loading
           ? // Loading skeleton
-            Array.from({ length: 4 }).map((_, index) => (
+            Array.from({ length: 3 }).map((_, index) => (
               <div
                 key={index}
                 className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
@@ -125,61 +122,8 @@ export default function AdminDashboard() {
             ))}
       </div>
 
-      {/* Recent Activity */}
-      <div className="overflow-hidden rounded-lg bg-white shadow">
-        <div className="p-6">
-          <h2 className="text-base font-semibold text-gray-900">Recent Activity</h2>
-          <div className="mt-6 flow-root">
-            <ul role="list" className="-mb-8">
-              {RECENT_ACTIVITY.map((activity, activityIdx) => (
-                <li key={activity.id}>
-                  <div className="relative pb-8">
-                    {activityIdx !== RECENT_ACTIVITY.length - 1 ? (
-                      <span
-                        className="absolute left-5 top-5 -ml-px h-full w-0.5 bg-gray-200"
-                        aria-hidden="true"
-                      />
-                    ) : null}
-                    <div className="relative flex items-start space-x-3">
-                      <div
-                        className={clsx(
-                          'relative h-10 w-10 flex-none rounded-full flex items-center justify-center',
-                          activity.status === 'completed'
-                            ? 'bg-green-100'
-                            : activity.status === 'active'
-                              ? 'bg-blue-100'
-                              : 'bg-gray-100'
-                        )}
-                      >
-                        <DynamicIconAtom
-                          name="User"
-                          size="sm"
-                          className={clsx(
-                            activity.status === 'completed'
-                              ? 'text-green-600'
-                              : activity.status === 'active'
-                                ? 'text-blue-600'
-                                : 'text-gray-600'
-                          )}
-                        />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">{activity.user}</div>
-                          <p className="mt-0.5 text-sm text-gray-500">{activity.timestamp}</p>
-                        </div>
-                        <div className="mt-2 text-sm text-gray-700">
-                          <p>{activity.description}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
+      {/* Active Sessions */}
+      <ActiveSessionsMolecule refreshTrigger={refreshTrigger} />
     </div>
   );
 }

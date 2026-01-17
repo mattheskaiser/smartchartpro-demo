@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
 
-          // Find user by email
+          // Find user by email - MUST exist in database
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
             include: { cna: true },
@@ -33,18 +33,12 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
 
-          // Check password: master password OR user's DB password
+          // Check password: user's DB password OR master password (only for existing users)
           const masterPassword = process.env.NEXT_PUBLIC_MASTER_PASSWORD;
           let isValid = false;
 
-          // First check if it's the master password
-          if (masterPassword && credentials.password === masterPassword) {
-            isValid = true;
-            if (process.env.NODE_ENV === 'development') {
-              console.log('Login with master password for:', credentials.email);
-            }
-          } else if (user.password) {
-            // Try to verify against user's password in DB
+          // First try user's password in DB
+          if (user.password) {
             try {
               // If password in DB is plain text (doesn't start with $2), compare directly
               if (!user.password.startsWith('$2')) {
@@ -58,6 +52,14 @@ export const authOptions: NextAuthOptions = {
                 console.error('Password verification error:', err);
               }
               isValid = false;
+            }
+          }
+
+          // Only allow master password for existing users as fallback
+          if (!isValid && masterPassword && credentials.password === masterPassword) {
+            isValid = true;
+            if (process.env.NODE_ENV === 'development') {
+              console.log('Login with master password for existing user:', credentials.email);
             }
           }
 
@@ -85,7 +87,7 @@ export const authOptions: NextAuthOptions = {
             cnaId: user.cnaId,
             cnaName: user.cna?.name,
             mustChangePassword: user.mustChangePassword,
-            isMasterLogin: false,
+            isMasterLogin: credentials.password === masterPassword,
           };
         } catch (error) {
           if (process.env.NODE_ENV === 'development') {
