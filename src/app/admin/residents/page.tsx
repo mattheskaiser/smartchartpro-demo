@@ -6,6 +6,7 @@ import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { AddResidentModalMolecule } from '@/components/molecules/resident/modals/AddResidentModal.molecule';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
+import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.template';
 import { useResidents, useCreateResident } from '@/hooks/useResidents';
 import { ResidentCardMolecule } from '@/components/molecules/resident/ResidentCard.molecule';
 import { toast } from '@/lib/toast';
@@ -50,56 +51,43 @@ export default function ResidentManagement() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <TextAtom variant="h1" weight="semibold">
-            Resident Management
-          </TextAtom>
-          <TextAtom variant="small" color="muted" className="mt-2">
-            Manage residents, their care levels, and CNA assignments
-          </TextAtom>
+    <AdminPageLayoutTemplate
+      title="Resident Management"
+      subtitle="Manage residents, their care levels, and CNA assignments"
+      actionButton={!isLoading ? {
+        label: 'Add Resident',
+        onClick: handleAddResident,
+        icon: 'Plus',
+        variant: 'primary'
+      } : undefined}
+    >
+      {isLoading ? (
+        <div className="flex items-center justify-center min-h-[400px]">
+          <LoadingStateMolecule message="Loading residents..." />
         </div>
-        {/* Hide Add button only when loading */}
-        {!isLoading && (
-          <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-            <ButtonAtom variant="primary" onClick={handleAddResident}>
-              <DynamicIconAtom name="Plus" size="sm" className="-ml-0.5 mr-1.5" />
-              Add Resident
-            </ButtonAtom>
-          </div>
-        )}
-      </div>
-
-      <div className="mt-8">
-        {isLoading ? (
-          <div className="flex items-center justify-center min-h-[400px]">
-            <LoadingStateMolecule message="Loading residents..." />
-          </div>
-        ) : error ? (
-          <div className="flex items-center justify-center min-h-[400px]">
-            <EmptyStateMolecule
-              iconName="Users"
-              title="Error loading residents"
-              description="There was an error loading the residents. Please try refreshing the page."
-            />
-          </div>
-        ) : residents.length === 0 ? (
-          <div className="flex items-center justify-center min-h-[400px]">
-            <EmptyStateMolecule
-              iconName="Users"
-              title="No residents found"
-              description="Get started by adding your first resident to the system. You can manage their care levels, medical information, and CNA assignments."
-            />
-          </div>
-        ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {residents.map(resident => (
-              <ResidentCardMolecule key={resident.id} resident={resident} />
-            ))}
-          </div>
-        )}
-      </div>
+      ) : error ? (
+        <div className="flex items-center justify-center min-h-[400px]">
+          <EmptyStateMolecule
+            iconName="Users"
+            title="Error loading residents"
+            description="There was an error loading the residents. Please try refreshing the page."
+          />
+        </div>
+      ) : residents.length === 0 ? (
+        <div className="flex items-center justify-center min-h-[400px]">
+          <EmptyStateMolecule
+            iconName="Users"
+            title="No residents found"
+            description="Get started by adding your first resident to the system. You can manage their care levels, medical information, and CNA assignments."
+          />
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {residents.map(resident => (
+            <ResidentCardMolecule key={resident.id} resident={resident} />
+          ))}
+        </div>
+      )}
 
       <AddResidentModalMolecule
         isOpen={isAddModalOpen}
@@ -107,6 +95,6 @@ export default function ResidentManagement() {
         onSubmit={handleSubmitResident}
         isLoading={createResidentMutation.isPending}
       />
-    </div>
+    </AdminPageLayoutTemplate>
   );
 }

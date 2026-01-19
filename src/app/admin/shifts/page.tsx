@@ -7,6 +7,7 @@ import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
 import { ShiftAssignmentModalMolecule } from '@/components/molecules/shift/ShiftAssignmentModal.molecule';
+import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.template';
 import { useShiftTemplates, formatShiftTime } from '@/hooks/useShiftTemplates';
 import { toast } from '@/lib/toast';
 
@@ -145,7 +146,10 @@ export default function ShiftManagement() {
 
   if (activeShifts.length === 0) {
     return (
-      <div className="mx-auto max-w-4xl">
+      <AdminPageLayoutTemplate
+        title="Daily Shift Assignments"
+        subtitle="Assign CNAs to shifts and residents to CNAs"
+      >
         <div className="text-center py-12">
           <DynamicIconAtom name="Calendar" size="lg" className="mx-auto text-gray-400 mb-6" />
           <TextAtom variant="h2" className="text-gray-500 mb-4">
@@ -159,44 +163,37 @@ export default function ShiftManagement() {
             Go to Settings
           </ButtonAtom>
         </div>
-      </div>
+      </AdminPageLayoutTemplate>
     );
   }
 
   return (
-    <div className="mx-auto max-w-4xl">
-      {/* Header */}
-      <div className="mb-8">
-        <TextAtom variant="h1" weight="semibold" className="mb-2">
-          Daily Shift Assignments
-        </TextAtom>
-        <TextAtom variant="body" className="text-gray-600">
-          Assign CNAs to shifts and residents to CNAs
-        </TextAtom>
-      </div>
-
-      {/* Date Navigation */}
-      <div className="flex items-center justify-center gap-4 mb-8">
-        <ButtonAtom variant="ghost" size="sm" onClick={() => navigateDate('prev')}>
-          <DynamicIconAtom name="ChevronLeft" size="sm" />
-        </ButtonAtom>
-        <div className="text-center">
-          <TextAtom variant="h2" weight="semibold">
-            {selectedDate.toLocaleDateString('en-US', {
-              weekday: 'long',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </TextAtom>
-          <TextAtom variant="small" className="text-gray-500">
-            {selectedDate.getFullYear()}
-          </TextAtom>
+    <AdminPageLayoutTemplate
+      title="Daily Shift Assignments"
+      subtitle="Assign CNAs to shifts and residents to CNAs"
+      headerExtra={
+        <div className="flex items-center gap-4">
+          <ButtonAtom variant="ghost" size="sm" onClick={() => navigateDate('prev')}>
+            <DynamicIconAtom name="ChevronLeft" size="sm" />
+          </ButtonAtom>
+          <div className="text-center">
+            <TextAtom variant="body" weight="semibold">
+              {selectedDate.toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </TextAtom>
+            <TextAtom variant="small" className="text-gray-500">
+              {selectedDate.getFullYear()}
+            </TextAtom>
+          </div>
+          <ButtonAtom variant="ghost" size="sm" onClick={() => navigateDate('next')}>
+            <DynamicIconAtom name="ChevronRight" size="sm" />
+          </ButtonAtom>
         </div>
-        <ButtonAtom variant="ghost" size="sm" onClick={() => navigateDate('next')}>
-          <DynamicIconAtom name="ChevronRight" size="sm" />
-        </ButtonAtom>
-      </div>
-
+      }
+    >
       {/* Shifts */}
       <div className="space-y-6">
         {activeShifts.map(shift => {
@@ -207,104 +204,106 @@ export default function ShiftManagement() {
             : [];
 
           return (
-            <div key={shift.id} className="bg-white rounded-lg border border-gray-200 p-6">
-              {/* Shift Header */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  <div
-                    className="w-12 h-12 rounded-lg flex items-center justify-center"
-                    style={{ backgroundColor: `${shift.color}20`, color: shift.color }}
-                  >
-                    <DynamicIconAtom name={getShiftIcon(shift.name)} size="lg" />
-                  </div>
-                  <div>
-                    <TextAtom variant="h2" weight="semibold">
-                      {shift.name}
-                    </TextAtom>
-                    <TextAtom variant="body" className="text-gray-600">
-                      {formatShiftTime(shift.startTime, shift.endTime)}
-                    </TextAtom>
-                  </div>
-                </div>
-                <ButtonAtom
-                  variant={assignedCNA ? 'secondary' : 'primary'}
-                  onClick={() => handleAssignShift(shift)}
-                >
-                  <DynamicIconAtom
-                    name={assignedCNA ? 'Pencil' : 'UserCheck'}
-                    size="sm"
-                    className="mr-2"
-                  />
-                  {assignedCNA ? 'Edit Assignment' : 'Assign CNA'}
-                </ButtonAtom>
-              </div>
-
-              {/* Assignment Details */}
-              {assignedCNA ? (
-                <div className="space-y-4">
-                  {/* Assigned CNA */}
-                  <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-lg">
-                    <AvatarAtom src={assignedCNA.imageData} alt={assignedCNA.name} size="md" />
-                    <div className="flex-1">
-                      <TextAtom variant="body" weight="semibold">
-                        {assignedCNA.name}
-                      </TextAtom>
-                      <TextAtom variant="small" className="text-gray-600">
-                        {assignedCNA.email}
-                      </TextAtom>
+            <div key={shift.id} className="overflow-hidden rounded-lg bg-white shadow">
+              <div className="p-6">
+                {/* Shift Header */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="w-12 h-12 rounded-lg flex items-center justify-center"
+                      style={{ backgroundColor: `${shift.color}20`, color: shift.color }}
+                    >
+                      <DynamicIconAtom name={getShiftIcon(shift.name)} size="lg" />
                     </div>
-                    <div className="text-right">
-                      <TextAtom variant="small" className="text-gray-500">
-                        Residents Assigned
-                      </TextAtom>
-                      <TextAtom variant="h3" weight="semibold">
-                        {assignedResidents.length}
-                      </TextAtom>
-                    </div>
-                  </div>
-
-                  {/* Assigned Residents */}
-                  {assignedResidents.length > 0 && (
                     <div>
-                      <TextAtom variant="body" weight="medium" className="mb-3">
-                        Assigned Residents
+                      <TextAtom variant="h2" weight="semibold">
+                        {shift.name}
                       </TextAtom>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {assignedResidents.map(resident => (
-                          <div
-                            key={resident?.id}
-                            className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
-                          >
-                            <AvatarAtom
-                              src={resident?.imageUrl}
-                              alt={resident?.name || 'Resident'}
-                              size="sm"
-                            />
-                            <div className="flex-1">
-                              <TextAtom variant="body" weight="medium">
-                                {resident?.name}
-                              </TextAtom>
-                              <TextAtom variant="small" className="text-gray-500">
-                                Room {resident?.room}
-                              </TextAtom>
-                            </div>
-                          </div>
-                        ))}
+                      <TextAtom variant="body" className="text-gray-600">
+                        {formatShiftTime(shift.startTime, shift.endTime)}
+                      </TextAtom>
+                    </div>
+                  </div>
+                  <ButtonAtom
+                    variant={assignedCNA ? 'secondary' : 'primary'}
+                    onClick={() => handleAssignShift(shift)}
+                  >
+                    <DynamicIconAtom
+                      name={assignedCNA ? 'Pencil' : 'UserCheck'}
+                      size="sm"
+                      className="mr-2"
+                    />
+                    {assignedCNA ? 'Edit Assignment' : 'Assign CNA'}
+                  </ButtonAtom>
+                </div>
+
+                {/* Assignment Details */}
+                {assignedCNA ? (
+                  <div className="space-y-4">
+                    {/* Assigned CNA */}
+                    <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-lg">
+                      <AvatarAtom src={assignedCNA.imageData} alt={assignedCNA.name} size="md" />
+                      <div className="flex-1">
+                        <TextAtom variant="body" weight="semibold">
+                          {assignedCNA.name}
+                        </TextAtom>
+                        <TextAtom variant="small" className="text-gray-600">
+                          {assignedCNA.email}
+                        </TextAtom>
+                      </div>
+                      <div className="text-right">
+                        <TextAtom variant="small" className="text-gray-500">
+                          Residents Assigned
+                        </TextAtom>
+                        <TextAtom variant="h3" weight="semibold">
+                          {assignedResidents.length}
+                        </TextAtom>
                       </div>
                     </div>
-                  )}
-                </div>
-              ) : (
-                <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-lg">
-                  <DynamicIconAtom name="UserX" size="lg" className="mx-auto text-gray-400 mb-3" />
-                  <TextAtom variant="body" className="text-gray-500 mb-2">
-                    No CNA assigned to this shift
-                  </TextAtom>
-                  <TextAtom variant="small" className="text-gray-400">
-                    Click "Assign CNA" to get started
-                  </TextAtom>
-                </div>
-              )}
+
+                    {/* Assigned Residents */}
+                    {assignedResidents.length > 0 && (
+                      <div>
+                        <TextAtom variant="body" weight="medium" className="mb-3">
+                          Assigned Residents
+                        </TextAtom>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {assignedResidents.map(resident => (
+                            <div
+                              key={resident?.id}
+                              className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+                            >
+                              <AvatarAtom
+                                src={resident?.imageUrl}
+                                alt={resident?.name || 'Resident'}
+                                size="sm"
+                              />
+                              <div className="flex-1">
+                                <TextAtom variant="body" weight="medium">
+                                  {resident?.name}
+                                </TextAtom>
+                                <TextAtom variant="small" className="text-gray-500">
+                                  Room {resident?.room}
+                                </TextAtom>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-lg">
+                    <DynamicIconAtom name="UserX" size="lg" className="mx-auto text-gray-400 mb-3" />
+                    <TextAtom variant="body" className="text-gray-500 mb-2">
+                      No CNA assigned to this shift
+                    </TextAtom>
+                    <TextAtom variant="small" className="text-gray-400">
+                      Click "Assign CNA" to get started
+                    </TextAtom>
+                  </div>
+                )}
+              </div>
             </div>
           );
         })}
@@ -318,19 +317,19 @@ export default function ShiftManagement() {
         shift={
           assignmentModal.shift
             ? {
-                id: assignmentModal.shift.id,
-                type: assignmentModal.shift.name,
-                date: selectedDate.toISOString(),
-                time: formatShiftTime(
-                  assignmentModal.shift.startTime,
-                  assignmentModal.shift.endTime
-                ),
-              }
+              id: assignmentModal.shift.id,
+              type: assignmentModal.shift.name,
+              date: selectedDate.toISOString(),
+              time: formatShiftTime(
+                assignmentModal.shift.startTime,
+                assignmentModal.shift.endTime
+              ),
+            }
             : { id: '', type: '', date: '', time: '' }
         }
         availableCNAs={mockCNAs}
         availableResidents={mockResidents}
       />
-    </div>
+    </AdminPageLayoutTemplate>
   );
 }
