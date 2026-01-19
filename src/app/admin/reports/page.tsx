@@ -4,9 +4,10 @@ import { useChartingReports, useDeleteChartingReport } from '@/hooks/useCharting
 import { format } from 'date-fns';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
-import { CardAtom } from '@/components/atoms/Card.atom';
+import { DashboardCardAtom } from '@/components/atoms/DashboardCard.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
+import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.template';
 import { toast } from '@/lib/toast';
 
 export default function ReportsPage() {
@@ -63,113 +64,132 @@ export default function ReportsPage() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-7xl p-6">
+      <AdminPageLayoutTemplate
+        title="Reports"
+        subtitle="View and manage generated charting reports"
+      >
         <LoadingStateMolecule message="Loading reports..." />
-      </div>
+      </AdminPageLayoutTemplate>
     );
   }
 
   if (error) {
     return (
-      <div className="mx-auto max-w-7xl p-6">
-        <CardAtom className="text-center">
+      <AdminPageLayoutTemplate
+        title="Reports"
+        subtitle="View and manage generated charting reports"
+      >
+        <DashboardCardAtom className="text-center">
           <DynamicIconAtom name="TriangleAlert" size="lg" className="mx-auto text-red-500 mb-4" />
           <TextAtom variant="h2" className="text-red-600 mb-2">
             Error Loading Reports
           </TextAtom>
           <TextAtom className="text-gray-600 mb-4">
-            {error instanceof Error ? error.message : 'Failed to load reports'}
+            There was an error loading the reports. Please try refreshing the page.
           </TextAtom>
-          <ButtonAtom onClick={() => window.location.reload()} variant="outline">
-            Try Again
+          <ButtonAtom onClick={() => window.location.reload()}>
+            <DynamicIconAtom name="RefreshCw" size="sm" className="mr-2" />
+            Refresh Page
           </ButtonAtom>
-        </CardAtom>
-      </div>
+        </DashboardCardAtom>
+      </AdminPageLayoutTemplate>
+    );
+  }
+
+  if (reports.length === 0) {
+    return (
+      <AdminPageLayoutTemplate
+        title="Reports"
+        subtitle="View and manage generated charting reports"
+      >
+        <DashboardCardAtom className="text-center py-12">
+          <DynamicIconAtom name="FileText" size="lg" className="mx-auto text-gray-400 mb-4" />
+          <TextAtom variant="h2" className="text-gray-500 mb-2">
+            No Reports Available
+          </TextAtom>
+          <TextAtom className="text-gray-600 mb-6">
+            Reports will appear here once charting data is available and reports are generated.
+          </TextAtom>
+          <ButtonAtom variant="primary" onClick={() => (window.location.href = '/admin')}>
+            <DynamicIconAtom name="TrendingUp" size="sm" className="mr-2" />
+            Go to Dashboard
+          </ButtonAtom>
+        </DashboardCardAtom>
+      </AdminPageLayoutTemplate>
     );
   }
 
   return (
-    <div className="mx-auto max-w-7xl p-6 space-y-6">
-      {/* Header */}
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <TextAtom variant="h1" weight="semibold">
-            Charting Reports
-          </TextAtom>
-          <TextAtom variant="small" color="muted" className="mt-2">
-            View and manage completed ADL charting sessions
-          </TextAtom>
-        </div>
-      </div>
-
-      {/* Reports List */}
-      {reports.length === 0 ? (
-        <CardAtom className="text-center py-12">
-          <DynamicIconAtom name="FileText" size="lg" className="mx-auto text-gray-400 mb-4" />
-          <TextAtom variant="h3" className="text-gray-500 mb-2">
-            No Reports Found
-          </TextAtom>
-          <TextAtom className="text-gray-400">
-            Completed charting sessions will appear here
-          </TextAtom>
-        </CardAtom>
-      ) : (
-        <div className="space-y-3">
-          {reports.map(report => (
-            <div
-              key={report.id}
-              className="bg-white rounded-lg border border-gray-200 p-4 hover:border-gray-300 transition-colors"
-            >
-              <div className="flex items-center justify-between">
-                {/* Report Info */}
-                <div className="flex items-center gap-3 flex-1">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-blue-50">
-                    <DynamicIconAtom name="FileText" size="md" className="text-blue-600" />
+    <AdminPageLayoutTemplate title="Reports" subtitle="View and manage generated charting reports">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {reports.map(report => (
+          <div key={report.id} className="overflow-hidden rounded-lg bg-white shadow">
+            <div className="p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <DynamicIconAtom name="FileText" className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <div className="flex items-baseline gap-2">
-                      <TextAtom variant="body" weight="semibold">
-                        {format(new Date(report.reportDate), 'MMM dd, yyyy')}
-                      </TextAtom>
-                      <TextAtom variant="small" className="text-gray-500">
-                        {format(new Date(report.sessionStartTime), 'h:mm a')} -{' '}
-                        {format(new Date(report.sessionEndTime), 'h:mm a')}
-                      </TextAtom>
-                    </div>
-                    <TextAtom variant="small" className="text-gray-600">
-                      {report.cnaName || 'Not specified'} • {report.totalResidents} residents •{' '}
-                      {report.totalActivities} activities
+                    <TextAtom variant="body" weight="semibold" className="text-gray-900">
+                      Daily Report
+                    </TextAtom>
+                    <TextAtom variant="small" className="text-gray-500">
+                      {format(new Date(report.reportDate), 'MMM dd, yyyy')}
                     </TextAtom>
                   </div>
                 </div>
+              </div>
 
-                {/* Actions */}
-                <div className="flex items-center gap-2">
-                  <ButtonAtom
-                    variant="outline"
-                    onClick={() => window.open(`/api/reports/${report.id}/pdf`, '_blank')}
-                  >
-                    <DynamicIconAtom name="Eye" size="sm" className="mr-2" />
-                    View
-                  </ButtonAtom>
-                  <ButtonAtom
-                    variant="outline"
-                    onClick={() => handleDownload(report.id, report.reportDate)}
-                  >
-                    <DynamicIconAtom name="Download" size="sm" />
-                  </ButtonAtom>
-                  <ButtonAtom
-                    variant="ghost"
-                    onClick={() => handleDelete(report.id, report.reportDate)}
-                  >
-                    <DynamicIconAtom name="Trash2" size="sm" className="text-red-500" />
-                  </ButtonAtom>
+              <div className="space-y-3 mb-6">
+                <div className="flex justify-between">
+                  <TextAtom variant="small" className="text-gray-500">
+                    Total Activities
+                  </TextAtom>
+                  <TextAtom variant="small" weight="medium">
+                    {report.totalActivities}
+                  </TextAtom>
+                </div>
+                <div className="flex justify-between">
+                  <TextAtom variant="small" className="text-gray-500">
+                    Total Residents
+                  </TextAtom>
+                  <TextAtom variant="small" weight="medium">
+                    {report.totalResidents}
+                  </TextAtom>
+                </div>
+                <div className="flex justify-between">
+                  <TextAtom variant="small" className="text-gray-500">
+                    Generated
+                  </TextAtom>
+                  <TextAtom variant="small" weight="medium">
+                    {format(new Date(report.createdAt), 'h:mm a')}
+                  </TextAtom>
                 </div>
               </div>
+
+              <div className="flex gap-2">
+                <ButtonAtom
+                  variant="primary"
+                  size="sm"
+                  className="flex-1"
+                  onClick={() => handleDownload(report.id, report.reportDate)}
+                >
+                  <DynamicIconAtom name="Download" size="sm" className="mr-2" />
+                  Download
+                </ButtonAtom>
+                <ButtonAtom
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleDelete(report.id, report.reportDate)}
+                >
+                  <DynamicIconAtom name="Trash2" size="sm" />
+                </ButtonAtom>
+              </div>
             </div>
-          ))}
-        </div>
-      )}
-    </div>
+          </div>
+        ))}
+      </div>
+    </AdminPageLayoutTemplate>
   );
 }

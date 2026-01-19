@@ -133,6 +133,28 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(transformedResident, { status: 201 });
   } catch (error) {
+    console.error('Error creating resident:', error);
+
+    // More specific error handling
+    if (error instanceof Error) {
+      if (error.message.includes('Server has closed the connection')) {
+        return NextResponse.json(
+          {
+            error: 'Database connection error. Please try again in a moment.',
+          },
+          { status: 503 }
+        );
+      }
+      if (error.message.includes('Unique constraint')) {
+        return NextResponse.json(
+          {
+            error: 'A resident with this information already exists',
+          },
+          { status: 409 }
+        );
+      }
+    }
+
     return handleApiError(error);
   }
 }

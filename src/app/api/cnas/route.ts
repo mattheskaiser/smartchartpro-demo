@@ -46,43 +46,39 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Check if email already exists in CNA table
-    const existingCna = await prisma.cna.findUnique({
-      where: { email: body.email },
-    });
+    // Check if email already exists in either table
+    const [existingCna, existingUser] = await Promise.all([
+      prisma.cna.findUnique({ where: { email: body.email } }),
+      prisma.user.findUnique({ where: { email: body.email } }),
+    ]);
 
     if (existingCna) {
       return NextResponse.json({ error: 'A CNA with this email already exists' }, { status: 409 });
     }
 
-    // Check if email already exists in User table
-    const existingUser = await prisma.user.findUnique({
-      where: { email: body.email },
-    });
-
     if (existingUser) {
       return NextResponse.json({ error: 'A user with this email already exists' }, { status: 409 });
     }
 
-    const cna = await prisma.cna.create({
-      data: {
-        name: body.name,
-        email: body.email,
-        phone: body.phone,
-        certificationNumber: body.certificationNumber,
-        hireDate: body.hireDate ? new Date(body.hireDate) : null,
-        notes: body.notes,
-        imageData: body.imageData || null,
-      },
-    });
-
-    console.log(`CNA created: ${cna.id} - ${body.email}`);
-
-    // Automatically create user account with password "1234"
-    try {
-      const user = await prisma.user.create({
+    // Use transaction to ensure both CNA and User are created together
+    const result = await prisma.$transaction(async tx => {
+      // Create CNA first
+      const cna = await tx.cna.create({
         data: {
-          email: body.email,
+          name: body.name!,
+          email: body.email!,
+          phone: body.phone,
+          certificationNumber: body.certificationNumber,
+          hireDate: body.hireDate ? new Date(body.hireDate) : null,
+          notes: body.notes,
+          imageData: body.imageData || null,
+        },
+      });
+
+      // Create user account with password "1234"
+      await tx.user.create({
+        data: {
+          email: body.email!,
           password: '1234', // Plain text for testing
           role: 'CNA',
           cnaId: cna.id,
@@ -91,38 +87,46 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      console.log(
-        `User account created for CNA: ${body.email} with password: 1234, userId: ${user.id}, cnaId: ${user.cnaId}`
-      );
-    } catch (userError) {
-      console.error('Error creating user account for CNA:', userError);
-      // Delete the CNA if user creation fails to keep data consistent
-      await prisma.cna.delete({ where: { id: cna.id } });
-      return NextResponse.json(
-        {
-          error: 'Failed to create user account for CNA. Please try again.',
-        },
-        { status: 500 }
-      );
-    }
-
-    // Fetch the complete CNA with user data to return
-    const completeCna = await prisma.cna.findUnique({
-      where: { id: cna.id },
-      include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            isActive: true,
+      // Return CNA with user data
+      return await tx.cna.findUnique({
+        where: { id: cna.id },
+        include: {
+          user: {
+            select: {
+              id: true,
+              email: true,
+              isActive: true,
+            },
           },
         },
-      },
+      });
     });
 
-    return NextResponse.json(completeCna, { status: 201 });
+    console.log(`CNA and user account created successfully: ${body.email}`);
+    return NextResponse.json(result, { status: 201 });
   } catch (error) {
     console.error('Error creating CNA:', error);
+
+    // More specific error handling
+    if (error instanceof Error) {
+      if (error.message.includes('Server has closed the connection')) {
+        return NextResponse.json(
+          {
+            error: 'Database connection error. Please try again in a moment.',
+          },
+          { status: 503 }
+        );
+      }
+      if (error.message.includes('Unique constraint')) {
+        return NextResponse.json(
+          {
+            error: 'A user with this email already exists',
+          },
+          { status: 409 }
+        );
+      }
+    }
+
     return NextResponse.json({ error: 'Failed to create CNA' }, { status: 500 });
   }
 }

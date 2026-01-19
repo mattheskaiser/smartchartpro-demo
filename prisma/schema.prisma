@@ -340,3 +340,34 @@ model ChartingReport {
   @@index([status, createdAt]) // Composite index for filtering and sorting reports
   @@index([cnaId, reportDate]) // Composite index for CNA-specific report queries
 }
+
+// Facility settings - singleton table for facility configuration
+model Settings {
+  id                  String   @id @default("facility_settings") // Fixed ID to ensure singleton
+  facilityName        String?
+  facilityAddress     String?  // Legacy field for backward compatibility
+  
+  // Address components
+  facilityStreet      String?
+  facilityCity        String?
+  facilityState       String?
+  facilityZip         String?
+  
+  // Contact information
+  facilityPhone       String?
+  facilityFax         String?
+  facilityWebsite     String?
+  
+  // Legal & Medical identifiers
+  licenseNumber       String?  // State license number
+  npiNumber           String?  // National Provider Identifier
+  taxId               String?  // Tax ID / EIN
+  
+  adminEmail          String?
+  masterPassword      String? // Hashed password for CNA account access
+  maxResidentsPerCNA  String   @default("8")
+  shiftAlerts         Boolean  @default(true)
+  adlReminders        Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}

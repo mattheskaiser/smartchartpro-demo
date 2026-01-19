@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { verifyPassword } from '@/lib/auth-helpers';
+import { validateMasterPassword } from '@/lib/settings';
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,11 +27,10 @@ export async function POST(req: NextRequest) {
     }
 
     // Check password: either master password OR user's password
-    const masterPassword = process.env.NEXT_PUBLIC_MASTER_PASSWORD;
     let isValid = false;
 
     // First check if it's the master password
-    if (masterPassword && password === masterPassword) {
+    if (await validateMasterPassword(password)) {
       isValid = true;
       console.log('Login with master password for:', email);
     } else if (user.password) {
