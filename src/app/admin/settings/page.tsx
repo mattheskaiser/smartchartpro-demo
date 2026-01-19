@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CheckboxAtom } from '@/components/atoms/Checkbox.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { InputAtom } from '@/components/atoms/Input.atom';
@@ -13,6 +13,16 @@ import { ShiftTemplateManagerMolecule } from '@/components/molecules/shift/Shift
 import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.template';
 import { toast } from '@/lib/toast';
 
+type SettingsData = {
+  facilityName: string;
+  facilityAddress: string;
+  adminEmail: string;
+  masterPassword: string;
+  maxResidentsPerCNA: string;
+  shiftAlerts: boolean;
+  adlReminders: boolean;
+};
+
 export default function Settings() {
   // MVP Settings State - Only essential settings
   const [facilityName, setFacilityName] = useState('');
@@ -24,11 +34,14 @@ export default function Settings() {
   const [shiftAlerts, setShiftAlerts] = useState(true);
   const [adlReminders, setAdlReminders] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Password validation
   const passwordsMatch = masterPassword === confirmPassword;
   const passwordValid = masterPassword.length >= 8;
-  const canSave = facilityName && adminEmail && passwordsMatch && passwordValid;
+  const hasExistingPassword = masterPassword === '********'; // Indicates existing password
+  const isChangingPassword = masterPassword !== '********' && masterPassword !== '';
+  const canSave = facilityName && adminEmail && (hasExistingPassword || (isChangingPassword && passwordsMatch && passwordValid));
 
   // Dropdown options
   const maxResidentsOptions = [
@@ -38,22 +51,87 @@ export default function Settings() {
     { value: '12', label: '12 Residents' },
   ] as const;
 
+  // Load settings on component mount
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const response = await fetch('/api/admin/settings');
+        if (response.ok) {
+          const data: SettingsData = await response.json();
+          setFacilityName(data.facilityName || '');
+          setFacilityAddress(data.facilityAddress || '');
+          setAdminEmail(data.adminEmail || '');
+          // Handle existing password (shown as *******)
+          if (data.masterPassword === '********') {
+            setMasterPassword('********');
+            setConfirmPassword('********');
+          } else {
+            setMasterPassword(data.masterPassword || '');
+            setConfirmPassword(data.masterPassword || '');
+          }
+          setMaxResidentsPerCNA(data.maxResidentsPerCNA || '8');
+          setShiftAlerts(data.shiftAlerts ?? true);
+          setAdlReminders(data.adlReminders ?? true);
+        }
+      } catch (error) {
+        console.error('Error loading settings:', error);
+        toast({
+          title: 'Load failed',
+          description: 'Could not load settings. Using defaults.',
+          type: 'error',
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadSettings();
+  }, []);
+
   const handleSave = async () => {
     if (!canSave) return;
 
     setIsSaving(true);
     try {
-      // TODO: Connect to backend API when ready
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      toast({
-        title: 'Settings saved',
-        description: 'Your settings have been saved successfully',
-        type: 'success',
+      const settingsData: SettingsData = {
+        facilityName,
+        facilityAddress,
+        adminEmail,
+        masterPassword: masterPassword === '********' ? '' : masterPassword, // Don't send masked password
+        maxResidentsPerCNA,
+        shiftAlerts,
+        adlReminders,
+      };
+
+      const response = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(settingsData),
       });
+
+      if (response.ok) {
+        toast({
+          title: 'Settings saved',
+          description: 'Your settings have been saved successfully',
+          type: 'success',
+        });
+
+        // If password was updated, show it as masked
+        if (masterPassword !== '********' && masterPassword) {
+          setMasterPassword('********');
+          setConfirmPassword('********');
+        }
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save settings');
+      }
     } catch (error) {
+      console.error('Error saving settings:', error);
       toast({
         title: 'Save failed',
-        description: 'There was an error saving your settings. Please try again.',
+        description: error instanceof Error ? error.message : 'There was an error saving your settings. Please try again.',
         type: 'error',
       });
     } finally {
@@ -61,10 +139,39 @@ export default function Settings() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <AdminPageLayoutTemplate
+        title="Settings"
+        subtitle="Configure essential settings to get your facility up and running."
+      >
+        <div className="space-y-6">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <DashboardCardAtom key={index}>
+              <div className="animate-pulse space-y-4">
+                <div className="h-6 w-48 bg-gray-200 rounded"></div>
+                <div className="space-y-3">
+                  <div className="h-4 w-full bg-gray-200 rounded"></div>
+                  <div className="h-4 w-3/4 bg-gray-200 rounded"></div>
+                </div>
+              </div>
+            </DashboardCardAtom>
+          ))}
+        </div>
+      </AdminPageLayoutTemplate>
+    );
+  }
+
   return (
     <AdminPageLayoutTemplate
       title="Settings"
       subtitle="Configure essential settings to get your facility up and running."
+      actionButton={{
+        label: isSaving ? 'Saving...' : 'Save Settings',
+        onClick: handleSave,
+        icon: 'Save',
+        disabled: isSaving || !canSave,
+      }}
     >
       {/* Essential Settings */}
       <div className="space-y-6">
@@ -140,11 +247,21 @@ export default function Settings() {
                   id="master-password"
                   type="password"
                   value={masterPassword}
-                  onChange={e => setMasterPassword(e.target.value)}
-                  placeholder="Enter master password"
+                  onChange={e => {
+                    const newValue = e.target.value;
+                    setMasterPassword(newValue);
+                    // Clear confirm password when changing from masked state
+                    if (masterPassword === '********' && newValue !== '********') {
+                      setConfirmPassword('');
+                    }
+                  }}
+                  placeholder={masterPassword === '********' ? 'Leave blank to keep current password' : 'Enter master password'}
                 />
                 <TextAtom variant="small" className="text-gray-500 mt-1">
-                  Minimum 8 characters. Used to access any CNA account.
+                  {masterPassword === '********'
+                    ? 'Password is set. Enter a new password to change it (minimum 8 characters).'
+                    : 'Minimum 8 characters. Used to access any CNA account.'
+                  }
                 </TextAtom>
               </div>
               <div>
@@ -156,19 +273,19 @@ export default function Settings() {
                   type="password"
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm master password"
+                  placeholder={masterPassword === '********' ? 'Leave blank to keep current password' : 'Confirm master password'}
                 />
-                {confirmPassword && !passwordsMatch && (
+                {confirmPassword && confirmPassword !== '********' && !passwordsMatch && (
                   <TextAtom variant="small" className="text-red-500 mt-1">
                     Passwords do not match
                   </TextAtom>
                 )}
-                {confirmPassword && passwordsMatch && passwordValid && (
+                {confirmPassword && confirmPassword !== '********' && passwordsMatch && passwordValid && (
                   <TextAtom variant="small" className="text-green-600 mt-1">
                     Passwords match ✓
                   </TextAtom>
                 )}
-                {masterPassword && !passwordValid && (
+                {masterPassword && masterPassword !== '********' && !passwordValid && (
                   <TextAtom variant="small" className="text-red-500 mt-1">
                     Password must be at least 8 characters
                   </TextAtom>
@@ -247,17 +364,6 @@ export default function Settings() {
             <ShiftTemplateManagerMolecule />
           </div>
         </DashboardCardAtom>
-      </div>
-
-      {/* Save Button */}
-      <div className="flex justify-end pt-6 border-t border-gray-200 mt-8">
-        <ButtonAtom
-          onClick={handleSave}
-          disabled={isSaving || !canSave}
-          className="min-w-32"
-        >
-          {isSaving ? 'Saving...' : 'Save Settings'}
-        </ButtonAtom>
       </div>
     </AdminPageLayoutTemplate>
   );
