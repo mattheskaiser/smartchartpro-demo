@@ -77,7 +77,12 @@ export const useFacilityStore = create<FacilityStore>()(
 
       getFormattedAddress: () => {
         const state = get();
-        if (state.facilityStreet && state.facilityCity && state.facilityState && state.facilityZip) {
+        if (
+          state.facilityStreet &&
+          state.facilityCity &&
+          state.facilityState &&
+          state.facilityZip
+        ) {
           return `${state.facilityStreet}, ${state.facilityCity}, ${state.facilityState} ${state.facilityZip}`;
         }
         return state.facilityAddress || '';

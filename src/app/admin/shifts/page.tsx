@@ -294,7 +294,11 @@ export default function ShiftManagement() {
                   </div>
                 ) : (
                   <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-lg">
-                    <DynamicIconAtom name="UserX" size="lg" className="mx-auto text-gray-400 mb-3" />
+                    <DynamicIconAtom
+                      name="UserX"
+                      size="lg"
+                      className="mx-auto text-gray-400 mb-3"
+                    />
                     <TextAtom variant="body" className="text-gray-500 mb-2">
                       No CNA assigned to this shift
                     </TextAtom>
@@ -317,14 +321,14 @@ export default function ShiftManagement() {
         shift={
           assignmentModal.shift
             ? {
-              id: assignmentModal.shift.id,
-              type: assignmentModal.shift.name,
-              date: selectedDate.toISOString(),
-              time: formatShiftTime(
-                assignmentModal.shift.startTime,
-                assignmentModal.shift.endTime
-              ),
-            }
+                id: assignmentModal.shift.id,
+                type: assignmentModal.shift.name,
+                date: selectedDate.toISOString(),
+                time: formatShiftTime(
+                  assignmentModal.shift.startTime,
+                  assignmentModal.shift.endTime
+                ),
+              }
             : { id: '', type: '', date: '', time: '' }
         }
         availableCNAs={mockCNAs}

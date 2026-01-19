@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     // Check if email already exists in either table
     const [existingCna, existingUser] = await Promise.all([
       prisma.cna.findUnique({ where: { email: body.email } }),
-      prisma.user.findUnique({ where: { email: body.email } })
+      prisma.user.findUnique({ where: { email: body.email } }),
     ]);
 
     if (existingCna) {
@@ -61,12 +61,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Use transaction to ensure both CNA and User are created together
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async tx => {
       // Create CNA first
       const cna = await tx.cna.create({
         data: {
-          name: body.name,
-          email: body.email,
+          name: body.name!,
+          email: body.email!,
           phone: body.phone,
           certificationNumber: body.certificationNumber,
           hireDate: body.hireDate ? new Date(body.hireDate) : null,
@@ -76,9 +76,9 @@ export async function POST(request: NextRequest) {
       });
 
       // Create user account with password "1234"
-      const user = await tx.user.create({
+      await tx.user.create({
         data: {
-          email: body.email,
+          email: body.email!,
           password: '1234', // Plain text for testing
           role: 'CNA',
           cnaId: cna.id,
@@ -104,21 +104,26 @@ export async function POST(request: NextRequest) {
 
     console.log(`CNA and user account created successfully: ${body.email}`);
     return NextResponse.json(result, { status: 201 });
-
   } catch (error) {
     console.error('Error creating CNA:', error);
 
     // More specific error handling
     if (error instanceof Error) {
       if (error.message.includes('Server has closed the connection')) {
-        return NextResponse.json({
-          error: 'Database connection error. Please try again in a moment.'
-        }, { status: 503 });
+        return NextResponse.json(
+          {
+            error: 'Database connection error. Please try again in a moment.',
+          },
+          { status: 503 }
+        );
       }
       if (error.message.includes('Unique constraint')) {
-        return NextResponse.json({
-          error: 'A user with this email already exists'
-        }, { status: 409 });
+        return NextResponse.json(
+          {
+            error: 'A user with this email already exists',
+          },
+          { status: 409 }
+        );
       }
     }
 

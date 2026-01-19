@@ -111,7 +111,7 @@ export default function ReportsPage() {
             Reports will appear here once charting data is available and reports are generated.
           </TextAtom>
           <ButtonAtom variant="primary" onClick={() => (window.location.href = '/admin')}>
-            <DynamicIconAtom name="BarChart3" size="sm" className="mr-2" />
+            <DynamicIconAtom name="TrendingUp" size="sm" className="mr-2" />
             Go to Dashboard
           </ButtonAtom>
         </DashboardCardAtom>
@@ -120,10 +120,7 @@ export default function ReportsPage() {
   }
 
   return (
-    <AdminPageLayoutTemplate
-      title="Reports"
-      subtitle="View and manage generated charting reports"
-    >
+    <AdminPageLayoutTemplate title="Reports" subtitle="View and manage generated charting reports">
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {reports.map(report => (
           <div key={report.id} className="overflow-hidden rounded-lg bg-white shadow">
@@ -147,18 +144,18 @@ export default function ReportsPage() {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between">
                   <TextAtom variant="small" className="text-gray-500">
-                    Total Entries
+                    Total Activities
                   </TextAtom>
                   <TextAtom variant="small" weight="medium">
-                    {report.totalEntries}
+                    {report.totalActivities}
                   </TextAtom>
                 </div>
                 <div className="flex justify-between">
                   <TextAtom variant="small" className="text-gray-500">
-                    CNAs Active
+                    Total Residents
                   </TextAtom>
                   <TextAtom variant="small" weight="medium">
-                    {report.activeCNAs}
+                    {report.totalResidents}
                   </TextAtom>
                 </div>
                 <div className="flex justify-between">

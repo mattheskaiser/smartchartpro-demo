@@ -173,10 +173,10 @@ export const ChartingReportPDF: React.FC<ChartingReportPDFProps> = ({
   facilityAddress,
   facilityPhone,
   facilityFax,
-  facilityWebsite,
+  // facilityWebsite, // Unused
   licenseNumber,
   npiNumber,
-  taxId,
+  // taxId, // Unused
   cnaName,
   cnaCertification,
   sessionStartTime,
@@ -224,7 +224,9 @@ export const ChartingReportPDF: React.FC<ChartingReportPDFProps> = ({
         <View style={styles.reportInfo}>
           <View style={styles.reportInfoRow}>
             <Text style={styles.reportLabel}>Report Date:</Text>
-            <Text style={styles.reportValue}>{format(sessionStartTime, 'EEEE, MMMM dd, yyyy')}</Text>
+            <Text style={styles.reportValue}>
+              {format(sessionStartTime, 'EEEE, MMMM dd, yyyy')}
+            </Text>
           </View>
           <View style={styles.reportInfoRow}>
             <Text style={styles.reportLabel}>Start Time:</Text>
@@ -237,7 +239,9 @@ export const ChartingReportPDF: React.FC<ChartingReportPDFProps> = ({
           {cnaName && (
             <View style={styles.reportInfoRow}>
               <Text style={styles.reportLabel}>Charted By:</Text>
-              <Text style={styles.reportValue}>{cnaName} {cnaCertification ? `(${cnaCertification})` : ''}</Text>
+              <Text style={styles.reportValue}>
+                {cnaName} {cnaCertification ? `(${cnaCertification})` : ''}
+              </Text>
             </View>
           )}
           <View style={styles.reportInfoRow}>
@@ -280,9 +284,7 @@ export const ChartingReportPDF: React.FC<ChartingReportPDFProps> = ({
                         <Text style={styles.activityAssistance}>
                           {ASSISTANCE_LEVELS[entry.assistance] || entry.assistance}
                         </Text>
-                        <Text style={styles.activityNotes}>
-                          {entry.notes || ''}
-                        </Text>
+                        <Text style={styles.activityNotes}>{entry.notes || ''}</Text>
                       </View>
                     </View>
                   ))}

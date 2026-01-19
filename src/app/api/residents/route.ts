@@ -138,14 +138,20 @@ export async function POST(request: NextRequest) {
     // More specific error handling
     if (error instanceof Error) {
       if (error.message.includes('Server has closed the connection')) {
-        return NextResponse.json({
-          error: 'Database connection error. Please try again in a moment.'
-        }, { status: 503 });
+        return NextResponse.json(
+          {
+            error: 'Database connection error. Please try again in a moment.',
+          },
+          { status: 503 }
+        );
       }
       if (error.message.includes('Unique constraint')) {
-        return NextResponse.json({
-          error: 'A resident with this information already exists'
-        }, { status: 409 });
+        return NextResponse.json(
+          {
+            error: 'A resident with this information already exists',
+          },
+          { status: 409 }
+        );
       }
     }
 

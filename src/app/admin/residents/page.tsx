@@ -1,8 +1,5 @@
 'use client';
 import { useState } from 'react';
-import { ButtonAtom } from '@/components/atoms/Button.atom';
-import { TextAtom } from '@/components/atoms/Text.atom';
-import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { AddResidentModalMolecule } from '@/components/molecules/resident/modals/AddResidentModal.molecule';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
 import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
@@ -54,12 +51,16 @@ export default function ResidentManagement() {
     <AdminPageLayoutTemplate
       title="Resident Management"
       subtitle="Manage residents, their care levels, and CNA assignments"
-      actionButton={!isLoading ? {
-        label: 'Add Resident',
-        onClick: handleAddResident,
-        icon: 'Plus',
-        variant: 'primary'
-      } : undefined}
+      actionButton={
+        !isLoading
+          ? {
+              label: 'Add Resident',
+              onClick: handleAddResident,
+              icon: 'Plus',
+              variant: 'primary',
+            }
+          : undefined
+      }
     >
       {isLoading ? (
         <div className="flex items-center justify-center min-h-[400px]">

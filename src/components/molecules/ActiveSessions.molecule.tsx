@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { TextAtom } from '@/components/atoms/Text.atom';
 
 type ActiveSession = {
@@ -123,9 +124,11 @@ export const ActiveSessionsMolecule = ({ refreshTrigger }: ActiveSessionsProps) 
               {/* CNA Avatar */}
               <div className="h-12 w-12 overflow-hidden rounded-full bg-gray-200">
                 {session.cna.imageData ? (
-                  <img
+                  <Image
                     src={session.cna.imageData}
                     alt={session.cna.name}
+                    width={48}
+                    height={48}
                     className="h-full w-full object-cover"
                   />
                 ) : (

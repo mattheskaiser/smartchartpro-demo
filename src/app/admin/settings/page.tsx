@@ -33,12 +33,6 @@ type SettingsData = {
   adlReminders: boolean;
 };
 
-type PasswordChangeData = {
-  currentPassword?: string;
-  newPassword: string;
-  confirmPassword: string;
-};
-
 export default function Settings() {
   // MVP Settings State - Only essential settings
   const [facilityName, setFacilityName] = useState('');
@@ -82,7 +76,14 @@ export default function Settings() {
   const isChangingPassword = newPassword !== '';
 
   // Form validation
-  const canSave = facilityName && adminEmail && facilityStreet && facilityCity && facilityState && facilityZip && (!isChangingPassword || (currentPasswordValid && passwordsMatch && passwordValid));
+  const canSave =
+    facilityName &&
+    adminEmail &&
+    facilityStreet &&
+    facilityCity &&
+    facilityState &&
+    facilityZip &&
+    (!isChangingPassword || (currentPasswordValid && passwordsMatch && passwordValid));
 
   // Dropdown options
   const maxResidentsOptions = [
@@ -176,7 +177,13 @@ export default function Settings() {
       };
 
       // Add password change data if changing password
-      const requestData: any = { ...settingsData };
+      const requestData: typeof settingsData & {
+        passwordChange?: {
+          currentPassword?: string;
+          newPassword: string;
+          confirmPassword: string;
+        };
+      } = { ...settingsData };
       if (isChangingPassword) {
         requestData.passwordChange = {
           currentPassword: hasExistingPassword ? currentPassword : undefined,
@@ -215,7 +222,10 @@ export default function Settings() {
       console.error('Error saving settings:', error);
       toast({
         title: 'Save failed',
-        description: error instanceof Error ? error.message : 'There was an error saving your settings. Please try again.',
+        description:
+          error instanceof Error
+            ? error.message
+            : 'There was an error saving your settings. Please try again.',
         type: 'error',
       });
     } finally {
@@ -224,7 +234,11 @@ export default function Settings() {
   };
 
   const handleRemovePassword = async () => {
-    if (!confirm('Are you sure you want to remove the master password? This will disable CNA account access via master password.')) {
+    if (
+      !confirm(
+        'Are you sure you want to remove the master password? This will disable CNA account access via master password.'
+      )
+    ) {
       return;
     }
 
@@ -254,7 +268,8 @@ export default function Settings() {
       console.error('Error removing password:', error);
       toast({
         title: 'Remove failed',
-        description: error instanceof Error ? error.message : 'There was an error removing the password.',
+        description:
+          error instanceof Error ? error.message : 'There was an error removing the password.',
         type: 'error',
       });
     } finally {
@@ -416,9 +431,7 @@ export default function Settings() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <LabelAtom htmlFor="facility-phone">
-                    Phone Number
-                  </LabelAtom>
+                  <LabelAtom htmlFor="facility-phone">Phone Number</LabelAtom>
                   <InputAtom
                     id="facility-phone"
                     type="tel"
@@ -428,9 +441,7 @@ export default function Settings() {
                   />
                 </div>
                 <div>
-                  <LabelAtom htmlFor="facility-fax">
-                    Fax Number
-                  </LabelAtom>
+                  <LabelAtom htmlFor="facility-fax">Fax Number</LabelAtom>
                   <InputAtom
                     id="facility-fax"
                     type="tel"
@@ -442,9 +453,7 @@ export default function Settings() {
               </div>
 
               <div>
-                <LabelAtom htmlFor="facility-website">
-                  Website (Optional)
-                </LabelAtom>
+                <LabelAtom htmlFor="facility-website">Website (Optional)</LabelAtom>
                 <InputAtom
                   id="facility-website"
                   type="url"
@@ -466,9 +475,7 @@ export default function Settings() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <LabelAtom htmlFor="license-number">
-                    State License Number
-                  </LabelAtom>
+                  <LabelAtom htmlFor="license-number">State License Number</LabelAtom>
                   <InputAtom
                     id="license-number"
                     type="text"
@@ -481,9 +488,7 @@ export default function Settings() {
                   </TextAtom>
                 </div>
                 <div>
-                  <LabelAtom htmlFor="npi-number">
-                    NPI Number
-                  </LabelAtom>
+                  <LabelAtom htmlFor="npi-number">NPI Number</LabelAtom>
                   <InputAtom
                     id="npi-number"
                     type="text"
@@ -499,9 +504,7 @@ export default function Settings() {
               </div>
 
               <div>
-                <LabelAtom htmlFor="tax-id">
-                  Tax ID / EIN
-                </LabelAtom>
+                <LabelAtom htmlFor="tax-id">Tax ID / EIN</LabelAtom>
                 <InputAtom
                   id="tax-id"
                   type="text"
@@ -557,7 +560,8 @@ export default function Settings() {
               // Password change form (when password exists)
               <div className="space-y-4">
                 <TextAtom variant="small" className="text-gray-600">
-                  A master password is currently set. To change it, enter your current password and then set a new one.
+                  A master password is currently set. To change it, enter your current password and
+                  then set a new one.
                 </TextAtom>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -580,9 +584,7 @@ export default function Settings() {
                   </div>
 
                   <div>
-                    <LabelAtom htmlFor="new-password">
-                      New Password
-                    </LabelAtom>
+                    <LabelAtom htmlFor="new-password">New Password</LabelAtom>
                     <InputAtom
                       id="new-password"
                       type="password"
@@ -591,14 +593,14 @@ export default function Settings() {
                       placeholder="Enter new password"
                     />
                     <TextAtom variant="small" className="text-gray-500 mt-1">
-                      {isChangingPassword ? 'Leave blank to keep current password' : 'Minimum 8 characters'}
+                      {isChangingPassword
+                        ? 'Leave blank to keep current password'
+                        : 'Minimum 8 characters'}
                     </TextAtom>
                   </div>
 
                   <div>
-                    <LabelAtom htmlFor="confirm-new-password">
-                      Confirm New Password
-                    </LabelAtom>
+                    <LabelAtom htmlFor="confirm-new-password">Confirm New Password</LabelAtom>
                     <InputAtom
                       id="confirm-new-password"
                       type="password"
@@ -628,7 +630,8 @@ export default function Settings() {
               // Initial password setup form (when no password exists)
               <div className="space-y-4">
                 <TextAtom variant="small" className="text-amber-600 bg-amber-50 p-3 rounded-md">
-                  ⚠️ No master password is set. Set one to enable CNA account access via master password.
+                  ⚠️ No master password is set. Set one to enable CNA account access via master
+                  password.
                 </TextAtom>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

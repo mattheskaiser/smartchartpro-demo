@@ -49,12 +49,16 @@ export default function CNAManagement() {
     <AdminPageLayoutTemplate
       title="CNA Management"
       subtitle="Manage certified nursing assistants, their schedules, and resident assignments"
-      actionButton={!isLoading ? {
-        label: 'Add CNA',
-        onClick: handleAddCNA,
-        icon: 'Plus',
-        variant: 'primary'
-      } : undefined}
+      actionButton={
+        !isLoading
+          ? {
+              label: 'Add CNA',
+              onClick: handleAddCNA,
+              icon: 'Plus',
+              variant: 'primary',
+            }
+          : undefined
+      }
     >
       {isLoading ? (
         <div className="flex items-center justify-center min-h-[400px]">
