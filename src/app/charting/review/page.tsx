@@ -58,7 +58,12 @@ export default function ChartingReviewPage() {
         session.startTime instanceof Date ? session.startTime : new Date(session.startTime);
       const endTime = new Date();
 
-      console.log('Step 1: Generating PDF on client side...');
+      console.log('Step 1: Loading facility settings from database...');
+
+      // Load fresh facility settings from database
+      await facilitySettings.loadFromDatabase();
+
+      console.log('Step 2: Generating PDF on client side...');
 
       // Generate PDF on client side to avoid Next.js SSR issues
       const { pdf } = await import('@react-pdf/renderer');
@@ -86,9 +91,9 @@ export default function ChartingReviewPage() {
       const buffer = Buffer.from(arrayBuffer);
       const pdfData = buffer.toString('base64');
 
-      console.log('Step 2: PDF generated, size:', pdfData.length);
+      console.log('Step 3: PDF generated, size:', pdfData.length);
 
-      console.log('Step 3: Saving report to database...');
+      console.log('Step 4: Saving report to database...');
 
       // Create the report with PDF data
       const report = await createReport.mutateAsync({
@@ -117,7 +122,7 @@ export default function ChartingReviewPage() {
         pdfData: pdfData,
       });
 
-      console.log('Step 4: Report saved successfully!');
+      console.log('Step 5: Report saved successfully!');
 
       // End the session in database
       if (activeSession) {

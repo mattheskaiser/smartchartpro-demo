@@ -21,6 +21,7 @@ interface FacilitySettings {
 
 interface FacilityStore extends FacilitySettings {
   updateSettings: (settings: Partial<FacilitySettings>) => void;
+  loadFromDatabase: () => Promise<void>;
   getFormattedAddress: () => string;
 }
 
@@ -47,6 +48,32 @@ export const useFacilityStore = create<FacilityStore>()(
           ...state,
           ...settings,
         })),
+
+      loadFromDatabase: async () => {
+        try {
+          const response = await fetch('/api/admin/settings');
+          if (response.ok) {
+            const data = await response.json();
+            set(state => ({
+              ...state,
+              facilityName: data.facilityName || state.facilityName,
+              facilityAddress: data.facilityAddress || state.facilityAddress,
+              facilityStreet: data.facilityStreet || state.facilityStreet,
+              facilityCity: data.facilityCity || state.facilityCity,
+              facilityState: data.facilityState || state.facilityState,
+              facilityZip: data.facilityZip || state.facilityZip,
+              facilityPhone: data.facilityPhone || state.facilityPhone,
+              facilityFax: data.facilityFax || state.facilityFax,
+              facilityWebsite: data.facilityWebsite || state.facilityWebsite,
+              licenseNumber: data.licenseNumber || state.licenseNumber,
+              npiNumber: data.npiNumber || state.npiNumber,
+              taxId: data.taxId || state.taxId,
+            }));
+          }
+        } catch (error) {
+          console.error('Failed to load facility settings from database:', error);
+        }
+      },
 
       getFormattedAddress: () => {
         const state = get();
