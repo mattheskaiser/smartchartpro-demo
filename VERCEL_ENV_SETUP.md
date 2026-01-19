@@ -4,12 +4,16 @@
 
 You need to add these environment variables in your Vercel project settings:
 
-### 1. Database Variables
+### 1. Database Variables (CRITICAL FIX)
 ```
-DATABASE_URL=postgres://dc74fff10c175bff07f3e7d390f4eef3a9f8f04d617043ac1b5aa3041c345978:sk_NhODCzh3Gtsr52-kHzHs8@db.prisma.io:5432/?sslmode=require
+# Use Prisma Accelerate for connection pooling (fixes "Server has closed the connection" errors)
+DATABASE_URL=prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqd3RfaWQiOjEsInNlY3VyZV9rZXkiOiJza19OaE9EQ3poM0d0c3I1Mi1rSHpIczgiLCJhcGlfa2V5IjoiMDFLMTIzRUdOQzZIM0hRWkJSTUFaTVlZOVoiLCJ0ZW5hbnRfaWQiOiJkYzc0ZmZmMTBjMTc1YmZmMDdmM2U3ZDM5MGY0ZWVmM2E5ZjhmMDRkNjE3MDQzYWMxYjVhYTMwNDFjMzQ1OTc4IiwiaW50ZXJuYWxfc2VjcmV0IjoiODE1NDc5ZDMtNDYwMS00YjI4LThhZjUtMjlmY2FkMjE5YTczIn0.wZORpk7jjc1cMKxyeV5NwGa0Xy1gPJmnVcgdcYcoy4M
 
-PRISMA_DATABASE_URL=prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqd3RfaWQiOjEsInNlY3VyZV9rZXkiOiJza19OaE9EQ3poM0d0c3I1Mi1rSHpIczgiLCJhcGlfa2V5IjoiMDFLMTIzRUdOQzZIM0hRWkJSTUFaTVlZOVoiLCJ0ZW5hbnRfaWQiOiJkYzc0ZmZmMTBjMTc1YmZmMDdmM2U3ZDM5MGY0ZWVmM2E5ZjhmMDRkNjE3MDQzYWMxYjVhYTMwNDFjMzQ1OTc4IiwiaW50ZXJuYWxfc2VjcmV0IjoiODE1NDc5ZDMtNDYwMS00YjI4LThhZjUtMjlmY2FkMjE5YTczIn0.wZORpk7jjc1cMKxyeV5NwGa0Xy1gPJmnVcgdcYcoy4M
+# Direct connection (backup - not used)
+POSTGRES_DIRECT_URL=postgres://dc74fff10c175bff07f3e7d390f4eef3a9f8f04d617043ac1b5aa3041c345978:sk_NhODCzh3Gtsr52-kHzHs8@db.prisma.io:5432/?sslmode=require
 ```
+
+**IMPORTANT:** The DATABASE_URL must use the Prisma Accelerate connection string (starting with `prisma+postgres://`) to prevent "Server has closed the connection" errors. The direct PostgreSQL connection causes connection pool exhaustion in serverless environments.
 
 ### 2. NextAuth Configuration (CRITICAL)
 ```
