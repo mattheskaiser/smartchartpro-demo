@@ -67,9 +67,13 @@ export default function ChartingReviewPage() {
       const pdfBlob = await pdf(
         <ChartingReportPDF
           facilityName={facilitySettings.facilityName}
-          facilityAddress={facilitySettings.facilityAddress}
+          facilityAddress={facilitySettings.getFormattedAddress()}
           facilityPhone={facilitySettings.facilityPhone}
+          facilityFax={facilitySettings.facilityFax}
+          facilityWebsite={facilitySettings.facilityWebsite}
           licenseNumber={facilitySettings.licenseNumber}
+          npiNumber={facilitySettings.npiNumber}
+          taxId={facilitySettings.taxId}
           cnaName={session.cnaName}
           cnaCertification={session.cnaCertification}
           sessionStartTime={startTime}

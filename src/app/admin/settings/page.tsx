@@ -16,6 +16,16 @@ import { toast } from '@/lib/toast';
 type SettingsData = {
   facilityName: string;
   facilityAddress: string;
+  facilityStreet: string;
+  facilityCity: string;
+  facilityState: string;
+  facilityZip: string;
+  facilityPhone: string;
+  facilityFax: string;
+  facilityWebsite: string;
+  licenseNumber: string;
+  npiNumber: string;
+  taxId: string;
   adminEmail: string;
   masterPassword: string;
   maxResidentsPerCNA: string;
@@ -33,6 +43,23 @@ export default function Settings() {
   // MVP Settings State - Only essential settings
   const [facilityName, setFacilityName] = useState('');
   const [facilityAddress, setFacilityAddress] = useState('');
+
+  // Address components
+  const [facilityStreet, setFacilityStreet] = useState('');
+  const [facilityCity, setFacilityCity] = useState('');
+  const [facilityState, setFacilityState] = useState('');
+  const [facilityZip, setFacilityZip] = useState('');
+
+  // Contact information
+  const [facilityPhone, setFacilityPhone] = useState('');
+  const [facilityFax, setFacilityFax] = useState('');
+  const [facilityWebsite, setFacilityWebsite] = useState('');
+
+  // Legal/Medical identifiers
+  const [licenseNumber, setLicenseNumber] = useState('');
+  const [npiNumber, setNpiNumber] = useState('');
+  const [taxId, setTaxId] = useState('');
+
   const [adminEmail, setAdminEmail] = useState('');
 
   // Password management state
@@ -55,7 +82,7 @@ export default function Settings() {
   const isChangingPassword = newPassword !== '';
 
   // Form validation
-  const canSave = facilityName && adminEmail && (!isChangingPassword || (currentPasswordValid && passwordsMatch && passwordValid));
+  const canSave = facilityName && adminEmail && facilityStreet && facilityCity && facilityState && facilityZip && (!isChangingPassword || (currentPasswordValid && passwordsMatch && passwordValid));
 
   // Dropdown options
   const maxResidentsOptions = [
@@ -74,6 +101,23 @@ export default function Settings() {
           const data: SettingsData = await response.json();
           setFacilityName(data.facilityName || '');
           setFacilityAddress(data.facilityAddress || '');
+
+          // Set address components
+          setFacilityStreet(data.facilityStreet || '');
+          setFacilityCity(data.facilityCity || '');
+          setFacilityState(data.facilityState || '');
+          setFacilityZip(data.facilityZip || '');
+
+          // Set contact information
+          setFacilityPhone(data.facilityPhone || '');
+          setFacilityFax(data.facilityFax || '');
+          setFacilityWebsite(data.facilityWebsite || '');
+
+          // Set legal/medical identifiers
+          setLicenseNumber(data.licenseNumber || '');
+          setNpiNumber(data.npiNumber || '');
+          setTaxId(data.taxId || '');
+
           setAdminEmail(data.adminEmail || '');
 
           // Check if password exists
@@ -98,6 +142,14 @@ export default function Settings() {
     loadSettings();
   }, []);
 
+  // Auto-sync legacy facilityAddress field when address components change
+  useEffect(() => {
+    if (facilityStreet && facilityCity && facilityState && facilityZip) {
+      const formattedAddress = `${facilityStreet}, ${facilityCity}, ${facilityState} ${facilityZip}`;
+      setFacilityAddress(formattedAddress);
+    }
+  }, [facilityStreet, facilityCity, facilityState, facilityZip]);
+
   const handleSave = async () => {
     if (!canSave) return;
 
@@ -106,6 +158,16 @@ export default function Settings() {
       const settingsData: SettingsData = {
         facilityName,
         facilityAddress,
+        facilityStreet,
+        facilityCity,
+        facilityState,
+        facilityZip,
+        facilityPhone,
+        facilityFax,
+        facilityWebsite,
+        licenseNumber,
+        npiNumber,
+        taxId,
         adminEmail,
         masterPassword: '', // Will be handled separately if changing
         maxResidentsPerCNA,
@@ -277,7 +339,184 @@ export default function Settings() {
               </div>
             </div>
 
-            <div>
+            {/* Address Section */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 pt-4 border-t border-gray-200">
+                <DynamicIconAtom name="MapPin" className="h-4 w-4 text-gray-500" />
+                <TextAtom variant="h3" weight="medium" className="text-gray-700">
+                  Facility Address
+                </TextAtom>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                <div>
+                  <LabelAtom htmlFor="facility-street" required>
+                    Street Address
+                  </LabelAtom>
+                  <InputAtom
+                    id="facility-street"
+                    type="text"
+                    value={facilityStreet}
+                    onChange={e => setFacilityStreet(e.target.value)}
+                    placeholder="123 Healthcare Avenue"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <LabelAtom htmlFor="facility-city" required>
+                      City
+                    </LabelAtom>
+                    <InputAtom
+                      id="facility-city"
+                      type="text"
+                      value={facilityCity}
+                      onChange={e => setFacilityCity(e.target.value)}
+                      placeholder="Medical City"
+                    />
+                  </div>
+                  <div>
+                    <LabelAtom htmlFor="facility-state" required>
+                      State
+                    </LabelAtom>
+                    <InputAtom
+                      id="facility-state"
+                      type="text"
+                      value={facilityState}
+                      onChange={e => setFacilityState(e.target.value)}
+                      placeholder="CA"
+                      maxLength={2}
+                    />
+                  </div>
+                  <div>
+                    <LabelAtom htmlFor="facility-zip" required>
+                      ZIP Code
+                    </LabelAtom>
+                    <InputAtom
+                      id="facility-zip"
+                      type="text"
+                      value={facilityZip}
+                      onChange={e => setFacilityZip(e.target.value)}
+                      placeholder="12345"
+                      maxLength={10}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Contact Information */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 pt-4 border-t border-gray-200">
+                <DynamicIconAtom name="Phone" className="h-4 w-4 text-gray-500" />
+                <TextAtom variant="h3" weight="medium" className="text-gray-700">
+                  Contact Information
+                </TextAtom>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <LabelAtom htmlFor="facility-phone">
+                    Phone Number
+                  </LabelAtom>
+                  <InputAtom
+                    id="facility-phone"
+                    type="tel"
+                    value={facilityPhone}
+                    onChange={e => setFacilityPhone(e.target.value)}
+                    placeholder="(555) 123-4567"
+                  />
+                </div>
+                <div>
+                  <LabelAtom htmlFor="facility-fax">
+                    Fax Number
+                  </LabelAtom>
+                  <InputAtom
+                    id="facility-fax"
+                    type="tel"
+                    value={facilityFax}
+                    onChange={e => setFacilityFax(e.target.value)}
+                    placeholder="(555) 123-4568"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <LabelAtom htmlFor="facility-website">
+                  Website (Optional)
+                </LabelAtom>
+                <InputAtom
+                  id="facility-website"
+                  type="url"
+                  value={facilityWebsite}
+                  onChange={e => setFacilityWebsite(e.target.value)}
+                  placeholder="https://www.yourfacility.com"
+                />
+              </div>
+            </div>
+
+            {/* Legal & Medical Identifiers */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 pt-4 border-t border-gray-200">
+                <DynamicIconAtom name="FileText" className="h-4 w-4 text-gray-500" />
+                <TextAtom variant="h3" weight="medium" className="text-gray-700">
+                  Legal & Medical Identifiers
+                </TextAtom>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <LabelAtom htmlFor="license-number">
+                    State License Number
+                  </LabelAtom>
+                  <InputAtom
+                    id="license-number"
+                    type="text"
+                    value={licenseNumber}
+                    onChange={e => setLicenseNumber(e.target.value)}
+                    placeholder="HC-2024-001"
+                  />
+                  <TextAtom variant="small" className="text-gray-500 mt-1">
+                    Required for medical records and reports
+                  </TextAtom>
+                </div>
+                <div>
+                  <LabelAtom htmlFor="npi-number">
+                    NPI Number
+                  </LabelAtom>
+                  <InputAtom
+                    id="npi-number"
+                    type="text"
+                    value={npiNumber}
+                    onChange={e => setNpiNumber(e.target.value)}
+                    placeholder="1234567890"
+                    maxLength={10}
+                  />
+                  <TextAtom variant="small" className="text-gray-500 mt-1">
+                    National Provider Identifier for billing
+                  </TextAtom>
+                </div>
+              </div>
+
+              <div>
+                <LabelAtom htmlFor="tax-id">
+                  Tax ID / EIN
+                </LabelAtom>
+                <InputAtom
+                  id="tax-id"
+                  type="text"
+                  value={taxId}
+                  onChange={e => setTaxId(e.target.value)}
+                  placeholder="12-3456789"
+                />
+                <TextAtom variant="small" className="text-gray-500 mt-1">
+                  Employer Identification Number for tax purposes
+                </TextAtom>
+              </div>
+            </div>
+
+            {/* Legacy Address Field (for backward compatibility) */}
+            <div className="hidden">
               <LabelAtom htmlFor="facility-address">Facility Address</LabelAtom>
               <InputAtom
                 id="facility-address"

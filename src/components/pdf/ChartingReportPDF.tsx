@@ -177,7 +177,11 @@ interface ChartingReportPDFProps {
   facilityName: string;
   facilityAddress: string;
   facilityPhone: string;
+  facilityFax?: string;
+  facilityWebsite?: string;
   licenseNumber: string;
+  npiNumber?: string;
+  taxId?: string;
   cnaName?: string;
   cnaCertification?: string;
   sessionStartTime: Date;
@@ -215,7 +219,11 @@ export const ChartingReportPDF: React.FC<ChartingReportPDFProps> = ({
   facilityName,
   facilityAddress,
   facilityPhone,
+  facilityFax,
+  facilityWebsite,
   licenseNumber,
+  npiNumber,
+  taxId,
   cnaName,
   cnaCertification,
   sessionStartTime,
@@ -253,7 +261,11 @@ export const ChartingReportPDF: React.FC<ChartingReportPDFProps> = ({
           <Text style={styles.facilityName}>{facilityName}</Text>
           <Text style={styles.facilityInfo}>{facilityAddress}</Text>
           <Text style={styles.facilityInfo}>Phone: {facilityPhone}</Text>
+          {facilityFax && <Text style={styles.facilityInfo}>Fax: {facilityFax}</Text>}
+          {facilityWebsite && <Text style={styles.facilityInfo}>Web: {facilityWebsite}</Text>}
           <Text style={styles.facilityInfo}>License: {licenseNumber}</Text>
+          {npiNumber && <Text style={styles.facilityInfo}>NPI: {npiNumber}</Text>}
+          {taxId && <Text style={styles.facilityInfo}>Tax ID: {taxId}</Text>}
           <Text style={styles.documentTitle}>ADL CHARTING REPORT</Text>
           <Text style={styles.facilityInfo}>
             Generated: {format(completionTime, 'MMMM dd, yyyy - h:mm a')}
