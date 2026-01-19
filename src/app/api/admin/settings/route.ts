@@ -7,6 +7,7 @@ const SETTINGS_ID = 'facility_settings';
 // GET /api/admin/settings - Get facility settings
 export async function GET() {
     try {
+        // @ts-ignore - Prisma client type issue
         const settings = await prisma.settings.findUnique({
             where: { id: SETTINGS_ID },
         });
@@ -66,6 +67,18 @@ export async function GET() {
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
+        console.log('Received settings data:', {
+            facilityName: body.facilityName,
+            hasStreet: !!body.facilityStreet,
+            hasCity: !!body.facilityCity,
+            hasState: !!body.facilityState,
+            hasZip: !!body.facilityZip,
+            hasPhone: !!body.facilityPhone,
+            hasLicense: !!body.licenseNumber,
+            hasNPI: !!body.npiNumber,
+            hasTaxId: !!body.taxId
+        });
+
         const {
             facilityName,
             facilityAddress,
@@ -101,6 +114,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Get existing settings
+        // @ts-ignore - Prisma client type issue
         const existingSettings = await prisma.settings.findUnique({
             where: { id: SETTINGS_ID },
         });
@@ -149,6 +163,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Upsert settings (create or update)
+        // @ts-ignore - Prisma client type issue
         const settings = await prisma.settings.upsert({
             where: { id: SETTINGS_ID },
             update: {
@@ -193,7 +208,12 @@ export async function POST(request: NextRequest) {
             },
         });
 
-        console.log('Settings saved successfully');
+        console.log('Settings saved successfully:', {
+            facilityName: settings.facilityName,
+            hasAddress: !!(settings.facilityStreet && settings.facilityCity),
+            hasPhone: !!settings.facilityPhone,
+            hasLicense: !!settings.licenseNumber
+        });
 
         // Return success without the hashed password
         return NextResponse.json({
@@ -205,15 +225,29 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         console.error('Error saving settings:', error);
 
-        // More specific error handling
+        // Log the full error details for debugging
         if (error instanceof Error) {
+            console.error('Error name:', error.name);
+            console.error('Error message:', error.message);
+            console.error('Error stack:', error.stack);
+
             if (error.message.includes('Server has closed the connection')) {
                 return NextResponse.json({
                     error: 'Database connection error. Please try again in a moment.'
                 }, { status: 503 });
             }
+
+            // Check for Prisma-specific errors
+            if (error.message.includes('Unknown field')) {
+                return NextResponse.json({
+                    error: 'Database schema error. Please contact support.'
+                }, { status: 500 });
+            }
         }
 
-        return NextResponse.json({ error: 'Failed to save settings' }, { status: 500 });
+        return NextResponse.json({
+            error: 'Failed to save settings',
+            details: error instanceof Error ? error.message : 'Unknown error'
+        }, { status: 500 });
     }
 }
