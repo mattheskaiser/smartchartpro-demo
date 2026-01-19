@@ -33,10 +33,19 @@ Or use this Node.js command:
 node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 ```
 
-### 3. Master Password (Optional but recommended)
+### 3. Master Password (Managed in Database)
+The master password is now managed through the Admin Settings page in the application. You no longer need to set it as an environment variable.
+
+**To set the master password:**
+1. Go to Admin Settings in your deployed application
+2. Set the master password in the "Admin Security" section
+3. This password will be used for CNA account access
+
+**Legacy Environment Variable (Optional):**
 ```
 NEXT_PUBLIC_MASTER_PASSWORD=AdminMaster2026!
 ```
+*Note: This environment variable is no longer used for authentication. The master password is now stored securely in the database and managed through the Admin Settings UI.*
 
 ## How to Add Environment Variables in Vercel
 

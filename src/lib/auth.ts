@@ -2,6 +2,7 @@ import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { prisma } from './db';
 import { verifyPassword } from './auth-helpers';
+import { validateMasterPassword } from './settings';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -34,7 +35,6 @@ export const authOptions: NextAuthOptions = {
           }
 
           // Check password: user's DB password OR master password (only for existing users)
-          const masterPassword = process.env.NEXT_PUBLIC_MASTER_PASSWORD;
           let isValid = false;
 
           // First try user's password in DB
@@ -56,9 +56,9 @@ export const authOptions: NextAuthOptions = {
           }
 
           // Only allow master password for existing users as fallback
-          if (!isValid && masterPassword && credentials.password === masterPassword) {
-            isValid = true;
-            if (process.env.NODE_ENV === 'development') {
+          if (!isValid) {
+            isValid = await validateMasterPassword(credentials.password);
+            if (isValid && process.env.NODE_ENV === 'development') {
               console.log('Login with master password for existing user:', credentials.email);
             }
           }
@@ -87,7 +87,7 @@ export const authOptions: NextAuthOptions = {
             cnaId: user.cnaId,
             cnaName: user.cna?.name,
             mustChangePassword: user.mustChangePassword,
-            isMasterLogin: credentials.password === masterPassword,
+            isMasterLogin: await validateMasterPassword(credentials.password),
           };
         } catch (error) {
           if (process.env.NODE_ENV === 'development') {

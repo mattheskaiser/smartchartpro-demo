@@ -23,25 +23,39 @@ type SettingsData = {
   adlReminders: boolean;
 };
 
+type PasswordChangeData = {
+  currentPassword?: string;
+  newPassword: string;
+  confirmPassword: string;
+};
+
 export default function Settings() {
   // MVP Settings State - Only essential settings
   const [facilityName, setFacilityName] = useState('');
   const [facilityAddress, setFacilityAddress] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
-  const [masterPassword, setMasterPassword] = useState('');
+
+  // Password management state
+  const [hasExistingPassword, setHasExistingPassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
   const [maxResidentsPerCNA, setMaxResidentsPerCNA] = useState('8');
   const [shiftAlerts, setShiftAlerts] = useState(true);
   const [adlReminders, setAdlReminders] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRemovingPassword, setIsRemovingPassword] = useState(false);
 
   // Password validation
-  const passwordsMatch = masterPassword === confirmPassword;
-  const passwordValid = masterPassword.length >= 8;
-  const hasExistingPassword = masterPassword === '********'; // Indicates existing password
-  const isChangingPassword = masterPassword !== '********' && masterPassword !== '';
-  const canSave = facilityName && adminEmail && (hasExistingPassword || (isChangingPassword && passwordsMatch && passwordValid));
+  const passwordsMatch = newPassword === confirmPassword;
+  const passwordValid = newPassword.length >= 8;
+  const currentPasswordValid = hasExistingPassword ? currentPassword.length > 0 : true;
+  const isChangingPassword = newPassword !== '';
+
+  // Form validation
+  const canSave = facilityName && adminEmail && (!isChangingPassword || (currentPasswordValid && passwordsMatch && passwordValid));
 
   // Dropdown options
   const maxResidentsOptions = [
@@ -61,14 +75,10 @@ export default function Settings() {
           setFacilityName(data.facilityName || '');
           setFacilityAddress(data.facilityAddress || '');
           setAdminEmail(data.adminEmail || '');
-          // Handle existing password (shown as *******)
-          if (data.masterPassword === '********') {
-            setMasterPassword('********');
-            setConfirmPassword('********');
-          } else {
-            setMasterPassword(data.masterPassword || '');
-            setConfirmPassword(data.masterPassword || '');
-          }
+
+          // Check if password exists
+          setHasExistingPassword(data.masterPassword === '********');
+
           setMaxResidentsPerCNA(data.maxResidentsPerCNA || '8');
           setShiftAlerts(data.shiftAlerts ?? true);
           setAdlReminders(data.adlReminders ?? true);
@@ -97,18 +107,28 @@ export default function Settings() {
         facilityName,
         facilityAddress,
         adminEmail,
-        masterPassword: masterPassword === '********' ? '' : masterPassword, // Don't send masked password
+        masterPassword: '', // Will be handled separately if changing
         maxResidentsPerCNA,
         shiftAlerts,
         adlReminders,
       };
+
+      // Add password change data if changing password
+      const requestData: any = { ...settingsData };
+      if (isChangingPassword) {
+        requestData.passwordChange = {
+          currentPassword: hasExistingPassword ? currentPassword : undefined,
+          newPassword,
+          confirmPassword,
+        };
+      }
 
       const response = await fetch('/api/admin/settings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(settingsData),
+        body: JSON.stringify(requestData),
       });
 
       if (response.ok) {
@@ -118,10 +138,12 @@ export default function Settings() {
           type: 'success',
         });
 
-        // If password was updated, show it as masked
-        if (masterPassword !== '********' && masterPassword) {
-          setMasterPassword('********');
-          setConfirmPassword('********');
+        // Clear password fields and update state
+        if (isChangingPassword) {
+          setHasExistingPassword(true);
+          setCurrentPassword('');
+          setNewPassword('');
+          setConfirmPassword('');
         }
       } else {
         const errorData = await response.json();
@@ -136,6 +158,45 @@ export default function Settings() {
       });
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleRemovePassword = async () => {
+    if (!confirm('Are you sure you want to remove the master password? This will disable CNA account access via master password.')) {
+      return;
+    }
+
+    setIsRemovingPassword(true);
+    try {
+      const response = await fetch('/api/admin/settings/password', {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        toast({
+          title: 'Password removed',
+          description: 'Master password has been removed from the database',
+          type: 'success',
+        });
+
+        // Reset password state
+        setHasExistingPassword(false);
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to remove password');
+      }
+    } catch (error) {
+      console.error('Error removing password:', error);
+      toast({
+        title: 'Remove failed',
+        description: error instanceof Error ? error.message : 'There was an error removing the password.',
+        type: 'error',
+      });
+    } finally {
+      setIsRemovingPassword(false);
     }
   };
 
@@ -171,6 +232,7 @@ export default function Settings() {
         onClick: handleSave,
         icon: 'Save',
         disabled: isSaving || !canSave,
+        variant: canSave ? 'primary' : 'outline',
       }}
     >
       {/* Essential Settings */}
@@ -231,67 +293,152 @@ export default function Settings() {
         {/* Admin Security */}
         <DashboardCardAtom>
           <div className="space-y-6">
-            <div className="flex items-center gap-2">
-              <DynamicIconAtom name="Shield" className="h-5 w-5 text-gray-600" />
-              <TextAtom variant="h3" weight="semibold" className="text-gray-900">
-                Admin Security
-              </TextAtom>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div>
-                <LabelAtom htmlFor="master-password" required>
-                  Master Password for CNA Accounts
-                </LabelAtom>
-                <InputAtom
-                  id="master-password"
-                  type="password"
-                  value={masterPassword}
-                  onChange={e => {
-                    const newValue = e.target.value;
-                    setMasterPassword(newValue);
-                    // Clear confirm password when changing from masked state
-                    if (masterPassword === '********' && newValue !== '********') {
-                      setConfirmPassword('');
-                    }
-                  }}
-                  placeholder={masterPassword === '********' ? 'Leave blank to keep current password' : 'Enter master password'}
-                />
-                <TextAtom variant="small" className="text-gray-500 mt-1">
-                  {masterPassword === '********'
-                    ? 'Password is set. Enter a new password to change it (minimum 8 characters).'
-                    : 'Minimum 8 characters. Used to access any CNA account.'
-                  }
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <DynamicIconAtom name="Shield" className="h-5 w-5 text-gray-600" />
+                <TextAtom variant="h3" weight="semibold" className="text-gray-900">
+                  Admin Security
                 </TextAtom>
               </div>
-              <div>
-                <LabelAtom htmlFor="confirm-password" required>
-                  Confirm Master Password
-                </LabelAtom>
-                <InputAtom
-                  id="confirm-password"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={e => setConfirmPassword(e.target.value)}
-                  placeholder={masterPassword === '********' ? 'Leave blank to keep current password' : 'Confirm master password'}
-                />
-                {confirmPassword && confirmPassword !== '********' && !passwordsMatch && (
-                  <TextAtom variant="small" className="text-red-500 mt-1">
-                    Passwords do not match
-                  </TextAtom>
-                )}
-                {confirmPassword && confirmPassword !== '********' && passwordsMatch && passwordValid && (
-                  <TextAtom variant="small" className="text-green-600 mt-1">
-                    Passwords match ✓
-                  </TextAtom>
-                )}
-                {masterPassword && masterPassword !== '********' && !passwordValid && (
-                  <TextAtom variant="small" className="text-red-500 mt-1">
-                    Password must be at least 8 characters
-                  </TextAtom>
-                )}
-              </div>
+
+              {/* Dev button to remove password */}
+              {hasExistingPassword && process.env.NODE_ENV === 'development' && (
+                <ButtonAtom
+                  onClick={handleRemovePassword}
+                  disabled={isRemovingPassword}
+                  variant="outline"
+                  className="text-red-600 border-red-300 hover:bg-red-50"
+                >
+                  {isRemovingPassword ? 'Removing...' : 'Remove Password (Dev)'}
+                </ButtonAtom>
+              )}
             </div>
+
+            {hasExistingPassword ? (
+              // Password change form (when password exists)
+              <div className="space-y-4">
+                <TextAtom variant="small" className="text-gray-600">
+                  A master password is currently set. To change it, enter your current password and then set a new one.
+                </TextAtom>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                  <div>
+                    <LabelAtom htmlFor="current-password" required>
+                      Current Password
+                    </LabelAtom>
+                    <InputAtom
+                      id="current-password"
+                      type="password"
+                      value={currentPassword}
+                      onChange={e => setCurrentPassword(e.target.value)}
+                      placeholder="Enter current password"
+                    />
+                    {!currentPasswordValid && currentPassword === '' && (
+                      <TextAtom variant="small" className="text-red-500 mt-1">
+                        Current password is required to change password
+                      </TextAtom>
+                    )}
+                  </div>
+
+                  <div>
+                    <LabelAtom htmlFor="new-password">
+                      New Password
+                    </LabelAtom>
+                    <InputAtom
+                      id="new-password"
+                      type="password"
+                      value={newPassword}
+                      onChange={e => setNewPassword(e.target.value)}
+                      placeholder="Enter new password"
+                    />
+                    <TextAtom variant="small" className="text-gray-500 mt-1">
+                      {isChangingPassword ? 'Leave blank to keep current password' : 'Minimum 8 characters'}
+                    </TextAtom>
+                  </div>
+
+                  <div>
+                    <LabelAtom htmlFor="confirm-new-password">
+                      Confirm New Password
+                    </LabelAtom>
+                    <InputAtom
+                      id="confirm-new-password"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={e => setConfirmPassword(e.target.value)}
+                      placeholder="Confirm new password"
+                    />
+                    {newPassword && confirmPassword && !passwordsMatch && (
+                      <TextAtom variant="small" className="text-red-500 mt-1">
+                        Passwords do not match
+                      </TextAtom>
+                    )}
+                    {newPassword && confirmPassword && passwordsMatch && passwordValid && (
+                      <TextAtom variant="small" className="text-green-600 mt-1">
+                        Passwords match ✓
+                      </TextAtom>
+                    )}
+                    {newPassword && !passwordValid && (
+                      <TextAtom variant="small" className="text-red-500 mt-1">
+                        Password must be at least 8 characters
+                      </TextAtom>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              // Initial password setup form (when no password exists)
+              <div className="space-y-4">
+                <TextAtom variant="small" className="text-amber-600 bg-amber-50 p-3 rounded-md">
+                  ⚠️ No master password is set. Set one to enable CNA account access via master password.
+                </TextAtom>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div>
+                    <LabelAtom htmlFor="new-password" required>
+                      Master Password
+                    </LabelAtom>
+                    <InputAtom
+                      id="new-password"
+                      type="password"
+                      value={newPassword}
+                      onChange={e => setNewPassword(e.target.value)}
+                      placeholder="Enter master password"
+                    />
+                    <TextAtom variant="small" className="text-gray-500 mt-1">
+                      Minimum 8 characters. Used to access any CNA account.
+                    </TextAtom>
+                  </div>
+
+                  <div>
+                    <LabelAtom htmlFor="confirm-new-password" required>
+                      Confirm Password
+                    </LabelAtom>
+                    <InputAtom
+                      id="confirm-new-password"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={e => setConfirmPassword(e.target.value)}
+                      placeholder="Confirm master password"
+                    />
+                    {newPassword && confirmPassword && !passwordsMatch && (
+                      <TextAtom variant="small" className="text-red-500 mt-1">
+                        Passwords do not match
+                      </TextAtom>
+                    )}
+                    {newPassword && confirmPassword && passwordsMatch && passwordValid && (
+                      <TextAtom variant="small" className="text-green-600 mt-1">
+                        Passwords match ✓
+                      </TextAtom>
+                    )}
+                    {newPassword && !passwordValid && (
+                      <TextAtom variant="small" className="text-red-500 mt-1">
+                        Password must be at least 8 characters
+                      </TextAtom>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </DashboardCardAtom>
 

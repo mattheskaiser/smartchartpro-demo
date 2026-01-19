@@ -50,10 +50,10 @@ export async function POST(request: NextRequest) {
             facilityName,
             facilityAddress,
             adminEmail,
-            masterPassword,
             maxResidentsPerCNA,
             shiftAlerts,
             adlReminders,
+            passwordChange,
         } = body;
 
         // Validate required fields
@@ -70,35 +70,53 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
         }
 
-        // Get existing settings to check if password should be updated
+        // Get existing settings
         const existingSettings = await prisma.settings.findUnique({
             where: { id: SETTINGS_ID },
         });
 
         let hashedPassword = existingSettings?.masterPassword;
 
-        // Only update password if a new one is provided
-        if (masterPassword && masterPassword.trim() !== '') {
-            // Validate password length
-            if (masterPassword.length < 8) {
+        // Handle password change if provided
+        if (passwordChange) {
+            const { currentPassword, newPassword, confirmPassword } = passwordChange;
+
+            // Validate new password
+            if (!newPassword || newPassword.length < 8) {
                 return NextResponse.json(
-                    { error: 'Master password must be at least 8 characters long' },
+                    { error: 'New password must be at least 8 characters long' },
                     { status: 400 }
                 );
             }
 
-            // Hash the new password
-            hashedPassword = await bcrypt.hash(masterPassword, 12);
-        } else if (!existingSettings?.masterPassword) {
-            // If no existing password and no new password provided, require it
-            return NextResponse.json(
-                { error: 'Master password is required for initial setup' },
-                { status: 400 }
-            );
-        }
+            if (newPassword !== confirmPassword) {
+                return NextResponse.json(
+                    { error: 'New password and confirmation do not match' },
+                    { status: 400 }
+                );
+            }
 
-        // Hash the master password
-        // const hashedPassword = await bcrypt.hash(masterPassword, 12);
+            // If there's an existing password, verify current password
+            if (existingSettings?.masterPassword) {
+                if (!currentPassword) {
+                    return NextResponse.json(
+                        { error: 'Current password is required to change password' },
+                        { status: 400 }
+                    );
+                }
+
+                const isCurrentPasswordValid = await bcrypt.compare(currentPassword, existingSettings.masterPassword);
+                if (!isCurrentPasswordValid) {
+                    return NextResponse.json(
+                        { error: 'Current password is incorrect' },
+                        { status: 400 }
+                    );
+                }
+            }
+
+            // Hash the new password
+            hashedPassword = await bcrypt.hash(newPassword, 12);
+        }
 
         // Upsert settings (create or update)
         const settings = await prisma.settings.upsert({
@@ -107,7 +125,7 @@ export async function POST(request: NextRequest) {
                 facilityName,
                 facilityAddress,
                 adminEmail,
-                ...(hashedPassword && { masterPassword: hashedPassword }),
+                ...(hashedPassword !== undefined && { masterPassword: hashedPassword }),
                 maxResidentsPerCNA,
                 shiftAlerts,
                 adlReminders,
@@ -118,7 +136,7 @@ export async function POST(request: NextRequest) {
                 facilityName,
                 facilityAddress,
                 adminEmail,
-                masterPassword: hashedPassword!,
+                masterPassword: hashedPassword,
                 maxResidentsPerCNA,
                 shiftAlerts,
                 adlReminders,
@@ -132,6 +150,7 @@ export async function POST(request: NextRequest) {
             message: 'Settings saved successfully',
             facilityName: settings.facilityName,
             adminEmail: settings.adminEmail,
+            passwordChanged: !!passwordChange,
         });
     } catch (error) {
         console.error('Error saving settings:', error);
