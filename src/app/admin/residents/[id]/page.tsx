@@ -334,7 +334,7 @@ export default function ResidentDetail() {
   };
 
   if (isLoading) {
-    return <PageLoaderMolecule message="Loading residents..." />;
+    return <PageLoaderMolecule message="Loading resident data..." />;
   }
 
   if (!resident) {

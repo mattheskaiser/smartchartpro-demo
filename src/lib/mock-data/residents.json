@@ -8,13 +8,139 @@
     "admissionDate": "2023-06-15T00:00:00.000Z",
     "dateOfBirth": "1945-03-22T00:00:00.000Z",
     "assignedCNA": "cna_001",
-    "adlNeeds": ["bathing", "dressing", "mobility"],
+    "adlNeeds": [
+      "bathing",
+      "dressing",
+      "mobility"
+    ],
     "emergencyContactName": "Sarah Thompson",
     "emergencyContactPhone": "(555) 123-4567",
     "emergencyContactRelationship": "Daughter",
     "notes": "Prefers morning showers. Uses walker for mobility.",
     "createdAt": "2023-06-15T00:00:00.000Z",
-    "updatedAt": "2024-01-15T00:00:00.000Z"
+    "updatedAt": "2024-01-15T00:00:00.000Z",
+    "allergies": [
+      {
+        "id": "allergy_001",
+        "residentId": "res_001",
+        "name": "Penicillin",
+        "severity": "severe",
+        "reaction": "Anaphylaxis, hives, difficulty breathing",
+        "createdAt": "2023-06-15T00:00:00.000Z",
+        "updatedAt": "2023-06-15T00:00:00.000Z"
+      },
+      {
+        "id": "allergy_002",
+        "residentId": "res_001",
+        "name": "Sulfa drugs",
+        "severity": "moderate",
+        "reaction": "Skin rash, itching",
+        "createdAt": "2023-06-15T00:00:00.000Z",
+        "updatedAt": "2023-06-15T00:00:00.000Z"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "condition_001",
+        "residentId": "res_001",
+        "name": "Type 2 Diabetes",
+        "diagnosedDate": "2015-03-10T00:00:00.000Z",
+        "status": "managed",
+        "notes": "Well controlled with medication and diet",
+        "createdAt": "2023-06-15T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_002",
+        "residentId": "res_001",
+        "name": "Hypertension",
+        "diagnosedDate": "2010-08-22T00:00:00.000Z",
+        "status": "managed",
+        "notes": "Blood pressure monitored daily",
+        "createdAt": "2023-06-15T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_003",
+        "residentId": "res_001",
+        "name": "Osteoarthritis",
+        "diagnosedDate": "2018-05-15T00:00:00.000Z",
+        "status": "active",
+        "notes": "Primarily affects knees and hips",
+        "createdAt": "2023-06-15T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "medications": [
+      {
+        "id": "med_001",
+        "residentId": "res_001",
+        "name": "Metformin",
+        "dosage": "500mg",
+        "frequency": "Twice daily",
+        "instructions": "Take with meals",
+        "startDate": "2015-03-10T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-06-15T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_002",
+        "residentId": "res_001",
+        "name": "Lisinopril",
+        "dosage": "10mg",
+        "frequency": "Once daily",
+        "instructions": "Take in the morning",
+        "startDate": "2010-08-22T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-06-15T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_003",
+        "residentId": "res_001",
+        "name": "Ibuprofen",
+        "dosage": "400mg",
+        "frequency": "As needed",
+        "instructions": "For arthritis pain, max 3 times daily",
+        "startDate": "2018-05-15T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-06-15T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "specialists": [
+      {
+        "id": "spec_001",
+        "residentId": "res_001",
+        "name": "Dr. Emily Chen",
+        "specialty": "Endocrinology",
+        "phone": "(555) 234-5678",
+        "email": "echen@medicalcenter.com",
+        "notes": "Diabetes management specialist",
+        "createdAt": "2023-06-15T00:00:00.000Z",
+        "updatedAt": "2023-06-15T00:00:00.000Z"
+      },
+      {
+        "id": "spec_002",
+        "residentId": "res_001",
+        "name": "Dr. Robert Martinez",
+        "specialty": "Cardiology",
+        "phone": "(555) 345-6789",
+        "email": "rmartinez@heartcenter.com",
+        "notes": "Hypertension and heart health",
+        "createdAt": "2023-06-15T00:00:00.000Z",
+        "updatedAt": "2023-06-15T00:00:00.000Z"
+      }
+    ],
+    "dnrStatus": {
+      "id": "dnr_001",
+      "residentId": "res_001",
+      "hasDNR": false,
+      "hasDNI": false,
+      "createdAt": "2023-06-15T00:00:00.000Z",
+      "updatedAt": "2023-06-15T00:00:00.000Z"
+    }
   },
   {
     "id": "res_002",
@@ -25,13 +151,95 @@
     "admissionDate": "2023-08-20T00:00:00.000Z",
     "dateOfBirth": "1950-11-08T00:00:00.000Z",
     "assignedCNA": "cna_001",
-    "adlNeeds": ["health"],
+    "adlNeeds": [
+      "health"
+    ],
     "emergencyContactName": "Linda Chen",
     "emergencyContactPhone": "(555) 234-5678",
     "emergencyContactRelationship": "Spouse",
     "notes": "Very independent. Requires daily blood pressure monitoring.",
     "createdAt": "2023-08-20T00:00:00.000Z",
-    "updatedAt": "2024-01-15T00:00:00.000Z"
+    "updatedAt": "2024-01-15T00:00:00.000Z",
+    "allergies": [
+      {
+        "id": "allergy_003",
+        "residentId": "res_002",
+        "name": "Shellfish",
+        "severity": "severe",
+        "reaction": "Throat swelling, difficulty breathing",
+        "createdAt": "2023-08-20T00:00:00.000Z",
+        "updatedAt": "2023-08-20T00:00:00.000Z"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "condition_004",
+        "residentId": "res_002",
+        "name": "Hypertension",
+        "diagnosedDate": "2012-04-15T00:00:00.000Z",
+        "status": "managed",
+        "notes": "Well controlled with medication",
+        "createdAt": "2023-08-20T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_005",
+        "residentId": "res_002",
+        "name": "High Cholesterol",
+        "diagnosedDate": "2014-09-20T00:00:00.000Z",
+        "status": "managed",
+        "notes": "Managed with statin therapy",
+        "createdAt": "2023-08-20T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "medications": [
+      {
+        "id": "med_004",
+        "residentId": "res_002",
+        "name": "Amlodipine",
+        "dosage": "5mg",
+        "frequency": "Once daily",
+        "instructions": "Take in the morning",
+        "startDate": "2012-04-15T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-08-20T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_005",
+        "residentId": "res_002",
+        "name": "Atorvastatin",
+        "dosage": "20mg",
+        "frequency": "Once daily",
+        "instructions": "Take at bedtime",
+        "startDate": "2014-09-20T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-08-20T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "specialists": [
+      {
+        "id": "spec_003",
+        "residentId": "res_002",
+        "name": "Dr. Sarah Johnson",
+        "specialty": "Cardiology",
+        "phone": "(555) 456-7890",
+        "email": "sjohnson@heartclinic.com",
+        "notes": "Annual cardiac checkups",
+        "createdAt": "2023-08-20T00:00:00.000Z",
+        "updatedAt": "2023-08-20T00:00:00.000Z"
+      }
+    ],
+    "dnrStatus": {
+      "id": "dnr_002",
+      "residentId": "res_002",
+      "hasDNR": false,
+      "hasDNI": false,
+      "createdAt": "2023-08-20T00:00:00.000Z",
+      "updatedAt": "2023-08-20T00:00:00.000Z"
+    }
   },
   {
     "id": "res_003",
@@ -42,13 +250,145 @@
     "admissionDate": "2023-05-10T00:00:00.000Z",
     "dateOfBirth": "1938-07-14T00:00:00.000Z",
     "assignedCNA": "cna_002",
-    "adlNeeds": ["bathing", "dressing", "eating", "toileting", "mobility"],
+    "adlNeeds": [
+      "bathing",
+      "dressing",
+      "eating",
+      "toileting",
+      "mobility"
+    ],
     "emergencyContactName": "Michael Williams",
     "emergencyContactPhone": "(555) 345-6789",
     "emergencyContactRelationship": "Son",
     "notes": "Requires full assistance with all ADLs. Non-verbal communication.",
     "createdAt": "2023-05-10T00:00:00.000Z",
-    "updatedAt": "2024-01-15T00:00:00.000Z"
+    "updatedAt": "2024-01-15T00:00:00.000Z",
+    "allergies": [
+      {
+        "id": "allergy_004",
+        "residentId": "res_003",
+        "name": "Latex",
+        "severity": "moderate",
+        "reaction": "Skin irritation, redness",
+        "createdAt": "2023-05-10T00:00:00.000Z",
+        "updatedAt": "2023-05-10T00:00:00.000Z"
+      },
+      {
+        "id": "allergy_005",
+        "residentId": "res_003",
+        "name": "Aspirin",
+        "severity": "severe",
+        "reaction": "Gastrointestinal bleeding",
+        "createdAt": "2023-05-10T00:00:00.000Z",
+        "updatedAt": "2023-05-10T00:00:00.000Z"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "condition_006",
+        "residentId": "res_003",
+        "name": "Advanced Dementia",
+        "diagnosedDate": "2019-02-10T00:00:00.000Z",
+        "status": "active",
+        "notes": "Stage 7 Alzheimer's disease, non-verbal",
+        "createdAt": "2023-05-10T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_007",
+        "residentId": "res_003",
+        "name": "Dysphagia",
+        "diagnosedDate": "2022-06-15T00:00:00.000Z",
+        "status": "active",
+        "notes": "Requires pureed diet and thickened liquids",
+        "createdAt": "2023-05-10T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_008",
+        "residentId": "res_003",
+        "name": "Osteoporosis",
+        "diagnosedDate": "2016-11-20T00:00:00.000Z",
+        "status": "managed",
+        "notes": "High fall risk, requires careful transfers",
+        "createdAt": "2023-05-10T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "medications": [
+      {
+        "id": "med_006",
+        "residentId": "res_003",
+        "name": "Memantine",
+        "dosage": "10mg",
+        "frequency": "Twice daily",
+        "instructions": "For dementia management",
+        "startDate": "2019-02-10T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-05-10T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_007",
+        "residentId": "res_003",
+        "name": "Calcium with Vitamin D",
+        "dosage": "600mg/400IU",
+        "frequency": "Twice daily",
+        "instructions": "For bone health",
+        "startDate": "2016-11-20T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-05-10T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_008",
+        "residentId": "res_003",
+        "name": "Lorazepam",
+        "dosage": "0.5mg",
+        "frequency": "As needed",
+        "instructions": "For severe agitation, max twice daily",
+        "startDate": "2022-03-15T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-05-10T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "specialists": [
+      {
+        "id": "spec_004",
+        "residentId": "res_003",
+        "name": "Dr. Patricia Lee",
+        "specialty": "Neurology",
+        "phone": "(555) 567-8901",
+        "email": "plee@neurocenter.com",
+        "notes": "Dementia care specialist",
+        "createdAt": "2023-05-10T00:00:00.000Z",
+        "updatedAt": "2023-05-10T00:00:00.000Z"
+      },
+      {
+        "id": "spec_005",
+        "residentId": "res_003",
+        "name": "Dr. James Wilson",
+        "specialty": "Speech Therapy",
+        "phone": "(555) 678-9012",
+        "email": "jwilson@speechclinic.com",
+        "notes": "Swallowing assessment and diet recommendations",
+        "createdAt": "2023-05-10T00:00:00.000Z",
+        "updatedAt": "2023-05-10T00:00:00.000Z"
+      }
+    ],
+    "dnrStatus": {
+      "id": "dnr_003",
+      "residentId": "res_003",
+      "hasDNR": true,
+      "hasDNI": true,
+      "dnrDate": "2022-08-10T00:00:00.000Z",
+      "dniDate": "2022-08-10T00:00:00.000Z",
+      "physicianName": "Dr. Patricia Lee",
+      "notes": "Family wishes comfort care only",
+      "createdAt": "2023-05-10T00:00:00.000Z",
+      "updatedAt": "2023-05-10T00:00:00.000Z"
+    }
   },
   {
     "id": "res_004",
@@ -59,13 +399,96 @@
     "admissionDate": "2023-09-05T00:00:00.000Z",
     "dateOfBirth": "1948-12-30T00:00:00.000Z",
     "assignedCNA": "cna_001",
-    "adlNeeds": ["bathing", "dressing"],
+    "adlNeeds": [
+      "bathing",
+      "dressing"
+    ],
     "emergencyContactName": "Maria Martinez",
     "emergencyContactPhone": "(555) 456-7890",
     "emergencyContactRelationship": "Daughter",
     "notes": "Needs assistance with bathing and dressing. Independent with eating.",
     "createdAt": "2023-09-05T00:00:00.000Z",
-    "updatedAt": "2024-01-15T00:00:00.000Z"
+    "updatedAt": "2024-01-15T00:00:00.000Z",
+    "allergies": [
+      {
+        "id": "allergy_006",
+        "residentId": "res_004",
+        "name": "Codeine",
+        "severity": "moderate",
+        "reaction": "Nausea, vomiting",
+        "createdAt": "2023-09-05T00:00:00.000Z",
+        "updatedAt": "2023-09-05T00:00:00.000Z"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "condition_009",
+        "residentId": "res_004",
+        "name": "Parkinson's Disease",
+        "diagnosedDate": "2020-01-15T00:00:00.000Z",
+        "status": "active",
+        "notes": "Tremors primarily in hands, affects fine motor skills",
+        "createdAt": "2023-09-05T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_010",
+        "residentId": "res_004",
+        "name": "Chronic Back Pain",
+        "diagnosedDate": "2017-05-20T00:00:00.000Z",
+        "status": "managed",
+        "notes": "Managed with physical therapy and medication",
+        "createdAt": "2023-09-05T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "medications": [
+      {
+        "id": "med_009",
+        "residentId": "res_004",
+        "name": "Carbidopa-Levodopa",
+        "dosage": "25-100mg",
+        "frequency": "Three times daily",
+        "instructions": "Take 30 minutes before meals",
+        "startDate": "2020-01-15T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-09-05T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_010",
+        "residentId": "res_004",
+        "name": "Gabapentin",
+        "dosage": "300mg",
+        "frequency": "Three times daily",
+        "instructions": "For nerve pain",
+        "startDate": "2017-05-20T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-09-05T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "specialists": [
+      {
+        "id": "spec_006",
+        "residentId": "res_004",
+        "name": "Dr. Michael Brown",
+        "specialty": "Neurology",
+        "phone": "(555) 789-0123",
+        "email": "mbrown@neuroclinic.com",
+        "notes": "Parkinson's disease management",
+        "createdAt": "2023-09-05T00:00:00.000Z",
+        "updatedAt": "2023-09-05T00:00:00.000Z"
+      }
+    ],
+    "dnrStatus": {
+      "id": "dnr_004",
+      "residentId": "res_004",
+      "hasDNR": false,
+      "hasDNI": false,
+      "createdAt": "2023-09-05T00:00:00.000Z",
+      "updatedAt": "2023-09-05T00:00:00.000Z"
+    }
   },
   {
     "id": "res_005",
@@ -76,13 +499,63 @@
     "admissionDate": "2023-07-18T00:00:00.000Z",
     "dateOfBirth": "1952-04-25T00:00:00.000Z",
     "assignedCNA": "cna_002",
-    "adlNeeds": ["health"],
+    "adlNeeds": [
+      "health"
+    ],
     "emergencyContactName": "David Johnson",
     "emergencyContactPhone": "(555) 567-8901",
     "emergencyContactRelationship": "Spouse",
     "notes": "Very active. Participates in all facility activities.",
     "createdAt": "2023-07-18T00:00:00.000Z",
-    "updatedAt": "2024-01-15T00:00:00.000Z"
+    "updatedAt": "2024-01-15T00:00:00.000Z",
+    "allergies": [],
+    "conditions": [
+      {
+        "id": "condition_011",
+        "residentId": "res_005",
+        "name": "Hypothyroidism",
+        "diagnosedDate": "2010-03-12T00:00:00.000Z",
+        "status": "managed",
+        "notes": "Well controlled with medication",
+        "createdAt": "2023-07-18T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "medications": [
+      {
+        "id": "med_011",
+        "residentId": "res_005",
+        "name": "Levothyroxine",
+        "dosage": "75mcg",
+        "frequency": "Once daily",
+        "instructions": "Take on empty stomach in the morning",
+        "startDate": "2010-03-12T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-07-18T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_012",
+        "residentId": "res_005",
+        "name": "Multivitamin",
+        "dosage": "1 tablet",
+        "frequency": "Once daily",
+        "instructions": "Take with breakfast",
+        "startDate": "2023-07-18T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-07-18T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "specialists": [],
+    "dnrStatus": {
+      "id": "dnr_005",
+      "residentId": "res_005",
+      "hasDNR": false,
+      "hasDNI": false,
+      "createdAt": "2023-07-18T00:00:00.000Z",
+      "updatedAt": "2023-07-18T00:00:00.000Z"
+    }
   },
   {
     "id": "res_006",
@@ -93,13 +566,96 @@
     "admissionDate": "2023-10-12T00:00:00.000Z",
     "dateOfBirth": "1946-09-17T00:00:00.000Z",
     "assignedCNA": "cna_003",
-    "adlNeeds": ["mobility", "toileting"],
+    "adlNeeds": [
+      "mobility",
+      "toileting"
+    ],
     "emergencyContactName": "Jennifer Anderson",
     "emergencyContactPhone": "(555) 678-9012",
     "emergencyContactRelationship": "Daughter",
     "notes": "Uses wheelchair. Requires assistance with transfers.",
     "createdAt": "2023-10-12T00:00:00.000Z",
-    "updatedAt": "2024-01-15T00:00:00.000Z"
+    "updatedAt": "2024-01-15T00:00:00.000Z",
+    "allergies": [
+      {
+        "id": "allergy_007",
+        "residentId": "res_006",
+        "name": "Iodine",
+        "severity": "moderate",
+        "reaction": "Skin rash, swelling",
+        "createdAt": "2023-10-12T00:00:00.000Z",
+        "updatedAt": "2023-10-12T00:00:00.000Z"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "condition_012",
+        "residentId": "res_006",
+        "name": "Spinal Cord Injury",
+        "diagnosedDate": "2021-06-10T00:00:00.000Z",
+        "status": "active",
+        "notes": "Paraplegia, wheelchair dependent",
+        "createdAt": "2023-10-12T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_013",
+        "residentId": "res_006",
+        "name": "Neurogenic Bladder",
+        "diagnosedDate": "2021-07-15T00:00:00.000Z",
+        "status": "managed",
+        "notes": "Requires catheterization schedule",
+        "createdAt": "2023-10-12T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "medications": [
+      {
+        "id": "med_013",
+        "residentId": "res_006",
+        "name": "Baclofen",
+        "dosage": "10mg",
+        "frequency": "Three times daily",
+        "instructions": "For muscle spasticity",
+        "startDate": "2021-06-10T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-10-12T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_014",
+        "residentId": "res_006",
+        "name": "Oxybutynin",
+        "dosage": "5mg",
+        "frequency": "Twice daily",
+        "instructions": "For bladder control",
+        "startDate": "2021-07-15T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-10-12T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "specialists": [
+      {
+        "id": "spec_007",
+        "residentId": "res_006",
+        "name": "Dr. Lisa Thompson",
+        "specialty": "Physical Medicine",
+        "phone": "(555) 890-1234",
+        "email": "lthompson@rehabcenter.com",
+        "notes": "Spinal cord injury specialist",
+        "createdAt": "2023-10-12T00:00:00.000Z",
+        "updatedAt": "2023-10-12T00:00:00.000Z"
+      }
+    ],
+    "dnrStatus": {
+      "id": "dnr_006",
+      "residentId": "res_006",
+      "hasDNR": false,
+      "hasDNI": false,
+      "createdAt": "2023-10-12T00:00:00.000Z",
+      "updatedAt": "2023-10-12T00:00:00.000Z"
+    }
   },
   {
     "id": "res_007",
@@ -110,13 +666,109 @@
     "admissionDate": "2023-06-28T00:00:00.000Z",
     "dateOfBirth": "1944-02-11T00:00:00.000Z",
     "assignedCNA": "cna_001",
-    "adlNeeds": ["bathing", "dressing", "mobility"],
+    "adlNeeds": [
+      "bathing",
+      "dressing",
+      "mobility"
+    ],
     "emergencyContactName": "Robert Davis",
     "emergencyContactPhone": "(555) 789-0123",
     "emergencyContactRelationship": "Son",
     "notes": "Prefers evening showers. Needs walker for mobility.",
     "createdAt": "2023-06-28T00:00:00.000Z",
-    "updatedAt": "2024-01-15T00:00:00.000Z"
+    "updatedAt": "2024-01-15T00:00:00.000Z",
+    "allergies": [
+      {
+        "id": "allergy_008",
+        "residentId": "res_007",
+        "name": "Morphine",
+        "severity": "severe",
+        "reaction": "Severe respiratory depression",
+        "createdAt": "2023-06-28T00:00:00.000Z",
+        "updatedAt": "2023-06-28T00:00:00.000Z"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "condition_014",
+        "residentId": "res_007",
+        "name": "Rheumatoid Arthritis",
+        "diagnosedDate": "2008-11-20T00:00:00.000Z",
+        "status": "active",
+        "notes": "Affects multiple joints, morning stiffness",
+        "createdAt": "2023-06-28T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_015",
+        "residentId": "res_007",
+        "name": "Osteoporosis",
+        "diagnosedDate": "2015-04-10T00:00:00.000Z",
+        "status": "managed",
+        "notes": "On bisphosphonate therapy",
+        "createdAt": "2023-06-28T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "medications": [
+      {
+        "id": "med_015",
+        "residentId": "res_007",
+        "name": "Methotrexate",
+        "dosage": "15mg",
+        "frequency": "Once weekly",
+        "instructions": "Take on Mondays with folic acid",
+        "startDate": "2008-11-20T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-06-28T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_016",
+        "residentId": "res_007",
+        "name": "Alendronate",
+        "dosage": "70mg",
+        "frequency": "Once weekly",
+        "instructions": "Take on empty stomach, remain upright for 30 minutes",
+        "startDate": "2015-04-10T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-06-28T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_017",
+        "residentId": "res_007",
+        "name": "Prednisone",
+        "dosage": "5mg",
+        "frequency": "Once daily",
+        "instructions": "Low dose for inflammation",
+        "startDate": "2008-11-20T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-06-28T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "specialists": [
+      {
+        "id": "spec_008",
+        "residentId": "res_007",
+        "name": "Dr. Karen White",
+        "specialty": "Rheumatology",
+        "phone": "(555) 901-2345",
+        "email": "kwhite@arthritiscenter.com",
+        "notes": "Rheumatoid arthritis management",
+        "createdAt": "2023-06-28T00:00:00.000Z",
+        "updatedAt": "2023-06-28T00:00:00.000Z"
+      }
+    ],
+    "dnrStatus": {
+      "id": "dnr_007",
+      "residentId": "res_007",
+      "hasDNR": false,
+      "hasDNI": false,
+      "createdAt": "2023-06-28T00:00:00.000Z",
+      "updatedAt": "2023-06-28T00:00:00.000Z"
+    }
   },
   {
     "id": "res_008",
@@ -133,7 +785,53 @@
     "emergencyContactRelationship": "Spouse",
     "notes": "Fully independent. Enjoys reading and gardening.",
     "createdAt": "2023-11-03T00:00:00.000Z",
-    "updatedAt": "2024-01-15T00:00:00.000Z"
+    "updatedAt": "2024-01-15T00:00:00.000Z",
+    "allergies": [
+      {
+        "id": "allergy_009",
+        "residentId": "res_008",
+        "name": "Peanuts",
+        "severity": "severe",
+        "reaction": "Anaphylaxis",
+        "createdAt": "2023-11-03T00:00:00.000Z",
+        "updatedAt": "2023-11-03T00:00:00.000Z"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "condition_016",
+        "residentId": "res_008",
+        "name": "Benign Prostatic Hyperplasia",
+        "diagnosedDate": "2018-09-15T00:00:00.000Z",
+        "status": "managed",
+        "notes": "Managed with medication",
+        "createdAt": "2023-11-03T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "medications": [
+      {
+        "id": "med_018",
+        "residentId": "res_008",
+        "name": "Tamsulosin",
+        "dosage": "0.4mg",
+        "frequency": "Once daily",
+        "instructions": "Take 30 minutes after same meal each day",
+        "startDate": "2018-09-15T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-11-03T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "specialists": [],
+    "dnrStatus": {
+      "id": "dnr_008",
+      "residentId": "res_008",
+      "hasDNR": false,
+      "hasDNI": false,
+      "createdAt": "2023-11-03T00:00:00.000Z",
+      "updatedAt": "2023-11-03T00:00:00.000Z"
+    }
   },
   {
     "id": "res_009",
@@ -144,13 +842,125 @@
     "admissionDate": "2023-04-22T00:00:00.000Z",
     "dateOfBirth": "1940-10-05T00:00:00.000Z",
     "assignedCNA": "cna_003",
-    "adlNeeds": ["bathing", "dressing", "eating", "toileting", "mobility"],
+    "adlNeeds": [
+      "bathing",
+      "dressing",
+      "eating",
+      "toileting",
+      "mobility"
+    ],
     "emergencyContactName": "Thomas Wilson",
     "emergencyContactPhone": "(555) 901-2345",
     "emergencyContactRelationship": "Son",
     "notes": "Requires full assistance. Bed-bound. Gentle care needed.",
     "createdAt": "2023-04-22T00:00:00.000Z",
-    "updatedAt": "2024-01-15T00:00:00.000Z"
+    "updatedAt": "2024-01-15T00:00:00.000Z",
+    "allergies": [
+      {
+        "id": "allergy_010",
+        "residentId": "res_009",
+        "name": "Adhesive tape",
+        "severity": "mild",
+        "reaction": "Skin irritation",
+        "createdAt": "2023-04-22T00:00:00.000Z",
+        "updatedAt": "2023-04-22T00:00:00.000Z"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "condition_017",
+        "residentId": "res_009",
+        "name": "End-stage COPD",
+        "diagnosedDate": "2015-03-20T00:00:00.000Z",
+        "status": "active",
+        "notes": "Requires oxygen therapy 24/7",
+        "createdAt": "2023-04-22T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_018",
+        "residentId": "res_009",
+        "name": "Congestive Heart Failure",
+        "diagnosedDate": "2019-08-10T00:00:00.000Z",
+        "status": "active",
+        "notes": "Stage D heart failure, palliative care",
+        "createdAt": "2023-04-22T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_019",
+        "residentId": "res_009",
+        "name": "Pressure Ulcer Stage 2",
+        "diagnosedDate": "2024-01-05T00:00:00.000Z",
+        "status": "active",
+        "notes": "Sacral area, requires frequent repositioning",
+        "createdAt": "2024-01-05T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "medications": [
+      {
+        "id": "med_019",
+        "residentId": "res_009",
+        "name": "Furosemide",
+        "dosage": "40mg",
+        "frequency": "Twice daily",
+        "instructions": "For fluid management",
+        "startDate": "2019-08-10T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-04-22T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_020",
+        "residentId": "res_009",
+        "name": "Albuterol",
+        "dosage": "2 puffs",
+        "frequency": "Every 4 hours as needed",
+        "instructions": "Via nebulizer for breathing",
+        "startDate": "2015-03-20T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-04-22T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_021",
+        "residentId": "res_009",
+        "name": "Morphine",
+        "dosage": "5mg",
+        "frequency": "Every 4 hours as needed",
+        "instructions": "For comfort and dyspnea",
+        "startDate": "2023-12-01T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-12-01T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "specialists": [
+      {
+        "id": "spec_009",
+        "residentId": "res_009",
+        "name": "Dr. David Green",
+        "specialty": "Palliative Care",
+        "phone": "(555) 012-3456",
+        "email": "dgreen@hospicecare.com",
+        "notes": "End-of-life comfort care",
+        "createdAt": "2023-04-22T00:00:00.000Z",
+        "updatedAt": "2023-04-22T00:00:00.000Z"
+      }
+    ],
+    "dnrStatus": {
+      "id": "dnr_009",
+      "residentId": "res_009",
+      "hasDNR": true,
+      "hasDNI": true,
+      "dnrDate": "2023-04-22T00:00:00.000Z",
+      "dniDate": "2023-04-22T00:00:00.000Z",
+      "physicianName": "Dr. David Green",
+      "notes": "Comfort measures only, no aggressive interventions",
+      "createdAt": "2023-04-22T00:00:00.000Z",
+      "updatedAt": "2023-04-22T00:00:00.000Z"
+    }
   },
   {
     "id": "res_010",
@@ -161,13 +971,129 @@
     "admissionDate": "2023-08-15T00:00:00.000Z",
     "dateOfBirth": "1947-05-28T00:00:00.000Z",
     "assignedCNA": "cna_001",
-    "adlNeeds": ["bathing", "mobility"],
+    "adlNeeds": [
+      "bathing",
+      "mobility"
+    ],
     "emergencyContactName": "Nancy Taylor",
     "emergencyContactPhone": "(555) 012-3456",
     "emergencyContactRelationship": "Spouse",
     "notes": "Needs assistance with bathing. Uses cane for walking.",
     "createdAt": "2023-08-15T00:00:00.000Z",
-    "updatedAt": "2024-01-15T00:00:00.000Z"
+    "updatedAt": "2024-01-15T00:00:00.000Z",
+    "allergies": [
+      {
+        "id": "allergy_011",
+        "residentId": "res_010",
+        "name": "Contrast dye",
+        "severity": "moderate",
+        "reaction": "Hives, itching",
+        "createdAt": "2023-08-15T00:00:00.000Z",
+        "updatedAt": "2023-08-15T00:00:00.000Z"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "condition_020",
+        "residentId": "res_010",
+        "name": "Type 2 Diabetes",
+        "diagnosedDate": "2012-06-15T00:00:00.000Z",
+        "status": "managed",
+        "notes": "Well controlled with insulin",
+        "createdAt": "2023-08-15T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_021",
+        "residentId": "res_010",
+        "name": "Peripheral Neuropathy",
+        "diagnosedDate": "2018-03-20T00:00:00.000Z",
+        "status": "active",
+        "notes": "Diabetic neuropathy in feet, affects balance",
+        "createdAt": "2023-08-15T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_022",
+        "residentId": "res_010",
+        "name": "Chronic Kidney Disease Stage 3",
+        "diagnosedDate": "2020-11-10T00:00:00.000Z",
+        "status": "managed",
+        "notes": "Requires monitoring of kidney function",
+        "createdAt": "2023-08-15T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "medications": [
+      {
+        "id": "med_022",
+        "residentId": "res_010",
+        "name": "Insulin Glargine",
+        "dosage": "20 units",
+        "frequency": "Once daily at bedtime",
+        "instructions": "Long-acting insulin",
+        "startDate": "2012-06-15T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-08-15T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_023",
+        "residentId": "res_010",
+        "name": "Insulin Lispro",
+        "dosage": "Sliding scale",
+        "frequency": "Before meals",
+        "instructions": "Rapid-acting insulin per sliding scale",
+        "startDate": "2012-06-15T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-08-15T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_024",
+        "residentId": "res_010",
+        "name": "Pregabalin",
+        "dosage": "75mg",
+        "frequency": "Twice daily",
+        "instructions": "For neuropathic pain",
+        "startDate": "2018-03-20T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-08-15T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "specialists": [
+      {
+        "id": "spec_010",
+        "residentId": "res_010",
+        "name": "Dr. Amanda Clark",
+        "specialty": "Endocrinology",
+        "phone": "(555) 123-4567",
+        "email": "aclark@diabetescenter.com",
+        "notes": "Diabetes and kidney disease management",
+        "createdAt": "2023-08-15T00:00:00.000Z",
+        "updatedAt": "2023-08-15T00:00:00.000Z"
+      },
+      {
+        "id": "spec_011",
+        "residentId": "res_010",
+        "name": "Dr. Steven Harris",
+        "specialty": "Nephrology",
+        "phone": "(555) 234-5678",
+        "email": "sharris@kidneyclinic.com",
+        "notes": "Chronic kidney disease monitoring",
+        "createdAt": "2023-08-15T00:00:00.000Z",
+        "updatedAt": "2023-08-15T00:00:00.000Z"
+      }
+    ],
+    "dnrStatus": {
+      "id": "dnr_010",
+      "residentId": "res_010",
+      "hasDNR": false,
+      "hasDNI": false,
+      "createdAt": "2023-08-15T00:00:00.000Z",
+      "updatedAt": "2023-08-15T00:00:00.000Z"
+    }
   },
   {
     "id": "res_011",
@@ -178,13 +1104,107 @@
     "admissionDate": "2023-12-01T00:00:00.000Z",
     "dateOfBirth": "1953-01-16T00:00:00.000Z",
     "assignedCNA": "cna_002",
-    "adlNeeds": ["health"],
+    "adlNeeds": [
+      "health"
+    ],
     "emergencyContactName": "Karen Miller",
     "emergencyContactPhone": "(555) 123-4568",
     "emergencyContactRelationship": "Daughter",
     "notes": "Independent. Requires medication reminders.",
     "createdAt": "2023-12-01T00:00:00.000Z",
-    "updatedAt": "2024-01-15T00:00:00.000Z"
+    "updatedAt": "2024-01-15T00:00:00.000Z",
+    "allergies": [
+      {
+        "id": "allergy_012",
+        "residentId": "res_011",
+        "name": "Eggs",
+        "severity": "moderate",
+        "reaction": "Digestive upset, hives",
+        "createdAt": "2023-12-01T00:00:00.000Z",
+        "updatedAt": "2023-12-01T00:00:00.000Z"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "condition_023",
+        "residentId": "res_011",
+        "name": "Atrial Fibrillation",
+        "diagnosedDate": "2021-02-15T00:00:00.000Z",
+        "status": "managed",
+        "notes": "Rate controlled, on anticoagulation",
+        "createdAt": "2023-12-01T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_024",
+        "residentId": "res_011",
+        "name": "Mild Cognitive Impairment",
+        "diagnosedDate": "2022-09-10T00:00:00.000Z",
+        "status": "active",
+        "notes": "Requires medication reminders and supervision",
+        "createdAt": "2023-12-01T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "medications": [
+      {
+        "id": "med_025",
+        "residentId": "res_011",
+        "name": "Apixaban",
+        "dosage": "5mg",
+        "frequency": "Twice daily",
+        "instructions": "Anticoagulant for AFib",
+        "startDate": "2021-02-15T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-12-01T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_026",
+        "residentId": "res_011",
+        "name": "Metoprolol",
+        "dosage": "50mg",
+        "frequency": "Twice daily",
+        "instructions": "For heart rate control",
+        "startDate": "2021-02-15T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-12-01T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_027",
+        "residentId": "res_011",
+        "name": "Donepezil",
+        "dosage": "5mg",
+        "frequency": "Once daily at bedtime",
+        "instructions": "For cognitive function",
+        "startDate": "2022-09-10T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-12-01T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "specialists": [
+      {
+        "id": "spec_012",
+        "residentId": "res_011",
+        "name": "Dr. Jennifer Adams",
+        "specialty": "Cardiology",
+        "phone": "(555) 345-6789",
+        "email": "jadams@heartcenter.com",
+        "notes": "Atrial fibrillation management",
+        "createdAt": "2023-12-01T00:00:00.000Z",
+        "updatedAt": "2023-12-01T00:00:00.000Z"
+      }
+    ],
+    "dnrStatus": {
+      "id": "dnr_011",
+      "residentId": "res_011",
+      "hasDNR": false,
+      "hasDNI": false,
+      "createdAt": "2023-12-01T00:00:00.000Z",
+      "updatedAt": "2023-12-01T00:00:00.000Z"
+    }
   },
   {
     "id": "res_012",
@@ -195,12 +1215,116 @@
     "admissionDate": "2023-07-09T00:00:00.000Z",
     "dateOfBirth": "1949-08-23T00:00:00.000Z",
     "assignedCNA": "cna_003",
-    "adlNeeds": ["dressing", "eating"],
+    "adlNeeds": [
+      "dressing",
+      "eating"
+    ],
     "emergencyContactName": "Rosa Garcia",
     "emergencyContactPhone": "(555) 234-5679",
     "emergencyContactRelationship": "Spouse",
     "notes": "Needs help with buttons and zippers. Requires adaptive utensils.",
     "createdAt": "2023-07-09T00:00:00.000Z",
-    "updatedAt": "2024-01-15T00:00:00.000Z"
+    "updatedAt": "2024-01-15T00:00:00.000Z",
+    "allergies": [
+      {
+        "id": "allergy_013",
+        "residentId": "res_012",
+        "name": "Gluten",
+        "severity": "moderate",
+        "reaction": "Severe digestive issues, celiac disease",
+        "createdAt": "2023-07-09T00:00:00.000Z",
+        "updatedAt": "2023-07-09T00:00:00.000Z"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "condition_025",
+        "residentId": "res_012",
+        "name": "Stroke (CVA)",
+        "diagnosedDate": "2022-03-15T00:00:00.000Z",
+        "status": "active",
+        "notes": "Left-sided weakness, affects fine motor skills",
+        "createdAt": "2023-07-09T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_026",
+        "residentId": "res_012",
+        "name": "Celiac Disease",
+        "diagnosedDate": "2005-11-20T00:00:00.000Z",
+        "status": "managed",
+        "notes": "Strict gluten-free diet required",
+        "createdAt": "2023-07-09T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "condition_027",
+        "residentId": "res_012",
+        "name": "Depression",
+        "diagnosedDate": "2022-05-10T00:00:00.000Z",
+        "status": "managed",
+        "notes": "Post-stroke depression, improving with therapy",
+        "createdAt": "2023-07-09T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "medications": [
+      {
+        "id": "med_028",
+        "residentId": "res_012",
+        "name": "Clopidogrel",
+        "dosage": "75mg",
+        "frequency": "Once daily",
+        "instructions": "Antiplatelet for stroke prevention",
+        "startDate": "2022-03-15T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-07-09T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      },
+      {
+        "id": "med_029",
+        "residentId": "res_012",
+        "name": "Sertraline",
+        "dosage": "50mg",
+        "frequency": "Once daily",
+        "instructions": "For depression",
+        "startDate": "2022-05-10T00:00:00.000Z",
+        "status": "current",
+        "createdAt": "2023-07-09T00:00:00.000Z",
+        "updatedAt": "2024-01-15T00:00:00.000Z"
+      }
+    ],
+    "specialists": [
+      {
+        "id": "spec_013",
+        "residentId": "res_012",
+        "name": "Dr. Maria Rodriguez",
+        "specialty": "Physical Therapy",
+        "phone": "(555) 456-7890",
+        "email": "mrodriguez@rehabcenter.com",
+        "notes": "Post-stroke rehabilitation",
+        "createdAt": "2023-07-09T00:00:00.000Z",
+        "updatedAt": "2023-07-09T00:00:00.000Z"
+      },
+      {
+        "id": "spec_014",
+        "residentId": "res_012",
+        "name": "Dr. Thomas Baker",
+        "specialty": "Occupational Therapy",
+        "phone": "(555) 567-8901",
+        "email": "tbaker@therapycenter.com",
+        "notes": "ADL training and adaptive equipment",
+        "createdAt": "2023-07-09T00:00:00.000Z",
+        "updatedAt": "2023-07-09T00:00:00.000Z"
+      }
+    ],
+    "dnrStatus": {
+      "id": "dnr_012",
+      "residentId": "res_012",
+      "hasDNR": false,
+      "hasDNI": false,
+      "createdAt": "2023-07-09T00:00:00.000Z",
+      "updatedAt": "2023-07-09T00:00:00.000Z"
+    }
   }
 ]
