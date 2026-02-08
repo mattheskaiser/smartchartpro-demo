@@ -39,7 +39,7 @@ export const DEMO_CONFIG = {
   messages: {
     demoModeActive: 'Demo Mode: Changes are not saved',
     loginSuccess: 'Demo login successful',
-    actionNotPersisted: 'Demo Mode: Action completed but not persisted',
+    actionNotPersisted: 'This is a demo - changes are not persistent',
   },
 };
 
@@ -48,3 +48,4 @@ export const isDemoMode = () => DEMO_CONFIG.enabled;
 
 // Helper to get demo message
 export const getDemoMessage = (key: keyof typeof DEMO_CONFIG.messages) => DEMO_CONFIG.messages[key];
+

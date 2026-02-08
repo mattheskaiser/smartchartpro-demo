@@ -8,6 +8,7 @@ import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { AllergyModalMolecule } from './modals/AllergyModal.molecule';
 import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
 import { toast } from '@/lib/toast';
+import { isDemoMode, getDemoMessage } from '@/lib/demo-config';
 
 interface Allergy {
   id: string;
@@ -37,6 +38,18 @@ export const ResidentAllergiesMolecule = ({
 
   const addAllergy = async (allergyData: { name: string; severity: string; reaction: string }) => {
     if (!residentId) return;
+
+    // Block in demo mode
+    if (isDemoMode()) {
+      toast({
+        title: 'Demo Mode',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'info',
+      });
+      setShowModal(false);
+      setEditingAllergy(null);
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -109,6 +122,16 @@ export const ResidentAllergiesMolecule = ({
 
   const removeAllergy = async (id: string) => {
     if (!residentId) return;
+
+    // Block in demo mode
+    if (isDemoMode()) {
+      toast({
+        title: 'Demo Mode',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'info',
+      });
+      return;
+    }
 
     try {
       const response = await fetch(`/api/residents/${residentId}/allergies/${id}`, {

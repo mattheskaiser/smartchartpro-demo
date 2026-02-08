@@ -1,4 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { isDemoMode, getDemoMessage } from '@/lib/demo-config';
+import { toast } from '@/lib/toast';
 
 // Types
 interface ShiftTemplate {
@@ -51,6 +53,16 @@ const fetchShiftTemplate = async (id: string): Promise<ShiftTemplate> => {
 };
 
 const createShiftTemplate = async (data: CreateShiftTemplateData): Promise<ShiftTemplate> => {
+  // Block in demo mode
+  if (isDemoMode()) {
+    toast({
+      title: 'Demo Mode',
+      description: getDemoMessage('actionNotPersisted'),
+      type: 'info',
+    });
+    throw new Error('Demo mode: Changes not persisted');
+  }
+
   const response = await fetch('/api/shift-templates', {
     method: 'POST',
     headers: {
@@ -74,6 +86,16 @@ const updateShiftTemplate = async ({
   id: string;
   data: UpdateShiftTemplateData;
 }): Promise<ShiftTemplate> => {
+  // Block in demo mode
+  if (isDemoMode()) {
+    toast({
+      title: 'Demo Mode',
+      description: getDemoMessage('actionNotPersisted'),
+      type: 'info',
+    });
+    throw new Error('Demo mode: Changes not persisted');
+  }
+
   const response = await fetch(`/api/shift-templates/${id}`, {
     method: 'PUT',
     headers: {
@@ -91,6 +113,16 @@ const updateShiftTemplate = async ({
 };
 
 const deleteShiftTemplate = async (id: string): Promise<void> => {
+  // Block in demo mode
+  if (isDemoMode()) {
+    toast({
+      title: 'Demo Mode',
+      description: getDemoMessage('actionNotPersisted'),
+      type: 'info',
+    });
+    throw new Error('Demo mode: Changes not persisted');
+  }
+
   const response = await fetch(`/api/shift-templates/${id}`, {
     method: 'DELETE',
   });

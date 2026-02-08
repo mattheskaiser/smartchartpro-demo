@@ -8,6 +8,8 @@ import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
 import { SpecialistModalMolecule } from './modals/SpecialistModal.molecule';
 import { SPECIALTY_OPTIONS } from '@/constants/medical';
+import { toast } from '@/lib/toast';
+import { isDemoMode, getDemoMessage } from '@/lib/demo-config';
 
 interface Specialist {
   id: string;
@@ -49,6 +51,18 @@ export const ResidentSpecialistsMolecule = ({
     notes: string;
   }) => {
     if (!residentId) return;
+
+    // Block in demo mode
+    if (isDemoMode()) {
+      toast({
+        title: 'Demo Mode',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'info',
+      });
+      setShowModal(false);
+      setEditingSpecialist(null);
+      return;
+    }
 
     setIsLoading(true);
 
@@ -103,6 +117,16 @@ export const ResidentSpecialistsMolecule = ({
 
   const removeSpecialist = async (id: string) => {
     if (!residentId) return;
+
+    // Block in demo mode
+    if (isDemoMode()) {
+      toast({
+        title: 'Demo Mode',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'info',
+      });
+      return;
+    }
 
     try {
       const response = await fetch(`/api/residents/${residentId}/specialists/${id}`, {

@@ -4,6 +4,8 @@ import {
   CreateChartingReportData,
   UpdateChartingReportData,
 } from '@/types/chartingReport';
+import { isDemoMode, getDemoMessage } from '@/lib/demo-config';
+import { toast } from '@/lib/toast';
 
 // API functions
 const fetchReports = async (filters?: {
@@ -49,6 +51,16 @@ const fetchReport = async (id: string): Promise<ChartingReport> => {
 };
 
 const createReport = async (data: CreateChartingReportData): Promise<ChartingReport> => {
+  // Block in demo mode
+  if (isDemoMode()) {
+    toast({
+      title: 'Demo Mode',
+      description: getDemoMessage('actionNotPersisted'),
+      type: 'info',
+    });
+    throw new Error('Demo mode: Changes not persisted');
+  }
+
   const response = await fetch('/api/reports', {
     method: 'POST',
     headers: {
@@ -72,6 +84,16 @@ const updateReport = async ({
   id: string;
   data: UpdateChartingReportData;
 }): Promise<ChartingReport> => {
+  // Block in demo mode
+  if (isDemoMode()) {
+    toast({
+      title: 'Demo Mode',
+      description: getDemoMessage('actionNotPersisted'),
+      type: 'info',
+    });
+    throw new Error('Demo mode: Changes not persisted');
+  }
+
   const response = await fetch(`/api/reports/${id}`, {
     method: 'PATCH',
     headers: {
@@ -88,6 +110,16 @@ const updateReport = async ({
 };
 
 const deleteReport = async (id: string): Promise<void> => {
+  // Block in demo mode
+  if (isDemoMode()) {
+    toast({
+      title: 'Demo Mode',
+      description: getDemoMessage('actionNotPersisted'),
+      type: 'info',
+    });
+    throw new Error('Demo mode: Changes not persisted');
+  }
+
   const response = await fetch(`/api/reports/${id}`, {
     method: 'DELETE',
   });
@@ -137,15 +169,15 @@ export const useCreateChartingReport = () => {
         (
           old:
             | {
-                reports: ChartingReport[];
-                pagination: {
-                  page: number;
-                  limit: number;
-                  totalCount: number;
-                  totalPages: number;
-                  hasMore: boolean;
-                };
-              }
+              reports: ChartingReport[];
+              pagination: {
+                page: number;
+                limit: number;
+                totalCount: number;
+                totalPages: number;
+                hasMore: boolean;
+              };
+            }
             | undefined
         ) => {
           if (!old)

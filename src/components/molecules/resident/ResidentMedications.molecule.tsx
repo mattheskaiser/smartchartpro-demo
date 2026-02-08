@@ -7,6 +7,8 @@ import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
 import { MedicationModalMolecule } from '@/components/molecules/resident/modals/MedicationModal.molecule';
+import { toast } from '@/lib/toast';
+import { isDemoMode, getDemoMessage } from '@/lib/demo-config';
 
 interface Medication {
   id: string;
@@ -48,6 +50,18 @@ export const ResidentMedicationsMolecule = ({
     startDate: string;
   }) => {
     if (!residentId) return;
+
+    // Block in demo mode
+    if (isDemoMode()) {
+      toast({
+        title: 'Demo Mode',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'info',
+      });
+      setShowModal(false);
+      setEditingMedication(null);
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -102,6 +116,16 @@ export const ResidentMedicationsMolecule = ({
   const removeMedication = async (id: string) => {
     if (!residentId) return;
 
+    // Block in demo mode
+    if (isDemoMode()) {
+      toast({
+        title: 'Demo Mode',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'info',
+      });
+      return;
+    }
+
     try {
       const response = await fetch(`/api/residents/${residentId}/medications/${id}`, {
         method: 'DELETE',
@@ -117,6 +141,16 @@ export const ResidentMedicationsMolecule = ({
 
   const discontinueMedication = async (id: string, reason: string) => {
     if (!residentId) return;
+
+    // Block in demo mode
+    if (isDemoMode()) {
+      toast({
+        title: 'Demo Mode',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'info',
+      });
+      return;
+    }
 
     try {
       const updateData = {
@@ -153,11 +187,10 @@ export const ResidentMedicationsMolecule = ({
       <div className="flex space-x-1 mb-4 bg-gray-100 p-1 rounded-lg">
         <button
           onClick={() => setActiveTab('current')}
-          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${
-            activeTab === 'current'
-              ? 'bg-white text-blue-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${activeTab === 'current'
+            ? 'bg-white text-blue-600 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
+            }`}
         >
           <DynamicIconAtom name="Clock" size="sm" className="mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
@@ -166,11 +199,10 @@ export const ResidentMedicationsMolecule = ({
         </button>
         <button
           onClick={() => setActiveTab('past')}
-          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${
-            activeTab === 'past'
-              ? 'bg-white text-blue-600 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+          className={`flex-1 flex items-center justify-center px-3 py-2 rounded-md transition-colors ${activeTab === 'past'
+            ? 'bg-white text-blue-600 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
+            }`}
         >
           <DynamicIconAtom name="CircleCheck" size="sm" className="mr-2" />
           <TextAtom variant="small" weight="medium" as="span">
@@ -231,17 +263,17 @@ export const ResidentMedicationsMolecule = ({
                   items={
                     medication.status === 'current'
                       ? [
-                          {
-                            id: 'discontinue',
-                            label: 'Discontinue',
-                            icon: <DynamicIconAtom name="Clock" size="sm" className="mr-2" />,
-                            onClick: () => {
-                              const reason = prompt('Reason for discontinuing this medication:');
-                              if (reason) discontinueMedication(medication.id, reason);
-                            },
-                            variant: 'warning',
+                        {
+                          id: 'discontinue',
+                          label: 'Discontinue',
+                          icon: <DynamicIconAtom name="Clock" size="sm" className="mr-2" />,
+                          onClick: () => {
+                            const reason = prompt('Reason for discontinuing this medication:');
+                            if (reason) discontinueMedication(medication.id, reason);
                           },
-                        ]
+                          variant: 'warning',
+                        },
+                      ]
                       : []
                   }
                 />

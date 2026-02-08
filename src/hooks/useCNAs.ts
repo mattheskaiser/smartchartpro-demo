@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CNA, CreateCNAData } from '@/types/cna';
 import { resizeImage } from '@/lib/imageUpload';
+import { isDemoMode, getDemoMessage } from '@/lib/demo-config';
+import { toast } from '@/lib/toast';
 
 // API functions
 const fetchCNAs = async (): Promise<CNA[]> => {
@@ -12,6 +14,16 @@ const fetchCNAs = async (): Promise<CNA[]> => {
 };
 
 const createCNA = async (data: CreateCNAData): Promise<CNA> => {
+  // Block in demo mode
+  if (isDemoMode()) {
+    toast({
+      title: 'Demo Mode',
+      description: getDemoMessage('actionNotPersisted'),
+      type: 'info',
+    });
+    throw new Error('Demo mode: Changes not persisted');
+  }
+
   let imageData = '';
 
   // Convert image to base64 if provided
@@ -56,6 +68,16 @@ const fetchCNA = async (id: string): Promise<CNA> => {
 };
 
 const updateCNA = async ({ id, data }: { id: string; data: Partial<CNA> }): Promise<CNA> => {
+  // Block in demo mode
+  if (isDemoMode()) {
+    toast({
+      title: 'Demo Mode',
+      description: getDemoMessage('actionNotPersisted'),
+      type: 'info',
+    });
+    throw new Error('Demo mode: Changes not persisted');
+  }
+
   const response = await fetch(`/api/cnas/${id}`, {
     method: 'PUT',
     headers: {
@@ -72,6 +94,16 @@ const updateCNA = async ({ id, data }: { id: string; data: Partial<CNA> }): Prom
 };
 
 const deleteCNA = async (id: string): Promise<void> => {
+  // Block in demo mode
+  if (isDemoMode()) {
+    toast({
+      title: 'Demo Mode',
+      description: getDemoMessage('actionNotPersisted'),
+      type: 'info',
+    });
+    throw new Error('Demo mode: Changes not persisted');
+  }
+
   const response = await fetch(`/api/cnas/${id}`, {
     method: 'DELETE',
   });
@@ -172,6 +204,16 @@ const updateCNAAvailability = async ({
   cnaId: string;
   availability: { [key: string]: string[] };
 }): Promise<{ [key: string]: string[] }> => {
+  // Block in demo mode
+  if (isDemoMode()) {
+    toast({
+      title: 'Demo Mode',
+      description: getDemoMessage('actionNotPersisted'),
+      type: 'info',
+    });
+    throw new Error('Demo mode: Changes not persisted');
+  }
+
   const response = await fetch(`/api/cnas/${cnaId}/availability`, {
     method: 'PUT',
     headers: {

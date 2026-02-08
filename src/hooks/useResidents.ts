@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { resizeImage } from '@/lib/imageUpload';
 import { Resident } from '@/types/resident';
+import { isDemoMode, getDemoMessage } from '@/lib/demo-config';
+import { toast } from '@/lib/toast';
 
 // Types
 interface CreateResidentData {
@@ -45,6 +47,16 @@ const fetchResidents = async (filters?: {
 };
 
 const createResident = async (data: CreateResidentData): Promise<Resident> => {
+  // Block in demo mode
+  if (isDemoMode()) {
+    toast({
+      title: 'Demo Mode',
+      description: getDemoMessage('actionNotPersisted'),
+      type: 'info',
+    });
+    throw new Error('Demo mode: Changes not persisted');
+  }
+
   let imageData = data.imageData || '';
 
   // Convert image to base64 if provided and no imageData exists
@@ -95,6 +107,16 @@ const updateResident = async ({
   id: string;
   data: Partial<Resident> & { imageFile?: File };
 }): Promise<Resident> => {
+  // Block in demo mode
+  if (isDemoMode()) {
+    toast({
+      title: 'Demo Mode',
+      description: getDemoMessage('actionNotPersisted'),
+      type: 'info',
+    });
+    throw new Error('Demo mode: Changes not persisted');
+  }
+
   let updateData = { ...data };
 
   // Handle image file if provided
@@ -127,6 +149,16 @@ const updateResident = async ({
 };
 
 const deleteResident = async (id: string): Promise<void> => {
+  // Block in demo mode
+  if (isDemoMode()) {
+    toast({
+      title: 'Demo Mode',
+      description: getDemoMessage('actionNotPersisted'),
+      type: 'info',
+    });
+    throw new Error('Demo mode: Changes not persisted');
+  }
+
   const response = await fetch(`/api/residents/${id}`, {
     method: 'DELETE',
   });
@@ -174,15 +206,15 @@ export const useCreateResident = () => {
         (
           old:
             | {
-                residents: Resident[];
-                pagination: {
-                  page: number;
-                  limit: number;
-                  totalCount: number;
-                  totalPages: number;
-                  hasMore: boolean;
-                };
-              }
+              residents: Resident[];
+              pagination: {
+                page: number;
+                limit: number;
+                totalCount: number;
+                totalPages: number;
+                hasMore: boolean;
+              };
+            }
             | undefined
         ) => {
           if (!old)
@@ -222,15 +254,15 @@ export const useUpdateResident = () => {
         (
           old:
             | {
-                residents: Resident[];
-                pagination: {
-                  page: number;
-                  limit: number;
-                  totalCount: number;
-                  totalPages: number;
-                  hasMore: boolean;
-                };
-              }
+              residents: Resident[];
+              pagination: {
+                page: number;
+                limit: number;
+                totalCount: number;
+                totalPages: number;
+                hasMore: boolean;
+              };
+            }
             | undefined
         ) => {
           if (!old) return old;
@@ -261,15 +293,15 @@ export const useDeleteResident = () => {
         (
           old:
             | {
-                residents: Resident[];
-                pagination: {
-                  page: number;
-                  limit: number;
-                  totalCount: number;
-                  totalPages: number;
-                  hasMore: boolean;
-                };
-              }
+              residents: Resident[];
+              pagination: {
+                page: number;
+                limit: number;
+                totalCount: number;
+                totalPages: number;
+                hasMore: boolean;
+              };
+            }
             | undefined
         ) => {
           if (!old) return old;

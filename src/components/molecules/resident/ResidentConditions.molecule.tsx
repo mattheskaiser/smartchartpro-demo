@@ -7,6 +7,8 @@ import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { ConditionModalMolecule } from './modals/ConditionModal.molecule';
 import { ActionMenuMolecule } from '@/components/molecules/ActionMenu.molecule';
+import { toast } from '@/lib/toast';
+import { isDemoMode, getDemoMessage } from '@/lib/demo-config';
 
 interface Condition {
   id: string;
@@ -42,6 +44,18 @@ export const ResidentConditionsMolecule = ({
     notes: string;
   }) => {
     if (!residentId) return;
+
+    // Block in demo mode
+    if (isDemoMode()) {
+      toast({
+        title: 'Demo Mode',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'info',
+      });
+      setShowModal(false);
+      setEditingCondition(null);
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -95,6 +109,16 @@ export const ResidentConditionsMolecule = ({
 
   const removeCondition = async (id: string) => {
     if (!residentId) return;
+
+    // Block in demo mode
+    if (isDemoMode()) {
+      toast({
+        title: 'Demo Mode',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'info',
+      });
+      return;
+    }
 
     try {
       const response = await fetch(`/api/residents/${residentId}/conditions/${id}`, {
