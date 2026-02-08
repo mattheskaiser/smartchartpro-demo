@@ -9,8 +9,17 @@ import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 export function ChartingUserProfileMolecule() {
   const { data: session } = useSession();
 
+  // Show placeholder to prevent layout shift while loading
   if (!session?.user) {
-    return null;
+    return (
+      <div className="flex items-center space-x-3">
+        <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
+        <div className="flex flex-col space-y-1">
+          <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" />
+          <div className="w-16 h-6 bg-gray-200 rounded animate-pulse" />
+        </div>
+      </div>
+    );
   }
 
   const handleLogout = async () => {

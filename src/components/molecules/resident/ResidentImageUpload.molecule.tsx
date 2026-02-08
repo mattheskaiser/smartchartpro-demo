@@ -5,7 +5,6 @@ import { CardAtom } from '@/components/atoms/Card.atom';
 import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
-import { SpinnerAtom } from '@/components/atoms/Spinner.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { resizeImage } from '@/lib/imageUpload';
 
@@ -92,7 +91,7 @@ export const ResidentImageUploadMolecule = ({
               {/* Loading spinner overlay */}
               {isUpdating && (
                 <div className="absolute inset-0 rounded-full bg-black bg-opacity-50 flex items-center justify-center">
-                  <SpinnerAtom size="lg" className="border-white border-t-blue-400" />
+                  <DynamicIconAtom name="Loader" size="lg" className="animate-spin text-white" />
                 </div>
               )}
             </div>
@@ -115,7 +114,7 @@ export const ResidentImageUploadMolecule = ({
             {/* Loading state text */}
             {isUpdating && (
               <div className="flex items-center gap-2">
-                <SpinnerAtom size="sm" />
+                <DynamicIconAtom name="Loader" size="sm" className="animate-spin text-primary" />
                 <TextAtom variant="body" color="muted">
                   Saving changes...
                 </TextAtom>

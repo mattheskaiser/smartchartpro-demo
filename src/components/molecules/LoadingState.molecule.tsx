@@ -32,7 +32,7 @@
  * />
  */
 import React from 'react';
-import { SpinnerAtom } from '@/components/atoms/Spinner.atom';
+import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 
 interface LoadingStateProps {
@@ -68,7 +68,7 @@ export const LoadingStateMolecule = ({
   if (inline) {
     return (
       <div className={`flex items-center justify-center space-x-2 ${className}`}>
-        <SpinnerAtom size={size} />
+        <DynamicIconAtom name="Loader" size={size} className="animate-spin text-primary" />
         <TextAtom variant="body" color="muted">
           {message}
         </TextAtom>
@@ -80,7 +80,7 @@ export const LoadingStateMolecule = ({
     <div
       className={`flex flex-col items-center justify-center text-center ${classes.container} ${className}`}
     >
-      <SpinnerAtom size={size} />
+      <DynamicIconAtom name="Loader" size={size} className="animate-spin text-primary" />
       <TextAtom variant="body" color="muted" className={classes.spacing}>
         {message}
       </TextAtom>
