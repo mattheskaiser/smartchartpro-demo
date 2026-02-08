@@ -59,7 +59,7 @@ export const ResidentMedicationsMolecule = ({
         toast({
           title: 'Changes Not Saved',
           description: getDemoMessage('actionNotPersisted'),
-          type: 'error',
+          type: 'warning',
         });
       }, 100);
       return;
@@ -124,7 +124,7 @@ export const ResidentMedicationsMolecule = ({
         toast({
           title: 'Changes Not Saved',
           description: getDemoMessage('actionNotPersisted'),
-          type: 'error',
+          type: 'warning',
         });
       }, 100);
       return;
@@ -152,7 +152,7 @@ export const ResidentMedicationsMolecule = ({
         toast({
           title: 'Changes Not Saved',
           description: getDemoMessage('actionNotPersisted'),
-          type: 'error',
+          type: 'warning',
         });
       }, 100);
       return;

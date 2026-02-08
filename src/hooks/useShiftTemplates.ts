@@ -59,7 +59,7 @@ const createShiftTemplate = async (data: CreateShiftTemplateData): Promise<Shift
       toast({
         title: 'Changes Not Saved',
         description: getDemoMessage('actionNotPersisted'),
-        type: 'error',
+        type: 'warning',
       });
     }, 100);
 
@@ -106,7 +106,7 @@ const updateShiftTemplate = async ({
       toast({
         title: 'Changes Not Saved',
         description: getDemoMessage('actionNotPersisted'),
-        type: 'error',
+        type: 'warning',
       });
     }, 100);
 
@@ -140,7 +140,7 @@ const deleteShiftTemplate = async (id: string): Promise<void> => {
       toast({
         title: 'Changes Not Saved',
         description: getDemoMessage('actionNotPersisted'),
-        type: 'error',
+        type: 'warning',
       });
     }, 100);
     return;

@@ -20,7 +20,7 @@ const createCNA = async (data: CreateCNAData): Promise<CNA> => {
       toast({
         title: 'Changes Not Saved',
         description: getDemoMessage('actionNotPersisted'),
-        type: 'error',
+        type: 'warning',
       });
     }, 100);
 
@@ -86,7 +86,7 @@ const updateCNA = async ({ id, data }: { id: string; data: Partial<CNA> }): Prom
       toast({
         title: 'Changes Not Saved',
         description: getDemoMessage('actionNotPersisted'),
-        type: 'error',
+        type: 'warning',
       });
     }, 100);
 
@@ -119,7 +119,7 @@ const deleteCNA = async (id: string): Promise<void> => {
       toast({
         title: 'Changes Not Saved',
         description: getDemoMessage('actionNotPersisted'),
-        type: 'error',
+        type: 'warning',
       });
     }, 100);
     return;
@@ -231,7 +231,7 @@ const updateCNAAvailability = async ({
       toast({
         title: 'Changes Not Saved',
         description: getDemoMessage('actionNotPersisted'),
-        type: 'error',
+        type: 'warning',
       });
     }, 100);
     return availability;

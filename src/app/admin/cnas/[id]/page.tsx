@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
@@ -8,10 +8,13 @@ import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { CardAtom } from '@/components/atoms/Card.atom';
+import { InputAtom } from '@/components/atoms/Input.atom';
+import { TextareaAtom } from '@/components/atoms/Textarea.atom';
 import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
 import { ConfirmationModalMolecule } from '@/components/molecules/ConfirmationModal.molecule';
 import { CNAAvailabilityMolecule } from '@/components/molecules/cna/CNAAvailability.molecule';
+import { StickyPageHeaderMolecule } from '@/components/molecules/StickyPageHeader.molecule';
 import {
   useCNA,
   useUpdateCNA,
@@ -19,17 +22,32 @@ import {
   useCNAAvailability,
   useUpdateCNAAvailability,
 } from '@/hooks/useCNAs';
-import { EditCNAModalMolecule } from '@/components/molecules/cna/EditCNAModal.molecule';
 import { toast } from '@/lib/toast';
+import { isDemoMode } from '@/lib/demo-config';
+import { resizeImage } from '@/lib/imageUpload';
+
+interface CNAData {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  certificationNumber?: string;
+  hireDate?: string;
+  notes?: string;
+  imageData?: string;
+  status: string;
+}
 
 export default function CNADetailPage() {
   const params = useParams();
   const router = useRouter();
   const cnaId = params.id as string;
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [isEditingAvailability, setIsEditingAvailability] = useState(false);
   const [localAvailability, setLocalAvailability] = useState<{ [key: string]: string[] }>({});
+  const [localCNA, setLocalCNA] = useState<CNAData | null>(null);
+  const [originalCNA, setOriginalCNA] = useState<CNAData | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: cna, isLoading, error } = useCNA(cnaId);
   const { data: availability = {} } = useCNAAvailability(cnaId);
@@ -37,29 +55,22 @@ export default function CNADetailPage() {
   const deleteCNAMutation = useDeleteCNA();
   const updateAvailabilityMutation = useUpdateCNAAvailability();
 
+  // Sync local CNA data with fetched data when not editing
+  useEffect(() => {
+    if (cna && !isEditing) {
+      setLocalCNA(cna);
+      setOriginalCNA(cna);
+    }
+  }, [cna, isEditing]);
+
   // Sync local availability with fetched data when not editing
-  React.useEffect(() => {
-    if (!isEditingAvailability && availability) {
+  useEffect(() => {
+    if (!isEditing && availability && Object.keys(availability).length > 0) {
       setLocalAvailability(availability);
     }
-  }, [availability, isEditingAvailability]);
+  }, [JSON.stringify(availability), isEditing]);
 
-  if (isLoading) {
-    return <PageLoaderMolecule message="Loading CNA details..." />;
-  }
-
-  if (error || !cna) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <EmptyStateMolecule
-          iconName="UserRound"
-          title="CNA not found"
-          description="The CNA you're looking for doesn't exist or has been removed."
-        />
-      </div>
-    );
-  }
-
+  // Define all handlers before early returns
   const getStatusColor = (status: string): 'success' | 'warning' | 'error' | 'info' => {
     switch (status) {
       case 'active':
@@ -71,284 +82,387 @@ export default function CNADetailPage() {
     }
   };
 
-  const handleEditSubmit = async (formData: {
-    name: string;
-    email: string;
-    phone?: string;
-    certificationNumber?: string;
-    hireDate?: string;
-    notes?: string;
-    imageFile?: File;
-    imageUrl?: string;
-  }) => {
+  const handleInputChange = (field: keyof CNAData, value: string) => {
+    setLocalCNA(prev => {
+      if (!prev) return prev;
+      return { ...prev, [field]: value };
+    });
+  };
+
+  const handleImageChange = (imageData: string | null) => {
+    setLocalCNA(prev => {
+      if (!prev) return prev;
+      return { ...prev, imageData: imageData || undefined };
+    });
+  };
+
+  const handleFileSelect = async (file: File) => {
+    if (file && file.type.startsWith('image/')) {
+      try {
+        const base64Data = await resizeImage(file);
+        handleImageChange(base64Data);
+      } catch (error) {
+        console.error('Error processing image:', error);
+      }
+    }
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileSelect(file);
+    }
+  };
+
+  const handleChangePhotoClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleRemoveImage = () => {
+    handleImageChange(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleSave = async () => {
+    if (!localCNA) return;
+
     try {
-      await updateCNAMutation.mutateAsync({
-        id: cnaId,
-        data: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          certificationNumber: formData.certificationNumber,
-          hireDate: formData.hireDate,
-          notes: formData.notes,
-          imageData: formData.imageUrl,
-        },
-      });
-      setIsEditModalOpen(false);
-      toast({
-        title: 'CNA updated successfully',
-        description: `${formData.name}'s information has been updated`,
-        type: 'success',
-      });
+      // Check if basic CNA data changed
+      const basicDataChanged = originalCNA && (
+        localCNA.name !== originalCNA.name ||
+        localCNA.email !== originalCNA.email ||
+        localCNA.phone !== originalCNA.phone ||
+        localCNA.certificationNumber !== originalCNA.certificationNumber ||
+        localCNA.hireDate !== originalCNA.hireDate ||
+        localCNA.notes !== originalCNA.notes ||
+        localCNA.imageData !== originalCNA.imageData
+      );
+
+      // Update basic CNA data if changed
+      if (basicDataChanged) {
+        await updateCNAMutation.mutateAsync({
+          id: cnaId,
+          data: {
+            name: localCNA.name,
+            email: localCNA.email,
+            phone: localCNA.phone,
+            certificationNumber: localCNA.certificationNumber,
+            hireDate: localCNA.hireDate,
+            notes: localCNA.notes,
+            imageData: localCNA.imageData,
+          },
+        });
+      }
+
+      // Check if availability changed
+      const availabilityChanged = JSON.stringify(localAvailability) !== JSON.stringify(availability);
+
+      // Update availability if changed
+      if (availabilityChanged) {
+        await updateAvailabilityMutation.mutateAsync({
+          cnaId,
+          availability: localAvailability,
+        });
+      }
+
+      // Only show success toast if not in demo mode and something changed
+      if (!isDemoMode() && (basicDataChanged || availabilityChanged)) {
+        toast({
+          title: 'CNA updated successfully',
+          description: `${localCNA.name}'s information has been saved`,
+          type: 'success',
+        });
+      }
+
+      setIsEditing(false);
     } catch (error) {
       console.error('Error updating CNA:', error);
-      toast({
-        title: 'Failed to update CNA',
-        description: 'There was an error updating the CNA. Please try again.',
-        type: 'error',
-      });
+
+      // Only show error toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({
+          title: 'Failed to update CNA',
+          description: 'There was an error saving the changes. Please try again.',
+          type: 'error',
+        });
+      }
     }
   };
 
   const handleDeleteCNA = async () => {
     try {
       await deleteCNAMutation.mutateAsync(cnaId);
-      toast({
-        title: 'CNA deleted successfully',
-        description: `${cna.name} has been removed from your team`,
-        type: 'success',
-      });
+
+      // Only show success toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({
+          title: 'CNA deleted successfully',
+          description: `${cna?.name} has been removed from your team`,
+          type: 'success',
+        });
+      }
+
       // Navigate back to CNAs list after successful deletion
       router.push('/admin/cnas');
     } catch (error) {
       console.error('Error deleting CNA:', error);
-      toast({
-        title: 'Failed to delete CNA',
-        description: 'There was an error deleting the CNA. Please try again.',
-        type: 'error',
-      });
+
+      // Only show error toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({
+          title: 'Failed to delete CNA',
+          description: 'There was an error deleting the CNA. Please try again.',
+          type: 'error',
+        });
+      }
     }
   };
 
   const handleAvailabilityChange = (newAvailability: { [key: string]: string[] }) => {
-    // Only update local state, don't save to API yet
     setLocalAvailability(newAvailability);
   };
 
-  const handleSaveAvailability = async () => {
-    try {
-      await updateAvailabilityMutation.mutateAsync({
-        cnaId,
-        availability: localAvailability,
-      });
-      setIsEditingAvailability(false);
-      toast({
-        title: 'Availability updated',
-        description: 'Shift availability has been saved successfully',
-        type: 'success',
-      });
-    } catch (error) {
-      console.error('Error updating availability:', error);
-      toast({
-        title: 'Failed to update availability',
-        description: 'There was an error saving the availability. Please try again.',
-        type: 'error',
-      });
-    }
-  };
+  // Early returns after all handlers are defined
+  if (isLoading) {
+    return <PageLoaderMolecule message="Loading CNA details..." />;
+  }
 
-  const handleCancelAvailabilityEdit = () => {
-    // Revert to original availability
-    setLocalAvailability(availability);
-    setIsEditingAvailability(false);
-  };
-
-  const handleStartAvailabilityEdit = () => {
-    // Initialize local state with current availability
-    setLocalAvailability(availability);
-    setIsEditingAvailability(true);
-  };
+  if (error || !cna || !localCNA) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <EmptyStateMolecule
+          iconName="UserRound"
+          title="CNA not found"
+          description="The CNA you're looking for doesn't exist or has been removed."
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-7xl">
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-4">
-            <ButtonAtom variant="ghost" onClick={() => router.back()} className="p-2">
-              <DynamicIconAtom name="ArrowLeft" size="md" />
-            </ButtonAtom>
-            <TextAtom variant="h1" weight="semibold">
-              CNA Details
-            </TextAtom>
-          </div>
-          <div className="flex items-center gap-3">
-            <ButtonAtom variant="delete" onClick={() => setShowDeleteModal(true)}>
-              <DynamicIconAtom name="Trash2" size="sm" className="mr-2" />
-              Delete CNA
-            </ButtonAtom>
-            <ButtonAtom variant="primary" onClick={() => setIsEditModalOpen(true)}>
-              <DynamicIconAtom name="Pencil" size="sm" className="mr-2" />
-              Edit CNA
-            </ButtonAtom>
-          </div>
-        </div>
-      </div>
+      <StickyPageHeaderMolecule
+        title={localCNA.name || 'Unknown CNA'}
+        subtitle={localCNA.email || ''}
+        isEditing={isEditing}
+        onBack={() => router.back()}
+        onToggleEdit={() => (isEditing ? handleSave() : setIsEditing(true))}
+        isSaving={updateCNAMutation.isPending || updateAvailabilityMutation.isPending}
+        showDelete={true}
+        onDelete={() => setShowDeleteModal(true)}
+      />
 
-      {/* CNA Profile */}
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Main Info */}
-        <div className="lg:col-span-2 space-y-6">
-          <CardAtom className="p-6">
-            <div className="flex items-start gap-6">
-              <AvatarAtom src={cna.imageData} alt={cna.name} size="lg" />
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <TextAtom variant="h2" weight="semibold">
-                    {cna.name}
-                  </TextAtom>
-                  <BadgeAtom variant={getStatusColor(cna.status)}>{cna.status}</BadgeAtom>
-                </div>
-                <div className="grid grid-cols-2 gap-4 mt-4">
-                  <div>
-                    <TextAtom variant="small" color="muted">
-                      Email
-                    </TextAtom>
-                    <TextAtom variant="body" weight="medium">
-                      {cna.email}
-                    </TextAtom>
-                  </div>
-                  {cna.phone && (
-                    <div>
-                      <TextAtom variant="small" color="muted">
-                        Phone
-                      </TextAtom>
-                      <TextAtom variant="body" weight="medium">
-                        {cna.phone}
-                      </TextAtom>
-                    </div>
-                  )}
-                  {cna.certificationNumber && (
-                    <div>
-                      <TextAtom variant="small" color="muted">
-                        Certification Number
-                      </TextAtom>
-                      <TextAtom variant="body" weight="medium">
-                        {cna.certificationNumber}
-                      </TextAtom>
-                    </div>
-                  )}
-                  {cna.hireDate && (
-                    <div>
-                      <TextAtom variant="small" color="muted">
-                        Hire Date
-                      </TextAtom>
-                      <TextAtom variant="body" weight="medium">
-                        {new Date(cna.hireDate).toLocaleDateString()}
-                      </TextAtom>
-                    </div>
-                  )}
-                </div>
-                {cna.notes && (
-                  <div className="mt-4">
-                    <TextAtom variant="small" color="muted">
-                      Notes
-                    </TextAtom>
-                    <TextAtom variant="body" className="mt-1">
-                      {cna.notes}
-                    </TextAtom>
-                  </div>
-                )}
-              </div>
+      <div className="space-y-8">
+        {/* Profile Picture Section */}
+        <CardAtom className="p-6">
+          <div className="flex items-center gap-6">
+            <div className="relative">
+              <AvatarAtom src={localCNA.imageData} alt={localCNA.name} size="lg" />
             </div>
-          </CardAtom>
-
-          {/* Availability Management */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <TextAtom variant="h2" weight="semibold" className="text-gray-900">
-                Shift Availability
-              </TextAtom>
-              {!isEditingAvailability ? (
-                <ButtonAtom variant="secondary" onClick={handleStartAvailabilityEdit}>
-                  <DynamicIconAtom name="Pencil" size="sm" className="mr-2" />
-                  Edit Availability
-                </ButtonAtom>
-              ) : (
-                <div className="flex items-center gap-2">
-                  <ButtonAtom
-                    variant="ghost"
-                    onClick={handleCancelAvailabilityEdit}
-                    disabled={updateAvailabilityMutation.isPending}
-                  >
-                    Cancel
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-2">
+                <TextAtom variant="h2" weight="semibold">
+                  {localCNA.name}
+                </TextAtom>
+                <BadgeAtom variant={getStatusColor(localCNA.status)}>{localCNA.status}</BadgeAtom>
+              </div>
+              {isEditing && (
+                <div className="flex gap-2 mt-3">
+                  <ButtonAtom variant="secondary" size="sm" onClick={handleChangePhotoClick}>
+                    <DynamicIconAtom name="Upload" size="sm" className="mr-2" />
+                    Change Photo
                   </ButtonAtom>
-                  <ButtonAtom
-                    variant="primary"
-                    onClick={handleSaveAvailability}
-                    isLoading={updateAvailabilityMutation.isPending}
-                    loadingText="Saving..."
-                  >
-                    <DynamicIconAtom name="Check" size="sm" className="mr-2" />
-                    Save Changes
-                  </ButtonAtom>
+                  {localCNA.imageData && (
+                    <ButtonAtom variant="ghost" size="sm" onClick={handleRemoveImage}>
+                      <DynamicIconAtom name="Trash2" size="sm" className="mr-2" />
+                      Remove
+                    </ButtonAtom>
+                  )}
                 </div>
               )}
             </div>
-            <CNAAvailabilityMolecule
-              availability={localAvailability}
-              isEditing={isEditingAvailability}
-              onAvailabilityChange={handleAvailabilityChange}
-            />
+          </div>
+          {/* Hidden file input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileInputChange}
+            className="hidden"
+          />
+        </CardAtom>
+
+        {/* Basic Information Section */}
+        <div>
+          <TextAtom variant="h2" weight="semibold" className="mb-4 text-gray-900">
+            Basic Information
+          </TextAtom>
+          <CardAtom className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <TextAtom variant="small" color="muted" className="mb-2">
+                  Name
+                </TextAtom>
+                {isEditing ? (
+                  <InputAtom
+                    value={localCNA.name}
+                    onChange={e => handleInputChange('name', e.target.value)}
+                    placeholder="Enter name"
+                  />
+                ) : (
+                  <TextAtom variant="body" weight="medium">
+                    {localCNA.name}
+                  </TextAtom>
+                )}
+              </div>
+
+              <div>
+                <TextAtom variant="small" color="muted" className="mb-2">
+                  Email
+                </TextAtom>
+                {isEditing ? (
+                  <InputAtom
+                    type="email"
+                    value={localCNA.email}
+                    onChange={e => handleInputChange('email', e.target.value)}
+                    placeholder="Enter email"
+                  />
+                ) : (
+                  <TextAtom variant="body" weight="medium">
+                    {localCNA.email}
+                  </TextAtom>
+                )}
+              </div>
+
+              <div>
+                <TextAtom variant="small" color="muted" className="mb-2">
+                  Phone
+                </TextAtom>
+                {isEditing ? (
+                  <InputAtom
+                    type="tel"
+                    value={localCNA.phone || ''}
+                    onChange={e => handleInputChange('phone', e.target.value)}
+                    placeholder="Enter phone number"
+                  />
+                ) : (
+                  <TextAtom variant="body" weight="medium">
+                    {localCNA.phone || 'Not provided'}
+                  </TextAtom>
+                )}
+              </div>
+
+              <div>
+                <TextAtom variant="small" color="muted" className="mb-2">
+                  Certification Number
+                </TextAtom>
+                {isEditing ? (
+                  <InputAtom
+                    value={localCNA.certificationNumber || ''}
+                    onChange={e => handleInputChange('certificationNumber', e.target.value)}
+                    placeholder="Enter certification number"
+                  />
+                ) : (
+                  <TextAtom variant="body" weight="medium">
+                    {localCNA.certificationNumber || 'Not provided'}
+                  </TextAtom>
+                )}
+              </div>
+
+              <div>
+                <TextAtom variant="small" color="muted" className="mb-2">
+                  Hire Date
+                </TextAtom>
+                {isEditing ? (
+                  <InputAtom
+                    type="date"
+                    value={localCNA.hireDate || ''}
+                    onChange={e => handleInputChange('hireDate', e.target.value)}
+                  />
+                ) : (
+                  <TextAtom variant="body" weight="medium">
+                    {localCNA.hireDate
+                      ? new Date(localCNA.hireDate).toLocaleDateString()
+                      : 'Not provided'}
+                  </TextAtom>
+                )}
+              </div>
+            </div>
+
+            {(isEditing || localCNA.notes) && (
+              <div className="mt-6">
+                <TextAtom variant="small" color="muted" className="mb-2">
+                  Notes
+                </TextAtom>
+                {isEditing ? (
+                  <TextareaAtom
+                    value={localCNA.notes || ''}
+                    onChange={e => handleInputChange('notes', e.target.value)}
+                    placeholder="Add any additional notes..."
+                    rows={3}
+                  />
+                ) : (
+                  <TextAtom variant="body">{localCNA.notes}</TextAtom>
+                )}
+              </div>
+            )}
+          </CardAtom>
+        </div>
+
+        {/* Availability Section */}
+        <div>
+          <TextAtom variant="h2" weight="semibold" className="mb-4 text-gray-900">
+            Shift Availability
+          </TextAtom>
+          <CNAAvailabilityMolecule
+            availability={localAvailability}
+            isEditing={isEditing}
+            onAvailabilityChange={handleAvailabilityChange}
+          />
+        </div>
+
+        {/* Stats Section */}
+        <div>
+          <TextAtom variant="h2" weight="semibold" className="mb-4 text-gray-900">
+            Statistics
+          </TextAtom>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <CardAtom className="p-6">
+              <div className="flex items-center gap-3">
+                <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary">
+                  <DynamicIconAtom name="Calendar" size="md" className="text-primary" />
+                </div>
+                <div>
+                  <TextAtom variant="small" color="muted">
+                    Available Shifts
+                  </TextAtom>
+                  <TextAtom variant="h3" weight="semibold">
+                    {Object.values(localAvailability).flat().length}
+                  </TextAtom>
+                </div>
+              </div>
+            </CardAtom>
+
+            <CardAtom className="p-6">
+              <div className="flex items-center gap-3">
+                <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary">
+                  <DynamicIconAtom name="Clock" size="md" className="text-primary" />
+                </div>
+                <div>
+                  <TextAtom variant="small" color="muted">
+                    Status
+                  </TextAtom>
+                  <TextAtom variant="h3" weight="semibold">
+                    {localCNA.status}
+                  </TextAtom>
+                </div>
+              </div>
+            </CardAtom>
           </div>
         </div>
-
-        {/* Stats */}
-        <div className="space-y-6">
-          <CardAtom className="p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary">
-                <DynamicIconAtom name="Calendar" size="md" className="text-primary" />
-              </div>
-              <div>
-                <TextAtom variant="small" color="muted">
-                  Available Shifts
-                </TextAtom>
-                <TextAtom variant="h3" weight="semibold">
-                  {
-                    Object.values(isEditingAvailability ? localAvailability : availability).flat()
-                      .length
-                  }
-                </TextAtom>
-              </div>
-            </div>
-          </CardAtom>
-
-          <CardAtom className="p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary">
-                <DynamicIconAtom name="Clock" size="md" className="text-primary" />
-              </div>
-              <div>
-                <TextAtom variant="small" color="muted">
-                  Status
-                </TextAtom>
-                <TextAtom variant="h3" weight="semibold">
-                  {cna.status}
-                </TextAtom>
-              </div>
-            </div>
-          </CardAtom>
-        </div>
       </div>
-
-      <EditCNAModalMolecule
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        onSubmit={handleEditSubmit}
-        editingCNA={cna}
-        isLoading={updateCNAMutation.isPending}
-      />
 
       {/* Delete Confirmation Modal */}
       <ConfirmationModalMolecule

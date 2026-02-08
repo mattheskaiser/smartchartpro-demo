@@ -57,7 +57,7 @@ const createReport = async (data: CreateChartingReportData): Promise<ChartingRep
       toast({
         title: 'Changes Not Saved',
         description: getDemoMessage('actionNotPersisted'),
-        type: 'error',
+        type: 'warning',
       });
     }, 100);
 
@@ -99,7 +99,7 @@ const updateReport = async ({
       toast({
         title: 'Changes Not Saved',
         description: getDemoMessage('actionNotPersisted'),
-        type: 'error',
+        type: 'warning',
       });
     }, 100);
 
@@ -132,7 +132,7 @@ const deleteReport = async (id: string): Promise<void> => {
       toast({
         title: 'Changes Not Saved',
         description: getDemoMessage('actionNotPersisted'),
-        type: 'error',
+        type: 'warning',
       });
     }, 100);
     return;
