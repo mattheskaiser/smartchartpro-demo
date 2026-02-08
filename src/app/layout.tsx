@@ -28,8 +28,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   // Basic route protection
   useEffect(() => {
-    // Allow access to /charting/start, /, and all /admin routes without active charting
-    if (pathname === '/charting/start' || pathname === '/' || pathname.startsWith('/admin')) {
+    // Allow access to /charting/start, /charting/complete, /, and all /admin routes without active charting
+    if (
+      pathname === '/charting/start' ||
+      pathname === '/charting/complete' ||
+      pathname === '/' ||
+      pathname.startsWith('/admin')
+    ) {
       return;
     }
 

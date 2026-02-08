@@ -53,14 +53,7 @@ const fetchReport = async (id: string): Promise<ChartingReport> => {
 const createReport = async (data: CreateChartingReportData): Promise<ChartingReport> => {
   // In demo mode, return mock data without API call
   if (isDemoMode()) {
-    setTimeout(() => {
-      toast({
-        title: 'Changes Not Saved',
-        description: getDemoMessage('actionNotPersisted'),
-        type: 'warning',
-      });
-    }, 100);
-
+    // Don't show toast here - let the completion page handle it
     return {
       id: `report_demo_${Date.now()}`,
       ...data,

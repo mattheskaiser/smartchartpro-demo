@@ -12,6 +12,7 @@ import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
+import { isDemoMode } from '@/lib/demo-config';
 
 const ADL_TYPES = [
   { id: 'bathing', label: 'Bathing' },
@@ -36,103 +37,9 @@ export default function ChartingReviewPage() {
   const createReport = useCreateChartingReport();
   const [isSaving, setIsSaving] = useState(false);
 
-  const handleEndCharting = async () => {
-    if (!session) {
-      return;
-    }
-
-    if (entries.length === 0) {
-      return;
-    }
-
-    setIsSaving(true);
-
-    try {
-      const startTime =
-        session.startTime instanceof Date ? session.startTime : new Date(session.startTime);
-      const endTime = new Date();
-
-      console.log('Step 1: Loading facility settings from database...');
-
-      // Load fresh facility settings from database
-      await facilitySettings.loadFromDatabase();
-
-      console.log('Step 2: Generating PDF on client side...');
-
-      // Generate PDF on client side to avoid Next.js SSR issues
-      const { pdf } = await import('@react-pdf/renderer');
-      const { ChartingReportPDF } = await import('@/components/pdf/ChartingReportPDF');
-
-      const pdfBlob = await pdf(
-        <ChartingReportPDF
-          facilityName={facilitySettings.facilityName}
-          facilityAddress={facilitySettings.getFormattedAddress()}
-          facilityPhone={facilitySettings.facilityPhone}
-          facilityFax={facilitySettings.facilityFax}
-          facilityWebsite={facilitySettings.facilityWebsite}
-          licenseNumber={facilitySettings.licenseNumber}
-          npiNumber={facilitySettings.npiNumber}
-          taxId={facilitySettings.taxId}
-          cnaName={session.cnaName}
-          cnaCertification={session.cnaCertification}
-          sessionStartTime={startTime}
-          selectedResidents={selectedResidents}
-          entries={entries}
-        />
-      ).toBlob();
-
-      const arrayBuffer = await pdfBlob.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      const pdfData = buffer.toString('base64');
-
-      console.log('Step 3: PDF generated, size:', pdfData.length);
-
-      console.log('Step 4: Saving report to database...');
-
-      // Create the report with PDF data
-      const report = await createReport.mutateAsync({
-        reportDate: startTime,
-        sessionStartTime: startTime,
-        sessionEndTime: endTime,
-        cnaId: session.cnaId,
-        cnaName: session.cnaName,
-        cnaCertification: session.cnaCertification,
-        totalResidents: selectedResidents.length,
-        totalActivities: entries.length,
-        residentsData: selectedResidents.map(r => ({
-          id: r.id,
-          name: r.name,
-          room: r.room,
-          status: r.status,
-          imageData: r.imageData || r.imageUrl || null,
-        })),
-        entriesData: entries.map(e => ({
-          residentId: e.residentId,
-          activityType: e.activityType,
-          assistance: e.assistance,
-          timestamp: e.timestamp,
-          notes: e.notes,
-        })),
-        pdfData: pdfData,
-      });
-
-      console.log('Step 5: Report saved successfully!');
-
-      // End the session in database
-      if (activeSession) {
-        await endSession(report.id);
-      }
-
-      // Clear charting session
-      endCharting();
-
-      // Redirect to completion page
-      router.push('/charting/complete');
-    } catch (error) {
-      console.error('Error saving charting session:', error);
-    } finally {
-      setIsSaving(false);
-    }
+  const handleEndCharting = () => {
+    // Just redirect - don't clear session yet
+    router.push('/charting/complete');
   };
 
   const entriesByResident = entries.reduce(
