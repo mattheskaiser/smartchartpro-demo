@@ -1,27 +1,43 @@
-import { PrismaClient } from '@prisma/client';
+import { mockPrisma } from './mock-db';
+import { DEMO_CONFIG } from './demo-config';
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
+// In demo mode, always use mock client (no Prisma needed)
+export const prisma = DEMO_CONFIG.enabled
+  ? (mockPrisma as any)
+  : (() => {
+      // Only import real Prisma in production
+      try {
+        const { PrismaClient } = require('@prisma/client');
+        const globalForPrisma = globalThis as unknown as {
+          prisma: any | undefined;
+        };
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-  });
+        const client =
+          globalForPrisma.prisma ??
+          new PrismaClient({
+            log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+          });
 
-// Cache in all environments for better connection reuse
-globalForPrisma.prisma = prisma;
+        globalForPrisma.prisma = client;
 
-// Handle graceful shutdown
-if (typeof window === 'undefined') {
-  process.on('SIGINT', async () => {
-    await prisma.$disconnect();
-    process.exit(0);
-  });
+        // Handle graceful shutdown
+        if (typeof window === 'undefined') {
+          process.on('SIGINT', async () => {
+            await client.$disconnect();
+            process.exit(0);
+          });
 
-  process.on('SIGTERM', async () => {
-    await prisma.$disconnect();
-    process.exit(0);
-  });
-}
+          process.on('SIGTERM', async () => {
+            await client.$disconnect();
+            process.exit(0);
+          });
+        }
+
+        return client;
+      } catch (error) {
+        console.error(
+          'Prisma Client not available. Make sure to run "prisma generate" in production mode.'
+        );
+        throw error;
+      }
+    })();

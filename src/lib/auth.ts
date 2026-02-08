@@ -3,6 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { prisma } from './db';
 import { verifyPassword } from './auth-helpers';
 import { validateMasterPassword } from './settings';
+import { DEMO_CONFIG } from './demo-config';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -17,6 +18,40 @@ export const authOptions: NextAuthOptions = {
         try {
           if (!credentials?.email || !credentials?.password) {
             return null;
+          }
+
+          // DEMO MODE: Accept any password for demo accounts
+          if (DEMO_CONFIG.enabled) {
+            const demoAccounts = [
+              {
+                email: 'admin@demo.com',
+                role: 'ADMIN',
+                id: 'user_admin',
+                cnaId: null,
+                cnaName: undefined,
+              },
+              {
+                email: 'cna@demo.com',
+                role: 'CNA',
+                id: 'user_cna_001',
+                cnaId: 'cna_001',
+                cnaName: 'Jennifer Rodriguez',
+              },
+            ];
+
+            const demoAccount = demoAccounts.find(acc => acc.email === credentials.email);
+            if (demoAccount) {
+              return {
+                id: demoAccount.id,
+                email: demoAccount.email,
+                role: demoAccount.role as 'ADMIN' | 'CNA',
+                cnaId: demoAccount.cnaId,
+                cnaName: demoAccount.cnaName,
+                mustChangePassword: false,
+                isMasterLogin: false,
+              };
+            }
+            // If not a demo account, continue with normal auth
           }
 
           // Find user by email - MUST exist in database

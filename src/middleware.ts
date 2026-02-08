@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
+// Check if demo mode is enabled
+const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -31,8 +34,8 @@ export async function middleware(request: NextRequest) {
     const userRole = token.role as 'ADMIN' | 'CNA' | undefined;
     const mustChangePassword = token.mustChangePassword as boolean | undefined;
 
-    // Force password change if required (except for password change page itself)
-    if (mustChangePassword && pathname !== '/profile/change-password') {
+    // In demo mode, skip password change requirement
+    if (!isDemoMode && mustChangePassword && pathname !== '/profile/change-password') {
       return NextResponse.redirect(new URL('/profile/change-password', request.url));
     }
 
@@ -47,17 +50,19 @@ export async function middleware(request: NextRequest) {
       }
     }
 
-    // CNA routes - only CNAs can access (admins redirected to admin panel)
+    // CNA routes - CNAs and Admins can access in demo mode
     if (pathname.startsWith('/charting')) {
-      if (userRole !== 'CNA') {
+      // In demo mode, allow both CNAs and Admins to access charting
+      if (!isDemoMode && userRole !== 'CNA') {
         return NextResponse.redirect(new URL('/admin', request.url));
       }
       return NextResponse.next();
     }
 
-    // API routes protection for sessions (only CNAs)
+    // API routes protection for sessions (CNAs and Admins in demo mode)
     if (pathname.startsWith('/api/sessions')) {
-      if (userRole !== 'CNA') {
+      // In demo mode, allow both CNAs and Admins to access session APIs
+      if (!isDemoMode && userRole !== 'CNA') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
       return NextResponse.next();
