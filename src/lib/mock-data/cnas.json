@@ -1,0 +1,80 @@
+[
+  {
+    "id": "cna_001",
+    "name": "Jennifer Rodriguez",
+    "email": "cna@demo.com",
+    "phone": "(555) 111-2222",
+    "status": "active",
+    "imageData": null,
+    "hireDate": "2022-03-15T00:00:00.000Z",
+    "certificationNumber": "CNA-2022-001",
+    "notes": "Excellent with dementia patients. Morning shift preferred.",
+    "createdAt": "2022-03-15T00:00:00.000Z",
+    "updatedAt": "2024-01-15T00:00:00.000Z"
+  },
+  {
+    "id": "cna_002",
+    "name": "Michael Thompson",
+    "email": "michael.thompson@demo.com",
+    "phone": "(555) 222-3333",
+    "status": "active",
+    "imageData": null,
+    "hireDate": "2021-11-20T00:00:00.000Z",
+    "certificationNumber": "CNA-2021-045",
+    "notes": "5 years experience. Great with mobility assistance.",
+    "createdAt": "2021-11-20T00:00:00.000Z",
+    "updatedAt": "2024-01-15T00:00:00.000Z"
+  },
+  {
+    "id": "cna_003",
+    "name": "Sarah Johnson",
+    "email": "sarah.johnson@demo.com",
+    "phone": "(555) 333-4444",
+    "status": "active",
+    "imageData": null,
+    "hireDate": "2023-01-10T00:00:00.000Z",
+    "certificationNumber": "CNA-2023-012",
+    "notes": "Bilingual (English/Spanish). Evening shift specialist.",
+    "createdAt": "2023-01-10T00:00:00.000Z",
+    "updatedAt": "2024-01-15T00:00:00.000Z"
+  },
+  {
+    "id": "cna_004",
+    "name": "David Lee",
+    "email": "david.lee@demo.com",
+    "phone": "(555) 444-5555",
+    "status": "active",
+    "imageData": null,
+    "hireDate": "2022-08-05T00:00:00.000Z",
+    "certificationNumber": "CNA-2022-078",
+    "notes": "Night shift lead. CPR certified.",
+    "createdAt": "2022-08-05T00:00:00.000Z",
+    "updatedAt": "2024-01-15T00:00:00.000Z"
+  },
+  {
+    "id": "cna_005",
+    "name": "Emily Martinez",
+    "email": "emily.martinez@demo.com",
+    "phone": "(555) 555-6666",
+    "status": "active",
+    "imageData": null,
+    "hireDate": "2023-06-12T00:00:00.000Z",
+    "certificationNumber": "CNA-2023-089",
+    "notes": "New hire. Excellent documentation skills.",
+    "createdAt": "2023-06-12T00:00:00.000Z",
+    "updatedAt": "2024-01-15T00:00:00.000Z"
+  },
+  {
+    "id": "cna_006",
+    "name": "Robert Kim",
+    "email": "robert.kim@demo.com",
+    "phone": "(555) 666-7777",
+    "status": "inactive",
+    "imageData": null,
+    "hireDate": "2020-05-18T00:00:00.000Z",
+    "certificationNumber": "CNA-2020-034",
+    "notes": "On leave. Expected return date: March 2026.",
+    "createdAt": "2020-05-18T00:00:00.000Z",
+    "updatedAt": "2024-01-15T00:00:00.000Z"
+  }
+]

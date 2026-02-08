@@ -1,0 +1,22 @@
+{
+  "id": "facility_settings",
+  "facilityName": "Sunrise Senior Living",
+  "facilityAddress": null,
+  "facilityStreet": "1234 Healthcare Drive",
+  "facilityCity": "Springfield",
+  "facilityState": "IL",
+  "facilityZip": "62701",
+  "facilityPhone": "(555) 100-2000",
+  "facilityFax": "(555) 100-2001",
+  "facilityWebsite": "www.sunriseseniorliving.demo",
+  "licenseNumber": "IL-ALF-2023-001",
+  "npiNumber": "1234567890",
+  "taxId": "12-3456789",
+  "adminEmail": "admin@sunriseseniorliving.demo",
+  "masterPassword": "$2a$10$demoHashedMasterPassword123456",
+  "maxResidentsPerCNA": "8",
+  "shiftAlerts": true,
+  "adlReminders": true,
+  "createdAt": "2023-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-15T00:00:00.000Z"
+}

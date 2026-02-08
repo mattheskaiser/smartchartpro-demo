@@ -1,0 +1,57 @@
+[
+  {
+    "id": "session_001",
+    "userId": "user_cna_002",
+    "cnaId": "cna_002",
+    "residentIds": ["res_003", "res_005", "res_008"],
+    "startTime": "2026-02-06T06:00:00.000Z",
+    "endTime": null,
+    "isActive": true,
+    "currentStep": "adls",
+    "chartingData": {
+      "entries": [
+        {
+          "residentId": "res_003",
+          "activityType": "bathing",
+          "assistance": "full",
+          "timestamp": "2026-02-06T06:30:00.000Z",
+          "notes": "Assisted with bed bath. Patient cooperative."
+        },
+        {
+          "residentId": "res_003",
+          "activityType": "dressing",
+          "assistance": "full",
+          "timestamp": "2026-02-06T06:45:00.000Z",
+          "notes": "Changed into fresh clothes."
+        }
+      ]
+    },
+    "reportId": null,
+    "createdAt": "2026-02-06T06:00:00.000Z",
+    "updatedAt": "2026-02-06T06:45:00.000Z"
+  },
+  {
+    "id": "session_002",
+    "userId": "user_cna_003",
+    "cnaId": "cna_003",
+    "residentIds": ["res_006", "res_009", "res_012"],
+    "startTime": "2026-02-06T14:00:00.000Z",
+    "endTime": null,
+    "isActive": true,
+    "currentStep": "charting",
+    "chartingData": {
+      "entries": [
+        {
+          "residentId": "res_006",
+          "activityType": "toileting",
+          "assistance": "partial",
+          "timestamp": "2026-02-06T14:15:00.000Z",
+          "notes": "Assisted with transfer to bathroom."
+        }
+      ]
+    },
+    "reportId": null,
+    "createdAt": "2026-02-06T14:00:00.000Z",
+    "updatedAt": "2026-02-06T14:15:00.000Z"
+  }
+]
