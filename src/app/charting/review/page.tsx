@@ -12,7 +12,6 @@ import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
-import { toast } from '@/lib/toast';
 
 const ADL_TYPES = [
   { id: 'bathing', label: 'Bathing' },
@@ -39,15 +38,10 @@ export default function ChartingReviewPage() {
 
   const handleEndCharting = async () => {
     if (!session) {
-      toast({ title: 'Session information is missing.', type: 'error' });
       return;
     }
 
     if (entries.length === 0) {
-      toast({
-        title: 'No activities recorded. Please add at least one activity.',
-        type: 'error',
-      });
       return;
     }
 
@@ -132,29 +126,10 @@ export default function ChartingReviewPage() {
       // Clear charting session
       endCharting();
 
-      toast({
-        title: 'Session ended successfully',
-        description: 'Report generated and you will be logged out',
-        type: 'success',
-      });
-
-      // Log out the user after ending session
-      setTimeout(() => {
-        signOut({ callbackUrl: '/login' });
-      }, 1500);
+      // Redirect to completion page
+      router.push('/charting/complete');
     } catch (error) {
       console.error('Error saving charting session:', error);
-
-      let errorMessage = 'Unknown error';
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-
-      toast({
-        title: 'Failed to save charting session',
-        description: errorMessage,
-        type: 'error',
-      });
     } finally {
       setIsSaving(false);
     }

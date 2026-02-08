@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const pathname = usePathname();
   const router = useRouter();
   const { isChartingActive } = useChartingStore();
-  const { facilityName, loadFromDatabase } = useFacilityStore();
+  const { loadFromDatabase } = useFacilityStore();
 
   // Load facility settings from database on mount
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                           <DynamicIconAtom name="Hospital" size="md" className="text-primary" />
                         </div>
                         <div>
-                          <h1 className="text-lg font-semibold text-gray-900">{facilityName}</h1>
+                          <h1 className="text-lg font-semibold text-gray-900">Sunrise Senior Living</h1>
                           <p className="text-xs text-gray-500">Care Documentation</p>
                         </div>
                       </div>

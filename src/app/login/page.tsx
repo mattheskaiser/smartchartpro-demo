@@ -36,12 +36,6 @@ function LoginForm() {
         return;
       }
 
-      toast({
-        title: 'Welcome!',
-        description: `Signed in as ${role === 'admin' ? 'Administrator' : 'CNA'}`,
-        type: 'success',
-      });
-
       // Redirect based on role
       const redirectUrl = role === 'admin' ? '/admin' : '/charting/start';
       window.location.href = searchParams.get('callbackUrl') || redirectUrl;
