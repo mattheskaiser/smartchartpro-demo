@@ -179,7 +179,7 @@ export default function ChartingReviewPage() {
   );
 
   return (
-    <div className="mx-auto max-w-7xl p-6 space-y-6">
+    <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
       <CardAtom>
         <TextAtom variant="h2" className="text-gray-900 mb-6">
           Charting Summary

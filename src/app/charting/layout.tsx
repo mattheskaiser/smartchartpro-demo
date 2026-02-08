@@ -6,10 +6,8 @@ export default function ChartingLayout({ children }: { children: React.ReactNode
   const pathname = usePathname();
 
   return (
-    <div className="transition-all duration-300 ease-in-out">
-      <div key={pathname} className="animate-in fade-in-from-right-1 duration-300">
-        {children}
-      </div>
+    <div key={pathname} className="animate-in fade-in-from-right-1 duration-300">
+      {children}
     </div>
   );
 }

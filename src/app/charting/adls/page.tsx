@@ -9,6 +9,7 @@ import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
+import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { ResidentSelectorMolecule } from '@/components/molecules/charting/ResidentSelector.molecule';
 import { ADLSelectorMolecule } from '@/components/molecules/charting/ADLSelector.molecule';
 import { AssistanceFormMolecule } from '@/components/molecules/charting/AssistanceForm.molecule';
@@ -48,31 +49,14 @@ export default function ChartingADLsPage() {
 
   // Show loading while residents are being loaded from session
   if (isLoadingResidents) {
-    return (
-      <div className="mx-auto max-w-7xl p-6">
-        <CardAtom>
-          <div className="flex items-center justify-center py-12">
-            <div className="text-center">
-              <DynamicIconAtom
-                name="Loader"
-                size="lg"
-                className="mx-auto text-primary animate-spin mb-4"
-              />
-              <TextAtom variant="h3" className="text-gray-700">
-                Loading session...
-              </TextAtom>
-            </div>
-          </div>
-        </CardAtom>
-      </div>
-    );
+    return <PageLoaderMolecule message="Loading session..." />;
   }
 
   // If no residents are available
   if (selectedResidents.length === 0) {
     return (
-      <div className="mx-auto max-w-7xl p-6">
-        <CardAtom>
+      <div className="h-full flex items-center justify-center p-6">
+        <CardAtom className="max-w-md">
           <EmptyStateMolecule
             iconName="Users"
             title="No Residents Selected"
@@ -88,7 +72,7 @@ export default function ChartingADLsPage() {
   // If no resident is selected, show the resident selection screen
   if (!selectedResident) {
     return (
-      <div className="mx-auto max-w-7xl p-6 space-y-6">
+      <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
         <CardAtom padding="none">
           <div className="p-6">
             <ResidentSelectorMolecule
@@ -117,7 +101,7 @@ export default function ChartingADLsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl p-6 space-y-6">
+    <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
       {/* Header with Current Resident */}
       <CardAtom className="border-l-4 border-l-primary">
         <div className="flex items-center justify-between">

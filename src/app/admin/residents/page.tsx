@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { AddResidentModalMolecule } from '@/components/molecules/resident/modals/AddResidentModal.molecule';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
-import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
+import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.template';
 import { useResidents, useCreateResident } from '@/hooks/useResidents';
 import { ResidentCardMolecule } from '@/components/molecules/resident/ResidentCard.molecule';
@@ -63,9 +63,7 @@ export default function ResidentManagement() {
       }
     >
       {isLoading ? (
-        <div className="flex items-center justify-center min-h-[400px]">
-          <LoadingStateMolecule message="Loading residents..." />
-        </div>
+        <PageLoaderMolecule message="Loading residents..." />
       ) : error ? (
         <div className="flex items-center justify-center min-h-[400px]">
           <EmptyStateMolecule

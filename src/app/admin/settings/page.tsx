@@ -11,6 +11,7 @@ import { TextAtom } from '@/components/atoms/Text.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { ShiftTemplateManagerMolecule } from '@/components/molecules/shift/ShiftTemplateManager.molecule';
 import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.template';
+import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { toast } from '@/lib/toast';
 
 type SettingsData = {
@@ -278,26 +279,7 @@ export default function Settings() {
   };
 
   if (isLoading) {
-    return (
-      <AdminPageLayoutTemplate
-        title="Settings"
-        subtitle="Configure essential settings to get your facility up and running."
-      >
-        <div className="space-y-6">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <DashboardCardAtom key={index}>
-              <div className="animate-pulse space-y-4">
-                <div className="h-6 w-48 bg-gray-200 rounded"></div>
-                <div className="space-y-3">
-                  <div className="h-4 w-full bg-gray-200 rounded"></div>
-                  <div className="h-4 w-3/4 bg-gray-200 rounded"></div>
-                </div>
-              </div>
-            </DashboardCardAtom>
-          ))}
-        </div>
-      </AdminPageLayoutTemplate>
-    );
+    return <PageLoaderMolecule message="Loading settings..." />;
   }
 
   return (

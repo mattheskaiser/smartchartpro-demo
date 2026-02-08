@@ -5,7 +5,7 @@ import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { AvatarAtom } from '@/components/atoms/Avatar.atom';
-import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
+import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { ShiftAssignmentModalMolecule } from '@/components/molecules/shift/ShiftAssignmentModal.molecule';
 import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.template';
 import { useShiftTemplates, formatShiftTime } from '@/hooks/useShiftTemplates';
@@ -139,7 +139,7 @@ export default function ShiftManagement() {
   };
 
   if (templatesLoading) {
-    return <LoadingStateMolecule message="Loading shifts..." />;
+    return <PageLoaderMolecule message="Loading shifts..." />;
   }
 
   const activeShifts = shiftTemplates?.filter(shift => shift.isActive) || [];

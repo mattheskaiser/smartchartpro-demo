@@ -6,7 +6,7 @@ import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { DashboardCardAtom } from '@/components/atoms/DashboardCard.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
-import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
+import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.template';
 import { toast } from '@/lib/toast';
 
@@ -63,14 +63,7 @@ export default function ReportsPage() {
   };
 
   if (isLoading) {
-    return (
-      <AdminPageLayoutTemplate
-        title="Reports"
-        subtitle="View and manage generated charting reports"
-      >
-        <LoadingStateMolecule message="Loading reports..." />
-      </AdminPageLayoutTemplate>
-    );
+    return <PageLoaderMolecule message="Loading reports..." />;
   }
 
   if (error) {

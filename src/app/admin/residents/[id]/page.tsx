@@ -57,7 +57,7 @@ import { ResidentConditionsMolecule } from '@/components/molecules/resident/Resi
 import { ResidentMedicationsMolecule } from '@/components/molecules/resident/ResidentMedications.molecule';
 import { ResidentDNRStatusMolecule } from '@/components/molecules/resident/ResidentDNRStatus.molecule';
 import { ResidentSpecialistsMolecule } from '@/components/molecules/resident/ResidentSpecialists.molecule';
-import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
+import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { ConfirmationModalMolecule } from '@/components/molecules/ConfirmationModal.molecule';
 import { useResident, useUpdateResident, useDeleteResident } from '@/hooks/useResidents';
 import { useQueryClient } from '@tanstack/react-query';
@@ -334,11 +334,7 @@ export default function ResidentDetail() {
   };
 
   if (isLoading) {
-    return (
-      <div className="mx-auto max-w-7xl">
-        <LoadingStateMolecule message="Loading resident details..." />
-      </div>
-    );
+    return <PageLoaderMolecule message="Loading residents..." />;
   }
 
   if (!resident) {
@@ -347,14 +343,6 @@ export default function ResidentDetail() {
         <div className="text-center py-8">
           <TextAtom>Resident not found</TextAtom>
         </div>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className="mx-auto max-w-7xl">
-        <LoadingStateMolecule message="Loading resident details..." />
       </div>
     );
   }

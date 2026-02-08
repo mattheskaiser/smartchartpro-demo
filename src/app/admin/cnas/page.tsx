@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
-import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
+import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { AddCNAModalMolecule } from '@/components/molecules/cna/AddCNAModal.molecule';
 import { CNACardMolecule } from '@/components/molecules/cna/CNACard.molecule';
 import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.template';
@@ -61,9 +61,7 @@ export default function CNAManagement() {
       }
     >
       {isLoading ? (
-        <div className="flex items-center justify-center min-h-[400px]">
-          <LoadingStateMolecule message="Loading CNAs..." />
-        </div>
+        <PageLoaderMolecule message="Loading CNAs..." />
       ) : error ? (
         <div className="flex items-center justify-center min-h-[400px]">
           <EmptyStateMolecule

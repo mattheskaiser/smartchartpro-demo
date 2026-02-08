@@ -8,7 +8,7 @@ import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { CardAtom } from '@/components/atoms/Card.atom';
-import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
+import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { EmptyStateMolecule } from '@/components/molecules/EmptyState.molecule';
 import { ConfirmationModalMolecule } from '@/components/molecules/ConfirmationModal.molecule';
 import { CNAAvailabilityMolecule } from '@/components/molecules/cna/CNAAvailability.molecule';
@@ -45,11 +45,7 @@ export default function CNADetailPage() {
   }, [availability, isEditingAvailability]);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <LoadingStateMolecule message="Loading CNA details..." />
-      </div>
-    );
+    return <PageLoaderMolecule message="Loading CNA details..." />;
   }
 
   if (error || !cna) {

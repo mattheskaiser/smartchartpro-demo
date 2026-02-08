@@ -9,7 +9,7 @@ import { TextAtom } from '@/components/atoms/Text.atom';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
-import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
+import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { toast } from '@/lib/toast';
 
 const ADL_TYPES: Record<string, string> = {
@@ -113,11 +113,7 @@ export default function ReportDetailPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="mx-auto max-w-7xl p-6">
-        <LoadingStateMolecule message="Loading report..." />
-      </div>
-    );
+    return <PageLoaderMolecule message="Loading report..." />;
   }
 
   if (error || !report) {

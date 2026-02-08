@@ -12,7 +12,7 @@ import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
-import { LoadingStateMolecule } from '@/components/molecules/LoadingState.molecule';
+import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { toast } from '@/lib/toast';
 
 type Resident = {
@@ -130,26 +130,18 @@ export default function ChartingStartPage() {
   };
 
   if (loading || sessionLoading) {
-    return (
-      <div className="mx-auto max-w-7xl p-6">
-        <LoadingStateMolecule message="Loading..." />
-      </div>
-    );
+    return <PageLoaderMolecule message="Loading residents..." />;
   }
 
   // If there's an active session, show loading while redirecting
   if (activeSession && activeSession.isActive) {
-    return (
-      <div className="mx-auto max-w-7xl p-6">
-        <LoadingStateMolecule message="Resuming session..." />
-      </div>
-    );
+    return <PageLoaderMolecule message="Resuming session..." />;
   }
 
   if (error) {
     return (
-      <div className="mx-auto max-w-7xl p-6">
-        <CardAtom className="text-center">
+      <div className="h-full flex items-center justify-center p-6">
+        <CardAtom className="text-center max-w-md">
           <DynamicIconAtom name="TriangleAlert" size="lg" className="mx-auto text-red-500 mb-4" />
           <TextAtom variant="h2" className="text-red-600 mb-2">
             Error Loading Residents
@@ -164,7 +156,7 @@ export default function ChartingStartPage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl p-6 space-y-6">
+    <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
       {/* Resident Selection */}
       <CardAtom padding="none">
         <div className="p-6">
