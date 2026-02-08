@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/lib/prisma-types';
 import { hashPassword, generateTemporaryPassword } from '@/lib/auth-helpers';
 import { CreateCNAAccountSchema } from '@/lib/validations/cna.schema';
 import { handleApiError, CommonErrors } from '@/lib/api-error';

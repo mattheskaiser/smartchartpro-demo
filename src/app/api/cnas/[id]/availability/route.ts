@@ -24,7 +24,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     });
 
     // Populate with actual availability
-    availability.forEach(avail => {
+    availability.forEach((avail: any) => {
       const dayName = dayNames[avail.dayOfWeek];
       if (dayName) {
         formattedAvailability[dayName].push(avail.shiftType);
@@ -93,7 +93,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       formattedAvailability[day] = [];
     });
 
-    updatedAvailability.forEach(avail => {
+    updatedAvailability.forEach((avail: any) => {
       const dayName = dayNames[avail.dayOfWeek];
       if (dayName) {
         formattedAvailability[dayName].push(avail.shiftType);

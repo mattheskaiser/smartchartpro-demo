@@ -85,7 +85,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
               where: { id: params.id },
               select: { name: true },
             })
-            .then(template => (template ? [template.name] : [])),
+            .then((template: any) => (template ? [template.name] : [])),
         },
       },
     });

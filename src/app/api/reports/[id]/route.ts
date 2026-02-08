@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/lib/prisma-types';
 import { UpdateReportSchema } from '@/lib/validations/report.schema';
 import { handleApiError, CommonErrors } from '@/lib/api-error';
 

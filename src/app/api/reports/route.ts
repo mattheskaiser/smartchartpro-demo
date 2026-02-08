@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/lib/prisma-types';
 import { CreateReportSchema } from '@/lib/validations/report.schema';
 import { handleApiError } from '@/lib/api-error';
 

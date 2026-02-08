@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/lib/prisma-types';
 import { handleApiError, CommonErrors } from '@/lib/api-error';
 
 // Force dynamic rendering - don't cache this route
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Transform imageData to imageUrl for frontend compatibility
-    const transformedResidents = residents.map(resident => ({
+    const transformedResidents = residents.map((resident: any) => ({
       ...resident,
       imageUrl: resident.imageData || null,
     }));

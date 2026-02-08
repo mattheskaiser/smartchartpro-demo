@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Use transaction to ensure both CNA and User are created together
-    const result = await prisma.$transaction(async tx => {
+    const result = await prisma.$transaction(async (tx: any) => {
       // Create CNA first
       const cna = await tx.cna.create({
         data: {

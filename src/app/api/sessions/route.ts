@@ -60,28 +60,14 @@ export async function POST(req: NextRequest) {
       const { prisma } = await import('@/lib/db');
       const user = await prisma.user.findUnique({
         where: { id: session.user.id },
-        include: { cna: true },
+        select: { cnaId: true },
       });
 
-      if (!user?.cnaId || !user.cna) {
-        return CommonErrors.validationError(
-          'CNA account not properly configured. Please contact administrator.'
-        );
+      if (!user?.cnaId) {
+        return NextResponse.json({ error: 'CNA ID not found for user' }, { status: 400 });
       }
 
       cnaId = user.cnaId;
-    } else {
-      // Verify the CNA still exists
-      const { prisma } = await import('@/lib/db');
-      const cna = await prisma.cna.findUnique({
-        where: { id: cnaId },
-      });
-
-      if (!cna) {
-        return CommonErrors.validationError(
-          'CNA account no longer exists. Please contact administrator.'
-        );
-      }
     }
 
     const body = await req.json();
@@ -89,7 +75,7 @@ export async function POST(req: NextRequest) {
     // Validate request body
     const validatedData = CreateSessionSchema.parse(body);
 
-    const newSession = await createSession(session.user.id, cnaId, validatedData.residentIds);
+    const newSession = await createSession(session.user.id, cnaId!, validatedData.residentIds);
 
     return NextResponse.json({ session: newSession }, { status: 201 });
   } catch (error) {
