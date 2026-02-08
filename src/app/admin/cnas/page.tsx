@@ -7,6 +7,7 @@ import { CNACardMolecule } from '@/components/molecules/cna/CNACard.molecule';
 import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.template';
 import { useCNAs, useCreateCNA } from '@/hooks/useCNAs';
 import { toast } from '@/lib/toast';
+import { isDemoMode } from '@/lib/demo-config';
 
 export default function CNAManagement() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -30,18 +31,26 @@ export default function CNAManagement() {
     try {
       await createCNAMutation.mutateAsync(formData);
       setIsAddModalOpen(false);
-      toast({
-        title: 'CNA created successfully',
-        description: `${formData.name} has been added to your team`,
-        type: 'success',
-      });
+
+      // Only show success toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({
+          title: 'CNA created successfully',
+          description: `${formData.name} has been added to your team`,
+          type: 'success',
+        });
+      }
     } catch (error) {
       console.error('Error creating CNA:', error);
-      toast({
-        title: 'Failed to create CNA',
-        description: 'There was an error creating the CNA. Please try again.',
-        type: 'error',
-      });
+
+      // Only show error toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({
+          title: 'Failed to create CNA',
+          description: 'There was an error creating the CNA. Please try again.',
+          type: 'error',
+        });
+      }
     }
   };
 
@@ -52,11 +61,11 @@ export default function CNAManagement() {
       actionButton={
         !isLoading
           ? {
-              label: 'Add CNA',
-              onClick: handleAddCNA,
-              icon: 'Plus',
-              variant: 'primary',
-            }
+            label: 'Add CNA',
+            onClick: handleAddCNA,
+            icon: 'Plus',
+            variant: 'primary',
+          }
           : undefined
       }
     >

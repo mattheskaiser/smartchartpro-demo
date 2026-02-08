@@ -51,14 +51,23 @@ const fetchReport = async (id: string): Promise<ChartingReport> => {
 };
 
 const createReport = async (data: CreateChartingReportData): Promise<ChartingReport> => {
-  // Block in demo mode
+  // In demo mode, return mock data without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'error',
+      });
+    }, 100);
+
+    return {
+      id: `report_demo_${Date.now()}`,
+      ...data,
+      status: 'draft',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    } as ChartingReport;
   }
 
   const response = await fetch('/api/reports', {
@@ -84,14 +93,21 @@ const updateReport = async ({
   id: string;
   data: UpdateChartingReportData;
 }): Promise<ChartingReport> => {
-  // Block in demo mode
+  // In demo mode, return mock updated data without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'error',
+      });
+    }, 100);
+
+    return {
+      id,
+      ...data,
+      updatedAt: new Date().toISOString(),
+    } as ChartingReport;
   }
 
   const response = await fetch(`/api/reports/${id}`, {
@@ -110,14 +126,16 @@ const updateReport = async ({
 };
 
 const deleteReport = async (id: string): Promise<void> => {
-  // Block in demo mode
+  // In demo mode, simulate successful deletion without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'error',
+      });
+    }, 100);
+    return;
   }
 
   const response = await fetch(`/api/reports/${id}`, {

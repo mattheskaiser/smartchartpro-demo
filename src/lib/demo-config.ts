@@ -39,7 +39,7 @@ export const DEMO_CONFIG = {
   messages: {
     demoModeActive: 'Demo Mode: Changes are not saved',
     loginSuccess: 'Demo login successful',
-    actionNotPersisted: 'This is a demo - changes are not persistent',
+    actionNotPersisted: 'Your changes weren\'t saved. This is a demo and changes aren\'t persistent.',
   },
 };
 

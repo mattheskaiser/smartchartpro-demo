@@ -53,14 +53,28 @@ const fetchShiftTemplate = async (id: string): Promise<ShiftTemplate> => {
 };
 
 const createShiftTemplate = async (data: CreateShiftTemplateData): Promise<ShiftTemplate> => {
-  // Block in demo mode
+  // In demo mode, return mock data without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'error',
+      });
+    }, 100);
+
+    return {
+      id: `template_demo_${Date.now()}`,
+      name: data.name,
+      startTime: data.startTime,
+      endTime: data.endTime,
+      color: data.color,
+      description: data.description,
+      sortOrder: data.sortOrder || 0,
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    } as ShiftTemplate;
   }
 
   const response = await fetch('/api/shift-templates', {
@@ -86,14 +100,21 @@ const updateShiftTemplate = async ({
   id: string;
   data: UpdateShiftTemplateData;
 }): Promise<ShiftTemplate> => {
-  // Block in demo mode
+  // In demo mode, return mock updated data without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'error',
+      });
+    }, 100);
+
+    return {
+      id,
+      ...data,
+      updatedAt: new Date().toISOString(),
+    } as ShiftTemplate;
   }
 
   const response = await fetch(`/api/shift-templates/${id}`, {
@@ -113,14 +134,16 @@ const updateShiftTemplate = async ({
 };
 
 const deleteShiftTemplate = async (id: string): Promise<void> => {
-  // Block in demo mode
+  // In demo mode, simulate successful deletion without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'error',
+      });
+    }, 100);
+    return;
   }
 
   const response = await fetch(`/api/shift-templates/${id}`, {

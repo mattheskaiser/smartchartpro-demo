@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 
 // Import types from the hook
 import type { Resident } from '@/types/resident';
+import { isDemoMode } from '@/lib/demo-config';
 
 // Component-specific types for the molecules
 interface AllergyDisplay {
@@ -156,21 +157,28 @@ export default function ResidentDetail() {
           data: basicResidentData,
         });
 
-        toast({
-          title: 'Resident updated successfully',
-          description: `${resident.name}'s information has been saved`,
-          type: 'success',
-        });
+        // Only show success toast if not in demo mode
+        if (!isDemoMode()) {
+          toast({
+            title: 'Resident updated successfully',
+            description: `${resident.name}'s information has been saved`,
+            type: 'success',
+          });
+        }
       }
 
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating resident:', error);
-      toast({
-        title: 'Failed to update resident',
-        description: 'There was an error saving the changes. Please try again.',
-        type: 'error',
-      });
+
+      // Only show error toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({
+          title: 'Failed to update resident',
+          description: 'There was an error saving the changes. Please try again.',
+          type: 'error',
+        });
+      }
     }
   };
 
@@ -316,20 +324,29 @@ export default function ResidentDetail() {
   const handleDeleteResident = async () => {
     try {
       await deleteResidentMutation.mutateAsync(params.id as string);
-      toast({
-        title: 'Resident deleted successfully',
-        description: `${resident?.name} has been removed from the system`,
-        type: 'success',
-      });
+
+      // Only show success toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({
+          title: 'Resident deleted successfully',
+          description: `${resident?.name} has been removed from the system`,
+          type: 'success',
+        });
+      }
+
       // Navigate back to residents list after successful deletion
       router.push('/admin/residents');
     } catch (error) {
       console.error('Error deleting resident:', error);
-      toast({
-        title: 'Failed to delete resident',
-        description: 'There was an error deleting the resident. Please try again.',
-        type: 'error',
-      });
+
+      // Only show error toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({
+          title: 'Failed to delete resident',
+          description: 'There was an error deleting the resident. Please try again.',
+          type: 'error',
+        });
+      }
     }
   };
 

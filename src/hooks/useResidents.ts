@@ -47,14 +47,30 @@ const fetchResidents = async (filters?: {
 };
 
 const createResident = async (data: CreateResidentData): Promise<Resident> => {
-  // Block in demo mode
+  // In demo mode, return mock data without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    // Show toast after a brief delay to mimic API call
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'warning',
+      });
+    }, 100);
+
+    // Return mock resident data
+    return {
+      id: `res_demo_${Date.now()}`,
+      name: data.name,
+      room: data.room,
+      status: 'independent',
+      dateOfBirth: data.dateOfBirth,
+      emergencyContactName: data.emergencyContactName,
+      emergencyContactPhone: data.emergencyContactPhone,
+      imageUrl: data.imageData || null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    } as Resident;
   }
 
   let imageData = data.imageData || '';
@@ -107,14 +123,23 @@ const updateResident = async ({
   id: string;
   data: Partial<Resident> & { imageFile?: File };
 }): Promise<Resident> => {
-  // Block in demo mode
+  // In demo mode, return mock updated data without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    // Show toast after a brief delay to mimic API call
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'warning',
+      });
+    }, 100);
+
+    // Return mock updated resident data
+    return {
+      id,
+      ...data,
+      updatedAt: new Date().toISOString(),
+    } as Resident;
   }
 
   let updateData = { ...data };
@@ -149,14 +174,19 @@ const updateResident = async ({
 };
 
 const deleteResident = async (id: string): Promise<void> => {
-  // Block in demo mode
+  // In demo mode, simulate successful deletion without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    // Show toast after a brief delay to mimic API call
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'warning',
+      });
+    }, 100);
+
+    // Return successfully (no-op)
+    return;
   }
 
   const response = await fetch(`/api/residents/${id}`, {

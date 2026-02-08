@@ -72,14 +72,24 @@ const fetchShift = async (id: string): Promise<ShiftAssignment> => {
 };
 
 const createShift = async (data: CreateShiftData): Promise<ShiftAssignment> => {
-  // Block in demo mode
+  // In demo mode, return mock data without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'error',
+      });
+    }, 100);
+
+    return {
+      id: `shift_demo_${Date.now()}`,
+      date: data.date,
+      shiftType: data.shiftType,
+      cnaId: data.cnaId,
+      status: 'scheduled',
+      residentAssignments: [],
+    } as ShiftAssignment;
   }
 
   const response = await fetch('/api/shifts', {
@@ -105,14 +115,20 @@ const updateShift = async ({
   id: string;
   data: UpdateShiftData;
 }): Promise<ShiftAssignment> => {
-  // Block in demo mode
+  // In demo mode, return mock updated data without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'error',
+      });
+    }, 100);
+
+    return {
+      id,
+      ...data,
+    } as ShiftAssignment;
   }
 
   const response = await fetch(`/api/shifts/${id}`, {
@@ -131,14 +147,16 @@ const updateShift = async ({
 };
 
 const deleteShift = async (id: string): Promise<void> => {
-  // Block in demo mode
+  // In demo mode, simulate successful deletion without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'error',
+      });
+    }, 100);
+    return;
   }
 
   const response = await fetch(`/api/shifts/${id}`, {

@@ -14,14 +14,26 @@ const fetchCNAs = async (): Promise<CNA[]> => {
 };
 
 const createCNA = async (data: CreateCNAData): Promise<CNA> => {
-  // Block in demo mode
+  // In demo mode, return mock data without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'error',
+      });
+    }, 100);
+
+    return {
+      id: `cna_demo_${Date.now()}`,
+      name: data.name,
+      email: data.email,
+      certificationNumber: data.certificationNumber,
+      phone: data.phone,
+      imageUrl: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    } as CNA;
   }
 
   let imageData = '';
@@ -68,14 +80,21 @@ const fetchCNA = async (id: string): Promise<CNA> => {
 };
 
 const updateCNA = async ({ id, data }: { id: string; data: Partial<CNA> }): Promise<CNA> => {
-  // Block in demo mode
+  // In demo mode, return mock updated data without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'error',
+      });
+    }, 100);
+
+    return {
+      id,
+      ...data,
+      updatedAt: new Date().toISOString(),
+    } as CNA;
   }
 
   const response = await fetch(`/api/cnas/${id}`, {
@@ -94,14 +113,16 @@ const updateCNA = async ({ id, data }: { id: string; data: Partial<CNA> }): Prom
 };
 
 const deleteCNA = async (id: string): Promise<void> => {
-  // Block in demo mode
+  // In demo mode, simulate successful deletion without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'error',
+      });
+    }, 100);
+    return;
   }
 
   const response = await fetch(`/api/cnas/${id}`, {
@@ -204,14 +225,16 @@ const updateCNAAvailability = async ({
   cnaId: string;
   availability: { [key: string]: string[] };
 }): Promise<{ [key: string]: string[] }> => {
-  // Block in demo mode
+  // In demo mode, return the availability data without API call
   if (isDemoMode()) {
-    toast({
-      title: 'Demo Mode',
-      description: getDemoMessage('actionNotPersisted'),
-      type: 'info',
-    });
-    throw new Error('Demo mode: Changes not persisted');
+    setTimeout(() => {
+      toast({
+        title: 'Changes Not Saved',
+        description: getDemoMessage('actionNotPersisted'),
+        type: 'error',
+      });
+    }, 100);
+    return availability;
   }
 
   const response = await fetch(`/api/cnas/${cnaId}/availability`, {

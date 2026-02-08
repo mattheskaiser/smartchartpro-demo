@@ -51,15 +51,17 @@ export const ResidentMedicationsMolecule = ({
   }) => {
     if (!residentId) return;
 
-    // Block in demo mode
+    // In demo mode, simulate success without API call
     if (isDemoMode()) {
-      toast({
-        title: 'Demo Mode',
-        description: getDemoMessage('actionNotPersisted'),
-        type: 'info',
-      });
       setShowModal(false);
       setEditingMedication(null);
+      setTimeout(() => {
+        toast({
+          title: 'Changes Not Saved',
+          description: getDemoMessage('actionNotPersisted'),
+          type: 'error',
+        });
+      }, 100);
       return;
     }
 
@@ -116,13 +118,15 @@ export const ResidentMedicationsMolecule = ({
   const removeMedication = async (id: string) => {
     if (!residentId) return;
 
-    // Block in demo mode
+    // In demo mode, simulate success without API call
     if (isDemoMode()) {
-      toast({
-        title: 'Demo Mode',
-        description: getDemoMessage('actionNotPersisted'),
-        type: 'info',
-      });
+      setTimeout(() => {
+        toast({
+          title: 'Changes Not Saved',
+          description: getDemoMessage('actionNotPersisted'),
+          type: 'error',
+        });
+      }, 100);
       return;
     }
 
@@ -142,13 +146,15 @@ export const ResidentMedicationsMolecule = ({
   const discontinueMedication = async (id: string, reason: string) => {
     if (!residentId) return;
 
-    // Block in demo mode
+    // In demo mode, simulate success without API call
     if (isDemoMode()) {
-      toast({
-        title: 'Demo Mode',
-        description: getDemoMessage('actionNotPersisted'),
-        type: 'info',
-      });
+      setTimeout(() => {
+        toast({
+          title: 'Changes Not Saved',
+          description: getDemoMessage('actionNotPersisted'),
+          type: 'error',
+        });
+      }, 100);
       return;
     }
 

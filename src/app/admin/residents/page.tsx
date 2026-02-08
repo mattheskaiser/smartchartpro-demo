@@ -7,6 +7,7 @@ import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.
 import { useResidents, useCreateResident } from '@/hooks/useResidents';
 import { ResidentCardMolecule } from '@/components/molecules/resident/ResidentCard.molecule';
 import { toast } from '@/lib/toast';
+import { isDemoMode } from '@/lib/demo-config';
 
 export default function ResidentManagement() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -32,18 +33,26 @@ export default function ResidentManagement() {
     try {
       await createResidentMutation.mutateAsync(formData);
       setIsAddModalOpen(false);
-      toast({
-        title: 'Resident created successfully',
-        description: `${formData.name} has been added to the system`,
-        type: 'success',
-      });
+
+      // Only show success toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({
+          title: 'Resident created successfully',
+          description: `${formData.name} has been added to the system`,
+          type: 'success',
+        });
+      }
     } catch (error) {
       console.error('Error creating resident:', error);
-      toast({
-        title: 'Failed to create resident',
-        description: 'There was an error creating the resident. Please try again.',
-        type: 'error',
-      });
+
+      // Only show error toast if not in demo mode (demo mode shows its own toast)
+      if (!isDemoMode()) {
+        toast({
+          title: 'Failed to create resident',
+          description: 'There was an error creating the resident. Please try again.',
+          type: 'error',
+        });
+      }
     }
   };
 
@@ -54,11 +63,11 @@ export default function ResidentManagement() {
       actionButton={
         !isLoading
           ? {
-              label: 'Add Resident',
-              onClick: handleAddResident,
-              icon: 'Plus',
-              variant: 'primary',
-            }
+            label: 'Add Resident',
+            onClick: handleAddResident,
+            icon: 'Plus',
+            variant: 'primary',
+          }
           : undefined
       }
     >

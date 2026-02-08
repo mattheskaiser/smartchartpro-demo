@@ -52,15 +52,17 @@ export const ResidentSpecialistsMolecule = ({
   }) => {
     if (!residentId) return;
 
-    // Block in demo mode
+    // In demo mode, simulate success without API call
     if (isDemoMode()) {
-      toast({
-        title: 'Demo Mode',
-        description: getDemoMessage('actionNotPersisted'),
-        type: 'info',
-      });
       setShowModal(false);
       setEditingSpecialist(null);
+      setTimeout(() => {
+        toast({
+          title: 'Changes Not Saved',
+          description: getDemoMessage('actionNotPersisted'),
+          type: 'error',
+        });
+      }, 100);
       return;
     }
 
@@ -118,13 +120,15 @@ export const ResidentSpecialistsMolecule = ({
   const removeSpecialist = async (id: string) => {
     if (!residentId) return;
 
-    // Block in demo mode
+    // In demo mode, simulate success without API call
     if (isDemoMode()) {
-      toast({
-        title: 'Demo Mode',
-        description: getDemoMessage('actionNotPersisted'),
-        type: 'info',
-      });
+      setTimeout(() => {
+        toast({
+          title: 'Changes Not Saved',
+          description: getDemoMessage('actionNotPersisted'),
+          type: 'error',
+        });
+      }, 100);
       return;
     }
 
