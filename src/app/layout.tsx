@@ -71,8 +71,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div className="h-screen flex flex-col overflow-hidden">
                 <header className="flex-shrink-0 w-full bg-white border-b border-gray-200 shadow-sm min-h-[88px]">
                   <div className="max-w-7xl mx-auto px-6 py-4 h-full">
-                    <div className="flex items-center justify-between h-full">
-                      {/* Left: SmartChart Pro Logo */}
+                    {/* Desktop: Single row with 3 columns */}
+                    <div className="hidden lg:flex items-center justify-between h-full">
+                      {/* Left: Company Logo */}
                       <div className="flex items-center space-x-3 w-64">
                         <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg">
                           <DynamicIconAtom name="Hospital" size="md" className="text-primary" />
@@ -91,6 +92,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       {/* Right: User Profile */}
                       <div className="w-64 flex justify-end">
                         <ChartingUserProfileMolecule />
+                      </div>
+                    </div>
+
+                    {/* iPad/Mobile: Two rows with more space between them */}
+                    <div className="lg:hidden space-y-8">
+                      {/* Top row: Company name left, user profile right */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg">
+                            <DynamicIconAtom name="Hospital" size="md" className="text-primary" />
+                          </div>
+                          <div>
+                            <h1 className="text-lg font-semibold text-gray-900">Sunrise Senior Living</h1>
+                            <p className="text-xs text-gray-500">Care Documentation</p>
+                          </div>
+                        </div>
+
+                        <ChartingUserProfileMolecule />
+                      </div>
+
+                      {/* Bottom row: Centered stepper with more space above */}
+                      <div className="flex justify-center pt-2">
+                        <ChartingProgressStepperMolecule currentStep={getCurrentStep()} />
                       </div>
                     </div>
                   </div>
