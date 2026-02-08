@@ -17,7 +17,7 @@ export const AdminSidebarMolecule = () => {
   };
 
   return (
-    <div className="fixed inset-y-0 left-0 w-64 bg-white border-r shadow-xl">
+    <div className="fixed inset-y-0 left-0 w-56 bg-white border-r shadow-xl">
       <nav className="flex flex-col h-full p-4">
         <div className="space-y-2">
           {ADMIN_NAVIGATION.map(item => (

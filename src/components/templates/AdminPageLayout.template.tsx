@@ -25,8 +25,8 @@ export function AdminPageLayoutTemplate({
 }: AdminPageLayoutProps) {
   return (
     <div className="mx-auto max-w-7xl">
-      {/* Exact Dashboard Header Layout */}
-      <div className="mb-8 flex items-center justify-between">
+      {/* Desktop: Single row header */}
+      <div className="hidden lg:flex mb-8 items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">{title}</h1>
           <p className="mt-2 text-sm text-gray-600">{subtitle}</p>
@@ -53,6 +53,41 @@ export function AdminPageLayoutTemplate({
                 {actionButton.label}
               </ButtonAtom>
             )}
+          </div>
+        )}
+      </div>
+
+      {/* Mobile/iPad: Three rows - heading full width, button right-aligned 35% width, then content */}
+      <div className="lg:hidden mb-8 space-y-6">
+        {/* Row 1: Heading and subheading full width */}
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900">{title}</h1>
+          <p className="mt-2 text-sm text-gray-600">{subtitle}</p>
+        </div>
+
+        {/* Row 2: Buttons right-aligned, 35% for button only, 50% when headerExtra exists */}
+        {(actionButton || headerExtra) && (
+          <div className="flex justify-end">
+            <div className={`flex items-center justify-end space-x-4 ${headerExtra ? 'w-[50%]' : 'w-[35%]'}`}>
+              {headerExtra}
+              {actionButton && (
+                <ButtonAtom
+                  onClick={actionButton.onClick}
+                  variant={actionButton.variant || 'primary'}
+                  disabled={actionButton.disabled}
+                  className="inline-flex items-center whitespace-nowrap"
+                >
+                  {actionButton.icon && (
+                    <DynamicIconAtom
+                      name={actionButton.icon as keyof typeof import('lucide-react').icons}
+                      size="sm"
+                      className="mr-2"
+                    />
+                  )}
+                  {actionButton.label}
+                </ButtonAtom>
+              )}
+            </div>
           </div>
         )}
       </div>

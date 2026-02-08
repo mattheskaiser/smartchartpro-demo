@@ -47,22 +47,22 @@ export default function AdminDashboard() {
 
   const dashboardStats = stats
     ? [
-        {
-          name: 'Total CNAs',
-          value: stats.totalCnas.toString(),
-          icon: 'UserRound' as keyof typeof icons,
-        },
-        {
-          name: 'Total Residents',
-          value: stats.totalResidents.toString(),
-          icon: 'Users' as keyof typeof icons,
-        },
-        {
-          name: 'Active Sessions',
-          value: stats.activeSessions.toString(),
-          icon: 'Activity' as keyof typeof icons,
-        },
-      ]
+      {
+        name: 'Total CNAs',
+        value: stats.totalCnas.toString(),
+        icon: 'UserRound' as keyof typeof icons,
+      },
+      {
+        name: 'Total Residents',
+        value: stats.totalResidents.toString(),
+        icon: 'Users' as keyof typeof icons,
+      },
+      {
+        name: 'Active Sessions',
+        value: stats.activeSessions.toString(),
+        icon: 'Activity' as keyof typeof icons,
+      },
+    ]
     : [];
 
   if (loading) {
@@ -90,7 +90,7 @@ export default function AdminDashboard() {
         }}
       >
         {/* Stats */}
-        <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mb-8 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3">
           {dashboardStats.map(stat => (
             <StatisticMolecule
               key={stat.name}
