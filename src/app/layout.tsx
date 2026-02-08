@@ -19,7 +19,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const pathname = usePathname();
   const router = useRouter();
   const { isChartingActive } = useChartingStore();
-  const { facilityName } = useFacilityStore();
+  const { facilityName, loadFromDatabase } = useFacilityStore();
+
+  // Load facility settings from database on mount
+  useEffect(() => {
+    loadFromDatabase();
+  }, [loadFromDatabase]);
 
   // Basic route protection
   useEffect(() => {
@@ -36,7 +41,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   const isAdminRoute = pathname.startsWith('/admin');
   const isChartingRoute = pathname.startsWith('/charting');
-  const showHeader = pathname !== '/' && !isAdminRoute && !isChartingRoute;
+  const isLoginRoute = pathname === '/login' || pathname === '/';
+  const showHeader = !isAdminRoute && !isChartingRoute;
 
   // Determine current step for progress stepper
   const getCurrentStep = () => {
@@ -56,11 +62,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               // Admin routes use their own fullscreen layout
               children
             ) : isChartingRoute ? (
-              // Charting routes with full-width sticky header
-              <>
-                <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
-                  <div className="max-w-7xl mx-auto px-6 py-4">
-                    <div className="flex items-center justify-between">
+              // Charting routes with sticky header and controlled scrolling
+              <div className="h-screen flex flex-col overflow-hidden">
+                <header className="flex-shrink-0 w-full bg-white border-b border-gray-200 shadow-sm min-h-[88px]">
+                  <div className="max-w-7xl mx-auto px-6 py-4 h-full">
+                    <div className="flex items-center justify-between h-full">
                       {/* Left: SmartChart Pro Logo */}
                       <div className="flex items-center space-x-3 w-64">
                         <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg">
@@ -84,12 +90,31 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </div>
                   </div>
                 </header>
-                <div className="min-h-screen bg-gray-50">
-                  <main className="max-w-7xl mx-auto px-4 py-6">{children}</main>
-                </div>
-              </>
+                <main className="flex-1 bg-gray-50 overflow-y-auto">{children}</main>
+              </div>
+            ) : isLoginRoute ? (
+              // Login page - header + centered content with no scroll
+              <div className="h-screen flex flex-col overflow-hidden">
+                <header className="flex-shrink-0 bg-white border-b border-gray-200 shadow-sm min-h-[88px]">
+                  <div className="max-w-7xl mx-auto px-6 py-4 h-full">
+                    <div className="flex items-center justify-center h-full">
+                      {/* SmartChart Pro Logo */}
+                      <div className="flex items-center space-x-3">
+                        <div className="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-lg">
+                          <DynamicIconAtom name="Hospital" size="sm" className="text-primary" />
+                        </div>
+                        <div>
+                          <h1 className="text-lg font-semibold text-gray-900">SmartChart Pro</h1>
+                          <p className="text-xs text-gray-500">Resident Care Documentation</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </header>
+                <main className="flex-1 overflow-hidden">{children}</main>
+              </div>
             ) : (
-              // Other routes (like home page)
+              // Other routes
               <div className="min-h-screen bg-gray-50">
                 {showHeader && (
                   <header className="bg-white border-b border-gray-200 shadow-sm">
