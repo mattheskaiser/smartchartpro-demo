@@ -1,4 +1,5 @@
-import { Role } from '@prisma/client';
+// Define Role type locally to avoid Prisma dependency in demo mode
+export type Role = 'ADMIN' | 'CNA';
 
 export interface User {
   id: string;
