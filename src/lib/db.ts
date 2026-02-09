@@ -1,15 +1,16 @@
 import { mockPrisma } from './mock-db';
 import { DEMO_CONFIG } from './demo-config';
+import type { PrismaClient } from '@prisma/client';
 
 // In demo mode, always use mock client (no Prisma needed)
 export const prisma = DEMO_CONFIG.enabled
-  ? (mockPrisma as any)
+  ? (mockPrisma as unknown as PrismaClient)
   : (() => {
       // Only import real Prisma in production
       try {
         const { PrismaClient } = require('@prisma/client');
         const globalForPrisma = globalThis as unknown as {
-          prisma: any | undefined;
+          prisma: PrismaClient | undefined;
         };
 
         const client =

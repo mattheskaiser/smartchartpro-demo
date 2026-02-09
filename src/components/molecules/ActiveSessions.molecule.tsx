@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { TextAtom } from '@/components/atoms/Text.atom';
-import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 
 type ActiveSession = {
   id: string;
@@ -73,6 +72,19 @@ export const ActiveSessionsMolecule = ({ refreshTrigger }: ActiveSessionsProps) 
     const mins = diffMins % 60;
     return `${hours}h ${mins}m`;
   };
+
+  if (loading) {
+    return (
+      <div className="overflow-hidden rounded-lg bg-white shadow">
+        <div className="p-6">
+          <h2 className="text-base font-semibold text-gray-900">Active Sessions</h2>
+          <div className="mt-6 py-8 text-center">
+            <TextAtom className="text-gray-500">Loading...</TextAtom>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (sessions.length === 0) {
     return (

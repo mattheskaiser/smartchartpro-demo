@@ -57,7 +57,7 @@ const createReport = async (data: CreateChartingReportData): Promise<ChartingRep
     return {
       id: `report_demo_${Date.now()}`,
       ...data,
-      status: 'draft',
+      status: 'pending' as const,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     } as ChartingReport;

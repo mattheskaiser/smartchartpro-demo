@@ -74,7 +74,10 @@ export const AvatarAtom = ({
             src={src}
             alt={alt}
             fill
-            className={clsx('object-cover transition-opacity duration-200', imageLoading ? 'opacity-0' : 'opacity-100')}
+            className={clsx(
+              'object-cover transition-opacity duration-200',
+              imageLoading ? 'opacity-0' : 'opacity-100'
+            )}
             onError={() => {
               setImageError(true);
               setImageLoading(false);

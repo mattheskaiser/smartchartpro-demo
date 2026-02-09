@@ -2,17 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
 import { useChartingStore } from '@/stores/chartingStore';
-import { useFacilityStore } from '@/stores/facilityStore';
-import { useCreateChartingReport } from '@/hooks/useChartingReports';
 import { useChartingSession } from '@/hooks/useChartingSession';
 import { format } from 'date-fns';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { CardAtom } from '@/components/atoms/Card.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
-import { isDemoMode } from '@/lib/demo-config';
 
 const ADL_TYPES = [
   { id: 'bathing', label: 'Bathing' },
@@ -31,11 +27,9 @@ const ASSISTANCE_LEVELS = [
 
 export default function ChartingReviewPage() {
   const router = useRouter();
-  const { selectedResidents, entries, session, endCharting } = useChartingStore();
-  const { session: activeSession, endSession } = useChartingSession();
-  const facilitySettings = useFacilityStore();
-  const createReport = useCreateChartingReport();
-  const [isSaving, setIsSaving] = useState(false);
+  const { selectedResidents, entries } = useChartingStore();
+  useChartingSession(); // Keep session active
+  const [isSaving] = useState(false);
 
   const handleEndCharting = () => {
     // Just redirect - don't clear session yet

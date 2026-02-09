@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Mock Database Client for Demo Mode
  *
@@ -16,9 +17,6 @@ import {
   mockChartingReports,
   simulateDelay,
   findById,
-  filterBy,
-  paginate,
-  type PaginationParams,
 } from './mock-data';
 
 // In-memory storage for demo session (resets on page refresh)
@@ -269,7 +267,7 @@ export const mockPrisma = {
 
       // Handle includes if specified
       if (session && params?.include) {
-        const result = { ...session };
+        const result: any = { ...session };
 
         if (params.include.cna) {
           result.cna = demoSessionStorage.cnas.find(c => c.id === session.cnaId) || null;

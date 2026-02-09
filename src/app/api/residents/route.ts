@@ -68,6 +68,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Transform imageData to imageUrl for frontend compatibility
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const transformedResidents = residents.map((resident: any) => ({
       ...resident,
       imageUrl: resident.imageData || null,

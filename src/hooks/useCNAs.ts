@@ -30,6 +30,7 @@ const createCNA = async (data: CreateCNAData): Promise<CNA> => {
       email: data.email,
       certificationNumber: data.certificationNumber,
       phone: data.phone,
+      status: 'active' as const,
       imageUrl: null,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

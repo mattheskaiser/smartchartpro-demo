@@ -68,7 +68,8 @@ export default function CNADetailPage() {
     if (!isEditing && availability && Object.keys(availability).length > 0) {
       setLocalAvailability(availability);
     }
-  }, [JSON.stringify(availability), isEditing]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditing]);
 
   // Define all handlers before early returns
   const getStatusColor = (status: string): 'success' | 'warning' | 'error' | 'info' => {

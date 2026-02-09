@@ -7,27 +7,51 @@
 
 // Define Prisma-compatible types for demo mode
 export namespace Prisma {
+  export type StringFilter = {
+    contains?: string;
+    mode?: 'default' | 'insensitive';
+    equals?: string;
+    startsWith?: string;
+    endsWith?: string;
+  };
+
+  export type CnaRelation = {
+    id?: string;
+    name?: string | StringFilter;
+    email?: string;
+    status?: string;
+  };
+
   export type UserWhereInput = {
     id?: string;
-    email?: string;
+    email?: string | StringFilter;
     role?: 'ADMIN' | 'CNA';
     isActive?: boolean;
-    cna?: any;
-    OR?: any[];
+    cna?: CnaRelation;
+    OR?: UserWhereInput[];
   };
 
   export type ResidentWhereInput = {
     id?: string;
+    name?: string | StringFilter;
+    room?: string | StringFilter;
     status?: string;
     assignedCNA?: string;
-    OR?: any[];
+    OR?: ResidentWhereInput[];
+  };
+
+  export type DateFilter = {
+    gte?: Date | string;
+    lte?: Date | string;
+    gt?: Date | string;
+    lt?: Date | string;
   };
 
   export type ChartingReportWhereInput = {
     id?: string;
     cnaId?: string;
     status?: string;
-    reportDate?: any;
+    reportDate?: Date | string | DateFilter;
   };
 
   export type ChartingReportUpdateInput = {

@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
             const demoAccount = demoAccounts.find(acc => acc.email === credentials.email);
             if (demoAccount) {
               // If it's a CNA account, get the image from the CNA data
-              let cnaImageData = demoAccount.cnaImageData;
+              let cnaImageData: string | undefined = demoAccount.cnaImageData;
               if (demoAccount.cnaId) {
                 const cnaData = mockCnas.find(cna => cna.id === demoAccount.cnaId);
                 console.log('Found CNA data:', cnaData);

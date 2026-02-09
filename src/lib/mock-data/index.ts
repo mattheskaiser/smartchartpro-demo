@@ -19,7 +19,7 @@ export const findById = <T extends { id: string }>(data: T[], id: string): T | u
   data.find(item => item.id === id);
 
 // Helper to filter by field
-export const filterBy = <T>(data: T[], field: keyof T, value: any): T[] =>
+export const filterBy = <T>(data: T[], field: keyof T, value: T[keyof T]): T[] =>
   data.filter(item => item[field] === value);
 
 // Helper for pagination

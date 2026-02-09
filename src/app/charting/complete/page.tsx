@@ -54,7 +54,7 @@ export default function ChartingCompletePage() {
       <CardAtom className="max-w-lg w-full text-center p-12">
         <div className="mb-8">
           <div className="inline-flex items-center justify-center w-24 h-24 bg-primary/10 rounded-full mb-6">
-            <DynamicIconAtom name="Check" size="xl" className="text-primary" />
+            <DynamicIconAtom name="Check" size="lg" className="text-primary" />
           </div>
           <TextAtom variant="h1" className="text-gray-900 mb-4">
             You're All Done!
