@@ -34,6 +34,9 @@ export const AvatarAtom = ({ src, alt, size = 'md', className }: AvatarAtomProps
   const pixelSize = dimensions[size];
   const showFallback = !src || imageError;
 
+  // Check if src is base64 data
+  const isBase64 = src?.startsWith('data:image');
+
   return (
     <div
       className={clsx(
@@ -54,8 +57,9 @@ export const AvatarAtom = ({ src, alt, size = 'md', className }: AvatarAtomProps
           fill
           className="object-cover"
           onError={() => setImageError(true)}
-          unoptimized
-          priority={size === 'lg' || size === 'xl'}
+          unoptimized={isBase64} // Only unoptimized for base64, optimize URLs
+          loading="lazy" // Lazy load images for better performance
+          sizes={`${pixelSize}px`} // Hint to browser about image size
         />
       )}
     </div>

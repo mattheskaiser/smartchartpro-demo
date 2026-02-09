@@ -11,8 +11,8 @@ export const mockUsers = usersData;
 export const mockSettings = settingsData;
 export const mockSessions = sessionsData;
 
-// Helper to simulate database delay
-export const simulateDelay = (ms: number = 100) => new Promise(resolve => setTimeout(resolve, ms));
+// Helper to simulate database delay (reduced to 0ms for better performance)
+export const simulateDelay = (ms: number = 0) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Helper to find by ID
 export const findById = <T extends { id: string }>(data: T[], id: string): T | undefined =>

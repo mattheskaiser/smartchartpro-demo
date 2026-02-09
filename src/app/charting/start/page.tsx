@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useChartingStore } from '@/stores/chartingStore';
@@ -13,7 +13,6 @@ import { CardAtom } from '@/components/atoms/Card.atom';
 import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
-import { toast } from '@/lib/toast';
 
 type Resident = {
   id: string;
@@ -23,6 +22,63 @@ type Resident = {
   imageUrl?: string | null;
   imageData?: string | null;
 };
+
+// Memoized resident card for better performance
+const ResidentCard = memo(
+  ({
+    resident,
+    isSelected,
+    onToggle,
+  }: {
+    resident: Resident;
+    isSelected: boolean;
+    onToggle: (id: string) => void;
+  }) => {
+    const getStatusVariant = (status: string) => {
+      switch (status.toLowerCase()) {
+        case 'independent':
+          return 'success';
+        case 'partial':
+          return 'warning';
+        case 'full':
+          return 'error';
+        default:
+          return 'info';
+      }
+    };
+
+    return (
+      <div
+        className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${isSelected
+            ? 'border-primary bg-secondary ring-1 ring-primary/20'
+            : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+          }`}
+        onClick={() => onToggle(resident.id)}
+      >
+        <CheckboxAtom checked={isSelected} onCheckedChange={() => onToggle(resident.id)} />
+        <AvatarAtom
+          src={resident.imageUrl || resident.imageData || undefined}
+          alt={resident.name}
+          size="md"
+        />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between mb-1">
+            <TextAtom className="font-medium text-gray-900 truncate">{resident.name}</TextAtom>
+            <BadgeAtom variant={getStatusVariant(resident.status)}>
+              {resident.status.charAt(0).toUpperCase() + resident.status.slice(1)}
+            </BadgeAtom>
+          </div>
+          <div className="flex items-center text-sm text-gray-500">
+            <DynamicIconAtom name="MapPin" size="sm" className="mr-1" />
+            Room {resident.room}
+          </div>
+        </div>
+      </div>
+    );
+  }
+);
+
+ResidentCard.displayName = 'ResidentCard';
 
 export default function ChartingStartPage() {
   const router = useRouter();
@@ -105,18 +161,18 @@ export default function ChartingStartPage() {
     }
   };
 
-  const getStatusVariant = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'independent':
-        return 'success';
-      case 'partial':
-        return 'warning';
-      case 'full':
-        return 'error';
-      default:
-        return 'info';
-    }
-  };
+  // Memoized toggle function to prevent unnecessary re-renders
+  const handleToggleResident = useCallback((id: string) => {
+    setSelectedIds(prev => {
+      const newSelected = new Set(prev);
+      if (newSelected.has(id)) {
+        newSelected.delete(id);
+      } else {
+        newSelected.add(id);
+      }
+      return newSelected;
+    });
+  }, []);
 
   if (loading || sessionLoading) {
     return <PageLoaderMolecule message="Loading residents..." />;
@@ -184,55 +240,12 @@ export default function ChartingStartPage() {
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {residents.map(resident => (
-                <div
+                <ResidentCard
                   key={resident.id}
-                  className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${
-                    selectedIds.has(resident.id)
-                      ? 'border-primary bg-secondary ring-1 ring-primary/20'
-                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                  }`}
-                  onClick={() => {
-                    const newSelected = new Set(selectedIds);
-                    if (selectedIds.has(resident.id)) {
-                      newSelected.delete(resident.id);
-                    } else {
-                      newSelected.add(resident.id);
-                    }
-                    setSelectedIds(newSelected);
-                  }}
-                >
-                  <CheckboxAtom
-                    checked={selectedIds.has(resident.id)}
-                    onCheckedChange={checked => {
-                      const newSelected = new Set(selectedIds);
-                      if (checked) {
-                        newSelected.add(resident.id);
-                      } else {
-                        newSelected.delete(resident.id);
-                      }
-                      setSelectedIds(newSelected);
-                    }}
-                  />
-                  <AvatarAtom
-                    src={resident.imageUrl || resident.imageData || undefined}
-                    alt={resident.name}
-                    size="md"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <TextAtom className="font-medium text-gray-900 truncate">
-                        {resident.name}
-                      </TextAtom>
-                      <BadgeAtom variant={getStatusVariant(resident.status)}>
-                        {resident.status.charAt(0).toUpperCase() + resident.status.slice(1)}
-                      </BadgeAtom>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <DynamicIconAtom name="MapPin" size="sm" className="mr-1" />
-                      Room {resident.room}
-                    </div>
-                  </div>
-                </div>
+                  resident={resident}
+                  isSelected={selectedIds.has(resident.id)}
+                  onToggle={handleToggleResident}
+                />
               ))}
             </div>
           )}

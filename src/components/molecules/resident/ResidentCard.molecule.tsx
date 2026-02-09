@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { useRouter } from 'next/navigation';
 import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
@@ -11,13 +12,14 @@ interface ResidentCardProps {
   resident: Resident;
 }
 
-export const ResidentCardMolecule = ({ resident }: ResidentCardProps) => {
+// Memoize the component to prevent unnecessary re-renders
+export const ResidentCardMolecule = memo(({ resident }: ResidentCardProps) => {
   const router = useRouter();
 
   return (
     <div
       onClick={() => router.push(`/admin/residents/${resident.id}`)}
-      className="flex flex-col gap-y-8 relative p-6 rounded-xl shadow-lg cursor-pointer border border-gray-200 overflow-hidden"
+      className="flex flex-col gap-y-8 relative p-6 rounded-xl shadow-lg cursor-pointer border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow"
     >
       <div className="flex items-start justify-between">
         <div className="flex items-center space-x-4">
@@ -75,4 +77,6 @@ export const ResidentCardMolecule = ({ resident }: ResidentCardProps) => {
       <ButtonAtom>More Details</ButtonAtom>
     </div>
   );
-};
+});
+
+ResidentCardMolecule.displayName = 'ResidentCardMolecule';
