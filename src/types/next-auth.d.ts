@@ -7,6 +7,7 @@ declare module 'next-auth' {
       role: 'ADMIN' | 'CNA';
       cnaId: string | null;
       cnaName?: string;
+      cnaImageData?: string;
       mustChangePassword: boolean;
       isMasterLogin: boolean;
     } & DefaultSession['user'];
@@ -18,6 +19,7 @@ declare module 'next-auth' {
     role: 'ADMIN' | 'CNA';
     cnaId: string | null;
     cnaName?: string;
+    cnaImageData?: string;
     mustChangePassword: boolean;
     isMasterLogin: boolean;
   }
@@ -29,6 +31,7 @@ declare module 'next-auth/jwt' {
     role: 'ADMIN' | 'CNA';
     cnaId: string | null;
     cnaName?: string;
+    cnaImageData?: string;
     mustChangePassword: boolean;
     isMasterLogin: boolean;
   }

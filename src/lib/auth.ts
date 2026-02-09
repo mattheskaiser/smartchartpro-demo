@@ -4,6 +4,7 @@ import { prisma } from './db';
 import { verifyPassword } from './auth-helpers';
 import { validateMasterPassword } from './settings';
 import { DEMO_CONFIG } from './demo-config';
+import { mockCnas } from './mock-data';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -29,6 +30,7 @@ export const authOptions: NextAuthOptions = {
                 id: 'user_admin',
                 cnaId: null,
                 cnaName: undefined,
+                cnaImageData: undefined,
               },
               {
                 email: 'cna@demo.com',
@@ -36,20 +38,35 @@ export const authOptions: NextAuthOptions = {
                 id: 'user_cna_001',
                 cnaId: 'cna_001',
                 cnaName: 'Jennifer Rodriguez',
+                cnaImageData: undefined, // Will be loaded from CNA data
               },
             ];
 
             const demoAccount = demoAccounts.find(acc => acc.email === credentials.email);
             if (demoAccount) {
-              return {
+              // If it's a CNA account, get the image from the CNA data
+              let cnaImageData = demoAccount.cnaImageData;
+              if (demoAccount.cnaId) {
+                const cnaData = mockCnas.find(cna => cna.id === demoAccount.cnaId);
+                console.log('Found CNA data:', cnaData);
+                if (cnaData) {
+                  cnaImageData = cnaData.imageData;
+                  console.log('Setting cnaImageData to:', cnaImageData);
+                }
+              }
+
+              const userObj = {
                 id: demoAccount.id,
                 email: demoAccount.email,
                 role: demoAccount.role as 'ADMIN' | 'CNA',
                 cnaId: demoAccount.cnaId,
                 cnaName: demoAccount.cnaName,
+                cnaImageData: cnaImageData,
                 mustChangePassword: false,
                 isMasterLogin: false,
               };
+              console.log('Returning user object:', userObj);
+              return userObj;
             }
             // If not a demo account, continue with normal auth
           }
@@ -121,6 +138,7 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
             cnaId: user.cnaId,
             cnaName: user.cna?.name,
+            cnaImageData: user.cna?.imageData,
             mustChangePassword: user.mustChangePassword,
             isMasterLogin: await validateMasterPassword(credentials.password),
           };
@@ -141,6 +159,7 @@ export const authOptions: NextAuthOptions = {
         token.role = user.role;
         token.cnaId = user.cnaId;
         token.cnaName = user.cnaName;
+        token.cnaImageData = user.cnaImageData;
         token.mustChangePassword = user.mustChangePassword;
         token.isMasterLogin = user.isMasterLogin;
       }
@@ -152,6 +171,7 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role as 'ADMIN' | 'CNA';
         session.user.cnaId = token.cnaId as string | null;
         session.user.cnaName = token.cnaName as string | undefined;
+        session.user.cnaImageData = token.cnaImageData as string | undefined;
         session.user.mustChangePassword = token.mustChangePassword as boolean;
         session.user.isMasterLogin = token.isMasterLogin as boolean;
       }

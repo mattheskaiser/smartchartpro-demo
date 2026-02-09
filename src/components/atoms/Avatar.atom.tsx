@@ -8,10 +8,18 @@ interface AvatarAtomProps {
   alt: string;
   size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
   className?: string;
+  showSkeleton?: boolean; // Show loading skeleton
 }
 
-export const AvatarAtom = ({ src, alt, size = 'md', className }: AvatarAtomProps) => {
+export const AvatarAtom = ({
+  src,
+  alt,
+  size = 'md',
+  className,
+  showSkeleton = false,
+}: AvatarAtomProps) => {
   const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(!!src); // Only show loading if we have a src
 
   const dimensions = {
     sm: 32,
@@ -40,7 +48,10 @@ export const AvatarAtom = ({ src, alt, size = 'md', className }: AvatarAtomProps
   return (
     <div
       className={clsx(
-        'relative rounded-full overflow-hidden bg-gray-200 border-2 border-gray-500/50 flex items-center justify-center',
+        'relative rounded-full overflow-hidden border-2 border-gray-500/50 flex items-center justify-center',
+        showSkeleton || (imageLoading && !showFallback)
+          ? 'bg-gray-200 animate-pulse'
+          : 'bg-gray-200',
         className
       )}
       style={{
@@ -48,19 +59,32 @@ export const AvatarAtom = ({ src, alt, size = 'md', className }: AvatarAtomProps
         height: pixelSize,
       }}
     >
-      {showFallback ? (
+      {showSkeleton ? (
+        // Skeleton loading state
+        <div className="w-full h-full bg-gray-300 animate-pulse" />
+      ) : showFallback ? (
         <DynamicIconAtom name="User" size={iconSizes[size]} className="text-gray-400" />
       ) : (
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          className="object-cover"
-          onError={() => setImageError(true)}
-          unoptimized={isBase64} // Only unoptimized for base64, optimize URLs
-          loading="lazy" // Lazy load images for better performance
-          sizes={`${pixelSize}px`} // Hint to browser about image size
-        />
+        <>
+          {/* Show skeleton while image is loading */}
+          {imageLoading && (
+            <div className="absolute inset-0 w-full h-full bg-gray-300 animate-pulse" />
+          )}
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            className={clsx('object-cover transition-opacity duration-200', imageLoading ? 'opacity-0' : 'opacity-100')}
+            onError={() => {
+              setImageError(true);
+              setImageLoading(false);
+            }}
+            onLoad={() => setImageLoading(false)}
+            unoptimized={isBase64} // Only unoptimized for base64, optimize URLs
+            loading="lazy" // Lazy load images for better performance
+            sizes={`${pixelSize}px`} // Hint to browser about image size
+          />
+        </>
       )}
     </div>
   );

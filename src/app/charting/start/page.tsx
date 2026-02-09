@@ -49,10 +49,11 @@ const ResidentCard = memo(
 
     return (
       <div
-        className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${isSelected
+        className={`relative flex items-center space-x-4 p-4 border rounded-lg transition-all cursor-pointer hover:shadow-sm ${
+          isSelected
             ? 'border-primary bg-secondary ring-1 ring-primary/20'
             : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-          }`}
+        }`}
         onClick={() => onToggle(resident.id)}
       >
         <CheckboxAtom checked={isSelected} onCheckedChange={() => onToggle(resident.id)} />
@@ -174,8 +175,42 @@ export default function ChartingStartPage() {
     });
   }, []);
 
+  // Show loading while residents are being loaded from session
   if (loading || sessionLoading) {
-    return <PageLoaderMolecule message="Loading residents..." />;
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+        <CardAtom padding="none">
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <TextAtom variant="h2" className="text-gray-900">
+                Available Residents
+              </TextAtom>
+              <div className="flex items-center space-x-4">
+                <div className="w-24 h-9 bg-gray-200 rounded animate-pulse" />
+                <div className="w-20 h-9 bg-gray-200 rounded animate-pulse" />
+              </div>
+            </div>
+
+            {/* Skeleton loading for resident cards */}
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3, 4, 5, 6].map(i => (
+                <div
+                  key={i}
+                  className="relative flex items-center space-x-4 p-4 border border-gray-200 rounded-lg"
+                >
+                  <div className="w-4 h-4 bg-gray-200 rounded animate-pulse" />
+                  <AvatarAtom src={undefined} alt="Loading..." size="md" showSkeleton={true} />
+                  <div className="flex-1 min-w-0 space-y-2">
+                    <div className="w-32 h-4 bg-gray-200 rounded animate-pulse" />
+                    <div className="w-20 h-3 bg-gray-200 rounded animate-pulse" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </CardAtom>
+      </div>
+    );
   }
 
   // If there's an active session, show loading while redirecting

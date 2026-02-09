@@ -5,15 +5,25 @@ import { AvatarAtom } from '@/components/atoms/Avatar.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
+import { useEffect } from 'react';
 
 export function ChartingUserProfileMolecule() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
-  // Show placeholder to prevent layout shift while loading
-  if (!session?.user) {
+  // Debug: Log session data
+  useEffect(() => {
+    if (session) {
+      console.log('Session data:', session);
+      console.log('User data:', session.user);
+      console.log('CNA Image Data:', session.user?.cnaImageData);
+    }
+  }, [session]);
+
+  // Show skeleton while loading
+  if (status === 'loading' || !session?.user) {
     return (
       <div className="flex items-center space-x-3">
-        <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
+        <AvatarAtom src={undefined} alt="Loading..." size="sm" showSkeleton={true} />
         <div className="flex flex-col space-y-1">
           <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" />
           <div className="w-16 h-6 bg-gray-200 rounded animate-pulse" />
@@ -26,11 +36,15 @@ export function ChartingUserProfileMolecule() {
     await signOut({ callbackUrl: '/login' });
   };
 
+  // Get the avatar source - could be imageData or imageUrl
+  const avatarSrc = session.user.cnaImageData || undefined;
+  console.log('Avatar src being used:', avatarSrc);
+
   return (
     <div className="flex items-center space-x-3">
       {/* Avatar on the left */}
       <AvatarAtom
-        src={undefined}
+        src={avatarSrc}
         alt={session.user.cnaName || session.user.email || 'User'}
         size="sm"
       />
