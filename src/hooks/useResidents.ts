@@ -236,15 +236,15 @@ export const useCreateResident = () => {
         (
           old:
             | {
-              residents: Resident[];
-              pagination: {
-                page: number;
-                limit: number;
-                totalCount: number;
-                totalPages: number;
-                hasMore: boolean;
-              };
-            }
+                residents: Resident[];
+                pagination: {
+                  page: number;
+                  limit: number;
+                  totalCount: number;
+                  totalPages: number;
+                  hasMore: boolean;
+                };
+              }
             | undefined
         ) => {
           if (!old)
@@ -284,15 +284,15 @@ export const useUpdateResident = () => {
         (
           old:
             | {
-              residents: Resident[];
-              pagination: {
-                page: number;
-                limit: number;
-                totalCount: number;
-                totalPages: number;
-                hasMore: boolean;
-              };
-            }
+                residents: Resident[];
+                pagination: {
+                  page: number;
+                  limit: number;
+                  totalCount: number;
+                  totalPages: number;
+                  hasMore: boolean;
+                };
+              }
             | undefined
         ) => {
           if (!old) return old;
@@ -323,15 +323,15 @@ export const useDeleteResident = () => {
         (
           old:
             | {
-              residents: Resident[];
-              pagination: {
-                page: number;
-                limit: number;
-                totalCount: number;
-                totalPages: number;
-                hasMore: boolean;
-              };
-            }
+                residents: Resident[];
+                pagination: {
+                  page: number;
+                  limit: number;
+                  totalCount: number;
+                  totalPages: number;
+                  hasMore: boolean;
+                };
+              }
             | undefined
         ) => {
           if (!old) return old;

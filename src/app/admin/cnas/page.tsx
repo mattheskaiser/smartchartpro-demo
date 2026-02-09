@@ -61,11 +61,11 @@ export default function CNAManagement() {
       actionButton={
         !isLoading
           ? {
-            label: 'Add CNA',
-            onClick: handleAddCNA,
-            icon: 'Plus',
-            variant: 'primary',
-          }
+              label: 'Add CNA',
+              onClick: handleAddCNA,
+              icon: 'Plus',
+              variant: 'primary',
+            }
           : undefined
       }
     >

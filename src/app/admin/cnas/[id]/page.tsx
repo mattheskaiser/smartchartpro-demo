@@ -130,15 +130,15 @@ export default function CNADetailPage() {
 
     try {
       // Check if basic CNA data changed
-      const basicDataChanged = originalCNA && (
-        localCNA.name !== originalCNA.name ||
-        localCNA.email !== originalCNA.email ||
-        localCNA.phone !== originalCNA.phone ||
-        localCNA.certificationNumber !== originalCNA.certificationNumber ||
-        localCNA.hireDate !== originalCNA.hireDate ||
-        localCNA.notes !== originalCNA.notes ||
-        localCNA.imageData !== originalCNA.imageData
-      );
+      const basicDataChanged =
+        originalCNA &&
+        (localCNA.name !== originalCNA.name ||
+          localCNA.email !== originalCNA.email ||
+          localCNA.phone !== originalCNA.phone ||
+          localCNA.certificationNumber !== originalCNA.certificationNumber ||
+          localCNA.hireDate !== originalCNA.hireDate ||
+          localCNA.notes !== originalCNA.notes ||
+          localCNA.imageData !== originalCNA.imageData);
 
       // Update basic CNA data if changed
       if (basicDataChanged) {
@@ -157,7 +157,8 @@ export default function CNADetailPage() {
       }
 
       // Check if availability changed
-      const availabilityChanged = JSON.stringify(localAvailability) !== JSON.stringify(availability);
+      const availabilityChanged =
+        JSON.stringify(localAvailability) !== JSON.stringify(availability);
 
       // Update availability if changed
       if (availabilityChanged) {

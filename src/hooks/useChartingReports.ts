@@ -180,15 +180,15 @@ export const useCreateChartingReport = () => {
         (
           old:
             | {
-              reports: ChartingReport[];
-              pagination: {
-                page: number;
-                limit: number;
-                totalCount: number;
-                totalPages: number;
-                hasMore: boolean;
-              };
-            }
+                reports: ChartingReport[];
+                pagination: {
+                  page: number;
+                  limit: number;
+                  totalCount: number;
+                  totalPages: number;
+                  hasMore: boolean;
+                };
+              }
             | undefined
         ) => {
           if (!old)

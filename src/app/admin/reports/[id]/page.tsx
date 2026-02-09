@@ -11,6 +11,7 @@ import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { BadgeAtom } from '@/components/atoms/Badge.atom';
 import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { toast } from '@/lib/toast';
+import { isDemoMode } from '@/lib/demo-config';
 
 const ADL_TYPES: Record<string, string> = {
   bathing: 'Bathing',
@@ -54,7 +55,10 @@ export default function ReportDetailPage() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      toast({ title: 'PDF downloaded successfully', type: 'success' });
+      // Only show success toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({ title: 'PDF downloaded successfully', type: 'success' });
+      }
     } catch (error) {
       toast({
         title: 'Failed to download PDF',
@@ -72,7 +76,11 @@ export default function ReportDetailPage() {
         id: report.id,
         data: { status: 'reviewed', reviewedAt: new Date(), reviewedBy: 'Admin' },
       });
-      toast({ title: 'Report marked as reviewed', type: 'success' });
+
+      // Only show success toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({ title: 'Report marked as reviewed', type: 'success' });
+      }
     } catch (error) {
       toast({
         title: 'Failed to update report',
@@ -89,7 +97,11 @@ export default function ReportDetailPage() {
     setIsUpdating(true);
     try {
       await updateReport.mutateAsync({ id: report.id, data: { status: 'archived' } });
-      toast({ title: 'Report archived', type: 'success' });
+
+      // Only show success toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({ title: 'Report archived', type: 'success' });
+      }
     } catch (error) {
       toast({
         title: 'Failed to archive report',

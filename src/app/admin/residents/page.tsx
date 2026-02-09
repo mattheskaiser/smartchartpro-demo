@@ -63,11 +63,11 @@ export default function ResidentManagement() {
       actionButton={
         !isLoading
           ? {
-            label: 'Add Resident',
-            onClick: handleAddResident,
-            icon: 'Plus',
-            variant: 'primary',
-          }
+              label: 'Add Resident',
+              onClick: handleAddResident,
+              icon: 'Plus',
+              variant: 'primary',
+            }
           : undefined
       }
     >

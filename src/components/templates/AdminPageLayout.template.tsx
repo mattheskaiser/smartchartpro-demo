@@ -68,7 +68,9 @@ export function AdminPageLayoutTemplate({
         {/* Row 2: Buttons right-aligned, 35% for button only, 50% when headerExtra exists */}
         {(actionButton || headerExtra) && (
           <div className="flex justify-end">
-            <div className={`flex items-center justify-end space-x-4 ${headerExtra ? 'w-[50%]' : 'w-[35%]'}`}>
+            <div
+              className={`flex items-center justify-end space-x-4 ${headerExtra ? 'w-[50%]' : 'w-[35%]'}`}
+            >
               {headerExtra}
               {actionButton && (
                 <ButtonAtom

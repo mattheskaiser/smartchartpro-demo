@@ -231,11 +231,15 @@ export default function ResidentDetail() {
         id: params.id as string,
         data: { imageUrl: imageData },
       });
-      toast({
-        title: 'Image updated',
-        description: 'Profile picture has been updated successfully',
-        type: 'success',
-      });
+
+      // Only show success toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({
+          title: 'Image updated',
+          description: 'Profile picture has been updated successfully',
+          type: 'success',
+        });
+      }
     } catch (error) {
       console.error('Error updating resident image:', error);
       toast({
@@ -298,11 +302,15 @@ export default function ResidentDetail() {
       if (response.ok) {
         // Invalidate query to refetch with updated data
         queryClient.invalidateQueries({ queryKey: ['residents', params.id] });
-        toast({
-          title: 'DNR status updated',
-          description: 'Do Not Resuscitate status has been saved',
-          type: 'success',
-        });
+
+        // Only show success toast if not in demo mode
+        if (!isDemoMode()) {
+          toast({
+            title: 'DNR status updated',
+            description: 'Do Not Resuscitate status has been saved',
+            type: 'success',
+          });
+        }
       } else {
         throw new Error('Failed to update DNR status');
       }

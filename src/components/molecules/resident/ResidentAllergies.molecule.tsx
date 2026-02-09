@@ -71,11 +71,15 @@ export const ResidentAllergiesMolecule = ({
           onAllergiesChange(
             safeAllergies.map(a => (a.id === editingAllergy.id ? updatedAllergy : a))
           );
-          toast({
-            title: 'Allergy updated',
-            description: `${allergyData.name} has been updated`,
-            type: 'success',
-          });
+
+          // Only show success toast if not in demo mode
+          if (!isDemoMode()) {
+            toast({
+              title: 'Allergy updated',
+              description: `${allergyData.name} has been updated`,
+              type: 'success',
+            });
+          }
         } else {
           throw new Error('Failed to update allergy');
         }
@@ -91,11 +95,15 @@ export const ResidentAllergiesMolecule = ({
         if (response.ok) {
           const newAllergy = await response.json();
           onAllergiesChange([...safeAllergies, newAllergy]);
-          toast({
-            title: 'Allergy added',
-            description: `${allergyData.name} has been added to the allergy list`,
-            type: 'success',
-          });
+
+          // Only show success toast if not in demo mode
+          if (!isDemoMode()) {
+            toast({
+              title: 'Allergy added',
+              description: `${allergyData.name} has been added to the allergy list`,
+              type: 'success',
+            });
+          }
         } else {
           throw new Error('Failed to add allergy');
         }
@@ -145,13 +153,17 @@ export const ResidentAllergiesMolecule = ({
       if (response.ok) {
         const deletedAllergy = safeAllergies.find(a => a.id === id);
         onAllergiesChange(safeAllergies.filter(a => a.id !== id));
-        toast({
-          title: 'Allergy removed',
-          description: deletedAllergy
-            ? `${deletedAllergy.name} has been removed`
-            : 'Allergy has been removed',
-          type: 'success',
-        });
+
+        // Only show success toast if not in demo mode
+        if (!isDemoMode()) {
+          toast({
+            title: 'Allergy removed',
+            description: deletedAllergy
+              ? `${deletedAllergy.name} has been removed`
+              : 'Allergy has been removed',
+            type: 'success',
+          });
+        }
       } else {
         throw new Error('Failed to delete allergy');
       }

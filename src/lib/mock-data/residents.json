@@ -8,11 +8,7 @@
     "admissionDate": "2023-06-15T00:00:00.000Z",
     "dateOfBirth": "1945-03-22T00:00:00.000Z",
     "assignedCNA": "cna_001",
-    "adlNeeds": [
-      "bathing",
-      "dressing",
-      "mobility"
-    ],
+    "adlNeeds": ["bathing", "dressing", "mobility"],
     "emergencyContactName": "Sarah Thompson",
     "emergencyContactPhone": "(555) 123-4567",
     "emergencyContactRelationship": "Daughter",
@@ -151,9 +147,7 @@
     "admissionDate": "2023-08-20T00:00:00.000Z",
     "dateOfBirth": "1950-11-08T00:00:00.000Z",
     "assignedCNA": "cna_001",
-    "adlNeeds": [
-      "health"
-    ],
+    "adlNeeds": ["health"],
     "emergencyContactName": "Linda Chen",
     "emergencyContactPhone": "(555) 234-5678",
     "emergencyContactRelationship": "Spouse",
@@ -250,13 +244,7 @@
     "admissionDate": "2023-05-10T00:00:00.000Z",
     "dateOfBirth": "1938-07-14T00:00:00.000Z",
     "assignedCNA": "cna_002",
-    "adlNeeds": [
-      "bathing",
-      "dressing",
-      "eating",
-      "toileting",
-      "mobility"
-    ],
+    "adlNeeds": ["bathing", "dressing", "eating", "toileting", "mobility"],
     "emergencyContactName": "Michael Williams",
     "emergencyContactPhone": "(555) 345-6789",
     "emergencyContactRelationship": "Son",
@@ -399,10 +387,7 @@
     "admissionDate": "2023-09-05T00:00:00.000Z",
     "dateOfBirth": "1948-12-30T00:00:00.000Z",
     "assignedCNA": "cna_001",
-    "adlNeeds": [
-      "bathing",
-      "dressing"
-    ],
+    "adlNeeds": ["bathing", "dressing"],
     "emergencyContactName": "Maria Martinez",
     "emergencyContactPhone": "(555) 456-7890",
     "emergencyContactRelationship": "Daughter",
@@ -499,9 +484,7 @@
     "admissionDate": "2023-07-18T00:00:00.000Z",
     "dateOfBirth": "1952-04-25T00:00:00.000Z",
     "assignedCNA": "cna_002",
-    "adlNeeds": [
-      "health"
-    ],
+    "adlNeeds": ["health"],
     "emergencyContactName": "David Johnson",
     "emergencyContactPhone": "(555) 567-8901",
     "emergencyContactRelationship": "Spouse",
@@ -566,10 +549,7 @@
     "admissionDate": "2023-10-12T00:00:00.000Z",
     "dateOfBirth": "1946-09-17T00:00:00.000Z",
     "assignedCNA": "cna_003",
-    "adlNeeds": [
-      "mobility",
-      "toileting"
-    ],
+    "adlNeeds": ["mobility", "toileting"],
     "emergencyContactName": "Jennifer Anderson",
     "emergencyContactPhone": "(555) 678-9012",
     "emergencyContactRelationship": "Daughter",
@@ -666,11 +646,7 @@
     "admissionDate": "2023-06-28T00:00:00.000Z",
     "dateOfBirth": "1944-02-11T00:00:00.000Z",
     "assignedCNA": "cna_001",
-    "adlNeeds": [
-      "bathing",
-      "dressing",
-      "mobility"
-    ],
+    "adlNeeds": ["bathing", "dressing", "mobility"],
     "emergencyContactName": "Robert Davis",
     "emergencyContactPhone": "(555) 789-0123",
     "emergencyContactRelationship": "Son",
@@ -842,13 +818,7 @@
     "admissionDate": "2023-04-22T00:00:00.000Z",
     "dateOfBirth": "1940-10-05T00:00:00.000Z",
     "assignedCNA": "cna_003",
-    "adlNeeds": [
-      "bathing",
-      "dressing",
-      "eating",
-      "toileting",
-      "mobility"
-    ],
+    "adlNeeds": ["bathing", "dressing", "eating", "toileting", "mobility"],
     "emergencyContactName": "Thomas Wilson",
     "emergencyContactPhone": "(555) 901-2345",
     "emergencyContactRelationship": "Son",
@@ -971,10 +941,7 @@
     "admissionDate": "2023-08-15T00:00:00.000Z",
     "dateOfBirth": "1947-05-28T00:00:00.000Z",
     "assignedCNA": "cna_001",
-    "adlNeeds": [
-      "bathing",
-      "mobility"
-    ],
+    "adlNeeds": ["bathing", "mobility"],
     "emergencyContactName": "Nancy Taylor",
     "emergencyContactPhone": "(555) 012-3456",
     "emergencyContactRelationship": "Spouse",
@@ -1104,9 +1071,7 @@
     "admissionDate": "2023-12-01T00:00:00.000Z",
     "dateOfBirth": "1953-01-16T00:00:00.000Z",
     "assignedCNA": "cna_002",
-    "adlNeeds": [
-      "health"
-    ],
+    "adlNeeds": ["health"],
     "emergencyContactName": "Karen Miller",
     "emergencyContactPhone": "(555) 123-4568",
     "emergencyContactRelationship": "Daughter",
@@ -1215,10 +1180,7 @@
     "admissionDate": "2023-07-09T00:00:00.000Z",
     "dateOfBirth": "1949-08-23T00:00:00.000Z",
     "assignedCNA": "cna_003",
-    "adlNeeds": [
-      "dressing",
-      "eating"
-    ],
+    "adlNeeds": ["dressing", "eating"],
     "emergencyContactName": "Rosa Garcia",
     "emergencyContactPhone": "(555) 234-5679",
     "emergencyContactRelationship": "Spouse",

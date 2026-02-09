@@ -47,22 +47,22 @@ export default function AdminDashboard() {
 
   const dashboardStats = stats
     ? [
-      {
-        name: 'Total CNAs',
-        value: stats.totalCnas.toString(),
-        icon: 'UserRound' as keyof typeof icons,
-      },
-      {
-        name: 'Total Residents',
-        value: stats.totalResidents.toString(),
-        icon: 'Users' as keyof typeof icons,
-      },
-      {
-        name: 'Active Sessions',
-        value: stats.activeSessions.toString(),
-        icon: 'Activity' as keyof typeof icons,
-      },
-    ]
+        {
+          name: 'Total CNAs',
+          value: stats.totalCnas.toString(),
+          icon: 'UserRound' as keyof typeof icons,
+        },
+        {
+          name: 'Total Residents',
+          value: stats.totalResidents.toString(),
+          icon: 'Users' as keyof typeof icons,
+        },
+        {
+          name: 'Active Sessions',
+          value: stats.activeSessions.toString(),
+          icon: 'Activity' as keyof typeof icons,
+        },
+      ]
     : [];
 
   if (loading) {

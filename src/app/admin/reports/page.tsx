@@ -9,6 +9,7 @@ import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.template';
 import { toast } from '@/lib/toast';
+import { isDemoMode } from '@/lib/demo-config';
 
 export default function ReportsPage() {
   const { data, isLoading, error } = useChartingReports();
@@ -27,7 +28,11 @@ export default function ReportsPage() {
 
     try {
       await deleteReport.mutateAsync(id);
-      toast({ title: 'Report deleted successfully', type: 'success' });
+
+      // Only show success toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({ title: 'Report deleted successfully', type: 'success' });
+      }
     } catch (error) {
       toast({
         title: 'Failed to delete report',
@@ -52,7 +57,10 @@ export default function ReportsPage() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      toast({ title: 'PDF downloaded successfully', type: 'success' });
+      // Only show success toast if not in demo mode
+      if (!isDemoMode()) {
+        toast({ title: 'PDF downloaded successfully', type: 'success' });
+      }
     } catch (error) {
       toast({
         title: 'Failed to download PDF',

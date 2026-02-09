@@ -79,7 +79,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                           <DynamicIconAtom name="Hospital" size="md" className="text-primary" />
                         </div>
                         <div>
-                          <h1 className="text-lg font-semibold text-gray-900">Sunrise Senior Living</h1>
+                          <h1 className="text-lg font-semibold text-gray-900">
+                            Sunrise Senior Living
+                          </h1>
                           <p className="text-xs text-gray-500">Care Documentation</p>
                         </div>
                       </div>
@@ -104,7 +106,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <DynamicIconAtom name="Hospital" size="md" className="text-primary" />
                           </div>
                           <div>
-                            <h1 className="text-lg font-semibold text-gray-900">Sunrise Senior Living</h1>
+                            <h1 className="text-lg font-semibold text-gray-900">
+                              Sunrise Senior Living
+                            </h1>
                             <p className="text-xs text-gray-500">Care Documentation</p>
                           </div>
                         </div>
