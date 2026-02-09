@@ -2,11 +2,24 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
+// MAINTENANCE MODE - Set to true to enable maintenance page
+const MAINTENANCE_MODE = true;
+
 // Check if demo mode is enabled
 const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // MAINTENANCE MODE: Redirect all requests to maintenance page
+  if (MAINTENANCE_MODE && pathname !== '/maintenance') {
+    return NextResponse.redirect(new URL('/maintenance', request.url));
+  }
+
+  // Allow access to maintenance page
+  if (pathname === '/maintenance') {
+    return NextResponse.next();
+  }
 
   // Public routes that don't require authentication
   const publicRoutes = ['/login', '/api/auth', '/admin'];
