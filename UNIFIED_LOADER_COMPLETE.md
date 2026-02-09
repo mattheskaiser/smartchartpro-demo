@@ -14,6 +14,7 @@ Created **ONE** reusable loading component used consistently across the entire a
 ```
 
 ### Features:
+
 - ✅ **Fixed positioning** - `fixed inset-0` for perfect centering
 - ✅ **Consistent size** - Medium spinner everywhere
 - ✅ **Optional message** - Shows below spinner when provided
@@ -23,6 +24,7 @@ Created **ONE** reusable loading component used consistently across the entire a
 ## Usage Across App
 
 ### Pages WITHOUT Message (Dashboard-style):
+
 - ✅ Admin Dashboard
 - ✅ Settings Page
 - ✅ Shifts Page
@@ -34,6 +36,7 @@ if (loading) {
 ```
 
 ### Pages WITH Message (Detail pages):
+
 - ✅ Resident Detail - "Loading residents..."
 - ✅ CNA Detail - "Loading CNA details..."
 - ✅ Report Detail - "Loading report..."
@@ -49,9 +52,11 @@ if (loading) {
 ## Files Updated
 
 ### Component Created:
+
 1. `src/components/molecules/PageLoader.molecule.tsx` ⭐ NEW
 
 ### Pages Updated:
+
 1. `src/app/admin/page.tsx` - Dashboard
 2. `src/app/admin/settings/page.tsx` - Settings
 3. `src/app/admin/shifts/page.tsx` - Shifts
@@ -64,24 +69,18 @@ if (loading) {
 ## The Standard
 
 ### Component Structure:
+
 ```tsx
 <div className="fixed inset-0 flex items-center justify-center">
   <div className="flex flex-col items-center space-y-3">
-    <DynamicIconAtom 
-      name="Loader" 
-      size="md" 
-      className="animate-spin text-primary" 
-    />
-    {message && (
-      <TextAtom className="text-gray-600 text-sm">
-        {message}
-      </TextAtom>
-    )}
+    <DynamicIconAtom name="Loader" size="md" className="animate-spin text-primary" />
+    {message && <TextAtom className="text-gray-600 text-sm">{message}</TextAtom>}
   </div>
 </div>
 ```
 
 ### Why `fixed inset-0`?
+
 - **Perfect centering** - Centers in viewport, not just container
 - **Consistent positioning** - Same across all pages
 - **No layout shifts** - Doesn't depend on parent container
@@ -90,6 +89,7 @@ if (loading) {
 ## Before vs After
 
 ### Before:
+
 - ❌ Multiple loading implementations
 - ❌ Different sizes (sm, md, lg)
 - ❌ Inconsistent centering
@@ -97,6 +97,7 @@ if (loading) {
 - ❌ `min-h-screen` vs `py-20` vs other approaches
 
 ### After:
+
 - ✅ ONE component everywhere
 - ✅ ONE size (md) everywhere
 - ✅ Perfect centering with `fixed inset-0`

@@ -1,39 +1,47 @@
 # Demo Mode Protection - Complete
 
 ## Overview
+
 All mutation operations (create, update, delete) are now blocked in demo mode with a consistent toast message: **"This is a demo - changes are not persistent"**
 
 ## Changes Made
 
 ### 1. Updated Demo Config Message
+
 **File:** `src/lib/demo-config.ts`
+
 - Changed message from "Demo Mode: Action completed but not persisted" to "This is a demo - changes are not persistent"
 - More user-friendly and clear
 
 ### 2. Protected All Mutation Hooks
 
 #### Residents (`src/hooks/useResidents.ts`)
+
 - ✅ `createResident()` - Blocked
 - ✅ `updateResident()` - Blocked
 - ✅ `deleteResident()` - Blocked
 
 #### CNAs (`src/hooks/useCNAs.ts`)
+
 - ✅ `createCNA()` - Blocked
 - ✅ `updateCNA()` - Blocked
 - ✅ `deleteCNA()` - Blocked
 - ✅ `updateCNAAvailability()` - Blocked
 
 #### Shifts (`src/hooks/useShifts.ts`)
+
 - ✅ `createShift()` - Blocked
 - ✅ `updateShift()` - Blocked
 - ✅ `deleteShift()` - Blocked
 
 #### Shift Templates (`src/hooks/useShiftTemplates.ts`)
+
 - ✅ `createShiftTemplate()` - Blocked
 - ✅ `updateShiftTemplate()` - Blocked
 - ✅ `deleteShiftTemplate()` - Blocked
 
 #### Charting Reports (`src/hooks/useChartingReports.ts`)
+
 - ✅ `createReport()` - Blocked
 - ✅ `updateReport()` - Blocked
 - ✅ `deleteReport()` - Blocked
@@ -41,19 +49,23 @@ All mutation operations (create, update, delete) are now blocked in demo mode wi
 ### 3. Protected Resident Detail Components
 
 #### Allergies (`src/components/molecules/resident/ResidentAllergies.molecule.tsx`)
+
 - ✅ `addAllergy()` - Blocked (create & update)
 - ✅ `removeAllergy()` - Blocked
 
 #### Conditions (`src/components/molecules/resident/ResidentConditions.molecule.tsx`)
+
 - ✅ `addCondition()` - Blocked (create & update)
 - ✅ `removeCondition()` - Blocked
 
 #### Medications (`src/components/molecules/resident/ResidentMedications.molecule.tsx`)
+
 - ✅ `addMedication()` - Blocked (create & update)
 - ✅ `removeMedication()` - Blocked
 - ✅ `discontinueMedication()` - Blocked
 
 #### Specialists (`src/components/molecules/resident/ResidentSpecialists.molecule.tsx`)
+
 - ✅ `addSpecialist()` - Blocked (create & update)
 - ✅ `removeSpecialist()` - Blocked
 
@@ -76,6 +88,7 @@ if (isDemoMode()) {
 ## User Experience
 
 When a user tries to:
+
 - Add a new resident, CNA, shift, or report
 - Edit existing data
 - Delete any records
@@ -98,6 +111,7 @@ The UI will close any open modals and return to the previous state, giving the a
 ## Testing
 
 To verify demo mode protection:
+
 1. Ensure `NEXT_PUBLIC_DEMO_MODE=true` in `.env.local`
 2. Try to:
    - Add a new resident
