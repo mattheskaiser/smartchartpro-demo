@@ -54,6 +54,8 @@ export const AvatarAtom = ({ src, alt, size = 'md', className }: AvatarAtomProps
           fill
           className="object-cover"
           onError={() => setImageError(true)}
+          unoptimized
+          priority={size === 'lg' || size === 'xl'}
         />
       )}
     </div>
