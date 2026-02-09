@@ -50,6 +50,7 @@ Successfully converted SmartChart Pro into a **portfolio-ready demo** with:
 ### 🚀 Ready for Deployment
 
 The app is now ready to deploy to Vercel with:
+
 - No database required
 - No environment variables needed (except NEXTAUTH_SECRET)
 - Static mock data
@@ -72,10 +73,10 @@ npm run dev
 
 ### Demo Accounts
 
-| Role | Email | Password |
-|------|-------|----------|
+| Role  | Email          | Password     |
+| ----- | -------------- | ------------ |
 | Admin | admin@demo.com | any password |
-| CNA | cna@demo.com | any password |
+| CNA   | cna@demo.com   | any password |
 
 ### Build for Production
 
@@ -186,6 +187,7 @@ NEXTAUTH_URL=http://localhost:3000
 ## Testing Checklist
 
 ### Admin Features
+
 - [ ] Dashboard loads with stats
 - [ ] View residents list
 - [ ] View CNAs list
@@ -194,6 +196,7 @@ NEXTAUTH_URL=http://localhost:3000
 - [ ] Settings page
 
 ### CNA Features
+
 - [ ] Start charting session
 - [ ] Select residents
 - [ ] Document ADL activities
@@ -201,6 +204,7 @@ NEXTAUTH_URL=http://localhost:3000
 - [ ] Complete session (PDF generation)
 
 ### iPad Testing
+
 - [ ] Login page responsive
 - [ ] Charting workflow usable
 - [ ] Touch targets adequate (44px+)
@@ -237,6 +241,7 @@ NEXTAUTH_URL=http://localhost:3000
 ### Vercel Deployment
 
 1. **Push to GitHub**
+
    ```bash
    git add .
    git commit -m "Demo version ready"
@@ -249,6 +254,7 @@ NEXTAUTH_URL=http://localhost:3000
    - Configure project
 
 3. **Set Environment Variables**
+
    ```
    NEXT_PUBLIC_DEMO_MODE=true
    NEXTAUTH_SECRET=<generate-random-secret>
@@ -289,6 +295,7 @@ NEXTAUTH_URL=http://localhost:3000
 ## Success Metrics
 
 ✅ **Demo is ready when:**
+
 - Login works with one click
 - Both roles (Admin/CNA) accessible
 - All pages load without errors
@@ -303,6 +310,7 @@ NEXTAUTH_URL=http://localhost:3000
 ## Credits
 
 Built with:
+
 - Next.js 14
 - TypeScript
 - Tailwind CSS

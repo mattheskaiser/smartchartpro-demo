@@ -3,7 +3,7 @@
  *
  * This file controls the demo mode behavior for the portfolio version.
  * When DEMO_MODE is true, the app uses mock data instead of a real database.
- * 
+ *
  * MAINTENANCE_MODE can be enabled to switch to demo mode temporarily.
  */
 

@@ -1,11 +1,13 @@
 # Loading Spinners Standardization - Complete ✅
 
 ## Summary
+
 Successfully unified all loading spinners across the entire application using a single, consistent `PageLoaderMolecule` component with proper centering that accounts for the sidebar.
 
 ## What Was Done
 
 ### 1. Created Unified Loading Component
+
 - **File**: `src/components/molecules/PageLoader.molecule.tsx`
 - **Features**:
   - Single, reusable component for all loading states
@@ -17,11 +19,13 @@ Successfully unified all loading spinners across the entire application using a 
 ### 2. Updated All Pages to Use PageLoader with Messages
 
 #### Dashboard-Style Pages
+
 - ✅ `src/app/admin/page.tsx` - "Loading dashboard..."
 - ✅ `src/app/admin/settings/page.tsx` - "Loading settings..."
 - ✅ `src/app/admin/shifts/page.tsx` - "Loading shifts..."
 
 #### Detail Pages
+
 - ✅ `src/app/admin/residents/page.tsx` - "Loading residents..."
 - ✅ `src/app/admin/residents/[id]/page.tsx` - "Loading residents..."
 - ✅ `src/app/admin/cnas/page.tsx` - "Loading CNAs..."
@@ -31,6 +35,7 @@ Successfully unified all loading spinners across the entire application using a 
 - ✅ `src/app/charting/adls/page.tsx` - "Loading session..."
 
 ### 3. Removed Inconsistencies
+
 - ❌ Removed all skeleton loaders
 - ❌ Removed multiple spinners per page
 - ❌ Removed inconsistent centering approaches
@@ -48,18 +53,21 @@ Successfully unified all loading spinners across the entire application using a 
 ## Design Specifications
 
 ### Spinner
+
 - **Icon**: Loader (lucide-react)
 - **Size**: Medium (md)
 - **Animation**: Spin
 - **Color**: Primary theme color
 
 ### Layout
+
 - **Positioning**: `fixed inset-0` for viewport coverage
 - **Centering**: `marginLeft: 128px` to account for 256px sidebar (centers in main content area)
 - **Flex**: Column layout with centered items
 - **Spacing**: 3 units between spinner and message
 
 ### Message (Required)
+
 - **Text Size**: Small (sm)
 - **Color**: Gray-600
 - **Spacing**: 3 units above message
@@ -78,6 +86,7 @@ Successfully unified all loading spinners across the entire application using a 
 ## Verification
 
 All files compile without errors:
+
 - ✅ No TypeScript errors
 - ✅ No linting issues
 - ✅ All imports resolved correctly
@@ -88,6 +97,7 @@ All files compile without errors:
 ## Technical Details
 
 ### Sidebar Width Calculation
+
 - Sidebar width: `w-64` = 256px
 - Offset needed: 256px / 2 = 128px
 - Applied as: `style={{ marginLeft: '128px' }}`
