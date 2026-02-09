@@ -7,6 +7,12 @@ const nextConfig = {
     // This is a known issue: https://github.com/vercel/next.js/issues/58272
     ignoreBuildErrors: true,
   },
+  eslint: {
+    // Only run ESLint on these directories during production builds
+    dirs: ['src'],
+    // Don't fail build on ESLint warnings (only on errors)
+    ignoreDuringBuilds: false,
+  },
   images: {
     remotePatterns: [
       {
