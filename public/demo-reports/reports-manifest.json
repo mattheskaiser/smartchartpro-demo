@@ -1,0 +1,847 @@
+[
+  {
+    "id": "report_001",
+    "reportDate": "2026-02-10T15:44:02.169Z",
+    "sessionStartTime": "2026-02-10T14:00:00.000Z",
+    "cnaId": "cna_001",
+    "cnaName": "Jennifer Rodriguez",
+    "cnaCertification": "CNA-2022-001",
+    "totalResidents": 4,
+    "totalActivities": 17,
+    "residents": [
+      {
+        "id": "res_001",
+        "name": "Margaret Thompson",
+        "room": "101",
+        "status": "partial"
+      },
+      {
+        "id": "res_004",
+        "name": "James Martinez",
+        "room": "104",
+        "status": "partial"
+      },
+      {
+        "id": "res_007",
+        "name": "Mary Davis",
+        "room": "107",
+        "status": "partial"
+      },
+      {
+        "id": "res_002",
+        "name": "Robert Chen",
+        "room": "102",
+        "status": "independent"
+      }
+    ],
+    "entries": [
+      {
+        "residentId": "res_001",
+        "activityType": "eating",
+        "assistance": "partial",
+        "timestamp": "2026-02-10T14:18:06.426Z",
+        "notes": "Fed independently. No issues."
+      },
+      {
+        "residentId": "res_001",
+        "activityType": "dressing",
+        "assistance": "partial",
+        "timestamp": "2026-02-10T14:47:41.645Z",
+        "notes": "Assisted with clothing selection."
+      },
+      {
+        "residentId": "res_001",
+        "activityType": "toileting",
+        "assistance": "independent",
+        "timestamp": "2026-02-10T15:07:09.859Z",
+        "notes": "Assisted with transfer to bathroom."
+      },
+      {
+        "residentId": "res_001",
+        "activityType": "bathing",
+        "assistance": "independent",
+        "timestamp": "2026-02-10T15:24:40.625Z",
+        "notes": "Shower completed without issues."
+      },
+      {
+        "residentId": "res_001",
+        "activityType": "health",
+        "assistance": "independent",
+        "timestamp": "2026-02-10T15:46:45.645Z",
+        "notes": "Vital signs stable."
+      },
+      {
+        "residentId": "res_004",
+        "activityType": "mobility",
+        "assistance": "partial",
+        "timestamp": "2026-02-10T16:14:28.474Z",
+        "notes": "Ambulated with walker to dining room."
+      },
+      {
+        "residentId": "res_004",
+        "activityType": "health",
+        "assistance": "independent",
+        "timestamp": "2026-02-10T16:44:14.296Z",
+        "notes": "Vital signs stable."
+      },
+      {
+        "residentId": "res_004",
+        "activityType": "bathing",
+        "assistance": "independent",
+        "timestamp": "2026-02-10T17:11:48.159Z",
+        "notes": "Assisted with shower. Patient cooperative."
+      },
+      {
+        "residentId": "res_004",
+        "activityType": "toileting",
+        "assistance": "partial",
+        "timestamp": "2026-02-10T17:36:13.907Z",
+        "notes": "Assisted with transfer to commode."
+      },
+      {
+        "residentId": "res_004",
+        "activityType": "dressing",
+        "assistance": "independent",
+        "timestamp": "2026-02-10T17:53:27.611Z",
+        "notes": "Changed into fresh clothes."
+      },
+      {
+        "residentId": "res_007",
+        "activityType": "dressing",
+        "assistance": "independent",
+        "timestamp": "2026-02-10T18:22:15.926Z",
+        "notes": "Assisted with clothing selection."
+      },
+      {
+        "residentId": "res_007",
+        "activityType": "toileting",
+        "assistance": "partial",
+        "timestamp": "2026-02-10T18:47:13.773Z",
+        "notes": "Assisted with transfer to commode."
+      },
+      {
+        "residentId": "res_007",
+        "activityType": "bathing",
+        "assistance": "partial",
+        "timestamp": "2026-02-10T19:13:20.219Z",
+        "notes": "Bed bath completed. Skin integrity good."
+      },
+      {
+        "residentId": "res_007",
+        "activityType": "health",
+        "assistance": "independent",
+        "timestamp": "2026-02-10T19:28:21.584Z",
+        "notes": "Medication administered as ordered."
+      },
+      {
+        "residentId": "res_002",
+        "activityType": "dressing",
+        "assistance": "independent",
+        "timestamp": "2026-02-10T19:48:44.972Z",
+        "notes": "Helped with buttons and shoes."
+      },
+      {
+        "residentId": "res_002",
+        "activityType": "health",
+        "assistance": "independent",
+        "timestamp": "2026-02-10T20:18:22.812Z",
+        "notes": "Vital signs stable."
+      },
+      {
+        "residentId": "res_002",
+        "activityType": "toileting",
+        "assistance": "independent",
+        "timestamp": "2026-02-10T20:34:05.154Z",
+        "notes": "Assisted with transfer to commode."
+      }
+    ]
+  },
+  {
+    "id": "report_002",
+    "reportDate": "2026-02-09T15:44:02.171Z",
+    "sessionStartTime": "2026-02-09T14:00:00.000Z",
+    "cnaId": "cna_002",
+    "cnaName": "Michael Thompson",
+    "cnaCertification": "CNA-2021-045",
+    "totalResidents": 3,
+    "totalActivities": 11,
+    "residents": [
+      {
+        "id": "res_003",
+        "name": "Dorothy Williams",
+        "room": "103",
+        "status": "full"
+      },
+      {
+        "id": "res_005",
+        "name": "Patricia Johnson",
+        "room": "105",
+        "status": "independent"
+      },
+      {
+        "id": "res_008",
+        "name": "Charles Brown",
+        "room": "108",
+        "status": "independent"
+      }
+    ],
+    "entries": [
+      {
+        "residentId": "res_003",
+        "activityType": "bathing",
+        "assistance": "full",
+        "timestamp": "2026-02-09T14:23:50.105Z",
+        "notes": "Assisted with shower. Patient cooperative."
+      },
+      {
+        "residentId": "res_003",
+        "activityType": "health",
+        "assistance": "full",
+        "timestamp": "2026-02-09T14:48:06.657Z",
+        "notes": "Vital signs stable."
+      },
+      {
+        "residentId": "res_003",
+        "activityType": "dressing",
+        "assistance": "full",
+        "timestamp": "2026-02-09T15:14:50.332Z",
+        "notes": "Helped with buttons and shoes."
+      },
+      {
+        "residentId": "res_003",
+        "activityType": "mobility",
+        "assistance": "full",
+        "timestamp": "2026-02-09T15:35:26.763Z",
+        "notes": "Assisted with position changes."
+      },
+      {
+        "residentId": "res_003",
+        "activityType": "eating",
+        "assistance": "full",
+        "timestamp": "2026-02-09T16:00:35.779Z",
+        "notes": "Assisted with cutting food. Ate well."
+      },
+      {
+        "residentId": "res_005",
+        "activityType": "mobility",
+        "assistance": "independent",
+        "timestamp": "2026-02-09T16:24:04.241Z",
+        "notes": "Assisted with position changes."
+      },
+      {
+        "residentId": "res_005",
+        "activityType": "dressing",
+        "assistance": "independent",
+        "timestamp": "2026-02-09T16:39:31.846Z",
+        "notes": "Helped with buttons and shoes."
+      },
+      {
+        "residentId": "res_005",
+        "activityType": "eating",
+        "assistance": "independent",
+        "timestamp": "2026-02-09T16:56:01.228Z",
+        "notes": "Encouraged fluid intake."
+      },
+      {
+        "residentId": "res_008",
+        "activityType": "mobility",
+        "assistance": "independent",
+        "timestamp": "2026-02-09T17:18:12.338Z",
+        "notes": "Assisted with position changes."
+      },
+      {
+        "residentId": "res_008",
+        "activityType": "toileting",
+        "assistance": "independent",
+        "timestamp": "2026-02-09T17:34:21.659Z",
+        "notes": "Assisted with transfer to bathroom."
+      },
+      {
+        "residentId": "res_008",
+        "activityType": "health",
+        "assistance": "independent",
+        "timestamp": "2026-02-09T17:51:38.231Z",
+        "notes": "No complaints of pain."
+      }
+    ]
+  },
+  {
+    "id": "report_003",
+    "reportDate": "2026-02-08T15:44:02.171Z",
+    "sessionStartTime": "2026-02-08T14:00:00.000Z",
+    "cnaId": "cna_003",
+    "cnaName": "Sarah Johnson",
+    "cnaCertification": "CNA-2023-012",
+    "totalResidents": 5,
+    "totalActivities": 21,
+    "residents": [
+      {
+        "id": "res_006",
+        "name": "William Anderson",
+        "room": "106",
+        "status": "partial"
+      },
+      {
+        "id": "res_009",
+        "name": "Barbara Wilson",
+        "room": "109",
+        "status": "full"
+      },
+      {
+        "id": "res_001",
+        "name": "Margaret Thompson",
+        "room": "101",
+        "status": "partial"
+      },
+      {
+        "id": "res_004",
+        "name": "James Martinez",
+        "room": "104",
+        "status": "partial"
+      },
+      {
+        "id": "res_007",
+        "name": "Mary Davis",
+        "room": "107",
+        "status": "partial"
+      }
+    ],
+    "entries": [
+      {
+        "residentId": "res_006",
+        "activityType": "mobility",
+        "assistance": "independent",
+        "timestamp": "2026-02-08T14:19:51.117Z",
+        "notes": "Ambulated with walker to dining room."
+      },
+      {
+        "residentId": "res_006",
+        "activityType": "eating",
+        "assistance": "partial",
+        "timestamp": "2026-02-08T14:49:41.038Z",
+        "notes": "Assisted with cutting food. Ate well."
+      },
+      {
+        "residentId": "res_006",
+        "activityType": "toileting",
+        "assistance": "independent",
+        "timestamp": "2026-02-08T15:11:55.731Z",
+        "notes": "Assisted with transfer to bathroom."
+      },
+      {
+        "residentId": "res_006",
+        "activityType": "dressing",
+        "assistance": "independent",
+        "timestamp": "2026-02-08T15:41:37.350Z",
+        "notes": "Helped with buttons and shoes."
+      },
+      {
+        "residentId": "res_006",
+        "activityType": "bathing",
+        "assistance": "independent",
+        "timestamp": "2026-02-08T16:06:12.858Z",
+        "notes": "Assisted with shower. Patient cooperative."
+      },
+      {
+        "residentId": "res_009",
+        "activityType": "eating",
+        "assistance": "full",
+        "timestamp": "2026-02-08T16:26:02.776Z",
+        "notes": "Assisted with cutting food. Ate well."
+      },
+      {
+        "residentId": "res_009",
+        "activityType": "mobility",
+        "assistance": "full",
+        "timestamp": "2026-02-08T16:44:58.568Z",
+        "notes": "Transferred to wheelchair for activities."
+      },
+      {
+        "residentId": "res_009",
+        "activityType": "bathing",
+        "assistance": "full",
+        "timestamp": "2026-02-08T17:02:55.589Z",
+        "notes": "Assisted with shower. Patient cooperative."
+      },
+      {
+        "residentId": "res_009",
+        "activityType": "health",
+        "assistance": "full",
+        "timestamp": "2026-02-08T17:19:59.574Z",
+        "notes": "No complaints of pain."
+      },
+      {
+        "residentId": "res_009",
+        "activityType": "toileting",
+        "assistance": "full",
+        "timestamp": "2026-02-08T17:36:19.227Z",
+        "notes": "Assisted with transfer to commode."
+      },
+      {
+        "residentId": "res_001",
+        "activityType": "bathing",
+        "assistance": "partial",
+        "timestamp": "2026-02-08T18:02:32.580Z",
+        "notes": "Bed bath completed. Skin integrity good."
+      },
+      {
+        "residentId": "res_001",
+        "activityType": "mobility",
+        "assistance": "independent",
+        "timestamp": "2026-02-08T18:18:21.676Z",
+        "notes": "Walked 50 feet with assistance."
+      },
+      {
+        "residentId": "res_001",
+        "activityType": "health",
+        "assistance": "independent",
+        "timestamp": "2026-02-08T18:47:03.058Z",
+        "notes": "Blood pressure within normal limits."
+      },
+      {
+        "residentId": "res_001",
+        "activityType": "toileting",
+        "assistance": "independent",
+        "timestamp": "2026-02-08T19:14:32.096Z",
+        "notes": "Continent, no accidents."
+      },
+      {
+        "residentId": "res_001",
+        "activityType": "dressing",
+        "assistance": "independent",
+        "timestamp": "2026-02-08T19:36:18.650Z",
+        "notes": "Helped with buttons and shoes."
+      },
+      {
+        "residentId": "res_004",
+        "activityType": "bathing",
+        "assistance": "independent",
+        "timestamp": "2026-02-08T19:51:28.850Z",
+        "notes": "Patient preferred morning bath."
+      },
+      {
+        "residentId": "res_004",
+        "activityType": "mobility",
+        "assistance": "partial",
+        "timestamp": "2026-02-08T20:08:32.339Z",
+        "notes": "Transferred to wheelchair for activities."
+      },
+      {
+        "residentId": "res_004",
+        "activityType": "health",
+        "assistance": "independent",
+        "timestamp": "2026-02-08T20:28:46.502Z",
+        "notes": "No complaints of pain."
+      },
+      {
+        "residentId": "res_007",
+        "activityType": "bathing",
+        "assistance": "partial",
+        "timestamp": "2026-02-08T20:52:57.872Z",
+        "notes": "Shower completed without issues."
+      },
+      {
+        "residentId": "res_007",
+        "activityType": "mobility",
+        "assistance": "partial",
+        "timestamp": "2026-02-08T21:10:58.615Z",
+        "notes": "Ambulated with walker to dining room."
+      },
+      {
+        "residentId": "res_007",
+        "activityType": "health",
+        "assistance": "partial",
+        "timestamp": "2026-02-08T21:37:15.085Z",
+        "notes": "Blood pressure within normal limits."
+      }
+    ]
+  },
+  {
+    "id": "report_004",
+    "reportDate": "2026-02-07T15:44:02.171Z",
+    "sessionStartTime": "2026-02-07T14:00:00.000Z",
+    "cnaId": "cna_001",
+    "cnaName": "Jennifer Rodriguez",
+    "cnaCertification": "CNA-2022-001",
+    "totalResidents": 4,
+    "totalActivities": 15,
+    "residents": [
+      {
+        "id": "res_002",
+        "name": "Robert Chen",
+        "room": "102",
+        "status": "independent"
+      },
+      {
+        "id": "res_005",
+        "name": "Patricia Johnson",
+        "room": "105",
+        "status": "independent"
+      },
+      {
+        "id": "res_008",
+        "name": "Charles Brown",
+        "room": "108",
+        "status": "independent"
+      },
+      {
+        "id": "res_003",
+        "name": "Dorothy Williams",
+        "room": "103",
+        "status": "full"
+      }
+    ],
+    "entries": [
+      {
+        "residentId": "res_002",
+        "activityType": "toileting",
+        "assistance": "independent",
+        "timestamp": "2026-02-07T14:28:33.927Z",
+        "notes": "No issues reported."
+      },
+      {
+        "residentId": "res_002",
+        "activityType": "eating",
+        "assistance": "independent",
+        "timestamp": "2026-02-07T14:50:12.166Z",
+        "notes": "Fed independently. No issues."
+      },
+      {
+        "residentId": "res_002",
+        "activityType": "health",
+        "assistance": "independent",
+        "timestamp": "2026-02-07T15:16:02.478Z",
+        "notes": "Blood pressure within normal limits."
+      },
+      {
+        "residentId": "res_002",
+        "activityType": "dressing",
+        "assistance": "independent",
+        "timestamp": "2026-02-07T15:40:04.738Z",
+        "notes": "Changed into fresh clothes."
+      },
+      {
+        "residentId": "res_002",
+        "activityType": "mobility",
+        "assistance": "independent",
+        "timestamp": "2026-02-07T16:07:22.780Z",
+        "notes": "Assisted with position changes."
+      },
+      {
+        "residentId": "res_005",
+        "activityType": "toileting",
+        "assistance": "independent",
+        "timestamp": "2026-02-07T16:31:24.759Z",
+        "notes": "Assisted with transfer to bathroom."
+      },
+      {
+        "residentId": "res_005",
+        "activityType": "mobility",
+        "assistance": "independent",
+        "timestamp": "2026-02-07T16:46:33.831Z",
+        "notes": "Ambulated with walker to dining room."
+      },
+      {
+        "residentId": "res_005",
+        "activityType": "bathing",
+        "assistance": "independent",
+        "timestamp": "2026-02-07T17:09:39.064Z",
+        "notes": "Bed bath completed. Skin integrity good."
+      },
+      {
+        "residentId": "res_008",
+        "activityType": "toileting",
+        "assistance": "independent",
+        "timestamp": "2026-02-07T17:33:05.188Z",
+        "notes": "No issues reported."
+      },
+      {
+        "residentId": "res_008",
+        "activityType": "health",
+        "assistance": "independent",
+        "timestamp": "2026-02-07T18:01:04.536Z",
+        "notes": "Blood pressure within normal limits."
+      },
+      {
+        "residentId": "res_008",
+        "activityType": "eating",
+        "assistance": "independent",
+        "timestamp": "2026-02-07T18:16:32.523Z",
+        "notes": "Fed independently. No issues."
+      },
+      {
+        "residentId": "res_008",
+        "activityType": "mobility",
+        "assistance": "independent",
+        "timestamp": "2026-02-07T18:45:40.637Z",
+        "notes": "Assisted with position changes."
+      },
+      {
+        "residentId": "res_003",
+        "activityType": "mobility",
+        "assistance": "full",
+        "timestamp": "2026-02-07T19:08:01.226Z",
+        "notes": "Assisted with position changes."
+      },
+      {
+        "residentId": "res_003",
+        "activityType": "eating",
+        "assistance": "full",
+        "timestamp": "2026-02-07T19:28:42.710Z",
+        "notes": "Encouraged fluid intake."
+      },
+      {
+        "residentId": "res_003",
+        "activityType": "bathing",
+        "assistance": "full",
+        "timestamp": "2026-02-07T19:51:08.354Z",
+        "notes": "Shower completed without issues."
+      }
+    ]
+  },
+  {
+    "id": "report_005",
+    "reportDate": "2026-02-06T15:44:02.171Z",
+    "sessionStartTime": "2026-02-06T14:00:00.000Z",
+    "cnaId": "cna_004",
+    "cnaName": "David Lee",
+    "cnaCertification": "CNA-2022-078",
+    "totalResidents": 3,
+    "totalActivities": 11,
+    "residents": [
+      {
+        "id": "res_006",
+        "name": "William Anderson",
+        "room": "106",
+        "status": "partial"
+      },
+      {
+        "id": "res_009",
+        "name": "Barbara Wilson",
+        "room": "109",
+        "status": "full"
+      },
+      {
+        "id": "res_001",
+        "name": "Margaret Thompson",
+        "room": "101",
+        "status": "partial"
+      }
+    ],
+    "entries": [
+      {
+        "residentId": "res_006",
+        "activityType": "bathing",
+        "assistance": "partial",
+        "timestamp": "2026-02-06T14:22:26.076Z",
+        "notes": "Shower completed without issues."
+      },
+      {
+        "residentId": "res_006",
+        "activityType": "mobility",
+        "assistance": "independent",
+        "timestamp": "2026-02-06T14:47:43.247Z",
+        "notes": "Transferred to wheelchair for activities."
+      },
+      {
+        "residentId": "res_006",
+        "activityType": "dressing",
+        "assistance": "partial",
+        "timestamp": "2026-02-06T15:16:36.337Z",
+        "notes": "Helped with buttons and shoes."
+      },
+      {
+        "residentId": "res_006",
+        "activityType": "health",
+        "assistance": "partial",
+        "timestamp": "2026-02-06T15:42:48.289Z",
+        "notes": "Vital signs stable."
+      },
+      {
+        "residentId": "res_009",
+        "activityType": "bathing",
+        "assistance": "full",
+        "timestamp": "2026-02-06T16:03:35.766Z",
+        "notes": "Assisted with shower. Patient cooperative."
+      },
+      {
+        "residentId": "res_009",
+        "activityType": "mobility",
+        "assistance": "full",
+        "timestamp": "2026-02-06T16:21:57.621Z",
+        "notes": "Transferred to wheelchair for activities."
+      },
+      {
+        "residentId": "res_009",
+        "activityType": "toileting",
+        "assistance": "full",
+        "timestamp": "2026-02-06T16:51:56.180Z",
+        "notes": "Continent, no accidents."
+      },
+      {
+        "residentId": "res_009",
+        "activityType": "eating",
+        "assistance": "full",
+        "timestamp": "2026-02-06T17:10:08.275Z",
+        "notes": "Ate 75% of breakfast. Good appetite."
+      },
+      {
+        "residentId": "res_001",
+        "activityType": "eating",
+        "assistance": "partial",
+        "timestamp": "2026-02-06T17:29:07.114Z",
+        "notes": "Ate 75% of breakfast. Good appetite."
+      },
+      {
+        "residentId": "res_001",
+        "activityType": "toileting",
+        "assistance": "independent",
+        "timestamp": "2026-02-06T17:57:02.320Z",
+        "notes": "No issues reported."
+      },
+      {
+        "residentId": "res_001",
+        "activityType": "mobility",
+        "assistance": "independent",
+        "timestamp": "2026-02-06T18:19:28.412Z",
+        "notes": "Assisted with position changes."
+      }
+    ]
+  },
+  {
+    "id": "report_006",
+    "reportDate": "2026-02-05T15:44:02.171Z",
+    "sessionStartTime": "2026-02-05T14:00:00.000Z",
+    "cnaId": "cna_002",
+    "cnaName": "Michael Thompson",
+    "cnaCertification": "CNA-2021-045",
+    "totalResidents": 4,
+    "totalActivities": 14,
+    "residents": [
+      {
+        "id": "res_004",
+        "name": "James Martinez",
+        "room": "104",
+        "status": "partial"
+      },
+      {
+        "id": "res_007",
+        "name": "Mary Davis",
+        "room": "107",
+        "status": "partial"
+      },
+      {
+        "id": "res_002",
+        "name": "Robert Chen",
+        "room": "102",
+        "status": "independent"
+      },
+      {
+        "id": "res_005",
+        "name": "Patricia Johnson",
+        "room": "105",
+        "status": "independent"
+      }
+    ],
+    "entries": [
+      {
+        "residentId": "res_004",
+        "activityType": "toileting",
+        "assistance": "partial",
+        "timestamp": "2026-02-05T14:19:52.732Z",
+        "notes": "No issues reported."
+      },
+      {
+        "residentId": "res_004",
+        "activityType": "bathing",
+        "assistance": "independent",
+        "timestamp": "2026-02-05T14:46:24.398Z",
+        "notes": "Shower completed without issues."
+      },
+      {
+        "residentId": "res_004",
+        "activityType": "eating",
+        "assistance": "independent",
+        "timestamp": "2026-02-05T15:09:56.396Z",
+        "notes": "Encouraged fluid intake."
+      },
+      {
+        "residentId": "res_004",
+        "activityType": "mobility",
+        "assistance": "independent",
+        "timestamp": "2026-02-05T15:38:37.002Z",
+        "notes": "Walked 50 feet with assistance."
+      },
+      {
+        "residentId": "res_007",
+        "activityType": "eating",
+        "assistance": "independent",
+        "timestamp": "2026-02-05T15:56:39.547Z",
+        "notes": "Encouraged fluid intake."
+      },
+      {
+        "residentId": "res_007",
+        "activityType": "bathing",
+        "assistance": "independent",
+        "timestamp": "2026-02-05T16:22:59.087Z",
+        "notes": "Bed bath completed. Skin integrity good."
+      },
+      {
+        "residentId": "res_007",
+        "activityType": "dressing",
+        "assistance": "partial",
+        "timestamp": "2026-02-05T16:38:15.213Z",
+        "notes": "Patient dressed independently with supervision."
+      },
+      {
+        "residentId": "res_007",
+        "activityType": "health",
+        "assistance": "independent",
+        "timestamp": "2026-02-05T17:01:58.364Z",
+        "notes": "Vital signs stable."
+      },
+      {
+        "residentId": "res_002",
+        "activityType": "toileting",
+        "assistance": "independent",
+        "timestamp": "2026-02-05T17:25:27.735Z",
+        "notes": "Continent, no accidents."
+      },
+      {
+        "residentId": "res_002",
+        "activityType": "health",
+        "assistance": "independent",
+        "timestamp": "2026-02-05T17:41:50.431Z",
+        "notes": "Medication administered as ordered."
+      },
+      {
+        "residentId": "res_002",
+        "activityType": "mobility",
+        "assistance": "independent",
+        "timestamp": "2026-02-05T18:00:24.055Z",
+        "notes": "Ambulated with walker to dining room."
+      },
+      {
+        "residentId": "res_005",
+        "activityType": "toileting",
+        "assistance": "independent",
+        "timestamp": "2026-02-05T18:18:35.174Z",
+        "notes": "Assisted with transfer to commode."
+      },
+      {
+        "residentId": "res_005",
+        "activityType": "health",
+        "assistance": "independent",
+        "timestamp": "2026-02-05T18:48:15.179Z",
+        "notes": "Blood pressure within normal limits."
+      },
+      {
+        "residentId": "res_005",
+        "activityType": "mobility",
+        "assistance": "independent",
+        "timestamp": "2026-02-05T19:09:39.969Z",
+        "notes": "Walked 50 feet with assistance."
+      }
+    ]
+  }
+]

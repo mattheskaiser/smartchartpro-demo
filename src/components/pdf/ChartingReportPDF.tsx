@@ -2,127 +2,172 @@ import React from 'react';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 
-// Clean, professional medical document styles
+// Clean, modern medical document styles
 const styles = StyleSheet.create({
   page: {
-    padding: 50,
-    fontSize: 11,
+    padding: 40,
+    fontSize: 10,
     backgroundColor: '#ffffff',
     fontFamily: 'Helvetica',
-    lineHeight: 1.4,
+    lineHeight: 1.5,
   },
 
-  // Simple header
+  // Modern header with blue accent
   header: {
     marginBottom: 30,
-    borderBottom: '1 solid #000000',
+    borderBottomWidth: 3,
+    borderBottomColor: '#3b82f6',
     paddingBottom: 20,
+    backgroundColor: '#f8fafc',
+    padding: 20,
+    borderRadius: 6,
   },
   facilityName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#000000',
+    color: '#1e40af',
     marginBottom: 8,
     textAlign: 'center',
   },
   facilityAddress: {
-    fontSize: 11,
-    color: '#000000',
+    fontSize: 10,
+    color: '#64748b',
     textAlign: 'center',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   facilityContact: {
-    fontSize: 10,
-    color: '#000000',
+    fontSize: 9,
+    color: '#64748b',
     textAlign: 'center',
-    marginBottom: 3,
+    marginBottom: 2,
   },
   documentTitle: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#000000',
+    color: '#1e293b',
     textAlign: 'center',
     marginTop: 15,
     marginBottom: 5,
+    letterSpacing: 1,
   },
 
-  // Report info
+  // Report info with subtle background
   reportInfo: {
     marginBottom: 25,
     fontSize: 10,
+    backgroundColor: '#f1f5f9',
+    padding: 15,
+    borderRadius: 6,
+    borderLeftWidth: 4,
+    borderLeftColor: '#3b82f6',
   },
   reportInfoRow: {
     flexDirection: 'row',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   reportLabel: {
-    width: '25%',
+    width: '30%',
     fontWeight: 'bold',
+    color: '#374151',
   },
   reportValue: {
-    width: '75%',
+    width: '70%',
+    color: '#1f2937',
   },
 
-  // Resident sections
+  // Modern resident sections
   residentSection: {
     marginBottom: 25,
     pageBreakInside: 'avoid',
+    overflow: 'hidden',
+    backgroundColor: '#ffffff',
   },
   residentHeader: {
     fontSize: 12,
     fontWeight: 'bold',
-    marginBottom: 10,
-    borderBottom: '1 solid #cccccc',
-    paddingBottom: 5,
+    marginBottom: 0,
+    backgroundColor: '#3b82f6',
+    color: '#ffffff',
+    padding: 12,
   },
 
-  // Activity entries
+  // Clean table styling
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#f9fafb',
+    borderBottomWidth: 2,
+    borderBottomColor: '#d1d5db',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    fontWeight: 'bold',
+    fontSize: 9,
+  },
+  tableHeaderAssistance: {
+    width: '20%',
+    fontSize: 9,
+    color: '#000000',
+    fontWeight: 'bold',
+  },
+
+  // Activity entries with better spacing
   activityEntry: {
-    marginBottom: 8,
-    paddingLeft: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f3f4f6',
+    paddingVertical: 12,
+    paddingHorizontal: 15,
   },
   activityRow: {
     flexDirection: 'row',
-    marginBottom: 2,
+    alignItems: 'flex-start',
   },
   activityTime: {
     width: '15%',
-    fontSize: 10,
+    fontSize: 9,
+    color: '#6b7280',
+    fontWeight: 'bold',
   },
   activityType: {
-    width: '30%',
-    fontSize: 10,
+    width: '25%',
+    fontSize: 9,
+    color: '#374151',
+    fontWeight: 'bold',
   },
   activityAssistance: {
-    width: '25%',
-    fontSize: 10,
+    width: '20%',
+    fontSize: 9,
+    fontWeight: 'bold',
+  },
+
+  // Assistance level colors
+  assistanceIndependent: {
+    color: '#059669',
+  },
+  assistancePartial: {
+    color: '#d97706',
+  },
+  assistanceFull: {
+    color: '#dc2626',
   },
   activityNotes: {
-    width: '30%',
-    fontSize: 10,
+    width: '40%',
+    fontSize: 9,
+    color: '#6b7280',
+    fontStyle: 'italic',
   },
 
-  // Table headers
-  tableHeader: {
-    flexDirection: 'row',
-    marginBottom: 8,
-    paddingBottom: 3,
-    borderBottom: '1 solid #000000',
-    fontWeight: 'bold',
-    fontSize: 10,
-  },
-
-  // Footer
+  // Modern footer
   footer: {
     position: 'absolute',
     bottom: 30,
-    left: 50,
-    right: 50,
-    borderTop: '1 solid #000000',
-    paddingTop: 10,
+    left: 40,
+    right: 40,
+    borderTopWidth: 2,
+    borderTopColor: '#e5e7eb',
+    paddingTop: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    fontSize: 9,
+    fontSize: 8,
+    color: '#6b7280',
   },
 });
 
@@ -173,10 +218,8 @@ export const ChartingReportPDF: React.FC<ChartingReportPDFProps> = ({
   facilityAddress,
   facilityPhone,
   facilityFax,
-  // facilityWebsite, // Unused
   licenseNumber,
   npiNumber,
-  // taxId, // Unused
   cnaName,
   cnaCertification,
   sessionStartTime,
@@ -205,6 +248,19 @@ export const ChartingReportPDF: React.FC<ChartingReportPDFProps> = ({
   const totalActivities = entries.length;
   const residentCount = selectedResidents.length;
   const completionTime = new Date();
+
+  const getAssistanceStyle = (assistance: string) => {
+    switch (assistance.toLowerCase()) {
+      case 'independent':
+        return styles.assistanceIndependent;
+      case 'partial':
+        return styles.assistancePartial;
+      case 'full':
+        return styles.assistanceFull;
+      default:
+        return styles.assistancePartial;
+    }
+  };
 
   return (
     <Document>
@@ -269,7 +325,7 @@ export const ChartingReportPDF: React.FC<ChartingReportPDFProps> = ({
                   <View style={styles.tableHeader}>
                     <Text style={styles.activityTime}>Time</Text>
                     <Text style={styles.activityType}>Activity</Text>
-                    <Text style={styles.activityAssistance}>Assistance</Text>
+                    <Text style={styles.tableHeaderAssistance}>Assistance</Text>
                     <Text style={styles.activityNotes}>Notes</Text>
                   </View>
                   {residentEntries.map((entry, entryIndex) => (
@@ -281,7 +337,7 @@ export const ChartingReportPDF: React.FC<ChartingReportPDFProps> = ({
                         <Text style={styles.activityType}>
                           {ADL_TYPES[entry.activityType] || entry.activityType}
                         </Text>
-                        <Text style={styles.activityAssistance}>
+                        <Text style={[styles.activityAssistance, getAssistanceStyle(entry.assistance)]}>
                           {ASSISTANCE_LEVELS[entry.assistance] || entry.assistance}
                         </Text>
                         <Text style={styles.activityNotes}>{entry.notes || ''}</Text>
@@ -290,9 +346,11 @@ export const ChartingReportPDF: React.FC<ChartingReportPDFProps> = ({
                   ))}
                 </>
               ) : (
-                <Text style={{ fontSize: 10, fontStyle: 'italic', paddingLeft: 15 }}>
-                  No activities documented for this resident
-                </Text>
+                <View style={{ padding: 15, backgroundColor: '#f9fafb' }}>
+                  <Text style={{ fontSize: 10, fontStyle: 'italic', color: '#6b7280', textAlign: 'center' }}>
+                    No activities documented for this resident
+                  </Text>
+                </View>
               )}
             </View>
           );

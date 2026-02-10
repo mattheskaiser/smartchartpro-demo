@@ -152,41 +152,94 @@ export const generateMockShiftAssignments = () => {
 
 export const mockShiftAssignments = generateMockShiftAssignments();
 
-// Mock charting reports (last 30 days)
+// Mock charting reports - 6 recent reports with realistic data
 export const generateMockChartingReports = () => {
   const reports = [];
   const today = new Date();
 
-  for (let i = 1; i <= 30; i++) {
-    const date = new Date(today);
-    date.setDate(date.getDate() - i);
+  const mockReportsData = [
+    {
+      daysAgo: 0,
+      cnaId: 'cna_001',
+      cnaName: 'Jennifer Rodriguez',
+      cnaCert: 'CNA-2022-001',
+      totalResidents: 4,
+      totalActivities: 18,
+      status: 'pending',
+    },
+    {
+      daysAgo: 1,
+      cnaId: 'cna_002',
+      cnaName: 'Michael Thompson',
+      cnaCert: 'CNA-2021-045',
+      totalResidents: 3,
+      totalActivities: 15,
+      status: 'reviewed',
+    },
+    {
+      daysAgo: 2,
+      cnaId: 'cna_003',
+      cnaName: 'Sarah Johnson',
+      cnaCert: 'CNA-2023-012',
+      totalResidents: 5,
+      totalActivities: 22,
+      status: 'reviewed',
+    },
+    {
+      daysAgo: 3,
+      cnaId: 'cna_001',
+      cnaName: 'Jennifer Rodriguez',
+      cnaCert: 'CNA-2022-001',
+      totalResidents: 4,
+      totalActivities: 17,
+      status: 'reviewed',
+    },
+    {
+      daysAgo: 4,
+      cnaId: 'cna_004',
+      cnaName: 'David Lee',
+      cnaCert: 'CNA-2022-078',
+      totalResidents: 3,
+      totalActivities: 14,
+      status: 'reviewed',
+    },
+    {
+      daysAgo: 5,
+      cnaId: 'cna_002',
+      cnaName: 'Michael Thompson',
+      cnaCert: 'CNA-2021-045',
+      totalResidents: 4,
+      totalActivities: 19,
+      status: 'reviewed',
+    },
+  ];
 
-    const cnaId = ['cna_001', 'cna_002', 'cna_003'][i % 3];
-    const cnaName = ['Jennifer Rodriguez', 'Michael Thompson', 'Sarah Johnson'][i % 3];
-    const cnaCert = ['CNA-2022-001', 'CNA-2021-045', 'CNA-2023-012'][i % 3];
+  mockReportsData.forEach((data, index) => {
+    const date = new Date(today);
+    date.setDate(date.getDate() - data.daysAgo);
 
     reports.push({
-      id: `report_${String(i).padStart(3, '0')}`,
+      id: `report_${String(index + 1).padStart(3, '0')}`,
       reportDate: date.toISOString(),
       sessionStartTime: new Date(date.setHours(6, 0, 0, 0)).toISOString(),
       sessionEndTime: new Date(date.setHours(13, 30, 0, 0)).toISOString(),
-      cnaId,
-      cnaName,
-      cnaCertification: cnaCert,
-      createdById: `user_${cnaId}`,
-      totalResidents: 4 + (i % 3),
-      totalActivities: 12 + (i % 8),
-      status: i <= 5 ? 'pending' : 'reviewed',
-      reviewedBy: i <= 5 ? null : 'Admin User',
-      reviewedAt: i <= 5 ? null : new Date(date.setHours(15, 0, 0, 0)).toISOString(),
-      notes: i <= 5 ? null : 'Report reviewed and approved.',
+      cnaId: data.cnaId,
+      cnaName: data.cnaName,
+      cnaCertification: data.cnaCert,
+      createdById: `user_${data.cnaId}`,
+      totalResidents: data.totalResidents,
+      totalActivities: data.totalActivities,
+      status: data.status,
+      reviewedBy: data.status === 'reviewed' ? 'Admin User' : null,
+      reviewedAt: data.status === 'reviewed' ? new Date(date.setHours(15, 0, 0, 0)).toISOString() : null,
+      notes: data.status === 'reviewed' ? 'Report reviewed and approved.' : null,
       residentsData: [],
       entriesData: [],
       pdfData: null,
       createdAt: new Date(date.setHours(13, 30, 0, 0)).toISOString(),
       updatedAt: new Date(date.setHours(15, 0, 0, 0)).toISOString(),
     });
-  }
+  });
 
   return reports;
 };

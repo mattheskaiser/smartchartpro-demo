@@ -17,25 +17,20 @@ export default function ReportsPage() {
   const deleteReport = useDeleteChartingReport();
 
   const handleDelete = async (id: string, reportDate: string | Date) => {
-    const dateStr = typeof reportDate === 'string' ? reportDate : reportDate.toISOString();
-    if (
-      !confirm(
-        `Are you sure you want to delete the report from ${format(new Date(dateStr), 'MMM dd, yyyy')}? This action cannot be undone.`
-      )
-    ) {
-      return;
-    }
+    toast({
+      title: 'Demo Mode',
+      description: "Report deletion isn't available in demo mode. This is for demonstration purposes only.",
+      type: 'warning',
+    });
+  };
 
+  const handleViewPDF = async (report: any) => {
     try {
-      await deleteReport.mutateAsync(id);
-
-      // Only show success toast if not in demo mode
-      if (!isDemoMode()) {
-        toast({ title: 'Report deleted successfully', type: 'success' });
-      }
+      // Open PDF in new tab via API
+      window.open(`/api/reports/${report.id}/pdf`, '_blank');
     } catch (error) {
       toast({
-        title: 'Failed to delete report',
+        title: 'Failed to open PDF',
         description: error instanceof Error ? error.message : 'Unknown error',
         type: 'error',
       });
@@ -57,10 +52,7 @@ export default function ReportsPage() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      // Only show success toast if not in demo mode
-      if (!isDemoMode()) {
-        toast({ title: 'PDF downloaded successfully', type: 'success' });
-      }
+      toast({ title: 'PDF downloaded successfully', type: 'success' });
     } catch (error) {
       toast({
         title: 'Failed to download PDF',
@@ -170,6 +162,15 @@ export default function ReportsPage() {
               </div>
 
               <div className="flex gap-2">
+                <ButtonAtom
+                  variant="outline"
+                  size="sm"
+                  className="flex-1"
+                  onClick={() => handleViewPDF(report)}
+                >
+                  <DynamicIconAtom name="Eye" size="sm" className="mr-2" />
+                  View
+                </ButtonAtom>
                 <ButtonAtom
                   variant="primary"
                   size="sm"
