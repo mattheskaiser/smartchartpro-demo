@@ -1,57 +1,124 @@
 [
   {
     "id": "session_001",
-    "userId": "user_cna_002",
-    "cnaId": "cna_002",
-    "residentIds": ["res_003", "res_005", "res_008"],
-    "startTime": "2026-02-06T06:00:00.000Z",
+    "userId": "user_cna_001",
+    "cnaId": "cna_001",
+    "residentIds": [
+      "res_001",
+      "res_003",
+      "res_005",
+      "res_007"
+    ],
+    "startTime": "2026-02-10T06:15:00.000Z",
     "endTime": null,
     "isActive": true,
     "currentStep": "adls",
     "chartingData": {
       "entries": [
         {
-          "residentId": "res_003",
+          "residentId": "res_001",
           "activityType": "bathing",
-          "assistance": "full",
-          "timestamp": "2026-02-06T06:30:00.000Z",
-          "notes": "Assisted with bed bath. Patient cooperative."
+          "assistance": "partial",
+          "timestamp": "2026-02-10T06:30:00.000Z",
+          "notes": "Assisted with shower. Patient cooperative and in good spirits."
+        },
+        {
+          "residentId": "res_001",
+          "activityType": "dressing",
+          "assistance": "partial",
+          "timestamp": "2026-02-10T06:45:00.000Z",
+          "notes": "Helped with buttons and shoes."
         },
         {
           "residentId": "res_003",
-          "activityType": "dressing",
+          "activityType": "bathing",
           "assistance": "full",
-          "timestamp": "2026-02-06T06:45:00.000Z",
-          "notes": "Changed into fresh clothes."
+          "timestamp": "2026-02-10T07:00:00.000Z",
+          "notes": "Bed bath completed. Skin integrity good."
         }
       ]
     },
     "reportId": null,
-    "createdAt": "2026-02-06T06:00:00.000Z",
-    "updatedAt": "2026-02-06T06:45:00.000Z"
+    "createdAt": "2026-02-10T06:15:00.000Z",
+    "updatedAt": "2026-02-10T07:00:00.000Z"
   },
   {
     "id": "session_002",
-    "userId": "user_cna_003",
-    "cnaId": "cna_003",
-    "residentIds": ["res_006", "res_009", "res_012"],
-    "startTime": "2026-02-06T14:00:00.000Z",
+    "userId": "user_cna_002",
+    "cnaId": "cna_002",
+    "residentIds": [
+      "res_002",
+      "res_004",
+      "res_006"
+    ],
+    "startTime": "2026-02-10T06:00:00.000Z",
     "endTime": null,
     "isActive": true,
     "currentStep": "charting",
     "chartingData": {
       "entries": [
         {
-          "residentId": "res_006",
+          "residentId": "res_002",
           "activityType": "toileting",
+          "assistance": "full",
+          "timestamp": "2026-02-10T06:20:00.000Z",
+          "notes": "Assisted with transfer to commode. No issues."
+        },
+        {
+          "residentId": "res_002",
+          "activityType": "bathing",
+          "assistance": "full",
+          "timestamp": "2026-02-10T06:40:00.000Z",
+          "notes": "Bed bath provided. Patient comfortable."
+        },
+        {
+          "residentId": "res_004",
+          "activityType": "dressing",
           "assistance": "partial",
-          "timestamp": "2026-02-06T14:15:00.000Z",
-          "notes": "Assisted with transfer to bathroom."
+          "timestamp": "2026-02-10T07:10:00.000Z",
+          "notes": "Assisted with clothing selection and dressing."
         }
       ]
     },
     "reportId": null,
-    "createdAt": "2026-02-06T14:00:00.000Z",
-    "updatedAt": "2026-02-06T14:15:00.000Z"
+    "createdAt": "2026-02-10T06:00:00.000Z",
+    "updatedAt": "2026-02-10T07:10:00.000Z"
+  },
+  {
+    "id": "session_003",
+    "userId": "user_cna_003",
+    "cnaId": "cna_003",
+    "residentIds": [
+      "res_008",
+      "res_009",
+      "res_010",
+      "res_011",
+      "res_012"
+    ],
+    "startTime": "2026-02-10T14:05:00.000Z",
+    "endTime": null,
+    "isActive": true,
+    "currentStep": "adls",
+    "chartingData": {
+      "entries": [
+        {
+          "residentId": "res_008",
+          "activityType": "toileting",
+          "assistance": "partial",
+          "timestamp": "2026-02-10T14:20:00.000Z",
+          "notes": "Assisted with transfer to bathroom. Patient stable."
+        },
+        {
+          "residentId": "res_009",
+          "activityType": "feeding",
+          "assistance": "partial",
+          "timestamp": "2026-02-10T14:45:00.000Z",
+          "notes": "Assisted with afternoon snack. Good appetite."
+        }
+      ]
+    },
+    "reportId": null,
+    "createdAt": "2026-02-10T14:05:00.000Z",
+    "updatedAt": "2026-02-10T14:45:00.000Z"
   }
 ]
