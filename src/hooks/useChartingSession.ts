@@ -29,7 +29,7 @@ export function useChartingSession() {
 
   useEffect(() => {
     fetchSession();
-  }, [fetchSession]);
+  }, []); // Remove fetchSession dependency to prevent infinite loop
 
   // Create new session
   const createSession = useCallback(async (residentIds: string[]) => {

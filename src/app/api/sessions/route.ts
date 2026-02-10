@@ -9,6 +9,7 @@ import {
 } from '@/lib/session-service';
 import { CreateSessionSchema, UpdateSessionSchema } from '@/lib/validations/session.schema';
 import { handleApiError, CommonErrors } from '@/lib/api-error';
+import { isDemoMode } from '@/lib/demo-config';
 
 // Force dynamic rendering - don't cache this route
 export const dynamic = 'force-dynamic';
@@ -23,6 +24,11 @@ export async function GET() {
 
     if (!session?.user) {
       return CommonErrors.unauthorized();
+    }
+
+    // In demo mode, return no active session to allow starting new sessions
+    if (isDemoMode()) {
+      return NextResponse.json({ session: null });
     }
 
     const activeSession = await getActiveSession(session.user.id);
@@ -52,6 +58,42 @@ export async function POST(req: NextRequest) {
       return CommonErrors.forbidden();
     }
 
+    const body = await req.json();
+
+    // Validate request body
+    const validatedData = CreateSessionSchema.parse(body);
+
+    // In demo mode, return a mock session
+    if (isDemoMode()) {
+      const mockSession = {
+        id: 'demo_session_' + Date.now(),
+        userId: session.user.id,
+        cnaId: session.user.cnaId || 'cna_001',
+        residentIds: validatedData.residentIds,
+        isActive: true,
+        currentStep: 'adls',
+        startTime: new Date(),
+        endTime: null,
+        chartingData: {},
+        reportId: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        cna: {
+          id: session.user.cnaId || 'cna_001',
+          name: session.user.cnaName || 'Demo CNA',
+          email: session.user.email || 'cna@demo.com',
+          certificationNumber: 'CNA-DEMO-001',
+        },
+        user: {
+          id: session.user.id,
+          email: session.user.email || 'cna@demo.com',
+          role: 'CNA',
+        },
+      };
+
+      return NextResponse.json({ session: mockSession }, { status: 201 });
+    }
+
     // Get cnaId from session or fetch from database
     let cnaId = session.user.cnaId;
 
@@ -69,11 +111,6 @@ export async function POST(req: NextRequest) {
 
       cnaId = user.cnaId;
     }
-
-    const body = await req.json();
-
-    // Validate request body
-    const validatedData = CreateSessionSchema.parse(body);
 
     const newSession = await createSession(session.user.id, cnaId!, validatedData.residentIds);
 
@@ -97,16 +134,47 @@ export async function PATCH(req: NextRequest) {
       return CommonErrors.unauthorized();
     }
 
+    const body = await req.json();
+
+    // Validate request body
+    const validatedData = UpdateSessionSchema.parse(body);
+
+    // In demo mode, return a mock updated session
+    if (isDemoMode()) {
+      const mockSession = {
+        id: 'demo_session_' + Date.now(),
+        userId: session.user.id,
+        cnaId: session.user.cnaId || 'cna_001',
+        residentIds: ['resident_001', 'resident_002'],
+        isActive: true,
+        currentStep: validatedData.currentStep || 'adls',
+        startTime: new Date(),
+        endTime: null,
+        chartingData: validatedData.chartingData || {},
+        reportId: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        cna: {
+          id: session.user.cnaId || 'cna_001',
+          name: session.user.cnaName || 'Demo CNA',
+          email: session.user.email || 'cna@demo.com',
+          certificationNumber: 'CNA-DEMO-001',
+        },
+        user: {
+          id: session.user.id,
+          email: session.user.email || 'cna@demo.com',
+          role: 'CNA',
+        },
+      };
+
+      return NextResponse.json({ session: mockSession });
+    }
+
     const activeSession = await getActiveSession(session.user.id);
 
     if (!activeSession) {
       return CommonErrors.notFound('Active session');
     }
-
-    const body = await req.json();
-
-    // Validate request body
-    const validatedData = UpdateSessionSchema.parse(body);
 
     if (validatedData.currentStep) {
       await updateSessionStep(activeSession.id, validatedData.currentStep);
