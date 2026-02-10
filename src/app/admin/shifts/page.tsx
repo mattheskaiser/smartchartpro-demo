@@ -17,42 +17,48 @@ const mockCNAs = [
     id: 'cna_001',
     name: 'Jennifer Rodriguez',
     email: 'cna@demo.com',
-    imageData: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&crop=faces',
+    imageData:
+      'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&crop=faces',
     certificationNumber: 'CNA-2022-001',
   },
   {
     id: 'cna_002',
     name: 'Michael Thompson',
     email: 'michael.thompson@demo.com',
-    imageData: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop&crop=faces',
+    imageData:
+      'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop&crop=faces',
     certificationNumber: 'CNA-2021-045',
   },
   {
     id: 'cna_003',
     name: 'Sarah Johnson',
     email: 'sarah.johnson@demo.com',
-    imageData: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop&crop=faces',
+    imageData:
+      'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop&crop=faces',
     certificationNumber: 'CNA-2023-012',
   },
   {
     id: 'cna_004',
     name: 'David Lee',
     email: 'david.lee@demo.com',
-    imageData: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop&crop=faces',
+    imageData:
+      'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop&crop=faces',
     certificationNumber: 'CNA-2022-078',
   },
   {
     id: 'cna_005',
     name: 'Emily Martinez',
     email: 'emily.martinez@demo.com',
-    imageData: 'https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=400&h=400&fit=crop&crop=faces',
+    imageData:
+      'https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=400&h=400&fit=crop&crop=faces',
     certificationNumber: 'CNA-2023-089',
   },
   {
     id: 'cna_006',
     name: 'Robert Kim',
     email: 'robert.kim@demo.com',
-    imageData: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&h=400&fit=crop&crop=faces',
+    imageData:
+      'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&h=400&fit=crop&crop=faces',
     certificationNumber: 'CNA-2020-034',
   },
 ];
@@ -395,14 +401,14 @@ export default function ShiftManagement() {
         shift={
           assignmentModal.shift
             ? {
-              id: assignmentModal.shift.id,
-              type: assignmentModal.shift.name,
-              date: selectedDate.toISOString(),
-              time: formatShiftTime(
-                assignmentModal.shift.startTime,
-                assignmentModal.shift.endTime
-              ),
-            }
+                id: assignmentModal.shift.id,
+                type: assignmentModal.shift.name,
+                date: selectedDate.toISOString(),
+                time: formatShiftTime(
+                  assignmentModal.shift.startTime,
+                  assignmentModal.shift.endTime
+                ),
+              }
             : { id: '', type: '', date: '', time: '' }
         }
         availableCNAs={mockCNAs}

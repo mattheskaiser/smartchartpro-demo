@@ -154,7 +154,27 @@ export const mockShiftAssignments = generateMockShiftAssignments();
 
 // Mock charting reports - 6 recent reports with realistic data
 export const generateMockChartingReports = () => {
-  const reports = [];
+  const reports: Array<{
+    id: string;
+    reportDate: string;
+    sessionStartTime: string;
+    sessionEndTime: string;
+    cnaId: string;
+    cnaName: string;
+    cnaCertification: string;
+    createdById: string;
+    totalResidents: number;
+    totalActivities: number;
+    status: string;
+    reviewedBy: string | null;
+    reviewedAt: string | null;
+    notes: string | null;
+    residentsData: unknown[];
+    entriesData: unknown[];
+    pdfData: null;
+    createdAt: string;
+    updatedAt: string;
+  }> = [];
   const today = new Date();
 
   const mockReportsData = [
@@ -231,7 +251,8 @@ export const generateMockChartingReports = () => {
       totalActivities: data.totalActivities,
       status: data.status,
       reviewedBy: data.status === 'reviewed' ? 'Admin User' : null,
-      reviewedAt: data.status === 'reviewed' ? new Date(date.setHours(15, 0, 0, 0)).toISOString() : null,
+      reviewedAt:
+        data.status === 'reviewed' ? new Date(date.setHours(15, 0, 0, 0)).toISOString() : null,
       notes: data.status === 'reviewed' ? 'Report reviewed and approved.' : null,
       residentsData: [],
       entriesData: [],

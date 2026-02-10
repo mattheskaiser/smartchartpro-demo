@@ -1,6 +1,6 @@
 'use client';
 
-import { useChartingReports, useDeleteChartingReport } from '@/hooks/useChartingReports';
+import { useChartingReports } from '@/hooks/useChartingReports';
 import { format } from 'date-fns';
 import { ButtonAtom } from '@/components/atoms/Button.atom';
 import { TextAtom } from '@/components/atoms/Text.atom';
@@ -9,22 +9,21 @@ import { DynamicIconAtom } from '@/components/atoms/DynamicIcon.atom';
 import { PageLoaderMolecule } from '@/components/molecules/PageLoader.molecule';
 import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.template';
 import { toast } from '@/lib/toast';
-import { isDemoMode } from '@/lib/demo-config';
 
 export default function ReportsPage() {
   const { data, isLoading, error } = useChartingReports();
   const reports = data?.reports || [];
-  const deleteReport = useDeleteChartingReport();
 
-  const handleDelete = async (id: string, reportDate: string | Date) => {
+  const handleDelete = async () => {
     toast({
       title: 'Demo Mode',
-      description: "Report deletion isn't available in demo mode. This is for demonstration purposes only.",
+      description:
+        "Report deletion isn't available in demo mode. This is for demonstration purposes only.",
       type: 'warning',
     });
   };
 
-  const handleViewPDF = async (report: any) => {
+  const handleViewPDF = async (report: { id: string }) => {
     try {
       // Open PDF in new tab via API
       window.open(`/api/reports/${report.id}/pdf`, '_blank');
@@ -180,11 +179,7 @@ export default function ReportsPage() {
                   <DynamicIconAtom name="Download" size="sm" className="mr-2" />
                   Download
                 </ButtonAtom>
-                <ButtonAtom
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleDelete(report.id, report.reportDate)}
-                >
+                <ButtonAtom variant="outline" size="sm" onClick={() => handleDelete()}>
                   <DynamicIconAtom name="Trash2" size="sm" />
                 </ButtonAtom>
               </div>

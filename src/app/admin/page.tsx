@@ -13,7 +13,8 @@ const MOCK_ACTIVE_SESSIONS = [
     id: 'session_001',
     cna: {
       name: 'Jennifer Rodriguez',
-      imageData: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&crop=faces',
+      imageData:
+        'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&crop=faces',
     },
     residentCount: 4,
     duration: '2h 15m',
@@ -23,7 +24,8 @@ const MOCK_ACTIVE_SESSIONS = [
     id: 'session_002',
     cna: {
       name: 'Michael Thompson',
-      imageData: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop&crop=faces',
+      imageData:
+        'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop&crop=faces',
     },
     residentCount: 3,
     duration: '2h 30m',
@@ -33,7 +35,8 @@ const MOCK_ACTIVE_SESSIONS = [
     id: 'session_003',
     cna: {
       name: 'Sarah Johnson',
-      imageData: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop&crop=faces',
+      imageData:
+        'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop&crop=faces',
     },
     residentCount: 5,
     duration: '45m',

@@ -209,10 +209,10 @@ export const ShiftAssignmentModalMolecule = ({
                   }
                 }}
               >
-                <div onClick={(e) => e.stopPropagation()}>
+                <div onClick={e => e.stopPropagation()}>
                   <CheckboxAtom
                     checked={isSelected}
-                    onCheckedChange={() => { }}
+                    onCheckedChange={() => {}}
                     disabled={isDisabled}
                   />
                 </div>

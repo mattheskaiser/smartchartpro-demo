@@ -337,7 +337,9 @@ export const ChartingReportPDF: React.FC<ChartingReportPDFProps> = ({
                         <Text style={styles.activityType}>
                           {ADL_TYPES[entry.activityType] || entry.activityType}
                         </Text>
-                        <Text style={[styles.activityAssistance, getAssistanceStyle(entry.assistance)]}>
+                        <Text
+                          style={[styles.activityAssistance, getAssistanceStyle(entry.assistance)]}
+                        >
                           {ASSISTANCE_LEVELS[entry.assistance] || entry.assistance}
                         </Text>
                         <Text style={styles.activityNotes}>{entry.notes || ''}</Text>
@@ -347,7 +349,14 @@ export const ChartingReportPDF: React.FC<ChartingReportPDFProps> = ({
                 </>
               ) : (
                 <View style={{ padding: 15, backgroundColor: '#f9fafb' }}>
-                  <Text style={{ fontSize: 10, fontStyle: 'italic', color: '#6b7280', textAlign: 'center' }}>
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      fontStyle: 'italic',
+                      color: '#6b7280',
+                      textAlign: 'center',
+                    }}
+                  >
                     No activities documented for this resident
                   </Text>
                 </View>

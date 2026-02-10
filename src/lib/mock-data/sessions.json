@@ -3,12 +3,7 @@
     "id": "session_001",
     "userId": "user_cna_001",
     "cnaId": "cna_001",
-    "residentIds": [
-      "res_001",
-      "res_003",
-      "res_005",
-      "res_007"
-    ],
+    "residentIds": ["res_001", "res_003", "res_005", "res_007"],
     "startTime": "2026-02-10T06:15:00.000Z",
     "endTime": null,
     "isActive": true,
@@ -46,11 +41,7 @@
     "id": "session_002",
     "userId": "user_cna_002",
     "cnaId": "cna_002",
-    "residentIds": [
-      "res_002",
-      "res_004",
-      "res_006"
-    ],
+    "residentIds": ["res_002", "res_004", "res_006"],
     "startTime": "2026-02-10T06:00:00.000Z",
     "endTime": null,
     "isActive": true,
@@ -88,13 +79,7 @@
     "id": "session_003",
     "userId": "user_cna_003",
     "cnaId": "cna_003",
-    "residentIds": [
-      "res_008",
-      "res_009",
-      "res_010",
-      "res_011",
-      "res_012"
-    ],
+    "residentIds": ["res_008", "res_009", "res_010", "res_011", "res_012"],
     "startTime": "2026-02-10T14:05:00.000Z",
     "endTime": null,
     "isActive": true,

@@ -14,15 +14,17 @@ const FACILITY_INFO = {
   npi: '1234567890',
 };
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
 
     // Load the manifest
-    const manifestPath = path.join(process.cwd(), 'public', 'demo-reports', 'reports-manifest.json');
+    const manifestPath = path.join(
+      process.cwd(),
+      'public',
+      'demo-reports',
+      'reports-manifest.json'
+    );
 
     if (!fs.existsSync(manifestPath)) {
       return NextResponse.json(
@@ -32,7 +34,22 @@ export async function GET(
     }
 
     const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
-    const reportData = manifest.find((r: any) => r.id === id);
+    const reportData = manifest.find(
+      (r: {
+        id: string;
+        cnaName: string;
+        cnaCertification: string;
+        sessionStartTime: string;
+        residents: Array<{ id: string; name: string; room: string; status: string }>;
+        entries: Array<{
+          residentId: string;
+          activityType: string;
+          assistance: string;
+          timestamp: string;
+          notes?: string;
+        }>;
+      }) => r.id === id
+    );
 
     if (!reportData) {
       return NextResponse.json({ error: 'Report not found' }, { status: 404 });
@@ -50,14 +67,22 @@ export async function GET(
       cnaCertification: reportData.cnaCertification,
       sessionStartTime: new Date(reportData.sessionStartTime),
       selectedResidents: reportData.residents,
-      entries: reportData.entries.map((e: any) => ({
-        ...e,
-        timestamp: new Date(e.timestamp),
-      })),
+      entries: reportData.entries.map(
+        (e: {
+          residentId: string;
+          activityType: string;
+          assistance: string;
+          timestamp: string;
+          notes?: string;
+        }) => ({
+          ...e,
+          timestamp: new Date(e.timestamp),
+        })
+      ),
     });
 
     // Generate PDF stream
-    const stream = await renderToStream(pdfDocument);
+    const stream = await renderToStream(pdfDocument as React.ReactElement);
 
     // Convert stream to buffer
     const chunks: Buffer[] = [];
@@ -76,7 +101,10 @@ export async function GET(
   } catch (error) {
     console.error('Error generating PDF:', error);
     return NextResponse.json(
-      { error: 'Failed to generate PDF', details: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        error: 'Failed to generate PDF',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
       { status: 500 }
     );
   }
