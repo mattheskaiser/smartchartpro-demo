@@ -11,62 +11,136 @@ import { AdminPageLayoutTemplate } from '@/components/templates/AdminPageLayout.
 import { useShiftTemplates, formatShiftTime } from '@/hooks/useShiftTemplates';
 import { toast } from '@/lib/toast';
 
-// Mock data - replace with actual API calls
+// Mock data from actual mock-data files
 const mockCNAs = [
   {
-    id: '1',
+    id: 'cna_001',
+    name: 'Jennifer Rodriguez',
+    email: 'cna@demo.com',
+    imageData: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&crop=faces',
+    certificationNumber: 'CNA-2022-001',
+  },
+  {
+    id: 'cna_002',
+    name: 'Michael Thompson',
+    email: 'michael.thompson@demo.com',
+    imageData: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop&crop=faces',
+    certificationNumber: 'CNA-2021-045',
+  },
+  {
+    id: 'cna_003',
     name: 'Sarah Johnson',
-    email: 'sarah@facility.com',
-    imageData: '',
-    certificationNumber: 'CNA-001',
+    email: 'sarah.johnson@demo.com',
+    imageData: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop&crop=faces',
+    certificationNumber: 'CNA-2023-012',
   },
   {
-    id: '2',
-    name: 'Mike Chen',
-    email: 'mike@facility.com',
-    imageData: '',
-    certificationNumber: 'CNA-002',
+    id: 'cna_004',
+    name: 'David Lee',
+    email: 'david.lee@demo.com',
+    imageData: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop&crop=faces',
+    certificationNumber: 'CNA-2022-078',
   },
   {
-    id: '3',
-    name: 'Lisa Rodriguez',
-    email: 'lisa@facility.com',
-    imageData: '',
-    certificationNumber: 'CNA-003',
+    id: 'cna_005',
+    name: 'Emily Martinez',
+    email: 'emily.martinez@demo.com',
+    imageData: 'https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=400&h=400&fit=crop&crop=faces',
+    certificationNumber: 'CNA-2023-089',
   },
   {
-    id: '4',
-    name: 'David Kim',
-    email: 'david@facility.com',
-    imageData: '',
-    certificationNumber: 'CNA-004',
+    id: 'cna_006',
+    name: 'Robert Kim',
+    email: 'robert.kim@demo.com',
+    imageData: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&h=400&fit=crop&crop=faces',
+    certificationNumber: 'CNA-2020-034',
   },
 ];
 
 const mockResidents = [
   {
-    id: '1',
-    name: 'John Smith',
+    id: 'res_001',
+    name: 'Margaret Thompson',
     room: '101',
-    imageUrl: '',
+    imageUrl: '/resident-stock-photos/women/artem-labunsky-izJC1PUjZNc-unsplash.jpg',
     adlNeeds: ['Bathing', 'Dressing', 'Mobility'],
   },
-  { id: '2', name: 'Mary Johnson', room: '102', imageUrl: '', adlNeeds: ['Feeding', 'Toileting'] },
-  { id: '3', name: 'Robert Brown', room: '103', imageUrl: '', adlNeeds: ['Bathing', 'Medication'] },
   {
-    id: '4',
-    name: 'Patricia Davis',
-    room: '104',
-    imageUrl: '',
-    adlNeeds: ['Dressing', 'Mobility', 'Feeding'],
+    id: 'res_002',
+    name: 'Robert Chen',
+    room: '102',
+    imageUrl: '/resident-stock-photos/men/abbas-souzian-JC1oue4zY5U-unsplash.jpg',
+    adlNeeds: ['Health Monitoring'],
   },
-  { id: '5', name: 'James Wilson', room: '105', imageUrl: '', adlNeeds: ['Bathing', 'Toileting'] },
   {
-    id: '6',
-    name: 'Linda Miller',
+    id: 'res_003',
+    name: 'Dorothy Williams',
+    room: '103',
+    imageUrl: '/resident-stock-photos/women/danie-franco-l9I93gZKTG4-unsplash.jpg',
+    adlNeeds: ['Bathing', 'Dressing', 'Eating', 'Toileting', 'Mobility'],
+  },
+  {
+    id: 'res_004',
+    name: 'James Martinez',
+    room: '104',
+    imageUrl: '/resident-stock-photos/men/maria-lupan-2L8McMW3wAM-unsplash.jpg',
+    adlNeeds: ['Bathing', 'Dressing'],
+  },
+  {
+    id: 'res_005',
+    name: 'Patricia Johnson',
+    room: '105',
+    imageUrl: '/resident-stock-photos/women/eduardo-barrios-XMCLLGGMMYU-unsplash.jpg',
+    adlNeeds: ['Health Monitoring'],
+  },
+  {
+    id: 'res_006',
+    name: 'William Anderson',
     room: '106',
-    imageUrl: '',
-    adlNeeds: ['Medication', 'Mobility'],
+    imageUrl: '/resident-stock-photos/men/tim-doerfler-5jDJ4LaXiWE-unsplash.jpg',
+    adlNeeds: ['Mobility', 'Toileting'],
+  },
+  {
+    id: 'res_007',
+    name: 'Mary Davis',
+    room: '107',
+    imageUrl: '/resident-stock-photos/women/otacilio-maia-zrbnoeRI3wI-unsplash.jpg',
+    adlNeeds: ['Bathing', 'Dressing', 'Mobility'],
+  },
+  {
+    id: 'res_008',
+    name: 'Charles Brown',
+    room: '108',
+    imageUrl: '/resident-stock-photos/men/ving-n-qccFiSIZtiY-unsplash.jpg',
+    adlNeeds: [],
+  },
+  {
+    id: 'res_009',
+    name: 'Barbara Wilson',
+    room: '109',
+    imageUrl: '/resident-stock-photos/women/tatiana-zanon-MMhazsT2wtM-unsplash.jpg',
+    adlNeeds: ['Bathing', 'Dressing', 'Eating', 'Toileting', 'Mobility'],
+  },
+  {
+    id: 'res_010',
+    name: 'Richard Taylor',
+    room: '110',
+    imageUrl: '/resident-stock-photos/men/default-male.jpg',
+    adlNeeds: ['Bathing', 'Mobility'],
+  },
+  {
+    id: 'res_011',
+    name: 'Helen Garcia',
+    room: '111',
+    imageUrl: '/resident-stock-photos/women/default-female.jpg',
+    adlNeeds: ['Dressing', 'Eating'],
+  },
+  {
+    id: 'res_012',
+    name: 'George Miller',
+    room: '112',
+    imageUrl: '/resident-stock-photos/men/default-male-2.jpg',
+    adlNeeds: ['Toileting', 'Mobility'],
   },
 ];
 
@@ -125,9 +199,9 @@ export default function ShiftManagement() {
     console.log('Assignment submitted:', assignment);
     // TODO: Save assignment to backend
     toast({
-      title: 'Shift assigned successfully',
-      description: `CNA has been assigned to ${assignment.residentIds.length} resident${assignment.residentIds.length !== 1 ? 's' : ''}`,
-      type: 'success',
+      title: 'Demo Mode',
+      description: "Changes aren't saved in demo mode. This is for demonstration purposes only.",
+      type: 'warning',
     });
     setAssignmentModal({ isOpen: false });
   };
@@ -321,14 +395,14 @@ export default function ShiftManagement() {
         shift={
           assignmentModal.shift
             ? {
-                id: assignmentModal.shift.id,
-                type: assignmentModal.shift.name,
-                date: selectedDate.toISOString(),
-                time: formatShiftTime(
-                  assignmentModal.shift.startTime,
-                  assignmentModal.shift.endTime
-                ),
-              }
+              id: assignmentModal.shift.id,
+              type: assignmentModal.shift.name,
+              date: selectedDate.toISOString(),
+              time: formatShiftTime(
+                assignmentModal.shift.startTime,
+                assignmentModal.shift.endTime
+              ),
+            }
             : { id: '', type: '', date: '', time: '' }
         }
         availableCNAs={mockCNAs}

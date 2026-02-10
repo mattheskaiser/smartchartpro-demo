@@ -199,17 +199,23 @@ export const ShiftAssignmentModalMolecule = ({
               <div
                 key={resident.id}
                 className={`
-                  flex items-center gap-3 p-3 border-b border-gray-100 last:border-b-0 cursor-pointer transition-colors
+                  flex items-center gap-3 p-3 border-b border-gray-100 last:border-b-0 transition-colors
                   ${isSelected ? 'bg-blue-50' : 'hover:bg-gray-50'}
-                  ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}
+                  ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                 `}
-                onClick={() => !isDisabled && toggleResident(resident.id)}
+                onClick={() => {
+                  if (!isDisabled) {
+                    toggleResident(resident.id);
+                  }
+                }}
               >
-                <CheckboxAtom
-                  checked={isSelected}
-                  onCheckedChange={() => !isDisabled && toggleResident(resident.id)}
-                  disabled={isDisabled}
-                />
+                <div onClick={(e) => e.stopPropagation()}>
+                  <CheckboxAtom
+                    checked={isSelected}
+                    onCheckedChange={() => { }}
+                    disabled={isDisabled}
+                  />
+                </div>
                 <AvatarAtom src={resident.imageUrl} alt={resident.name} size="sm" />
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
