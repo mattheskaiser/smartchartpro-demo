@@ -10,7 +10,7 @@
     "verify:demo": "node scripts/verify-demo-config.js",
     "prisma:generate": "prisma generate",
     "seed:shifts": "node scripts/seed-default-shifts.js",
-    "start": "next start",
+    "start": "next start -H 0.0.0.0 -p 5000",
     "lint": "next lint",
     "lint:fix": "next lint --fix && prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "ts:check": "tsc --noEmit",
